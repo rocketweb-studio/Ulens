@@ -1,49 +1,22 @@
-# ========== STAGE 1: Установка зависимостей ==========
-FROM node:20.11-alpine AS dependencies
-
-# Устанавливаем pnpm глобально
-RUN npm install -g pnpm
-
+#Устанавливаем зависимости
+FROM node:20.11-alpine as dependencies
 WORKDIR /app
+COPY package*.json ./
+RUN pnpm install
 
-# Копируем только файлы для установки зависимостей
-COPY package.json pnpm-lock.yaml ./
-
-# Устанавливаем зависимости без запуска скриптов postinstall
-RUN pnpm install --frozen-lockfile
-
-
-# ========== STAGE 2: Сборка проекта ==========
-FROM node:20.11-alpine AS builder
-
-RUN npm install -g pnpm
-
+#Билдим приложение
+#Кэширование зависимостей — если файлы в проекте изменились,
+#но package.json остался неизменным, то стейдж с установкой зависимостей повторно не выполняется, что экономит время.
+FROM node:20.11-alpine as builder
 WORKDIR /app
-
-# Копируем исходный код проекта
 COPY . .
-
-# Копируем установленные зависимости из предыдущего этапа
 COPY --from=dependencies /app/node_modules ./node_modules
+RUN pnpm run build:production
 
-# Сборка проекта
-RUN pnpm build
-
-
-# ========== STAGE 3: Запуск приложения ==========
-FROM node:20.11-alpine AS runner
-
-RUN npm install -g pnpm
-
+#Стейдж запуска
+FROM node:20.11-alpine as runner
 WORKDIR /app
-
-ENV NODE_ENV=production
-
-# Копируем собранный проект
-COPY --from=builder /app ./
-
-# Указываем порт (если нужен для локального запуска или Docker Compose)
+ENV NODE_ENV production
+COPY --from=builder /app/ ./
 EXPOSE 3000
-
-# Запуск приложения
 CMD ["pnpm", "start"]
