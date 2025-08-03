@@ -21,18 +21,18 @@ pipeline {
             }
         }
         stage('Unit tests') {
-             steps {
+            steps {
                 echo "Preparing started..."
-                  script {
-                      sh '''
-                         export NVM_DIR="$HOME/.nvm"
-                         [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-                         nvm use --lts
-                         yarn install
-                         yarn test
-                      '''
-                  }
-             }
+                script {
+                    sh '''
+                        export NVM_DIR="$HOME/.nvm"
+                        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+                        nvm use --lts
+                        pnpm install
+                        pnpm test
+                    '''
+                }
+            }
         }
         stage('Build docker image') {
             steps {
