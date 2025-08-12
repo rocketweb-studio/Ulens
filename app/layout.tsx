@@ -1,6 +1,6 @@
 import type {Metadata} from "next";
 import {Geist, Geist_Mono} from "next/font/google";
-import "src/app/globals.css";
+import "@/src/app/globals.scss";
 import {StoreWrapper} from "@/src/app/store-wrapper";
 import React from "react";
 import Link from "next/link";
