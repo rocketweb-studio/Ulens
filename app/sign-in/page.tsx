@@ -77,8 +77,6 @@ export default function SignInPage() {
                     <span>Don’t have an account?</span>
                     <a className={styles.signUpLink} href="">Sign Up</a>
 
-
-
             </form>
 
         </article>

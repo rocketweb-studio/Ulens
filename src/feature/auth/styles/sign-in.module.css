@@ -46,9 +46,8 @@
     content: "";
     position: absolute;
     top: -20px;
-    left: -5px;
-    /*background-color: rgb(23, 23, 23);*/
-    padding: 0 5px;
+    left: 0;
+    padding: 0;
     font-size: 12px;
     z-index: 32423;
 }
@@ -61,7 +60,7 @@
 }.inputContainer:nth-child(2)::after {
     content: "Forgot Password";
      top: 80px;
-     left: 220px;
+     left: 235px;
 }
 .btn{
     width: 100%;
