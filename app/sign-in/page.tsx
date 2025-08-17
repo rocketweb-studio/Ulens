@@ -8,6 +8,9 @@ import {z} from "zod";
 import gitHubSvg from "@/public/github-svg.svg"
 import googleSvg from "@/public/google-svg.svg"
 import styles from "@/src/feature/auth/styles/sign-in.module.css"
+import {useState} from "react";
+import eyeOffSvg from "@/public/eye-off-outline.svg"
+import eyeOnSvg from "@/public/eye-outline.svg"
 
 const loginSchema = z.object({
     email: z.email("The email must match the format example@example.com"),
@@ -19,6 +22,7 @@ export type LoginResponseAccessToken = { accessToken: string }
 
 
 export default function SignInPage() {
+    const [showPassword, setShowPassword] = useState<boolean>(false);
     const [login] = useLoginMutation()
     const dispatch = useAppDispatch()
 
@@ -61,21 +65,46 @@ export default function SignInPage() {
 
                 <div className={styles.inputWrapper}>
 
-                <div className={styles.inputContainer}>
-                    <input type="text" {...register("email")} placeholder="Ulens@ulens.com" className={styles.emailInput} />
-                    {errors.email && <span className={styles.errorText}>{errors.email.message}</span>}
+                    <div className={styles.inputContainer}>
+                        <input type="text" {...register("email")} placeholder="Ulens@ulens.com"
+                               className={`${styles.emailInput} ${errors.email && styles.errorInput}`}/>
+                        {errors.email && <span className={styles.errorText}>{errors.email.message}</span>}
+                    </div>
+
+                    {/*<div className={styles.inputContainer}>*/}
+                    {/*    <input type="password" {...register("password")} placeholder="**********"*/}
+                    {/*           className={`${styles.passwordInput} ${errors.password && styles.errorInput}`}/>*/}
+                    {/*    {errors.password && <span className={styles.errorText}>{errors.password.message}</span>}*/}
+                    {/*</div>*/}
+                    <div className={styles.inputContainer}>
+                        <div className={styles.passwordWrapper}>
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                {...register("password")}
+                                placeholder="**********"
+                                className={`${styles.passwordInput} ${errors.password && styles.errorInput}`}
+                            />
+                            <button
+                                type="button"
+                                className={styles.togglePassword}
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                <Image
+                                    src={showPassword ? eyeOnSvg : eyeOffSvg}
+                                    alt={showPassword ? "Hide password" : "Show password"}
+                                    width={24}
+                                    height={24}
+                                />
+                            </button>
+                        </div>
+                        {errors.password && <span className={styles.errorText}>{errors.password.message}</span>}
+                    </div>
+
+                    <button className={styles.btn}>Sign In</button>
                 </div>
 
-                <div className={styles.inputContainer}>
-                    <input type="text" {...register("password")} placeholder="**********" className={styles.passwordInput} />
-                    {errors.password && <span className={styles.errorText}>{errors.password.message}</span>}
-                </div>
-
-                <button className={styles.btn}>Sign In</button>
-                </div>
-
-                    <span>Don’t have an account?</span>
-                    <a className={styles.signUpLink} href="">Sign Up</a>
+                <span>Don’t have an account?</span>
+                <a className={styles.signUpLink} href="">Sign Up</a>
 
             </form>
 
