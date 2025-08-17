@@ -11,7 +11,7 @@ import styles from "@/src/feature/auth/styles/sign-in.module.css"
 
 const loginSchema = z.object({
     email: z.email("The email must match the format example@example.com"),
-    password: z.string(),
+    password: z.string().min(6),
 })
 
 export type LoginRequestParams = z.infer<typeof loginSchema>;
@@ -63,12 +63,12 @@ export default function SignInPage() {
 
                 <div className={styles.inputContainer}>
                     <input type="text" {...register("email")} placeholder="Ulens@ulens.com" className={styles.emailInput} />
-                    {errors.email && <p>{errors.email.message}</p>}
+                    {errors.email && <span className={styles.errorText}>{errors.email.message}</span>}
                 </div>
 
                 <div className={styles.inputContainer}>
                     <input type="text" {...register("password")} placeholder="**********" className={styles.passwordInput} />
-                    {errors.password && <p>{errors.password.message}</p>}
+                    {errors.password && <span className={styles.errorText}>{errors.password.message}</span>}
                 </div>
 
                 <button className={styles.btn}>Sign In</button>

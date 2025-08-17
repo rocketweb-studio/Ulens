@@ -37,18 +37,24 @@
     background-color: transparent;
     border: 1px solid gray;
     padding: 0 10px;
+    outline: none;
 }
+
 
 
 
 
 .inputContainer::before ,::after {
     content: "";
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.7;
+    text-align: center;
+    color: #8d9094;
     position: absolute;
-    top: -20px;
+    top: -22px;
     left: 0;
     padding: 0;
-    font-size: 12px;
     z-index: 32423;
 }
 
@@ -60,7 +66,7 @@
 }.inputContainer:nth-child(2)::after {
     content: "Forgot Password";
      top: 80px;
-     left: 235px;
+     left: 220px;
 }
 .btn{
     width: 100%;
@@ -71,11 +77,21 @@
     border: none;
     border-radius: 3px;
 }
+.btn:hover{
+    background-color: #226cef;
+
+}
 .signUpLink , .btn{
     cursor: pointer;
 }
 
 .authForm .signUpLink{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.5;
     margin-top: 13px;
     color: #397DF6;
+}
+.errorText{
+    color: red;
 }
