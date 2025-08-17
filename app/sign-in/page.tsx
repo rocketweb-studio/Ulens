@@ -1,7 +1,6 @@
 'use client'
 import Image from "next/image";
 import {useLoginMutation} from "@/src/feature/auth/api/authApi";
-import {useAppDispatch} from "@/src/app/store";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
@@ -24,7 +23,6 @@ export type LoginResponseAccessToken = { accessToken: string }
 export default function SignInPage() {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [login] = useLoginMutation()
-    const dispatch = useAppDispatch()
 
     const {
         register,
@@ -40,16 +38,16 @@ export default function SignInPage() {
     })
 
     const onSubmit: SubmitHandler<LoginRequestParams> = async (data) => {
-        console.log("Отправка формы, сделается позже", data)
+        console.log("Отправка формы sign-in, сделается позже", data)
 
         try {
             const res = await login(data).unwrap()
-            console.log('res', res)
+            console.log('response sign-in', res)
             localStorage.setItem("accessToken", res.accessToken)
             reset()
 
         } catch (error) {
-            console.log("ERROR", error)
+            console.log("ERROR sign-in", error)
         }
     };
 
@@ -71,11 +69,6 @@ export default function SignInPage() {
                         {errors.email && <span className={styles.errorText}>{errors.email.message}</span>}
                     </div>
 
-                    {/*<div className={styles.inputContainer}>*/}
-                    {/*    <input type="password" {...register("password")} placeholder="**********"*/}
-                    {/*           className={`${styles.passwordInput} ${errors.password && styles.errorInput}`}/>*/}
-                    {/*    {errors.password && <span className={styles.errorText}>{errors.password.message}</span>}*/}
-                    {/*</div>*/}
                     <div className={styles.inputContainer}>
                         <div className={styles.passwordWrapper}>
                             <input
