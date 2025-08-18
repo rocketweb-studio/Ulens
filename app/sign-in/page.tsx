@@ -13,7 +13,7 @@ import eyeOnSvg from "@/public/eye-outline.svg"
 
 const loginSchema = z.object({
     email: z.email("The email must match the format example@example.com"),
-    password: z.string().min(6),
+    password: z.string().min(6,"Please enter a valid password.")
 })
 
 export type LoginRequestParams = z.infer<typeof loginSchema>;
