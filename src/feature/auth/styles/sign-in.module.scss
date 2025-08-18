@@ -1,5 +1,5 @@
 .authWrapper {
-    background-color: rgb(23, 23, 23);
+    background-color: color(dark,500);
     max-width: 380px;
    width: 100%;
     min-height: 480px;
@@ -11,7 +11,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    color: white;
+    color: color(light,100);
     padding: 23px;
     min-width:  100%;
 }
@@ -34,8 +34,8 @@
 .emailInput, .passwordInput {
    min-width: 100%;
     height: 40px;
-    background-color:transparent;
-    border: 1px solid gray;
+    background-color: color(dark,500);
+    border: 1px solid color(dark,100);
     padding: 0 10px;
     outline: none;
 }
@@ -46,7 +46,7 @@
     font-size: 14px;
     line-height: 1.7;
     text-align: center;
-    color: #8d9094;
+    color: color(light,900);
     position: absolute;
     top: -22px;
     left: 0;
@@ -84,14 +84,14 @@
 
 .passwordInput {
     width: 100%;
-    padding-right: 35px; /* Чтобы текст не заходил под кнопку */
+    padding-right: 35px;
 }
 
 
 
 .btn{
     width: 100%;
-    background-color: #397DF6;
+    background-color: color(accent,500);
     height: 36px;
     margin-top: 80px;
     margin-bottom: 18px;
@@ -99,7 +99,8 @@
     border-radius: 3px;
 }
 .btn:hover{
-    background-color: #226cef;
+    background-color: color(accent,700);
+
 
 }
 .signUpLink , .btn{
@@ -111,11 +112,11 @@
     font-size: 16px;
     line-height: 1.5;
     margin-top: 13px;
-    color: #397DF6;
+    color: color(accent,500);
 }
 .errorInput{
-    border: 1px solid red;
+    border: 1px solid color(danger,500);
 }
 .errorText{
-    color: red;
+    color: color(danger,500);;
 }

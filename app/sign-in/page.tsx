@@ -6,7 +6,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
 import gitHubSvg from "@/public/github-svg.svg"
 import googleSvg from "@/public/google-svg.svg"
-import styles from "@/src/feature/auth/styles/sign-in.module.css"
+import styles from "@/src/feature/auth/styles/sign-in.module.scss"
 import {useState} from "react";
 import eyeOffSvg from "@/public/eye-off-outline.svg"
 import eyeOnSvg from "@/public/eye-outline.svg"
@@ -84,7 +84,7 @@ export default function SignInPage() {
                             >
                                 <Image
                                     src={showPassword ? eyeOnSvg : eyeOffSvg}
-                                    alt={showPassword ? "Hide password" : "Show password"}
+                                    alt={showPassword ? "Hide" : "Show"}
                                     width={24}
                                     height={24}
                                 />
