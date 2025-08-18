@@ -1,0 +1,52 @@
+.formWrapper {
+  max-width: 378px;
+  padding: 24px;
+  background-color: color(dark, 500);
+  border: 1px solid color(dark, 300);
+  color: color(light, 100);
+}
+
+.title {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 36px;
+  align-self: center;
+  letter-spacing: 0;
+
+}
+
+.oAuthWrapper {
+  display: flex;
+  justify-content: center;
+  column-gap: 60px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputsTextWrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+  margin-bottom: 12px;
+}
+
+.signUpWrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  margin-bottom: 12px;
+}
+
+.signInWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 6px;
+}
+
+.signInText {
+  align-self: center;
+}

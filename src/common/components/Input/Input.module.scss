@@ -2,14 +2,12 @@
 @use 'src/common/styles/_typography' as _typography;
 
 .inputContainer {
-  font-family: _typography.$font-family;
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
 .label {
-  font-family: _typography.$font-family;
   font-size: 14px;
   line-height: 24px;
   font-weight: 400;
@@ -17,7 +15,6 @@
 }
 
 .input {
-  font-family: _typography.$font-family;
   padding: 6px 12px;
   border: 1px solid color(light, 900);
   color: color(light, 900);
@@ -26,6 +23,7 @@
   line-height: 24px ;
   font-weight: 400;
   transition: border-color 0.3s ease, background-color 0.3s ease;
+  background-color: rgba(0, 0, 0, 0);
 
   &:focus {
     background-color: color(dark, 500);
@@ -41,7 +39,7 @@
   }
 
   &::placeholder {
-    font-family: _typography.$font-family;
+    font-family: inherit;
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;
