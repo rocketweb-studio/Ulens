@@ -100,7 +100,6 @@
     color: color(accent, 500);
 
     &:hover:not(:disabled) {
-      border: 1px solid color(accent, 100);
       color: color(accent, 100);
     }
 
