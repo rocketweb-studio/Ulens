@@ -52,6 +52,79 @@
   }
 }
 
+.checkboxContainer {
+  display: flex;
+  cursor: pointer;
+  gap: 8px;
+}
+
+.checkboxInput {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkboxCustom {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background-color: color(light, 100);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    display: none;
+    width: 5px;
+    height: 10px;
+    border: solid color(dark, 900);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+}
+
+.checkboxInput:checked ~ .checkboxCustom {
+  background-color: white;
+  border-color: color(accent, 500);
+
+  &::after {
+    display: block;
+  }
+}
+
+.checkboxInput:disabled ~ .checkboxCustom {
+  background-color: color(dark, 100);
+  border-color: color(dark, 300);
+  cursor: not-allowed;
+
+  &::after {
+    border-color: color(dark, 300);
+  }
+}
+
+.checkboxInput:focus ~ .checkboxCustom {
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.checkboxLabel {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: color(light, 100);
+  cursor: pointer;
+}
+
+.checkboxInput:disabled ~ .checkboxLabel {
+  color: color(dark, 100);
+  cursor: not-allowed;
+}
+
 .errorInput {
   border-color: color(danger, 500);
 

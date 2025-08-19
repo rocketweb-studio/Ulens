@@ -26,7 +26,7 @@ export const SignUp = () => {
                     <p className={styles.signInText}>
                         Do you have an account?
                     </p>
-                    <Button>Sign In</Button>
+                    <Button variant={"text"}>Sign In</Button>
                 </div>
             </form>
         </div>

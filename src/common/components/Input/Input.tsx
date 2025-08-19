@@ -7,6 +7,7 @@ type Props = {
     type?: string;
     name: string;
     value?: string;
+    checked?: boolean;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
     label?: string;
@@ -16,16 +17,43 @@ type Props = {
 }
 
 export const Input = ({
-                   type = 'text',
-                   name,
-                   value,
-                   onChange,
-                   placeholder = '',
-                   label,
-                   error,
-                   disabled = false,
-                   className = '',
-               }: Props) => {
+                          type = 'text',
+                          name,
+                          value,
+                          checked,
+                          onChange,
+                          placeholder = '',
+                          label,
+                          error,
+                          disabled = false,
+                          className = '',
+                      }: Props) => {
+
+    if (type === 'checkbox') {
+        return (
+            <div className={`${styles.inputContainer} ${className}`}>
+                <label className={styles.checkboxContainer}>
+                    <input
+                        type="checkbox"
+                        id={name}
+                        name={name}
+                        checked={checked}
+                        onChange={onChange}
+                        disabled={disabled}
+                        className={styles.checkboxInput}
+                    />
+                    <span className={styles.checkboxCustom} />
+                    {label && (
+                        <span className={styles.checkboxLabel}>
+                            {label}
+                        </span>
+                    )}
+                </label>
+                {error && <span className={styles.errorText}>{error}</span>}
+            </div>
+        );
+    }
+
     return (
         <div className={`${styles.inputContainer} ${className}`}>
             {label && (
