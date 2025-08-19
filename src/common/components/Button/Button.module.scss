@@ -1,0 +1,156 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 24px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  outline: 2px solid transparent;
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: color(accent, 900);
+    color: color(light, 900);
+  }
+
+  &.fullWidth {
+    width: 100%;
+  }
+
+  &.variant-primary {
+    background-color: color(accent, 700);
+    color: color(light, 100);
+
+    &:hover:not(:disabled) {
+      background-color: color(accent, 100);
+      color: color(light, 100);
+    }
+
+    &:focus:not(:disabled) {
+      outline: 2px solid color(accent, 700);
+    }
+
+    &:active:not(:disabled) {
+      background-color: color(accent, 700);
+      color: color(light, 500);
+      outline: 2px solid transparent;
+
+    }
+  }
+
+  &.variant-secondary {
+    background-color: color(dark, 300);
+    color: color(light, 100);
+
+    &:hover:not(:disabled) {
+      background-color: color(dark, 100);
+      color: color(light, 100);
+    }
+
+    &:focus:not(:disabled) {
+      background-color: color(dark, 300);
+      outline: 2px solid color(accent, 300);
+    }
+
+    &:active:not(:disabled) {
+      background-color: color(dark, 100);
+      color: color(light, 100);
+      outline: 2px solid transparent;
+
+    }
+
+    &:disabled {
+      background-color: color(dark, 500);
+      color: color(light, 900);
+    }
+  }
+
+  &.variant-outline {
+    background-color: transparent;
+    border: 1px solid color(accent, 500);
+    color: color(accent, 500);
+
+    &:active:not(:disabled) {
+      border: 1px solid color(accent, 700);
+      color: color(accent, 700);
+      outline: 2px solid transparent;
+    }
+
+    &:hover:not(:disabled) {
+      border: 1px solid color(accent, 100);
+      color: color(accent, 100);
+    }
+
+    &:focus:not(:disabled) {
+      background-color: transparent;
+      outline: 2px solid color(accent, 700);
+      color: color(accent, 700);
+      border: 1px solid transparent;
+    }
+
+  }
+
+  &.variant-text {
+    background-color: transparent;
+    padding: 0;
+    color: color(accent, 500);
+
+    &:hover:not(:disabled) {
+      border: 1px solid color(accent, 100);
+      color: color(accent, 100);
+    }
+
+    &:active:not(:disabled) {
+      color: color(accent, 700);
+    }
+
+    &:focus:not(:disabled) {
+      outline: 2px solid color(accent, 700);
+      color: color(accent, 700);
+      border: 1px solid transparent;
+    }
+  }
+
+  &.size-small {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  &.size-medium {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  &.size-large {
+    padding: 12px 24px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  &.loading {
+    pointer-events: none;
+    color: transparent;
+
+    .loader {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      color: inherit;
+    }
+  }
+
+  .leftIcon {
+    margin-right: 8px;
+    display: flex;
+  }
+
+  .rightIcon {
+    margin-left: 8px;
+    display: flex;
+  }
+}
