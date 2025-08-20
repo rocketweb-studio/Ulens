@@ -1,9 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, {useState} from 'react';
 import styles from '@/src/common/components/Input/Input.module.scss';
 import {FieldValues, Path, UseFormRegister} from "react-hook-form";
 import {RegistrationInputs} from "@/src/feature/auth/lib/schemas";
+import Image from "next/image";
+import eyeOnSvg from "@/public/eye-outline.svg";
+import eyeOffSvg from "@/public/eye-off-outline.svg";
 
 type Props<T extends FieldValues = RegistrationInputs> = {
     type?: string;
@@ -17,6 +20,7 @@ type Props<T extends FieldValues = RegistrationInputs> = {
     disabled?: boolean;
     className?: string;
     register?: UseFormRegister<T>;
+    showPasswordToggle?: boolean;
 }
 
 export const Input = <T extends FieldValues = RegistrationInputs>({
@@ -30,8 +34,11 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
                                                                       error,
                                                                       disabled = false,
                                                                       className = '',
-                                                                      register
+                                                                      register,
+                                                                      showPasswordToggle = false
                                                                   }: Props<T>) => {
+    const [showPassword, setShowPassword] = useState(false);
+    const inputType = showPasswordToggle && type === 'password' && showPassword ? 'text' : type;
 
     if (type === 'checkbox') {
         return (
@@ -62,14 +69,31 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
                     {label}
                 </label>
             )}
-            <input
-                type={type}
-                value={value}
-                placeholder={placeholder}
-                disabled={disabled}
-                className={`${styles.input} ${error ? styles.errorInput : ''}`}
-                {...(register && name ? register(name) : {name, onChange})}
-            />
+            <div className={styles.inputWrapper}>
+                <input
+                    type={inputType}
+                    value={value}
+                    placeholder={placeholder}
+                    disabled={disabled}
+                    className={`${styles.input} ${error ? styles.errorInput : ''} ${showPasswordToggle && type === 'password' ? styles.passwordInput : ''}`}
+                    {...(register && name ? register(name) : {name, onChange})}
+                />
+                {showPasswordToggle && type === "password" && (
+                    <button
+                        type="button"
+                        className={styles.passwordToggle}
+                        onClick={() => setShowPassword(!showPassword)}
+                        disabled={disabled}
+                    >
+                        <Image
+                            src={showPassword ? eyeOnSvg : eyeOffSvg}
+                            alt={showPassword ? "Hide" : "Show"}
+                            width={24}
+                            height={24}
+                        />
+                    </button>
+                )}
+            </div>
             {error && <span className={styles.errorText}>{error}</span>}
         </div>
     );

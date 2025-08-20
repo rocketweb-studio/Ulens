@@ -39,8 +39,8 @@ export const SignUp = () => {
                 <div className={styles.inputsTextWrapper}>
                     <Input register={register} name={"username"} error={errors.username?.message} placeholder={"Epam11"} label={"Username"} />
                     <Input register={register} name={"email"} error={errors.email?.message} placeholder={"Epam@epam.com"} label={"Email"}/>
-                    <Input register={register} name={"password"} error={errors.password?.message} label={"Password"}/>
-                    <Input register={register} name={"passwordConfirmation"} error={errors.passwordConfirmation?.message} label={"Password Confirmation"}/>
+                    <Input register={register} name={"password"} error={errors.password?.message} label={"Password"} type={"password"} showPasswordToggle/>
+                    <Input register={register} name={"passwordConfirmation"} error={errors.passwordConfirmation?.message} label={"Password Confirmation"} type={"password"} showPasswordToggle/>
                 </div>
                 <div className={styles.signUpWrapper}>
                     <Input register={register} name={"agreePolitics"} error={errors.agreePolitics?.message} label={"I agree to the Terms of Service and Privacy Policy"}
