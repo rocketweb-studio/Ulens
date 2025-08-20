@@ -1,6 +1,11 @@
+'use client'
+
 import {Input} from "@/src/common/components/Input/Input";
 import styles from "./SignUp.module.scss"
 import {Button} from "@/src/common/components/Button/Button";
+import Image from "next/image";
+import googleSvg from "@/public/google-svg.svg";
+import gitHubSvg from "@/public/github-svg.svg";
 
 export const SignUp = () => {
     return (
@@ -8,8 +13,8 @@ export const SignUp = () => {
             <form className={styles.form}>
                 <h2 className={styles.title}>Sign Up</h2>
                 <div className={styles.oAuthWrapper}>
-                    <Button>Google</Button>
-                    <Button>Github</Button>
+                    <a href=""><Image src={googleSvg} alt={"Google"}/></a>
+                    <a href=""><Image src={gitHubSvg} alt={"GitHub"}/></a>
                 </div>
                 <div className={styles.inputsTextWrapper}>
                     <Input name={"Username"} placeholder={"Epam11"} label={"Username"}/>
