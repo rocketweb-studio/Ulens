@@ -56,16 +56,12 @@ export default function SignIn() {
                     <a href=""><Image src={gitHubSvg} alt={"GitHub"}/></a>
                 </div>
 
-                <div className={styles.inputWrapper}>
                     <div className={styles.inputContainer}>
                     <Input register={register} name={"email"} error={errors.email?.message} placeholder={"Ulens@ulens.com"} label={"Email"}/>
-                    </div>
 
-                    <div className={styles.inputContainer}>
                     <Input register={register} name={"password"} error={errors.password?.message} label={"Password"} type={"password"} showPasswordToggle/>
                     </div>
-                    <Button variant={"primary"} fullWidth>Sign In</Button>
-                </div>
+                    <Button variant={"primary"} fullWidth  className={styles.submitBtn}>Sign In</Button>
 
                 <span>Don’t have an account?</span>
                 <a className={styles.signUpLink} href="">Sign Up</a>

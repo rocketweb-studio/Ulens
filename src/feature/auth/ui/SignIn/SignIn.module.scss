@@ -2,15 +2,14 @@
   background-color: color(dark, 500);
   max-width: 380px;
   width: 100%;
-  min-height: 480px;
   margin: 0 auto;
 }
 
 .authForm {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
+  gap: 18px;
   color: color(light, 100);
   padding: 23px;
   min-width: 100%;
@@ -22,94 +21,36 @@
   margin-top: 13px;
 }
 
-.inputWrapper {
-  min-width: 100%;
-}
-
 .inputContainer {
-  position: relative;
-  width: 100%;
-  margin-top: 45px;
-}
-
-.emailInput, .passwordInput {
+  display: flex;
+  flex-direction: column;
   min-width: 100%;
-  height: 40px;
-  background-color: color(dark, 500);
-  border: 1px solid color(dark, 100);
-  padding: 0 10px;
-  outline: none;
+  position: relative;
+  gap:25px;
+
 }
 
 .inputContainer::before, ::after {
   content: "";
+  position: absolute;
   font-weight: 400;
   font-size: 14px;
   line-height: 1.7;
   text-align: center;
   color: color(light, 900);
-  position: absolute;
-  top: -22px;
-  left: 0;
   padding: 0;
-  z-index: 32423;
+  z-index: 777;
 }
 
-.inputContainer:nth-child(1)::before {
-  content: "Email";
-}
-
-.inputContainer:nth-child(2)::before {
-  content: "Password";
-}
-
-.inputContainer:nth-child(2)::after {
+.inputContainer::after {
   content: "Forgot Password";
-  top: 80px;
+  top: 200px;
   left: 220px;
 }
 
-
-.passwordWrapper {
-  position: relative;
-}
-
-.togglePassword {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  font-size: 1.2rem;
-}
-
-.passwordInput {
-  width: 100%;
-  padding-right: 35px;
-}
-
-
-.btn {
-  width: 100%;
-  background-color: color(accent, 500);
-  height: 36px;
-  margin-top: 80px;
-  margin-bottom: 18px;
-  border: none;
-  border-radius: 3px;
-}
-
-.btn:hover {
-  background-color: color(accent, 700);
-
-
-}
-
-.signUpLink, .btn {
-  cursor: pointer;
+.submitBtn{
+  margin-top: 72px;
+   margin-bottom: 18px;
 }
 
 .authForm .signUpLink {
@@ -118,12 +59,4 @@
   line-height: 1.5;
   margin-top: 13px;
   color: color(accent, 500);
-}
-
-.errorInput {
-  border: 1px solid color(danger, 500);
-}
-
-.errorText {
-  color: color(danger, 500);;
 }
