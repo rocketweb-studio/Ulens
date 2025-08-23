@@ -1,6 +1,6 @@
 import {baseApi} from "@/src/app/baseApi";
 import {UserType} from "@/src/feature/auth/api/authApi.types";
-import {LoginRequestParams, LoginResponseAccessToken} from "@/app/sign-in/page";
+import {LoginRequestParams, LoginResponseAccessToken} from "@/src/feature/auth/ui/SignIn";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({

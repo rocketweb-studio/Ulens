@@ -32,7 +32,9 @@ option {
   font-style: inherit;
   color: inherit;
 }
-
+a,button{
+  cursor: pointer;
+}
 a:visited {
   color: inherit;
 }

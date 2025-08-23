@@ -1,0 +1,62 @@
+.authWrapper {
+  background-color: color(dark, 500);
+  max-width: 380px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  color: color(light, 100);
+  padding: 23px;
+  min-width: 100%;
+}
+
+.oAuth {
+  display: flex;
+  gap: 60px;
+  margin-top: 13px;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+  position: relative;
+  gap:25px;
+
+}
+
+.inputContainer::before, ::after {
+  content: "";
+  position: absolute;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.7;
+  text-align: center;
+  color: color(light, 900);
+  padding: 0;
+  z-index: 777;
+}
+
+.inputContainer::after {
+  content: "Forgot Password";
+  top: 200px;
+  left: 220px;
+}
+
+.submitBtn{
+  margin-top: 72px;
+   margin-bottom: 18px;
+}
+
+.authForm .signUpLink {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.5;
+  margin-top: 13px;
+  color: color(accent, 500);
+}
