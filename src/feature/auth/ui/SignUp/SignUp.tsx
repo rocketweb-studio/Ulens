@@ -9,8 +9,11 @@ import gitHubSvg from "@/public/github-svg.svg";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {RegistrationInputs, registrationSchema} from "@/src/feature/auth/lib/schemas";
+import {useRegistrationMutation} from "@/src/feature/auth/api/authApi";
 
 export const SignUp = () => {
+    const [registration] = useRegistrationMutation()
+
     const {
         register,
         handleSubmit,
@@ -23,8 +26,11 @@ export const SignUp = () => {
         }
     })
 
-    const onSubmit: SubmitHandler<RegistrationInputs> = (data) => {
+    const onSubmit: SubmitHandler<RegistrationInputs> = async (data) => {
+        const {userName, email, password} = data
         console.log(data)
+        const res = await registration({userName, email, password}).unwrap()
+        console.log(res)
         reset()
     }
 
@@ -37,7 +43,7 @@ export const SignUp = () => {
                     <a href=""><Image src={gitHubSvg} alt={"GitHub"}/></a>
                 </div>
                 <div className={styles.inputsTextWrapper}>
-                    <Input register={register} name={"username"} error={errors.username?.message} placeholder={"Epam11"} label={"Username"} />
+                    <Input register={register} name={"userName"} error={errors.userName?.message} placeholder={"Epam11"} label={"Username"} />
                     <Input register={register} name={"email"} error={errors.email?.message} placeholder={"Epam@epam.com"} label={"Email"}/>
                     <Input register={register} name={"password"} error={errors.password?.message} label={"Password"} type={"password"} showPasswordToggle/>
                     <Input register={register} name={"passwordConfirmation"} error={errors.passwordConfirmation?.message} label={"Password Confirmation"} type={"password"} showPasswordToggle/>
