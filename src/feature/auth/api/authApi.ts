@@ -10,7 +10,10 @@ export const authApi = baseApi.injectEndpoints({
     login: build.mutation<LoginResponseAccessToken,LoginRequestParams>({
       query: (body) => ({ method: "post", url: "auth/login", body }),
     }),
+    logout: build.mutation<LoginResponseAccessToken, LoginRequestParams>({
+        query: () => ({method: "delete", url: "auth/login"})
+    })
   }),
 })
 
-export const {useGetUsersQuery,useLoginMutation} = authApi
+export const {useGetUsersQuery,useLoginMutation, useLogoutMutation} = authApi
