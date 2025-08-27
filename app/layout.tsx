@@ -29,6 +29,8 @@ export default function RootLayout({children,}: Readonly<{ children: React.React
         <Link href={'/'} >main</Link>
         <Link href={'/profile'} >profile</Link>
         <Link href={'/settings'} >settings</Link>
+        <Link href={'/sign-in'} >login</Link>
+        <Link href={'/sign-up'} >Sign Up</Link>
       </div>
       {children}
     </StoreWrapper>

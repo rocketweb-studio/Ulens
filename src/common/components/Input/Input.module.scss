@@ -1,0 +1,185 @@
+@use 'src/common/styles/_colors';
+@use 'src/common/styles/_typography' as _typography;
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 400;
+  color: color(light, 900);
+  margin-top: 4px;
+}
+
+.input {
+  padding: 6px 12px;
+  border: 1px solid color(light, 900);
+  color: color(light, 900);
+  border-radius: 0;
+  font-size: 16px;
+  line-height: 24px ;
+  font-weight: 400;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  background-color: rgba(0, 0, 0, 0);
+  width: 100%;
+
+  &:focus {
+    background-color: color(dark, 500);
+    border: 1px solid color(light, 100);
+    color: color(light, 100);
+    outline: none;
+  }
+
+  &:disabled {
+    background-color: color(dark, 100);
+    border: 1px solid color(dark, 100);
+    color: color(dark, 100);
+  }
+
+  &::placeholder {
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    color: color(light, 900);
+  }
+
+  &:hover {
+    color: color(light, 900);
+    border: 1px solid color(light, 900);
+  }
+}
+
+.passwordInput {
+  padding-right: 40px;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: color(light, 700);
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: color(light, 900);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: color(dark, 300);
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
+.checkboxContainer {
+  display: flex;
+  cursor: pointer;
+  gap: 8px;
+}
+
+.checkboxInput {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkboxCustom {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background-color: color(light, 100);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    display: none;
+    width: 5px;
+    height: 10px;
+    border: solid color(dark, 900);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+}
+
+.checkboxInput:checked ~ .checkboxCustom {
+  background-color: white;
+  border-color: color(accent, 500);
+
+  &::after {
+    display: block;
+  }
+}
+
+.checkboxInput:disabled ~ .checkboxCustom {
+  background-color: color(dark, 100);
+  border-color: color(dark, 300);
+  cursor: not-allowed;
+
+  &::after {
+    border-color: color(dark, 300);
+  }
+}
+
+.checkboxInput:focus ~ .checkboxCustom {
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.checkboxLabel {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: color(light, 100);
+  cursor: pointer;
+}
+
+.checkboxInput:disabled ~ .checkboxLabel {
+  color: color(dark, 100);
+  cursor: not-allowed;
+}
+
+.errorInput {
+  border-color: color(danger, 500);
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+  }
+}
+
+.errorText {
+  position: absolute;
+  top:64px;
+  color: color(danger, 500);
+  font-size: 14px;
+  margin-top: 2px;
+}
