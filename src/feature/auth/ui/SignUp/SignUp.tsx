@@ -43,14 +43,14 @@ export const SignUp = () => {
                     <a href=""><Image src={gitHubSvg} alt={"GitHub"}/></a>
                 </div>
                 <div className={styles.inputsTextWrapper}>
-                    <Input register={register} name={"userName"} error={errors.userName?.message} placeholder={"Epam11"} label={"Username"} />
-                    <Input register={register} name={"email"} error={errors.email?.message} placeholder={"Epam@epam.com"} label={"Email"}/>
-                    <Input register={register} name={"password"} error={errors.password?.message} label={"Password"} type={"password"} showPasswordToggle/>
-                    <Input register={register} name={"passwordConfirmation"} error={errors.passwordConfirmation?.message} label={"Password Confirmation"} type={"password"} showPasswordToggle/>
+                    <Input register={register} name={"userName"} error={errors.userName?.message} placeholder={"Epam11"} label={"Username"} id={"userName"}/>
+                    <Input register={register} name={"email"} error={errors.email?.message} placeholder={"Epam@epam.com"} label={"Email"} id={"email"}/>
+                    <Input register={register} name={"password"} error={errors.password?.message} label={"Password"} type={"password"} showPasswordToggle id={"password"}/>
+                    <Input register={register} name={"passwordConfirmation"} error={errors.passwordConfirmation?.message} label={"Password Confirmation"} type={"password"} showPasswordToggle id={"passwordConfirmation"}/>
                 </div>
                 <div className={styles.signUpWrapper}>
                     <Input register={register} name={"agreePolitics"} error={errors.agreePolitics?.message} label={"I agree to the Terms of Service and Privacy Policy"}
-                           type={"checkbox"}/>
+                           type={"checkbox"} id={"agreePolitics"}/>
                     <Button type="submit">Sign Up</Button>
                 </div>
                 <div className={styles.signInWrapper}>
