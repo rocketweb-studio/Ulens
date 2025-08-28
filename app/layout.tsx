@@ -3,7 +3,7 @@ import {Geist, Geist_Mono} from "next/font/google";
 import "@/src/app/globals.scss";
 import {StoreWrapper} from "@/src/app/store-wrapper";
 import React from "react";
-import Link from "next/link";
+import {Navigation} from "@/src/common/components/Navigation/Navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,13 +25,7 @@ export default function RootLayout({children,}: Readonly<{ children: React.React
     <html lang="en">
     <body className={`${geistSans.variable} ${geistMono.variable}`}>
     <StoreWrapper>
-      <div style={{display: "flex", justifyContent: "center", gap: '10px'}}>
-        <Link href={'/'} >main</Link>
-        <Link href={'/profile'} >profile</Link>
-        <Link href={'/settings'} >settings</Link>
-        <Link href={'/sign-in'} >login</Link>
-        <Link href={'/sign-up'} >Sign Up</Link>
-      </div>
+      <Navigation/>
       {children}
     </StoreWrapper>
     </body>

@@ -1,0 +1,20 @@
+@use 'src/common/styles/_colors';
+@use 'src/common/styles/_typography' as _typography;
+
+.navWrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+}
+
+.logotype{
+  font-size: 26px;
+}
+
+.linksWrap{
+  display: flex;
+  gap: 10px ;
+  text-transform: capitalize;
+}
