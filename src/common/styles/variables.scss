@@ -1,0 +1,10 @@
+@use 'colors';
+
+@mixin formWrapper {
+  max-width: 378px;
+  padding: 24px;
+  background-color: colors.color(dark, 500);
+  border: 1px solid colors.color(dark, 300);
+  color: colors.color(light, 100);
+  margin: 72px auto;
+}

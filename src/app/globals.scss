@@ -1,5 +1,5 @@
-@import '../common/styles/colors';
-@import '../common/styles/typography';
+@use '../common/styles/colors' as colors;
+@use '../common/styles/typography' as typography;
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 html {
@@ -40,9 +40,9 @@ a:visited {
 }
 
 body {
-  font-family: $font-family, sans-serif;
-  font-weight: $font-weight-regular;
-  background-color: color(dark,700);
+  font-family: typography.$font-family, sans-serif;
+  font-weight: typography.$font-weight-regular;
+  background-color: colors.color(dark,700);
   color: color(light, 100);
   padding: 12px 60px;
   height: 100%;

@@ -7,6 +7,8 @@ export const Path = {
     Settings: '/settings',
     SignIn: '/sign-in',
     SignUp: '/sign-up',
+    PasswordRecovery: '/password-recovery',
+    ResetPassword: '/account/reset-password',
 } as const
 
 export const Navigation = () => {
@@ -18,6 +20,8 @@ export const Navigation = () => {
                 <Link href={Path.Settings}>settings</Link>
                 <Link href={Path.SignIn}>login</Link>
                 <Link href={Path.SignUp}>Sign Up</Link>
+                <Link href={Path.PasswordRecovery} >Password-recovery</Link>
+                <Link href={Path.ResetPassword} >Reset-Password</Link>
             </div>
         </nav>
     );
