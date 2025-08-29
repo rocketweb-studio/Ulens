@@ -1,0 +1,36 @@
+$font-family: 'Inter', sans-serif;
+
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semi-bold: 600;
+$font-weight-bold: 700;
+
+@mixin h1 {
+  font-family: $font-family;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 180%;
+}
+
+@mixin h3 {
+  font-family: $font-family;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 150%;
+}
+
+
+@mixin regular_text_14 {
+  font-family: $font-family;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 171%;
+}
+
+@mixin regular_text_16 {
+  font-family: $font-family;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+}

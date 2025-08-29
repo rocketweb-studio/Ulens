@@ -43,12 +43,16 @@ J
     if (!isOpen) return null;
 
     return createPortal(
-        <div className={styles.modalOverlay} onClick={closeOnOverlayClick ? onClose : undefined}>
-            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                <button className={styles.closeButton} onClick={onClose} aria-label="Close modal">
-                    ×
+        <div className={s.overlay}>
+            <div className={s.content}>
+                <h3 className={s.title}>{modalTitle}</h3>
+                <button className={s.closeButton} onClick={onClose}>
+                    <Image src={closeIcon} alt={'closeIcon'}/>
                 </button>
-                {children}
+                <div className={s.flexContainer}>
+                    {children}
+                    <Button className={s.button} onClick={onClose}>ОК</Button>
+                </div>
             </div>
         </div>,
         document.body

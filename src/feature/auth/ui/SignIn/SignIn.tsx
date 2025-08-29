@@ -10,6 +10,7 @@ import {Input} from "@/src/common/components/Input/Input";
 import {Button} from "@/src/common/components/Button/Button";
 import {loginSchema} from "@/src/feature/auth/lib/schemas/loginSchema";
 import styles from "./SignIn.module.scss"
+import {Path} from "@/src/common/components/Navigation/Navigation";
 
 
 export type LoginRequestParams = z.infer<typeof loginSchema>;
@@ -64,8 +65,7 @@ export default function SignIn() {
                     <Button variant={"primary"} fullWidth  className={styles.submitBtn}>Sign In</Button>
 
                 <span>Don’t have an account?</span>
-                <a className={styles.signUpLink} href="">Sign Up</a>
-
+                <a className={styles.signUpLink} href={Path.SignUp}>Sign Up</a>
             </form>
 
         </article>

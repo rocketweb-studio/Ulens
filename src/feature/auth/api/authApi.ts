@@ -13,8 +13,31 @@ export const authApi = baseApi.injectEndpoints({
         }),
         registration: build.mutation<RegistrationResponce, RegistrationRequest>({
             query: (body) => ({method: "post", url: "auth/registration", body})
-        })
+        }),
+        confirmRegistration: build.mutation<any, { code: string }>({
+            query: (body) => ({method: 'post', url: 'auth/registration-confirmation', body})
+        }),
+        login: build.mutation<LoginResponseAccessToken, LoginRequestParams>({
+            query: (body) => ({method: "post", url: "auth/login", body}),
+        }),
+        passwordRecovery: build.mutation<any, { email: string }>({
+            query: (body) => ({method: "post", url: "auth/password-recovery", body}),
+        }),
+        checkRecoveryCode: build.mutation<any, { code: string }>({
+            query: (body) => ({method: "post", url: "auth/check-recovery-code", body}),
+        }),
+        setNewPassword: build.mutation<any, { password: string, code: string }>({
+            query: (body) => ({method: "post", url: "auth/new-password", body}),
+        }),
     }),
 })
 
-export const {useGetUsersQuery, useLoginMutation, useRegistrationMutation} = authApi
+export const {
+  useGetUsersQuery,
+  useLoginMutation,
+  usePasswordRecoveryMutation,
+  useRegistrationMutation,
+  useConfirmRegistrationMutation,
+  useCheckRecoveryCodeMutation,
+  useSetNewPasswordMutation
+} = authApi

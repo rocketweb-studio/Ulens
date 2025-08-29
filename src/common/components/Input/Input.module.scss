@@ -1,5 +1,5 @@
-@use 'src/common/styles/_colors';
-@use 'src/common/styles/_typography' as _typography;
+@use '../../styles/colors';
+@use '../../styles/typography' as typography;
 
 .inputContainer {
   display: flex;
@@ -177,8 +177,6 @@
 }
 
 .errorText {
-  position: absolute;
-  top:64px;
   color: color(danger, 500);
   font-size: 14px;
   margin-top: 2px;
