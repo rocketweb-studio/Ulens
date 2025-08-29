@@ -3,42 +3,44 @@
 import {Input} from '@/src/common/components/Input/Input';
 import s from './PasswordRecovery.module.scss'
 import {Button} from "@/src/common/components/Button/Button";
-import Image from "next/image";
-import ReCAPTCHA from '@/public/reCaptcha.svg'
 import {Modal} from "@/src/common/components/Modal/Modal";
 import {usePasswordRecoveryMutation} from "@/src/feature/auth/api/authApi";
-import {useState} from "react";
+import React, {useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {emailSchema} from "@/src/feature/auth/lib/schemas/emailSchema";
 import {useRouter} from "next/navigation";
+import ReCaptcha from "@/src/feature/auth/ui/PasswordRecovery/ReCaptcha";
 
 type Inputs = {
   email: string
-  ReCAPTCHA: boolean
+  ReCAPTCHA: string
 }
 
 export const PasswordRecovery = () => {
   const [sendEmail, result] = usePasswordRecoveryMutation() // {data, isLoading, error}
+  const [captcha, setCaptcha] = useState<string>('');
   const router = useRouter();
   const [openModal, setOpenModal] = useState(false)
 
-  console.log(result)
+  // console.log(result)
 
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: {errors},
   } = useForm<Inputs>({
     resolver: zodResolver(emailSchema),
-    defaultValues: {email: '', ReCAPTCHA: false},
+    defaultValues: {email: '', ReCAPTCHA: ''},
   })
 
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    sendEmail({email: data.email})
-    console.log(data.email)
+    sendEmail({email: data.email, reCaptcha: captcha})
+
     reset()
   }
 
@@ -47,8 +49,12 @@ export const PasswordRecovery = () => {
     result.reset()
   }
 
-  // console.log('errors =', errors)
+  if (captcha) {
+    setValue('ReCAPTCHA', captcha)
+  }
 
+  console.log('errors =', errors)
+  console.log(captcha)
 
   return (
     <div className={s.formWrapper}>
@@ -62,19 +68,16 @@ export const PasswordRecovery = () => {
         {result?.isSuccess && <p className={s.infoMessage2}>The link has been sent by email.<br/>
             If you don’t receive an email send link again</p>}
         <div className={s.buttonWrapper}>
-          <Button type='submit' >{result.isSuccess ? 'Send Link Again' : 'Send Link'}</Button>
-          <Button onClick={()=>{router.push('/sign-in')}} variant={"text"}>Back to Sign In</Button>
+          <Button type='submit'>{result.isSuccess ? 'Send Link Again' : 'Send Link'}</Button>
+          <Button onClick={() => {
+            router.push('/sign-in')
+          }} variant={"text"}>Back to Sign In</Button>
 
         </div>
-        {!result.isSuccess && <>
-            <div className={s.boxModel}>
-                <Input name="ReCAPTCHA" register={register} label="I’m not a robot" type={"checkbox"}
-                       error={errors?.ReCAPTCHA?.message}/>
-                <Image src={ReCAPTCHA} alt={'ReCAPTCHA'}/>
-            </div>
-        </>}
-
+        {!result.isSuccess && <ReCaptcha setCaptcha={setCaptcha} errorMessage={errors.ReCAPTCHA?.message || result?.isError }/>}
       </form>
+
+
 
 
       <Modal modalTitle={'Email sent'} open={openModal} onClose={() => setOpenModal(false)}>

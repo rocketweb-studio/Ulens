@@ -16,7 +16,7 @@ export const authApi = baseApi.injectEndpoints({
     login: build.mutation<LoginResponseAccessToken, LoginRequestParams>({
       query: (body) => ({method: "post", url: "auth/login", body}),
     }),
-    passwordRecovery: build.mutation<any, { email: string }>({
+    passwordRecovery: build.mutation<any, { email: string, reCaptcha: string }>({
       query: (body) => ({method: "post", url: "auth/password-recovery", body}),
     }),
     checkRecoveryCode: build.mutation<any, { code: string }>({
