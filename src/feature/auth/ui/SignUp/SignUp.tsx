@@ -10,9 +10,14 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {RegistrationInputs, registrationSchema} from "@/src/feature/auth/lib/schemas";
 import {useRegistrationMutation} from "@/src/feature/auth/api/authApi";
+import {useModal} from "@/src/common/hooks/useModal";
+import {Modal} from "@/src/common/components/Modal/Modal";
+import {useState} from "react";
 
 export const SignUp = () => {
-    const [registration] = useRegistrationMutation()
+    const [registration, {isSuccess, error}] = useRegistrationMutation()
+    const {isOpen, openModal, closeModal} = useModal()
+    const [email, setEmail] = useState('')
 
     const {
         register,
@@ -26,12 +31,19 @@ export const SignUp = () => {
         }
     })
 
+
     const onSubmit: SubmitHandler<RegistrationInputs> = async (data) => {
         const {userName, email, password} = data
         console.log(data)
-        const res = await registration({userName, email, password}).unwrap()
-        console.log(res)
-        reset()
+        try {
+            const res = await registration({userName, email, password}).unwrap()
+            setEmail(email)
+            if (isSuccess) openModal()
+            reset()
+            console.log(res)
+        } catch (error) {
+
+        }
     }
 
     return (
@@ -60,6 +72,15 @@ export const SignUp = () => {
                     <Button variant={"text"}>Sign In</Button>
                 </div>
             </form>
+            <Modal
+                isOpen={isOpen}
+                onClose={closeModal}
+                modalTitle="Email sent"
+            >
+                <div>
+                    <p>We have sent a link to confirm your email to {email}</p>
+                </div>
+            </Modal>
         </div>
     );
 };
