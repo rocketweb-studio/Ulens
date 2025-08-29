@@ -5,15 +5,39 @@ import {LoginRequestParams, LoginResponseAccessToken} from "@/src/feature/auth/u
 export const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getUsers: build.query<UserType[], void>({
-      query: () => "users",
+      query: () => "auth/users",
     }),
-    login: build.mutation<LoginResponseAccessToken,LoginRequestParams>({
-      query: (body) => ({ method: "post", url: "auth/login", body }),
+    registration: build.mutation<any, { userName: string, email: string, password: string }>({
+      query: (body) => ({method: 'post', url: 'auth/registration', body})
     }),
+    confirmRegistration: build.mutation<any, { code: string }>({
+      query: (body) => ({method: 'post', url: 'auth/registration-confirmation', body})
+    }),
+    login: build.mutation<LoginResponseAccessToken, LoginRequestParams>({
+      query: (body) => ({method: "post", url: "auth/login", body}),
+    }),
+    passwordRecovery: build.mutation<any, { email: string }>({
+      query: (body) => ({method: "post", url: "auth/password-recovery", body}),
+    }),
+    checkRecoveryCode: build.mutation<any, { code: string }>({
+      query: (body) => ({method: "post", url: "auth/check-recovery-code", body}),
+    }),
+    setNewPassword: build.mutation<any, { password: string, code: string }>({
+      query: (body) => ({method: "post", url: "auth/new-password", body}),
+    }),
+
     logout: build.mutation<LoginResponseAccessToken, LoginRequestParams>({
         query: () => ({method: "delete", url: "auth/login"})
     })
   }),
 })
 
-export const {useGetUsersQuery,useLoginMutation, useLogoutMutation} = authApi
+export const {
+  useGetUsersQuery,
+  useLoginMutation,
+  usePasswordRecoveryMutation,
+  useRegistrationMutation,
+  useConfirmRegistrationMutation,
+  useCheckRecoveryCodeMutation,
+  useSetNewPasswordMutation
+} = authApi

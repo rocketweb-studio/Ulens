@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 $colors: (
         accent: (
                 100: #73A5FF,
@@ -44,15 +46,17 @@ $colors: (
 );
 
 @function color($palette, $shade) {
-  @if map-has-key($colors, $palette) {
-    $palette-map: map-get($colors, $palette);
+  $palette-map: map.get($colors, $palette);
 
-    @if map-has-key($palette-map, $shade) {
-      @return map-get($palette-map, $shade);
-    } @else {
-      @error "Оттенок `#{$shade}` не найден в палитре `#{$palette}`.";
-    }
-  } @else {
-    @error "Палитра `#{$palette}` не найдена.";
+  @if not $palette-map {
+    @error "Палитра `#{$palette}` не найдена в $colors.";
   }
+
+  $color: map.get($palette-map, $shade);
+
+  @if not $color {
+    @error "Оттенок `#{$shade}` не найден в палитре `#{$palette}`.";
+  }
+
+  @return $color;
 }

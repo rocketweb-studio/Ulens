@@ -15,4 +15,7 @@ setupListeners(store.dispatch)
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
-export const useAppDispatch = useDispatch.withTypes<AppDispatch>
+
+// для возможности обращения к store в консоли браузера
+// @ts-ignore
+window.store = store
