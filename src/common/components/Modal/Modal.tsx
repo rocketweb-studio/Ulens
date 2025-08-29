@@ -1,6 +1,9 @@
-import React, { useEffect } from "react"
+import React, {useEffect} from "react"
 import {createPortal} from "react-dom"
-import styles from "./Modal.module.scss"
+import s from "./Modal.module.scss"
+import Image from "next/image";
+import closeIcon from "@/public/close.svg"
+import {Button} from "@/src/common/components/Button/Button";
 
 export type Props = {
     isOpen: boolean
@@ -8,15 +11,17 @@ export type Props = {
     children: React.ReactNode
     closeOnOverlayClick?: boolean
     closeOnEsc?: boolean
+    modalTitle: string
 };
 
 export const Modal = ({
-                   isOpen,
-                   onClose,
-                   children,
-                   closeOnOverlayClick = true,
-                   closeOnEsc = true
-               }: Props) => {
+                          isOpen,
+                          onClose,
+                          children,
+                          modalTitle,
+                          closeOnOverlayClick = true,
+                          closeOnEsc = true
+                      }: Props) => {
     useEffect(() => {
         if (!isOpen || !closeOnEsc) return;
 
@@ -34,7 +39,7 @@ export const Modal = ({
         } else {
             document.body.style.overflow = 'unset';
         }
-J
+
         return () => {
             document.body.style.overflow = 'unset';
         };
