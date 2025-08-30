@@ -13,17 +13,19 @@ import {useRegistrationMutation} from "@/src/feature/auth/api/authApi";
 import {useModal} from "@/src/common/hooks/useModal";
 import {Modal} from "@/src/common/components/Modal/Modal";
 import {useEffect, useState} from "react";
+import {useRouter} from "next/navigation";
 
 export const SignUp = () => {
     const [registration, {isSuccess, error}] = useRegistrationMutation()
     const {isOpen, openModal, closeModal} = useModal()
     const [email, setEmail] = useState('')
+    const router = useRouter();
 
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors },
+        formState: { errors, isValid },
     } = useForm<RegistrationInputs>({
         resolver: zodResolver(registrationSchema),
         defaultValues: {
@@ -65,13 +67,13 @@ export const SignUp = () => {
                 <div className={styles.signUpWrapper}>
                     <Input register={register} name={"agreePolitics"} error={errors.agreePolitics?.message} label={"I agree to the Terms of Service and Privacy Policy"}
                            type={"checkbox"} id={"agreePolitics"}/>
-                    <Button type="submit">Sign Up</Button>
+                    <Button type="submit" disabled={!isValid}>Sign Up</Button>
                 </div>
                 <div className={styles.signInWrapper}>
                     <p className={styles.signInText}>
                         Do you have an account?
                     </p>
-                    <Button variant={"text"}>Sign In</Button>
+                    <Button type={"button"} variant={"text"} onClick={() => router.push('/sign-in')}>Sign In</Button>
                 </div>
             </form>
             <Modal
