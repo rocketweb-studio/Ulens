@@ -11,6 +11,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {emailSchema} from "@/src/feature/auth/lib/schemas/emailSchema";
 import {useRouter} from "next/navigation";
 import ReCaptcha from "@/src/feature/auth/ui/PasswordRecovery/ReCaptcha";
+import {useModal} from "@/src/common/hooks/useModal";
 
 type Inputs = {
   email: string
@@ -19,9 +20,10 @@ type Inputs = {
 
 export const PasswordRecovery = () => {
   const [sendEmail, result] = usePasswordRecoveryMutation() // {data, isLoading, error}
+  const {isOpen, openModal, closeModal} = useModal()
   const [captcha, setCaptcha] = useState<string>('');
   const router = useRouter();
-  const [openModal, setOpenModal] = useState(false)
+  // const [openModal, setOpenModal] = useState(false)
 
   // console.log(result)
 
@@ -44,8 +46,8 @@ export const PasswordRecovery = () => {
     reset()
   }
 
-  if (result?.isSuccess && !openModal) {
-    setOpenModal(true)
+  if (result?.isSuccess && !isOpen) {
+    openModal()
     result.reset()
   }
 
@@ -80,7 +82,7 @@ export const PasswordRecovery = () => {
 
 
 
-      <Modal modalTitle={'Email sent'} open={openModal} onClose={() => setOpenModal(false)}>
+      <Modal modalTitle={'Email sent'} isOpen={isOpen} onClose={closeModal}>
         <p className={s.infoMessage3}>We have sent a link to confirm your email to epam@epam.com</p>
       </Modal>
 

@@ -12,7 +12,7 @@ import {RegistrationInputs, registrationSchema} from "@/src/feature/auth/lib/sch
 import {useRegistrationMutation} from "@/src/feature/auth/api/authApi";
 import {useModal} from "@/src/common/hooks/useModal";
 import {Modal} from "@/src/common/components/Modal/Modal";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export const SignUp = () => {
     const [registration, {isSuccess, error}] = useRegistrationMutation()
@@ -38,13 +38,15 @@ export const SignUp = () => {
         try {
             const res = await registration({userName, email, password}).unwrap()
             setEmail(email)
-            if (isSuccess) openModal()
             reset()
-            console.log(res)
         } catch (error) {
 
         }
     }
+
+    useEffect(() => {
+        if (isSuccess) openModal()
+    }, [isSuccess, openModal])
 
     return (
         <div className={styles.formWrapper}>
