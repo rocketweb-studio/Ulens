@@ -2,6 +2,5 @@ import {z} from "zod/v4";
 
 export const emailSchema = z.object({
   email: z.email({error: 'Incorrect email address'}),
-  // ReCAPTCHA: z.boolean({error: 'pass the captcha'})
-  ReCAPTCHA: z.string().min(1,{error: 'Please pass the captcha'})
+  recaptchaToken: z.string().min(1,{error: 'Please pass the captcha'})
 })
