@@ -34,6 +34,7 @@ export const ResendVerification = () => {
         try {
             const res = await resend({email, recaptchaToken: '123456'})
                 .unwrap()
+            setEmail(email)
             reset()
         } catch (error) {
         }
