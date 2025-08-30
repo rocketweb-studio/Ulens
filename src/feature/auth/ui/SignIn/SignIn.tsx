@@ -16,7 +16,7 @@ import {useRedirectIfAuthorized} from "@/src/common/hooks/useRedirectIfAuthorize
 
 export type LoginRequestParams = z.infer<typeof loginSchema>;
 export type LoginResponse = { accessToken: string }
-export type getMeResponse = { "userId": number, "userName": string, "email": string, "isBlocked": boolean }
+export type getMeResponse = { userId: number, userName: string, email: string, isBlocked?: boolean }
 
 export default function SignIn() {
     const isLoading=useRedirectIfAuthorized()
@@ -26,7 +26,6 @@ export default function SignIn() {
         register,
         handleSubmit,
         formState: {errors},
-        reset
     } = useForm<LoginRequestParams>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
