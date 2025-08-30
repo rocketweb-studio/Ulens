@@ -4,13 +4,13 @@ import {Path} from "@/src/common/components/Navigation/Navigation"
 import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
 
 
-export const useRedirectIfAuthorized = (redirecTo = Path.Profile) => {
+export const useRedirectIfAuthorized = (redirectTo = Path.Profile) => {
     const router = useRouter()
     const {data, isLoading} = useGetMeQuery()
 
     useEffect(() => {
         if (data) {
-            router.push(redirecTo)
+            router.push(redirectTo)
         }
     }, [data])
 

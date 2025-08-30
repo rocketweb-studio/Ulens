@@ -35,9 +35,9 @@ export default function SignIn() {
         },
     })
 
-    const onSubmit: SubmitHandler<LoginRequestParams> = async (data) => {
+    const onSubmit: SubmitHandler<LoginRequestParams> =  (data) => {
         console.log("Отправка формы sign-in", data)
-        login(data)
+        login(data).unwrap()
     };
 
     return (
