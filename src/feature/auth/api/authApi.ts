@@ -14,6 +14,9 @@ export const authApi = baseApi.injectEndpoints({
         confirmRegistration: build.mutation<any, { code: string }>({
             query: (body) => ({method: 'post', url: 'auth/registration-confirmation', body})
         }),
+        resendRegistrationEmail: build.mutation<any, { email: string, recaptchaToken: string }>({
+            query: (body) => ({method: 'post', url: 'auth/registration-email-resending', body})
+        }),
         login: build.mutation<LoginResponse, LoginRequestParams>({
             query: (body) => ({method: "post", url: "auth/login", body}),
             async onQueryStarted(_arg, {dispatch, queryFulfilled}) {
@@ -52,4 +55,5 @@ export const {
     useCheckRecoveryCodeMutation,
     useSetNewPasswordMutation,
     useGetMeQuery,
+    useResendRegistrationEmailMutation
 } = authApi
