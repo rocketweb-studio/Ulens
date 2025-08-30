@@ -9,18 +9,19 @@ import eyeOnSvg from "@/public/eye-outline.svg";
 import eyeOffSvg from "@/public/eye-off-outline.svg";
 
 type Props<T extends FieldValues = RegistrationInputs> = {
-    type?: string;
-    name?: Path<T>;
-    value?: string;
-    checked?: boolean;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    placeholder?: string;
-    label?: string;
-    error?: string;
-    disabled?: boolean;
-    className?: string;
-    register?: UseFormRegister<T>;
-    showPasswordToggle?: boolean;
+    type?: string
+    name?: Path<T>
+    id?: string
+    value?: string
+    checked?: boolean
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    placeholder?: string
+    label?: string
+    error?: string
+    disabled?: boolean
+    className?: string
+    register?: UseFormRegister<T>
+    showPasswordToggle?: boolean
 }
 
 export const Input = <T extends FieldValues = RegistrationInputs>({
@@ -32,6 +33,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
                                                                       placeholder = '',
                                                                       label,
                                                                       error,
+                                                                      id,
                                                                       disabled = false,
                                                                       className = '',
                                                                       register,
@@ -43,11 +45,12 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
     if (type === 'checkbox') {
         return (
             <div className={`${styles.inputContainer} ${className}`}>
-                <label className={styles.checkboxContainer}>
+                <label className={styles.checkboxContainer} htmlFor={id}>
                     <input
                         type="checkbox"
                         disabled={disabled}
                         className={styles.checkboxInput}
+                        id={id}
                         {...(register && name ? register(name) : {name, onChange, checked})}
                     />
                     <span className={styles.checkboxCustom}/>
@@ -65,7 +68,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
     return (
         <div className={`${styles.inputContainer} ${className}`}>
             {label && (
-                <label htmlFor={name} className={styles.label}>
+                <label htmlFor={id} className={styles.label}>
                     {label}
                 </label>
             )}
@@ -76,6 +79,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
                     placeholder={placeholder}
                     disabled={disabled}
                     className={`${styles.input} ${error ? styles.errorInput : ''} ${showPasswordToggle && type === 'password' ? styles.passwordInput : ''}`}
+                    id={id}
                     {...(register && name ? register(name) : {name, onChange})}
                 />
                 {showPasswordToggle && type === "password" && (

@@ -1,14 +1,15 @@
 import {baseApi} from "@/src/app/baseApi";
 import {UserType} from "@/src/feature/auth/api/authApi.types";
 import {getMeResponse, LoginRequestParams, LoginResponse} from "@/src/feature/auth/ui/SignIn";
+import {RegistrationRequest, RegistrationResponce} from "@/src/feature/auth/types";
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         getUsers: build.query<UserType[], void>({
             query: () => "auth/users",
         }),
-        registration: build.mutation<any, { userName: string, email: string, password: string }>({
-            query: (body) => ({method: 'post', url: 'auth/registration', body})
+        registration: build.mutation<RegistrationResponce, RegistrationRequest>({
+            query: (body) => ({method: "post", url: "auth/registration", body})
         }),
         confirmRegistration: build.mutation<any, { code: string }>({
             query: (body) => ({method: 'post', url: 'auth/registration-confirmation', body})

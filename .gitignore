@@ -46,4 +46,10 @@ server.js
 *.tsbuildinfo
 next-env.d.ts
 
+# SSL certificates
+/certs/
+!/certs/README.md
+local.dev.ulens.org.pem
+local.dev.ulens.org-key.pem
+server.js
 certificates
