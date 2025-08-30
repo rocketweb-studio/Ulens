@@ -5,28 +5,24 @@ import s from './PasswordRecovery.module.scss'
 import {Button} from "@/src/common/components/Button/Button";
 import {Modal} from "@/src/common/components/Modal/Modal";
 import {usePasswordRecoveryMutation} from "@/src/feature/auth/api/authApi";
-import React, {useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {emailSchema} from "@/src/feature/auth/lib/schemas/emailSchema";
 import {useRouter} from "next/navigation";
-import ReCaptcha from "@/src/feature/auth/ui/PasswordRecovery/ReCaptcha";
 import {useModal} from "@/src/common/hooks/useModal";
+import ReCaptcha from "@/src/feature/auth/ui/PasswordRecovery/ReCaptcha/ReCaptcha";
+import {useState} from "react";
 
 type Inputs = {
   email: string
-  ReCAPTCHA: string
+  recaptchaToken: string
 }
 
 export const PasswordRecovery = () => {
   const [sendEmail, result] = usePasswordRecoveryMutation() // {data, isLoading, error}
   const {isOpen, openModal, closeModal} = useModal()
-  const [captcha, setCaptcha] = useState<string>('');
   const router = useRouter();
-  // const [openModal, setOpenModal] = useState(false)
-
-  // console.log(result)
-
+  const [email, setEmail] = useState('')
 
   const {
     register,
@@ -36,13 +32,13 @@ export const PasswordRecovery = () => {
     formState: {errors},
   } = useForm<Inputs>({
     resolver: zodResolver(emailSchema),
-    defaultValues: {email: '', ReCAPTCHA: ''},
+    defaultValues: {email: '', recaptchaToken: ''},
   })
 
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    sendEmail({email: data.email, reCaptcha: captcha})
-
+    setEmail(data.email)
+    sendEmail({email: data.email, recaptchaToken: data.recaptchaToken})
     reset()
   }
 
@@ -51,12 +47,9 @@ export const PasswordRecovery = () => {
     result.reset()
   }
 
-  if (captcha) {
-    setValue('ReCAPTCHA', captcha)
+  const setCaptcha = (token: string) => {
+    setValue('recaptchaToken', token)
   }
-
-  console.log('errors =', errors)
-  console.log(captcha)
 
   return (
     <div className={s.formWrapper}>
@@ -76,14 +69,12 @@ export const PasswordRecovery = () => {
           }} variant={"text"}>Back to Sign In</Button>
 
         </div>
-        {!result.isSuccess && <ReCaptcha setCaptcha={setCaptcha} errorMessage={errors.ReCAPTCHA?.message || result?.isError }/>}
+        {!result.isSuccess &&
+            <ReCaptcha setCaptcha={setCaptcha} errorMessage={errors.recaptchaToken?.message || result?.isError}/>}
       </form>
 
-
-
-
       <Modal modalTitle={'Email sent'} isOpen={isOpen} onClose={closeModal}>
-        <p className={s.infoMessage3}>We have sent a link to confirm your email to epam@epam.com</p>
+        <p className={s.infoMessage3}>We have sent a link to confirm your email to {email}</p>
       </Modal>
 
     </div>
