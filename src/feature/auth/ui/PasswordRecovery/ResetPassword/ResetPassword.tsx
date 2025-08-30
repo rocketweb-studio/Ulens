@@ -3,15 +3,18 @@
 import {Input} from '@/src/common/components/Input/Input';
 import s from './ResetPassword.module.scss'
 import {Button} from "@/src/common/components/Button/Button";
-import {useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form"
-import {useSetNewPasswordMutation} from "@/src/feature/auth/api/authApi";
+import {usePasswordRecoveryMutation, useSetNewPasswordMutation} from "@/src/feature/auth/api/authApi";
 import Image from "next/image";
 import imgResend from 'public/rafiki.svg'
 import {zodResolver} from "@hookform/resolvers/zod";
 import {passwordSchema} from "@/src/feature/auth/lib/schemas";
-import {Modal} from "@/src/common/components/Modal/Modal";
 import {useRouter} from "next/navigation";
+import {Modal} from "@/src/common/components/Modal/Modal";
+import {useModal} from "@/src/common/hooks/useModal";
+import {delay} from "@/src/common/utils";
+import ReCaptcha from "@/src/feature/auth/ui/PasswordRecovery/ReCaptcha/ReCaptcha";
+import {useEffect, useLayoutEffect, useRef, useState} from "react";
 
 type Inputs = {
   password: string
@@ -20,13 +23,15 @@ type Inputs = {
 
 type Props = {
   isValidCode: boolean
-  code?: string | undefined
+  email: string
+  recoveryCode: string
 }
 
-export const ResetPassword = ({isValidCode}: Props) => {
-  // const [openModal, setOpenModal] = useState(false)
-  // const [sendEmail, result] = usePasswordRecoveryMutation()
-  const [setNewPassword, result2] = useSetNewPasswordMutation()
+export const ResetPassword = ({isValidCode, recoveryCode, email}: Props) => {
+  const {isOpen, openModal, closeModal} = useModal()
+  const [sendEmail, result] = usePasswordRecoveryMutation()
+  const [setNewPassword, newPassResult] = useSetNewPasswordMutation()
+  const [captcha, setCaptcha] = useState('')
   const router = useRouter();
 
 
@@ -43,22 +48,24 @@ export const ResetPassword = ({isValidCode}: Props) => {
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data)
+    setNewPassword({newPassword: data.password, recoveryCode})
     reset()
   }
 
-  console.log(errors)
-
-  const resendEmail = () => {
-  //   const email = localStorage.getItem("recoveryEmail")
-  //   console.log(email)
-  //   sendEmail({email: email || ''})
-  // }
-  //
-  // if (result?.isSuccess) {
-  //   setOpenModal(true)
-    router.push('/password-recovery')
+   if (newPassResult?.isSuccess && !isOpen) {
+    delay(1000).then(() => {
+      router.push('/sign-in')
+    })
   }
 
+  const resendEmail = () => {
+    sendEmail({email, recaptchaToken: captcha})
+  }
+
+   if (result?.isSuccess && !isOpen) {
+     openModal()
+     result.reset()
+   }
 
   return (
     <>
@@ -67,11 +74,13 @@ export const ResetPassword = ({isValidCode}: Props) => {
           <div className={s.formWrapper}>
               <form onSubmit={handleSubmit(onSubmit)}>
                   <h1 className={s.pageTitle}>Create New Password</h1>
-                  <Input className={s.input} register={register} name="password" placeholder="*********" label="New password"
+                  <Input className={s.input} register={register} name="password" placeholder="*********"
+                         label="New password"
                          type={"password"}
                          error={errors.password?.message}
                          showPasswordToggle/>
-                  <Input name="passwordConfirmation" register={register} placeholder="*********" label="Password confirmation"
+                  <Input name="passwordConfirmation" register={register} placeholder="*********"
+                         label="Password confirmation"
                          error={errors.passwordConfirmation?.message}
                          type={"password"}
                          showPasswordToggle/>
@@ -85,15 +94,19 @@ export const ResetPassword = ({isValidCode}: Props) => {
       {!isValidCode &&
           <div className={s.pageWrapper}>
               <h1 className={s.pageTitle2}>Email verification link expired</h1>
-              <p className={s.infoMessage2}>Looks like the verification link has expired. Not to worry, we can send the link again</p>
+              <p className={s.infoMessage2}>Looks like the verification link has expired. Not to worry, we can send the
+                  link again</p>
               <Button onClick={resendEmail} className={s.button}>Resend link</Button>
               <Image priority={true} width={470} height={350} src={imgResend} alt={'imgResend'}/>
 
           </div>}
 
-      {/*<Modal modalTitle={'Email sent'} open={openModal} onClose={() => setOpenModal(false)}>*/}
-      {/*  <p className={s.infoMessage3}>We have sent a link to confirm your email to epam@epam.com</p>*/}
-      {/*</Modal>*/}
+      <ReCaptcha setCaptcha={setCaptcha} errorMessage={''} invisible={true}/>
+
+      <Modal modalTitle={'Email sent'} isOpen={isOpen} onClose={closeModal}>
+        <p className={s.infoMessage3}>We have sent a link to confirm your email to {email}</p>
+      </Modal>
+
     </>
 
   );

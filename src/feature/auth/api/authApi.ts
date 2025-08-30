@@ -30,13 +30,13 @@ export const authApi = baseApi.injectEndpoints({
         getMe: build.query<getMeResponse, void>({
             query: () => "/auth/me",
         }),
-        passwordRecovery: build.mutation<any, { email: string }>({
+        passwordRecovery: build.mutation<any, { email: string, recaptchaToken: string }>({
             query: (body) => ({method: "post", url: "auth/password-recovery", body}),
         }),
         checkRecoveryCode: build.mutation<any, { code: string }>({
             query: (body) => ({method: "post", url: "auth/check-recovery-code", body}),
         }),
-        setNewPassword: build.mutation<any, { password: string, code: string }>({
+        setNewPassword: build.mutation<any, { newPassword: string, recoveryCode: string }>({
             query: (body) => ({method: "post", url: "auth/new-password", body}),
         }),
 

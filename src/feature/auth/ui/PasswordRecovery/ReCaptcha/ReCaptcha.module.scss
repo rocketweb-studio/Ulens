@@ -16,6 +16,7 @@
   display: flex;
   gap: 13px;
   align-items: center;
+  position: relative;
 }
 
 .checkbox {
@@ -46,6 +47,16 @@
   font-size: 10px;
   color: #f00;
   margin: 10px 0 0 15px;
+}
+
+.errorMessage2 {
+  font-weight: 400;
+  font-size: 10px;
+  color: #f00;
+  position: absolute;
+  top: -29px;
+  right: -75px;
+  width: 200px;
 }
 
 @keyframes xxx {
