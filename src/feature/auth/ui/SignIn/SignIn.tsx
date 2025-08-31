@@ -3,7 +3,6 @@ import Image from "next/image";
 import {useLoginMutation} from "@/src/feature/auth/api/authApi";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {z} from "zod";
 import gitHubSvg from "@/public/github-svg.svg"
 import googleSvg from "@/public/google-svg.svg"
 import {Input} from "@/src/common/components/Input/Input";
@@ -12,13 +11,10 @@ import {loginSchema} from "@/src/feature/auth/lib/schemas/loginSchema";
 import styles from "./SignIn.module.scss"
 import {Path} from "@/src/common/components/Navigation/Navigation";
 import {useRedirectIfAuthorized} from "@/src/common/hooks/useRedirectIfAuthorized";
+import {LoginRequestParams} from "@/src/feature/auth/api/authApi.types";
 
 
-export type LoginRequestParams = z.infer<typeof loginSchema>;
-export type LoginResponse = { accessToken: string }
-export type getMeResponse = { userId: number, userName: string, email: string, isBlocked?: boolean }
-
-export default function SignIn() {
+export const SignIn=()=> {
     const isLoading = useRedirectIfAuthorized()
     const [login] = useLoginMutation()
 
@@ -68,5 +64,7 @@ export default function SignIn() {
         </article>
     )
 }
+export default SignIn;
+
 
 

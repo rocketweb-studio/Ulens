@@ -1,8 +1,8 @@
 import {baseApi} from "@/src/app/baseApi";
-import {UserType} from "@/src/feature/auth/api/authApi.types";
-import {getMeResponse, LoginRequestParams, LoginResponse} from "@/src/feature/auth/ui/SignIn";
+import {LoginRequestParams,LoginResponse,getMeResponse, UserType} from "@/src/feature/auth/api/authApi.types";
 import {RegistrationRequest, RegistrationResponce} from "@/src/feature/auth/types";
 
+// @ts-ignore
 export const authApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         getUsers: build.query<UserType[], void>({
