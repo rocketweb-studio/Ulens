@@ -14,7 +14,7 @@ import {Modal} from "@/src/common/components/Modal/Modal";
 import {useModal} from "@/src/common/hooks/useModal";
 import {delay} from "@/src/common/utils";
 import ReCaptcha from "@/src/feature/auth/ui/PasswordRecovery/ReCaptcha/ReCaptcha";
-import {useEffect, useLayoutEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {useToast} from "@/src/common/hooks/useToast";
 
 type Inputs = {

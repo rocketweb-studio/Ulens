@@ -1,7 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit'
 import {setupListeners} from '@reduxjs/toolkit/query/react';
 import {baseApi} from "@/src/app/baseApi";
-import {useDispatch} from "react-redux";
 import {appReducer, appSlice} from "@/src/app/app-slice";
 
 const apiMiddlewares = [baseApi.middleware]

@@ -1,7 +1,7 @@
 import {baseApi} from "@/src/app/baseApi";
 import {LoginRequestParams,LoginResponse,getMeResponse, UserType} from "@/src/feature/auth/api/authApi.types";
 import {RegistrationRequest, RegistrationResponce} from "@/src/feature/auth/types";
-import {appSlice, setLoaderStatus} from "@/src/app/app-slice";
+import {setLoaderStatus} from "@/src/app/app-slice";
 
 // @ts-ignore
 export const authApi = baseApi.injectEndpoints({
