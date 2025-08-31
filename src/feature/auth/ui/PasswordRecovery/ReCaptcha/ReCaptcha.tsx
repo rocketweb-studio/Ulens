@@ -1,4 +1,4 @@
-import React, {RefObject, useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import Image from "next/image";
 import ReCaptcha_logo from '@/public/reCaptcha.svg'
 import checked from '@/public/check.svg'

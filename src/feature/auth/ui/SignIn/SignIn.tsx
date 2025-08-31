@@ -19,7 +19,7 @@ export type LoginResponse = { accessToken: string }
 export type getMeResponse = { userId: number, userName: string, email: string, isBlocked?: boolean }
 
 export default function SignIn() {
-    const isLoading=useRedirectIfAuthorized()
+    const isLoading = useRedirectIfAuthorized()
     const [login] = useLoginMutation()
 
     const {
@@ -34,7 +34,7 @@ export default function SignIn() {
         },
     })
 
-    const onSubmit: SubmitHandler<LoginRequestParams> =  (data) => {
+    const onSubmit: SubmitHandler<LoginRequestParams> = (data) => {
         console.log("Отправка формы sign-in", data)
         login(data).unwrap()
     };
@@ -55,6 +55,9 @@ export default function SignIn() {
 
                     <Input register={register} name={"password"} error={errors.password?.message} label={"Password"}
                            type={"password"} showPasswordToggle/>
+                    <a href={Path.PasswordRecovery} className={styles.forgotPassword}>
+                        Forgot Password
+                    </a>
                 </div>
                 <Button disabled={isLoading} variant={"primary"} fullWidth className={styles.submitBtn}>Sign In</Button>
 
