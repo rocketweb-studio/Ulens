@@ -6,6 +6,9 @@ import "@/src/app/globals.scss";
 import {StoreWrapper} from "@/src/app/store-wrapper";
 import React from "react";
 import {Navigation} from "@/src/common/components/Navigation/Navigation";
+import {AppLoader} from "@/src/common/components/AppLoader/AppLoader";
+import 'react-toastify/ReactToastify.css'
+import {AlertSnackbar} from "@/src/common/components/AlertSnackbar/AlertSnackbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +32,8 @@ export default function RootLayout({children,}: Readonly<{ children: React.React
     <StoreWrapper>
       <Navigation/>
       {children}
+      <AppLoader />
+      <AlertSnackbar/>
     </StoreWrapper>
     </body>
     </html>

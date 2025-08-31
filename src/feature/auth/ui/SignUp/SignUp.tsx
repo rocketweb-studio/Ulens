@@ -6,7 +6,7 @@ import {Button} from "@/src/common/components/Button/Button";
 import Image from "next/image";
 import googleSvg from "@/public/google-svg.svg";
 import gitHubSvg from "@/public/github-svg.svg";
-import {SubmitHandler, useForm} from "react-hook-form";
+import {FieldErrors, SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {RegistrationInputs, registrationSchema} from "@/src/feature/auth/lib/schemas";
 import {useRegistrationMutation} from "@/src/feature/auth/api/authApi";
@@ -14,10 +14,12 @@ import {useModal} from "@/src/common/hooks/useModal";
 import {Modal} from "@/src/common/components/Modal/Modal";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
+import {useToast} from "@/src/common/hooks/useToast";
 
 export const SignUp = () => {
     const [registration, {isSuccess, error}] = useRegistrationMutation()
     const {isOpen, openModal, closeModal} = useModal()
+    const { showSuccess, showError } = useToast()
     const [email, setEmail] = useState('')
     const router = useRouter();
 
@@ -39,6 +41,7 @@ export const SignUp = () => {
         console.log(data)
         try {
             const res = await registration({userName, email, password}).unwrap()
+            showSuccess('You are successfully registered!')
             setEmail(email)
             reset()
         } catch (error) {
@@ -49,6 +52,15 @@ export const SignUp = () => {
     useEffect(() => {
         if (isSuccess) openModal()
     }, [isSuccess, openModal])
+
+    useEffect(() => {
+        for (const key in errors) {
+            if (errors.hasOwnProperty(key)) {
+                const errorMessage = (errors as FieldErrors<RegistrationInputs>)[key as keyof RegistrationInputs]?.message
+                if (errorMessage) showError(errorMessage)
+            }
+        }
+    }, [errors])
 
     return (
         <div className={styles.formWrapper}>
@@ -67,7 +79,8 @@ export const SignUp = () => {
                 <div className={styles.signUpWrapper}>
                     <Input register={register} name={"agreePolitics"} error={errors.agreePolitics?.message} label={"I agree to the Terms of Service and Privacy Policy"}
                            type={"checkbox"} id={"agreePolitics"}/>
-                    <Button type="submit" disabled={!isValid}>Sign Up</Button>
+                    {/*<Button type="submit" disabled={!isValid}>Sign Up</Button>*/}
+                    <Button type="submit">Sign Up</Button>
                 </div>
                 <div className={styles.signInWrapper}>
                     <p className={styles.signInText}>

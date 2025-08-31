@@ -1,7 +1,7 @@
 'use client'
 import Image from "next/image";
 import {useLoginMutation} from "@/src/feature/auth/api/authApi";
-import {SubmitHandler, useForm} from "react-hook-form";
+import {FieldErrors, SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
 import gitHubSvg from "@/public/github-svg.svg"
@@ -12,6 +12,9 @@ import {loginSchema} from "@/src/feature/auth/lib/schemas/loginSchema";
 import styles from "./SignIn.module.scss"
 import {Path} from "@/src/common/components/Navigation/Navigation";
 import {useRedirectIfAuthorized} from "@/src/common/hooks/useRedirectIfAuthorized";
+import {useToast} from "@/src/common/hooks/useToast";
+import {useEffect} from "react";
+import {RegistrationInputs} from "@/src/feature/auth/lib/schemas";
 
 
 export type LoginRequestParams = z.infer<typeof loginSchema>;
@@ -19,7 +22,8 @@ export type LoginResponse = { accessToken: string }
 export type getMeResponse = { userId: number, userName: string, email: string, isBlocked?: boolean }
 
 export default function SignIn() {
-    const isLoading=useRedirectIfAuthorized()
+    const isLoading = useRedirectIfAuthorized()
+    const { showSuccess, showError } = useToast()
     const [login] = useLoginMutation()
 
     const {
@@ -34,10 +38,24 @@ export default function SignIn() {
         },
     })
 
-    const onSubmit: SubmitHandler<LoginRequestParams> =  (data) => {
-        console.log("Отправка формы sign-in", data)
-        login(data).unwrap()
+    const onSubmit: SubmitHandler<LoginRequestParams> =  async (data) => {
+        try {
+            console.log("Отправка формы sign-in", data)
+            const res = await login(data).unwrap()
+            showSuccess('Success login')
+        } catch (error) {
+
+        }
     };
+
+    useEffect(() => {
+        for (const key in errors) {
+            if (errors.hasOwnProperty(key)) {
+                const errorMessage = (errors as FieldErrors<RegistrationInputs>)[key as keyof RegistrationInputs]?.message
+                if (errorMessage) showError(errorMessage)
+            }
+        }
+    }, [errors])
 
     return (
         <article className={styles.authWrapper}>
