@@ -1,7 +1,7 @@
 'use client'
 import Image from "next/image";
 import {useLoginMutation} from "@/src/feature/auth/api/authApi";
-import {SubmitHandler, useForm} from "react-hook-form";
+import {FieldErrors, SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import gitHubSvg from "@/public/github-svg.svg"
 import googleSvg from "@/public/google-svg.svg"
@@ -12,10 +12,13 @@ import styles from "./SignIn.module.scss"
 import {Path} from "@/src/common/components/Navigation/Navigation";
 import {useRedirectIfAuthorized} from "@/src/common/hooks/useRedirectIfAuthorized";
 import {LoginRequestParams} from "@/src/feature/auth/api/authApi.types";
+import {useToast} from "@/src/common/hooks/useToast";
+import {useEffect} from "react";
 
 
 export const SignIn=()=> {
     const isLoading = useRedirectIfAuthorized()
+    const { showSuccess, showError } = useToast()
     const [login] = useLoginMutation()
 
     const {
@@ -30,10 +33,24 @@ export const SignIn=()=> {
         },
     })
 
-    const onSubmit: SubmitHandler<LoginRequestParams> = (data) => {
-        console.log("Отправка формы sign-in", data)
-        login(data).unwrap()
+    const onSubmit: SubmitHandler<LoginRequestParams> =  async (data) => {
+        try {
+            console.log("Отправка формы sign-in", data)
+            const res = await login(data).unwrap()
+            showSuccess('Success login')
+        } catch (error) {
+
+        }
     };
+
+    useEffect(() => {
+        for (const key in errors) {
+            if (errors.hasOwnProperty(key)) {
+                const errorMessage = (errors as FieldErrors<LoginRequestParams>)[key as keyof LoginRequestParams]?.message
+                if (errorMessage) showError(errorMessage)
+            }
+        }
+    }, [errors])
 
     return (
         <article className={styles.authWrapper}>
@@ -64,7 +81,5 @@ export const SignIn=()=> {
         </article>
     )
 }
-export default SignIn;
-
 
 
