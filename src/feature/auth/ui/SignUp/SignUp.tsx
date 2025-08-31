@@ -55,8 +55,8 @@ export const SignUp = () => {
             <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
                 <h2 className={styles.title}>Sign Up</h2>
                 <div className={styles.oAuthWrapper}>
-                    <a href=""><Image src={googleSvg} alt={"Google"}/></a>
-                    <a href=""><Image src={gitHubSvg} alt={"GitHub"}/></a>
+                    <a href="https://ulens.org/api/v1/auth/google-login"><Image src={googleSvg} alt={"Google"}/></a>
+                    <a href="https://ulens.org/api/v1/auth/github-login"><Image src={gitHubSvg} alt={"GitHub"}/></a>
                 </div>
                 <div className={styles.inputsTextWrapper}>
                     <Input register={register} name={"userName"} error={errors.userName?.message} placeholder={"Epam11"} label={"Username"} id={"userName"}/>

@@ -45,8 +45,8 @@ export default function SignIn() {
             <form onSubmit={handleSubmit(onSubmit)} className={styles.authForm}>
                 <h2>Sign In</h2>
                 <div className={styles.oAuth}>
-                    <a href=""><Image src={googleSvg} alt={"Google"}/></a>
-                    <a href=""><Image src={gitHubSvg} alt={"GitHub"}/></a>
+                    <a href="https://ulens.org/api/v1/auth/google-login"><Image src={googleSvg} alt={"Google"}/></a>
+                    <a href="https://ulens.org/api/v1/auth/github-login"><Image src={gitHubSvg} alt={"GitHub"}/></a>
                 </div>
 
                 <div className={styles.inputContainer}>
