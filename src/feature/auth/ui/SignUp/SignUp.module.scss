@@ -1,4 +1,6 @@
 .formWrapper {
+  align-self: center;
+  justify-self: center;
   max-width: 378px;
   padding: 24px;
   background-color: color(dark, 500);
@@ -20,6 +22,9 @@
   display: flex;
   justify-content: center;
   column-gap: 60px;
+  img:hover{
+    cursor: pointer;
+  }
 }
 
 .form {

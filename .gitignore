@@ -31,7 +31,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-
+# localhost
+local.dev.ulens.org-key.pem
+local.dev.ulens.org.pem
+server.js
 # env files (can opt-in for committing if needed)
 .env*
 
@@ -42,4 +45,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# SSL certificates
+/certs/
+!/certs/README.md
+local.dev.ulens.org.pem
+local.dev.ulens.org-key.pem
 certificates

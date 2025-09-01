@@ -1,9 +1,12 @@
 'use client'
 
 import {SignUp} from "@/src/feature/auth/ui/SignUp";
+import {FlexContainer} from "@/src/common/components/FlexContainer";
 
 export default function SingUpPage() {
-  return <div style={{height: '100%',display: 'flex',justifyContent: 'center',alignItems: 'center'}}>
-    <SignUp/>
-  </div>
+    return <div>
+        <FlexContainer justify={"center"} align={"center"} style={{minHeight: "100VH"}}>
+            <SignUp/>
+        </FlexContainer>
+    </div>
 }

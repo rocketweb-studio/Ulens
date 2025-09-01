@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node server.js",
+    "dev-http": "next dev --turbopack",
     "build": "next build",
     "build:production": "next build",
     "start": "next start",
@@ -19,6 +20,7 @@
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0",
     "react-redux": "^9.2.0",
+    "react-toastify": "^11.0.5",
     "zod": "^4.0.14"
   },
   "devDependencies": {
