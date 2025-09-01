@@ -1,6 +1,6 @@
 
 
-export const LoginButton = () => {
+export const Logout = () => {
 
     const handleLogout = () => {}
 
