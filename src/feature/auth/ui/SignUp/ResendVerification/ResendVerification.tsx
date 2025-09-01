@@ -53,10 +53,10 @@ export const ResendVerification = () => {
                 <p className={style.text}>
                     Looks like the verification link has expired. Not to worry, we can send the link again
                 </p>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form className={style.form} onSubmit={handleSubmit(onSubmit)}>
                     <Input className={style.input} name={"email"} register={register} error={errors.email?.message} placeholder={"Epam@epam.com"}
                            label={"Email"} id={"email"}/>
-                    <Button className={style.button}>Resend verification link</Button>
+                    <Button className={style.button} disabled={!isValid}>Resend verification link</Button>
                 </form>
                 <Image className={style.image} src={resendVerificationImage} alt={"Image confirmed email"} width={432}
                        height={300}></Image>
