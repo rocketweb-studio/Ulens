@@ -40,8 +40,8 @@ export const authApi = baseApi.injectEndpoints({
         setNewPassword: build.mutation<any, { newPassword: string, recoveryCode: string }>({
             query: (body) => ({method: "post", url: "auth/new-password", body}),
         }),
-        logout: build.mutation<any>({
-            query: (body) => ({method: "post", url: "auth/logout", body})
+        logout: build.mutation<void, void>({
+            query: () => ({method: "post", url: "auth/logout"})
         })
     }),
 })

@@ -20,7 +20,7 @@ export const ConfirmLogoutModal = ({ isOpen, onClose, email }: Props) => {
         try {
             await logout().unwrap()
             onClose()
-            router.push("/login") // редирект на страницу логина
+            router.push("/login")
         } catch (e) {
             console.error("Logout error:", e)
         }

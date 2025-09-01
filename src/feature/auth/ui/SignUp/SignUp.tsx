@@ -60,6 +60,7 @@ export const SignUp = () => {
                 if (errorMessage) showError(errorMessage)
             }
         }
+
     }, [errors])
 
     return (
