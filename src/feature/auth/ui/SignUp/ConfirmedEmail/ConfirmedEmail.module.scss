@@ -1,17 +1,23 @@
-.section {
+@use '@/src/common/styles/typography' as typography;
+@use '@/src/common/styles/colors' as colors;
 
+.section {
+  padding: 35px 0;
 }
 
 .title {
+  @include typography.h1;
   margin-bottom: 19px;
 }
 
 .text {
+  @include typography.regular_text_16;
   margin-bottom: 54px;
 }
 
 .image {
-
+  width: 432px;
+  height: 300px;
 }
 
 .button {
