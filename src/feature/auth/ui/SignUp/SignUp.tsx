@@ -15,6 +15,7 @@ import {Modal} from "@/src/common/components/Modal/Modal";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useToast} from "@/src/common/hooks/useToast";
+import { Path } from "@/src/common/components/Navigation/Navigation";
 
 export const SignUp = () => {
     const [registration, {isSuccess, error}] = useRegistrationMutation()
@@ -86,7 +87,7 @@ export const SignUp = () => {
                     <p className={styles.signInText}>
                         Do you have an account?
                     </p>
-                    <Button type={"button"} variant={"text"} onClick={() => router.push('/sign-in')}>Sign In</Button>
+                    <Button tagType={"link"} path={Path.SignIn} type={"button"} variant={"text"} onClick={() => router.push('/sign-in')}>Sign In</Button>
                 </div>
             </form>
             <Modal
