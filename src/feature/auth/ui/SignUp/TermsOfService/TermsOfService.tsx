@@ -13,7 +13,7 @@ export const TermsOfService = () => {
 
     return (
         <section>
-            <Button variant={"text-white"} leftIcon={<Image src={arrow} alt={'Arrow-left icon'} onClick={() => {push(Path.SignUp)}}/>}>Back to Sign Up</Button>
+            <Button tagType={"link"} path={Path.SignUp} variant={"text-white"} leftIcon={<Image src={arrow} alt={'Arrow-left icon'} onClick={() => {push(Path.SignUp)}}/>}>Back to Sign Up</Button>
             <h1 className={styles.title}>Terms of Service</h1>
             <div className={styles.content}>
                 <p className={styles.text}>

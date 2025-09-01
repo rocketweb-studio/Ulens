@@ -122,6 +122,29 @@
     }
   }
 
+  &.variant-in-text {
+    background-color: transparent;
+    padding: 0;
+    color: colors.color(accent, 500);
+    font-size: inherit;
+    line-height: inherit;
+    font-weight: inherit;
+
+    &:hover:not(:disabled) {
+      color: colors.color(accent, 100);
+    }
+
+    &:active:not(:disabled) {
+      color: colors.color(accent, 700);
+    }
+
+    &:focus:not(:disabled) {
+      outline: 2px solid colors.color(accent, 700);
+      color: colors.color(accent, 700);
+      border: 1px solid transparent;
+    }
+  }
+
   &.variant-text-white {
     background-color: transparent;
     padding: 0;
@@ -170,6 +193,14 @@
     }
   }
 
+  &.withoutPadding {
+    padding: 0;
+  }
+
+  &.underline {
+    text-decoration: underline;
+  }
+
   .leftIcon {
     margin-right: 8px;
     display: flex;
@@ -180,7 +211,5 @@
     display: flex;
   }
 
-  .underline {
-    text-decoration: underline;
-  }
+
 }

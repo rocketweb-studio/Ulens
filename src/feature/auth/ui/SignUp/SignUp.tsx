@@ -79,7 +79,7 @@ export const SignUp = () => {
                     <Input register={register} name={"passwordConfirmation"} error={errors.passwordConfirmation?.message} label={"Password Confirmation"} type={"password"} showPasswordToggle id={"passwordConfirmation"}/>
                 </div>
                 <div className={styles.signUpWrapper}>
-                    <Input register={register} name={"agreePolitics"} error={errors.agreePolitics?.message} label={"I agree to the Terms of Service and Privacy Policy"}
+                    <Input register={register} name={"agreePolitics"} error={errors.agreePolitics?.message} label={<span>I agree to the <Button tagType={"link"} path={Path.TermOfService} variant={"in-text"} underlineText={true} withoutPadding={true}>Terms of Service</Button> and Privacy Policy</span>}
                            type={"checkbox"} id={"agreePolitics"}/>
                     <Button type="submit" disabled={!isValid}>Sign Up</Button>
                 </div>
@@ -87,7 +87,7 @@ export const SignUp = () => {
                     <p className={styles.signInText}>
                         Do you have an account?
                     </p>
-                    <Button tagType={"link"} path={Path.SignIn} type={"button"} variant={"text"} onClick={() => router.push('/sign-in')}>Sign In</Button>
+                    <Button tagType={"link"} path={Path.SignIn} type={"button"} variant={"text"} >Sign In</Button>
                 </div>
             </form>
             <Modal
