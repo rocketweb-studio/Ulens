@@ -11,6 +11,7 @@ type Props = {
     isLoading?: boolean;
     leftIcon?: React.ReactNode;
     rightIcon?: React.ReactNode;
+    underlineText?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button = ({
@@ -22,6 +23,7 @@ export const Button = ({
                            disabled = false,
                            leftIcon,
                            rightIcon,
+                           underlineText = false,
                            className = '',
                            ...props
                        }: Props) => {
@@ -31,6 +33,7 @@ export const Button = ({
         styles[`size-${size}`],
         fullWidth && styles.fullWidth,
         isLoading && styles.loading,
+        underlineText && styles.underline,
         className,
     ]
         .filter(Boolean)
