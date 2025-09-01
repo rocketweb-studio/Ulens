@@ -30,6 +30,7 @@ export const SignUp = () => {
         reset,
         formState: { errors, isValid },
     } = useForm<RegistrationInputs>({
+        mode: "onBlur",
         resolver: zodResolver(registrationSchema),
         defaultValues: {
             agreePolitics: false
@@ -80,8 +81,7 @@ export const SignUp = () => {
                 <div className={styles.signUpWrapper}>
                     <Input register={register} name={"agreePolitics"} error={errors.agreePolitics?.message} label={"I agree to the Terms of Service and Privacy Policy"}
                            type={"checkbox"} id={"agreePolitics"}/>
-                    {/*<Button type="submit" disabled={!isValid}>Sign Up</Button>*/}
-                    <Button type="submit">Sign Up</Button>
+                    <Button type="submit" disabled={!isValid}>Sign Up</Button>
                 </div>
                 <div className={styles.signInWrapper}>
                     <p className={styles.signInText}>
