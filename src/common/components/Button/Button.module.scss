@@ -122,6 +122,26 @@
     }
   }
 
+  &.variant-text-white {
+    background-color: transparent;
+    padding: 0;
+    color: colors.color(light, 100);
+
+    &:hover:not(:disabled) {
+      color: colors.color(accent, 100);
+    }
+
+    &:active:not(:disabled) {
+      color: colors.color(accent, 700);
+    }
+
+    &:focus:not(:disabled) {
+      outline: 2px solid colors.color(accent, 700);
+      color: colors.color(accent, 700);
+      border: 1px solid transparent;
+    }
+  }
+
   &.size-small {
     padding: 6px 12px;
     font-size: 12px;
@@ -158,5 +178,9 @@
   .rightIcon {
     margin-left: 8px;
     display: flex;
+  }
+
+  .underline {
+    text-decoration: underline;
   }
 }

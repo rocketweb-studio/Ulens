@@ -1,20 +1,27 @@
 import React, {ButtonHTMLAttributes} from 'react';
 import styles from './Button.module.scss';
+import Link from "next/link";
 
-export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'text';
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'text' | 'text-white';
 export type ButtonSize = 'small' | 'medium' | 'large';
+export type TagType = 'button' | 'link'
 
 type Props = {
-    variant?: ButtonVariant;
-    size?: ButtonSize;
-    fullWidth?: boolean;
-    isLoading?: boolean;
-    leftIcon?: React.ReactNode;
-    rightIcon?: React.ReactNode;
+    tagType?: TagType
+    path?: string
+    variant?: ButtonVariant
+    size?: ButtonSize
+    fullWidth?: boolean
+    isLoading?: boolean
+    leftIcon?: React.ReactNode
+    rightIcon?: React.ReactNode
+    underlineText?: boolean
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button = ({
                            children,
+                           tagType = 'button',
+                           path = '/',
                            variant = 'primary',
                            size = 'medium',
                            fullWidth = false,
@@ -22,6 +29,7 @@ export const Button = ({
                            disabled = false,
                            leftIcon,
                            rightIcon,
+                           underlineText = false,
                            className = '',
                            ...props
                        }: Props) => {
@@ -31,10 +39,32 @@ export const Button = ({
         styles[`size-${size}`],
         fullWidth && styles.fullWidth,
         isLoading && styles.loading,
+        underlineText && styles.underline,
         className,
     ]
         .filter(Boolean)
         .join(' ');
+
+    const content = (
+        <>
+            {leftIcon && <span className={styles.leftIcon}>{leftIcon}</span>}
+            {children}
+            {rightIcon && <span className={styles.rightIcon}>{rightIcon}</span>}
+            {isLoading && <span className={styles.loader}>Loading...</span>}
+        </>
+    );
+
+    if (tagType === 'link') {
+        return (
+            <Link
+                href={path}
+                className={buttonClasses}
+                aria-disabled={disabled || isLoading}
+            >
+                {content}
+            </Link>
+        );
+    }
 
     return (
         <button
@@ -48,5 +78,6 @@ export const Button = ({
             {rightIcon && <span className={styles.rightIcon}>{rightIcon}</span>}
             {isLoading && <span className={styles.loader}>Loading...</span>}
         </button>
-    );
+    )
+
 };

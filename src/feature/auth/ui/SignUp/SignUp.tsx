@@ -15,6 +15,7 @@ import {Modal} from "@/src/common/components/Modal/Modal";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useToast} from "@/src/common/hooks/useToast";
+import { Path } from "@/src/common/components/Navigation/Navigation";
 
 export const SignUp = () => {
     const [registration, {isSuccess, error}] = useRegistrationMutation()
@@ -29,6 +30,7 @@ export const SignUp = () => {
         reset,
         formState: { errors, isValid },
     } = useForm<RegistrationInputs>({
+        mode: "onBlur",
         resolver: zodResolver(registrationSchema),
         defaultValues: {
             agreePolitics: false
@@ -79,14 +81,13 @@ export const SignUp = () => {
                 <div className={styles.signUpWrapper}>
                     <Input register={register} name={"agreePolitics"} error={errors.agreePolitics?.message} label={"I agree to the Terms of Service and Privacy Policy"}
                            type={"checkbox"} id={"agreePolitics"}/>
-                    {/*<Button type="submit" disabled={!isValid}>Sign Up</Button>*/}
-                    <Button type="submit">Sign Up</Button>
+                    <Button type="submit" disabled={!isValid}>Sign Up</Button>
                 </div>
                 <div className={styles.signInWrapper}>
                     <p className={styles.signInText}>
                         Do you have an account?
                     </p>
-                    <Button type={"button"} variant={"text"} onClick={() => router.push('/sign-in')}>Sign In</Button>
+                    <Button tagType={"link"} path={Path.SignIn} type={"button"} variant={"text"} onClick={() => router.push('/sign-in')}>Sign In</Button>
                 </div>
             </form>
             <Modal
