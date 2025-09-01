@@ -16,9 +16,9 @@ import {useToast} from "@/src/common/hooks/useToast";
 import {useEffect} from "react";
 
 
-export const SignIn=()=> {
+export const SignIn = () => {
     const isLoading = useRedirectIfAuthorized()
-    const { showSuccess, showError } = useToast()
+    const {showSuccess, showError} = useToast()
     const [login] = useLoginMutation()
 
     const {
@@ -33,7 +33,14 @@ export const SignIn=()=> {
         },
     })
 
-
+    const onSubmit: SubmitHandler<LoginRequestParams> = async (data) => {
+        try {
+            await login(data)
+            showSuccess('Success login')
+        } catch (error) {
+            showError(JSON.stringify(error))
+        }
+    };
 
     useEffect(() => {
         for (const key in errors) {
@@ -47,7 +54,7 @@ export const SignIn=()=> {
     return (
         <article className={styles.authWrapper}>
 
-            <form onSubmit={handleSubmit((data)=>{login(data)})} className={styles.authForm}>
+            <form onSubmit={handleSubmit(onSubmit)} className={styles.authForm}>
                 <h2>Sign In</h2>
                 <div className={styles.oAuth}>
                     <a href="https://ulens.org/api/v1/auth/google-login"><Image src={googleSvg} alt={"Google"}/></a>
