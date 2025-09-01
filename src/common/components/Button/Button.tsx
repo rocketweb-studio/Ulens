@@ -1,7 +1,7 @@
 import React, {ButtonHTMLAttributes} from 'react';
 import styles from './Button.module.scss';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'text';
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'text' | 'text-white';
 export type ButtonSize = 'small' | 'medium' | 'large';
 
 type Props = {
