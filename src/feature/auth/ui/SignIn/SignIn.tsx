@@ -38,7 +38,7 @@ export const SignIn = () => {
 
     const onSubmit: SubmitHandler<LoginRequestParams> = async (data) => {
         try {
-            await login(data).unwrap()
+            await login(data)
             showSuccess('Success login')
         } catch (error) {
             handleError(error)
