@@ -33,15 +33,7 @@ export const SignIn=()=> {
         },
     })
 
-    const onSubmit: SubmitHandler<LoginRequestParams> =  async (data) => {
-        try {
-            console.log("Отправка формы sign-in", data)
-            const res = await login(data).unwrap()
-            showSuccess('Success login')
-        } catch (error) {
 
-        }
-    };
 
     useEffect(() => {
         for (const key in errors) {
@@ -55,7 +47,7 @@ export const SignIn=()=> {
     return (
         <article className={styles.authWrapper}>
 
-            <form onSubmit={handleSubmit(onSubmit)} className={styles.authForm}>
+            <form onSubmit={handleSubmit((data)=>{login(data)})} className={styles.authForm}>
                 <h2>Sign In</h2>
                 <div className={styles.oAuth}>
                     <a href="https://ulens.org/api/v1/auth/google-login"><Image src={googleSvg} alt={"Google"}/></a>
