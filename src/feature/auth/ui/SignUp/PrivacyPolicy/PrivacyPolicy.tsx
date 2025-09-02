@@ -2,18 +2,18 @@
 
 import React from 'react';
 import {useRouter} from "next/navigation";
-import styles from "./TermsOfService.module.scss"
+import styles from "./PrivacyPolicy.module.scss"
 import arrow from "@/public/icons/arrow-left.svg"
 import {Button} from "@/src/common/components/Button/Button";
 import Image from "next/image";
 import {Path} from "@/src/common/components/Navigation/Navigation";
-export const TermsOfService = () => {
+export const PrivacyPolicy = () => {
     const {push} = useRouter()
 
     return (
         <section>
             <Button tagType={"link"} path={Path.SignUp} variant={"text-white"} leftIcon={<Image src={arrow} alt={'Arrow-left icon'} onClick={() => {push(Path.SignUp)}}/>}>Back to Sign Up</Button>
-            <h1 className={styles.title}>Terms of Service</h1>
+            <h1 className={styles.title}>Privacy Policy</h1>
             <div className={styles.content}>
                 <p className={styles.text}>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh. Amet consectetur adipiscing elit ut aliquam purus sit amet luctus. Tortor vitae purus faucibus ornare suspendisse sed nisi. Dolor sit amet consectetur adipiscing. Massa enim nec dui nunc mattis enim ut tellus. Scelerisque eleifend donec pretium vulputate sapien nec sagittis. Feugiat nisl pretium fusce id velit ut tortor pretium viverra. Tortor aliquam nulla facilisi cras. Elit pellentesque habitant morbi tristique senectus et netus. Nulla facilisi nullam vehicula ipsum a arcu cursus. Ut lectus arcu bibendum at varius vel pharetra. Etiam erat velit scelerisque in dictum non consectetur. Quam adipiscing vitae proin sagittis nisl rhoncus mattis rhoncus. Id diam maecenas ultricies mi eget mauris pharetra. Tincidunt lobortis feugiat vivamus at augue. Non odio euismod lacinia at. Aliquet eget sit amet tellus. Auctor neque vitae tempus quam.

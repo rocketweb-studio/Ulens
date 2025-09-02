@@ -15,12 +15,12 @@ import {Modal} from "@/src/common/components/Modal/Modal";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useToast} from "@/src/common/hooks/useToast";
-import { Path } from "@/src/common/components/Navigation/Navigation";
+import {Path} from "@/src/common/components/Navigation/Navigation";
 
 export const SignUp = () => {
     const [registration, {isSuccess, error}] = useRegistrationMutation()
     const {isOpen, openModal, closeModal} = useModal()
-    const { showSuccess, showError } = useToast()
+    const {showSuccess, showError} = useToast()
     const [email, setEmail] = useState('')
     const router = useRouter();
 
@@ -28,7 +28,7 @@ export const SignUp = () => {
         register,
         handleSubmit,
         reset,
-        formState: { errors, isValid },
+        formState: {errors, isValid},
     } = useForm<RegistrationInputs>({
         mode: "onBlur",
         resolver: zodResolver(registrationSchema),
@@ -73,13 +73,23 @@ export const SignUp = () => {
                     <a href="https://ulens.org/api/v1/auth/github-login"><Image src={gitHubSvg} alt={"GitHub"}/></a>
                 </div>
                 <div className={styles.inputsTextWrapper}>
-                    <Input register={register} name={"userName"} error={errors.userName?.message} placeholder={"Epam11"} label={"Username"} id={"userName"}/>
-                    <Input register={register} name={"email"} error={errors.email?.message} placeholder={"Epam@epam.com"} label={"Email"} id={"email"}/>
-                    <Input register={register} name={"password"} error={errors.password?.message} label={"Password"} type={"password"} showPasswordToggle id={"password"}/>
-                    <Input register={register} name={"passwordConfirmation"} error={errors.passwordConfirmation?.message} label={"Password Confirmation"} type={"password"} showPasswordToggle id={"passwordConfirmation"}/>
+                    <Input register={register} name={"userName"} error={errors.userName?.message} placeholder={"Epam11"}
+                           label={"Username"} id={"userName"}/>
+                    <Input register={register} name={"email"} error={errors.email?.message}
+                           placeholder={"Epam@epam.com"} label={"Email"} id={"email"}/>
+                    <Input register={register} name={"password"} error={errors.password?.message} label={"Password"}
+                           type={"password"} showPasswordToggle id={"password"}/>
+                    <Input register={register} name={"passwordConfirmation"}
+                           error={errors.passwordConfirmation?.message} label={"Password Confirmation"}
+                           type={"password"} showPasswordToggle id={"passwordConfirmation"}/>
                 </div>
                 <div className={styles.signUpWrapper}>
-                    <Input register={register} name={"agreePolitics"} error={errors.agreePolitics?.message} label={<span>I agree to the <Button tagType={"link"} path={Path.TermOfService} variant={"in-text"} underlineText={true} withoutPadding={true}>Terms of Service</Button> and Privacy Policy</span>}
+                    <Input register={register} name={"agreePolitics"} error={errors.agreePolitics?.message}
+                           label={<span>I agree to the <Button tagType={"link"} path={Path.TermOfService}
+                                                               variant={"in-text"} size={"inherit"} underlineText={true}
+                                                               withoutPadding={true}>Terms of Service</Button> and <Button
+                               tagType={"link"} path={Path.PrivacyPolicy} variant={"in-text"} size={"inherit"}
+                               underlineText={true} withoutPadding={true}>Privacy Policy</Button></span>}
                            type={"checkbox"} id={"agreePolitics"}/>
                     <Button type="submit" disabled={!isValid}>Sign Up</Button>
                 </div>
@@ -87,7 +97,7 @@ export const SignUp = () => {
                     <p className={styles.signInText}>
                         Do you have an account?
                     </p>
-                    <Button tagType={"link"} path={Path.SignIn} type={"button"} variant={"text"} >Sign In</Button>
+                    <Button tagType={"link"} path={Path.SignIn} type={"button"} variant={"text"}>Sign In</Button>
                 </div>
             </form>
             <Modal

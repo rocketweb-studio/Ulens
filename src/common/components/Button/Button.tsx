@@ -3,7 +3,7 @@ import styles from './Button.module.scss';
 import Link from "next/link";
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'text' | 'text-white' | 'in-text';
-export type ButtonSize = 'small' | 'medium' | 'large';
+export type ButtonSize = 'small' | 'medium' | 'large' | 'inherit';
 export type TagType = 'button' | 'link'
 
 type Props = {

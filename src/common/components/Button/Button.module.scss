@@ -125,6 +125,7 @@
   &.variant-in-text {
     background-color: transparent;
     padding: 0;
+    border: none;
     color: colors.color(accent, 500);
     font-size: inherit;
     line-height: inherit;
@@ -141,7 +142,6 @@
     &:focus:not(:disabled) {
       outline: 2px solid colors.color(accent, 700);
       color: colors.color(accent, 700);
-      border: 1px solid transparent;
     }
   }
 
@@ -180,6 +180,10 @@
     padding: 6px 64px;
   }
 
+  &.size-inherit {
+    font-size: inherit;
+  }
+
   &.loading {
     pointer-events: none;
     color: transparent;
@@ -210,6 +214,4 @@
     margin-left: 8px;
     display: flex;
   }
-
-
 }
