@@ -122,6 +122,29 @@
     }
   }
 
+  &.variant-in-text {
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    color: colors.color(accent, 500);
+    font-size: inherit;
+    line-height: inherit;
+    font-weight: inherit;
+
+    &:hover:not(:disabled) {
+      color: colors.color(accent, 100);
+    }
+
+    &:active:not(:disabled) {
+      color: colors.color(accent, 700);
+    }
+
+    &:focus:not(:disabled) {
+      outline: 2px solid colors.color(accent, 700);
+      color: colors.color(accent, 700);
+    }
+  }
+
   &.variant-text-white {
     background-color: transparent;
     padding: 0;
@@ -157,6 +180,10 @@
     padding: 6px 64px;
   }
 
+  &.size-inherit {
+    font-size: inherit;
+  }
+
   &.loading {
     pointer-events: none;
     color: transparent;
@@ -170,6 +197,14 @@
     }
   }
 
+  &.withoutPadding {
+    padding: 0;
+  }
+
+  &.underline {
+    text-decoration: underline;
+  }
+
   .leftIcon {
     margin-right: 8px;
     display: flex;
@@ -178,9 +213,5 @@
   .rightIcon {
     margin-left: 8px;
     display: flex;
-  }
-
-  .underline {
-    text-decoration: underline;
   }
 }

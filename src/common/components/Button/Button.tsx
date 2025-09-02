@@ -2,8 +2,8 @@ import React, {ButtonHTMLAttributes} from 'react';
 import styles from './Button.module.scss';
 import Link from "next/link";
 
-export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'text' | 'text-white';
-export type ButtonSize = 'small' | 'medium' | 'large';
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'text' | 'text-white' | 'in-text';
+export type ButtonSize = 'small' | 'medium' | 'large' | 'inherit';
 export type TagType = 'button' | 'link'
 
 type Props = {
@@ -16,6 +16,7 @@ type Props = {
     leftIcon?: React.ReactNode
     rightIcon?: React.ReactNode
     underlineText?: boolean
+    withoutPadding?: boolean
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button = ({
@@ -31,6 +32,7 @@ export const Button = ({
                            rightIcon,
                            underlineText = false,
                            className = '',
+                           withoutPadding = false,
                            ...props
                        }: Props) => {
     const buttonClasses = [
@@ -40,6 +42,7 @@ export const Button = ({
         fullWidth && styles.fullWidth,
         isLoading && styles.loading,
         underlineText && styles.underline,
+        withoutPadding && styles.withoutPadding,
         className,
     ]
         .filter(Boolean)

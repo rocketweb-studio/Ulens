@@ -6,35 +6,45 @@ import {Button} from "@/src/common/components/Button/Button";
 import Image from "next/image";
 import googleSvg from "@/public/google-svg.svg";
 import gitHubSvg from "@/public/github-svg.svg";
-import {FieldErrors, SubmitHandler, useForm} from "react-hook-form";
+import {SubmitHandler, useForm, useWatch} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {RegistrationInputs, registrationSchema} from "@/src/feature/auth/lib/schemas";
 import {useRegistrationMutation} from "@/src/feature/auth/api/authApi";
 import {useModal} from "@/src/common/hooks/useModal";
 import {Modal} from "@/src/common/components/Modal/Modal";
 import {useEffect, useState} from "react";
-import {useRouter} from "next/navigation";
 import {useToast} from "@/src/common/hooks/useToast";
-import { Path } from "@/src/common/components/Navigation/Navigation";
+import {Path} from "@/src/common/components/Navigation/Navigation";
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
+import {SerializedError} from "@reduxjs/toolkit";
+import {ServerErrorType} from "@/src/feature/auth/types";
 
 export const SignUp = () => {
-    const [registration, {isSuccess, error}] = useRegistrationMutation()
+    const [registration, {isSuccess, error, isError}] = useRegistrationMutation()
     const {isOpen, openModal, closeModal} = useModal()
-    const { showSuccess, showError } = useToast()
+    const {showSuccess} = useToast()
     const [email, setEmail] = useState('')
-    const router = useRouter();
 
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors, isValid },
+        setError,
+        control,
+        trigger,
+        clearErrors,
+        formState: {errors, isValid},
     } = useForm<RegistrationInputs>({
         mode: "onBlur",
         resolver: zodResolver(registrationSchema),
         defaultValues: {
             agreePolitics: false
         }
+    })
+
+    const agreePoliticsValue = useWatch({
+        control,
+        name: "agreePolitics"
     })
 
 
@@ -46,23 +56,47 @@ export const SignUp = () => {
             showSuccess('You are successfully registered!')
             setEmail(email)
             reset()
-        } catch (error) {
-
+        } catch (e) {
         }
     }
+
+    const handleServerError = (error: FetchBaseQueryError | SerializedError | undefined) => {
+        if (!error) return
+
+        clearErrors()
+
+        if ('status' in error) {
+            if (error.status === 400 && error.data) {
+                const serverError = error.data as ServerErrorType
+                const errorsMessages = serverError.errorsMessages
+                if (errorsMessages && errorsMessages.length > 0) {
+                    serverError.errorsMessages.forEach((errorMessage) => {
+                        const fieldName = errorMessage.field as keyof RegistrationInputs
+                        setError(fieldName, {
+                            type: 'serverError',
+                            message: errorMessage.message,
+                        })
+                    })
+                }
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (agreePoliticsValue !== undefined) {
+            trigger("agreePolitics");
+        }
+    }, [agreePoliticsValue, trigger]);
 
     useEffect(() => {
         if (isSuccess) openModal()
     }, [isSuccess, openModal])
 
     useEffect(() => {
-        for (const key in errors) {
-            if (errors.hasOwnProperty(key)) {
-                const errorMessage = (errors as FieldErrors<RegistrationInputs>)[key as keyof RegistrationInputs]?.message
-                if (errorMessage) showError(errorMessage)
-            }
+        if (isError) {
+            handleServerError(error);
         }
-    }, [errors])
+    }, [isError]);
 
     return (
         <div className={styles.formWrapper}>
@@ -73,13 +107,23 @@ export const SignUp = () => {
                     <a href="https://ulens.org/api/v1/auth/github-login"><Image src={gitHubSvg} alt={"GitHub"}/></a>
                 </div>
                 <div className={styles.inputsTextWrapper}>
-                    <Input register={register} name={"userName"} error={errors.userName?.message} placeholder={"Epam11"} label={"Username"} id={"userName"}/>
-                    <Input register={register} name={"email"} error={errors.email?.message} placeholder={"Epam@epam.com"} label={"Email"} id={"email"}/>
-                    <Input register={register} name={"password"} error={errors.password?.message} label={"Password"} type={"password"} showPasswordToggle id={"password"}/>
-                    <Input register={register} name={"passwordConfirmation"} error={errors.passwordConfirmation?.message} label={"Password Confirmation"} type={"password"} showPasswordToggle id={"passwordConfirmation"}/>
+                    <Input register={register} name={"userName"} error={errors.userName?.message} placeholder={"Epam11"}
+                           label={"Username"} id={"userName"}/>
+                    <Input register={register} name={"email"} error={errors.email?.message}
+                           placeholder={"Epam@epam.com"} label={"Email"} id={"email"}/>
+                    <Input register={register} name={"password"} error={errors.password?.message} label={"Password"}
+                           type={"password"} showPasswordToggle id={"password"}/>
+                    <Input register={register} name={"passwordConfirmation"}
+                           error={errors.passwordConfirmation?.message} label={"Password Confirmation"}
+                           type={"password"} showPasswordToggle id={"passwordConfirmation"}/>
                 </div>
                 <div className={styles.signUpWrapper}>
-                    <Input register={register} name={"agreePolitics"} error={errors.agreePolitics?.message} label={"I agree to the Terms of Service and Privacy Policy"}
+                    <Input register={register} name={"agreePolitics"} error={errors.agreePolitics?.message}
+                           label={<span>I agree to the <Button tagType={"link"} path={Path.TermOfService}
+                                                               variant={"in-text"} size={"inherit"} underlineText={true}
+                                                               withoutPadding={true}>Terms of Service</Button> and <Button
+                               tagType={"link"} path={Path.PrivacyPolicy} variant={"in-text"} size={"inherit"}
+                               underlineText={true} withoutPadding={true}>Privacy Policy</Button></span>}
                            type={"checkbox"} id={"agreePolitics"}/>
                     <Button type="submit" disabled={!isValid}>Sign Up</Button>
                 </div>
@@ -87,7 +131,7 @@ export const SignUp = () => {
                     <p className={styles.signInText}>
                         Do you have an account?
                     </p>
-                    <Button tagType={"link"} path={Path.SignIn} type={"button"} variant={"text"} onClick={() => router.push('/sign-in')}>Sign In</Button>
+                    <Button tagType={"link"} path={Path.SignIn} type={"button"} variant={"text"}>Sign In</Button>
                 </div>
             </form>
             <Modal

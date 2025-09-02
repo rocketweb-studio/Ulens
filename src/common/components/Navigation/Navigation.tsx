@@ -7,6 +7,8 @@ export const Path = {
     Settings: '/settings',
     SignIn: '/sign-in',
     SignUp: '/sign-up',
+    TermOfService: '/sign-up/term-of-service',
+    PrivacyPolicy: '/sign-up/privacy-policy',
     SignUpConfirmedEmail: '/sign-up/confirmed-email',
     PasswordRecovery: '/password-recovery',
     ResetPassword: '/account/reset-password',

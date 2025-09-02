@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {ReactNode, useState} from 'react';
 import styles from '@/src/common/components/Input/Input.module.scss';
 import {FieldValues, Path, UseFormRegister} from "react-hook-form";
 import {RegistrationInputs} from "@/src/feature/auth/lib/schemas";
@@ -16,7 +16,7 @@ type Props<T extends FieldValues = RegistrationInputs> = {
     checked?: boolean
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
     placeholder?: string
-    label?: string
+    label?: string | ReactNode
     error?: string
     disabled?: boolean
     className?: string
