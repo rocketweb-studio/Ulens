@@ -5,14 +5,13 @@ import s from './PasswordRecovery.module.scss'
 import {Button} from "@/src/common/components/Button/Button";
 import {Modal} from "@/src/common/components/Modal/Modal";
 import {usePasswordRecoveryMutation} from "@/src/feature/auth/api/authApi";
-import {FieldErrors, SubmitHandler, useForm} from "react-hook-form"
+import {SubmitHandler, useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {emailSchema} from "@/src/feature/auth/lib/schemas/emailSchema";
 import {useRouter} from "next/navigation";
 import {useModal} from "@/src/common/hooks/useModal";
 import ReCaptcha from "@/src/feature/auth/ui/PasswordRecovery/ReCaptcha/ReCaptcha";
-import {useEffect, useState} from "react";
-import {useToast} from "@/src/common/hooks/useToast";
+import {useState} from "react";
 
 type Inputs = {
   email: string
@@ -24,7 +23,6 @@ export const PasswordRecovery = () => {
   const {isOpen, openModal, closeModal} = useModal()
   const router = useRouter();
   const [email, setEmail] = useState('')
-  const { showSuccess, showError } = useToast()
 
   const {
     register,
@@ -52,15 +50,6 @@ export const PasswordRecovery = () => {
   const setCaptcha = (token: string) => {
     setValue('recaptchaToken', token)
   }
-
-  useEffect(() => {
-    for (const key in errors) {
-      if (errors.hasOwnProperty(key)) {
-        const errorMessage = (errors as FieldErrors<Inputs>)[key as keyof Inputs]?.message
-        if (errorMessage) showError(errorMessage)
-      }
-    }
-  }, [errors])
 
   return (
     <div className={s.formWrapper}>

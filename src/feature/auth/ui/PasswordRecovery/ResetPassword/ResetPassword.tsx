@@ -34,7 +34,6 @@ export const ResetPassword = ({isValidCode, recoveryCode, email}: Props) => {
   const [setNewPassword, newPassResult] = useSetNewPasswordMutation()
   const [captcha, setCaptcha] = useState('')
   const router = useRouter();
-  const { showSuccess, showError } = useToast()
 
   const {
     register,
@@ -67,15 +66,6 @@ export const ResetPassword = ({isValidCode, recoveryCode, email}: Props) => {
     openModal()
     result.reset()
   }
-
-  useEffect(() => {
-    for (const key in errors) {
-      if (errors.hasOwnProperty(key)) {
-        const errorMessage = (errors as FieldErrors<Inputs>)[key as keyof Inputs]?.message
-        if (errorMessage) showError(errorMessage)
-      }
-    }
-  }, [errors])
 
   return (
     <>
