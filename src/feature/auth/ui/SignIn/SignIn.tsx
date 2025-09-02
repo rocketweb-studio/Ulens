@@ -13,6 +13,7 @@ import {Path} from "@/src/common/components/Navigation/Navigation";
 import {useRedirectIfAuthorized} from "@/src/common/hooks/useRedirectIfAuthorized";
 import {LoginRequestParams} from "@/src/feature/auth/api/authApi.types";
 import {useToast} from "@/src/common/hooks/useToast";
+import Link from "next/link";
 
 
 export const SignIn = () => {
@@ -57,14 +58,14 @@ export const SignIn = () => {
 
                     <Input register={register} name={"password"} error={errors.password?.message} label={"Password"}
                            type={"password"} showPasswordToggle/>
-                    <a href={Path.PasswordRecovery} className={styles.forgotPassword}>
+                    <Link href={Path.PasswordRecovery} className={styles.forgotPassword}>
                         Forgot Password
-                    </a>
+                    </Link>
                 </div>
                 <Button disabled={isLoading} variant={"primary"} fullWidth className={styles.submitBtn}>Sign In</Button>
 
                 <span>Don’t have an account?</span>
-                <a className={styles.signUpLink} href={Path.SignUp}>Sign Up</a>
+                <Link className={styles.signUpLink} href={Path.SignUp}>Sign Up</Link>
             </form>
 
         </article>
