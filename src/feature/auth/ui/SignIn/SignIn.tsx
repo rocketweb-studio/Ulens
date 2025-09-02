@@ -13,6 +13,7 @@ import {Path} from "@/src/common/components/Navigation/Navigation";
 import {useRedirectIfAuthorized} from "@/src/common/hooks/useRedirectIfAuthorized";
 import {LoginRequestParams} from "@/src/feature/auth/api/authApi.types";
 import {useToast} from "@/src/common/hooks/useToast";
+import {ApiError} from "next/dist/server/api-utils";
 
 
 export const SignIn = () => {
@@ -35,10 +36,15 @@ export const SignIn = () => {
 
     const onSubmit: SubmitHandler<LoginRequestParams> = async (data) => {
         try {
-            await login(data)
+            await login(data).unwrap()
             showSuccess('Success login')
         } catch (error) {
-            showError(JSON.stringify(error))
+            if (error && typeof error === 'object' && 'data' in error && error.data && typeof error.data === 'object' && 'message' in error.data) {
+                showError((error.data as { message: string }).message);
+            }
+           else{
+               showError("Login error")
+           }
         }
     }
 
