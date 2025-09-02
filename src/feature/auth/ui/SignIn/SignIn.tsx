@@ -1,7 +1,7 @@
 'use client'
 import Image from "next/image";
-import {useLoginMutation} from "@/src/feature/auth/api/authApi";
-import {FieldErrors, SubmitHandler, useForm} from "react-hook-form";
+import {authApi, useLoginMutation} from "@/src/feature/auth/api/authApi";
+import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import gitHubSvg from "@/public/github-svg.svg"
 import googleSvg from "@/public/google-svg.svg"
@@ -13,19 +13,17 @@ import {Path} from "@/src/common/components/Navigation/Navigation";
 import {useRedirectIfAuthorized} from "@/src/common/hooks/useRedirectIfAuthorized";
 import {LoginRequestParams} from "@/src/feature/auth/api/authApi.types";
 import {useToast} from "@/src/common/hooks/useToast";
-import {useEffect} from "react";
-import {useApiError} from "@/src/common/utils/useApiError";
 
 
 export const SignIn = () => {
     const isLoading = useRedirectIfAuthorized()
-    const {showSuccess, showError} = useToast()
+    const {showSuccess,showError} = useToast()
     const [login] = useLoginMutation()
-    const {handleError} = useApiError()
 
     const {
         register,
         handleSubmit,
+        reset,
         formState: {errors},
     } = useForm<LoginRequestParams>({
         resolver: zodResolver(loginSchema),
@@ -38,10 +36,16 @@ export const SignIn = () => {
 
     const onSubmit: SubmitHandler<LoginRequestParams> = async (data) => {
         try {
-            await login(data)
+            await login(data).unwrap()
             showSuccess('Success login')
+            reset()
         } catch (error) {
-            handleError(error)
+            if (error && typeof error === 'object' && 'data' in error && error.data && typeof error.data === 'object' && 'message' in error.data) {
+                showError((error.data as { message: string }).message);
+            }
+           else{
+               showError("Login error")
+           }
         }
     }
 
