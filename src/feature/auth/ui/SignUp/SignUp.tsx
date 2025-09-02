@@ -90,7 +90,6 @@ export const SignUp = () => {
         }
 
         if (agreePoliticsValue !== undefined) {
-            debugger
             trigger("agreePolitics");
         }
     }, [agreePoliticsValue, trigger]);
