@@ -1,6 +1,6 @@
 'use client'
 import Image from "next/image";
-import {useLoginMutation} from "@/src/feature/auth/api/authApi";
+import {authApi, useLoginMutation} from "@/src/feature/auth/api/authApi";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import gitHubSvg from "@/public/github-svg.svg"
@@ -13,14 +13,12 @@ import {Path} from "@/src/common/components/Navigation/Navigation";
 import {useRedirectIfAuthorized} from "@/src/common/hooks/useRedirectIfAuthorized";
 import {LoginRequestParams} from "@/src/feature/auth/api/authApi.types";
 import {useToast} from "@/src/common/hooks/useToast";
-import {useApiError} from "@/src/common/utils/useApiError";
 
 
 export const SignIn = () => {
     const isLoading = useRedirectIfAuthorized()
-    const {showSuccess} = useToast()
+    const {showSuccess,showError} = useToast()
     const [login] = useLoginMutation()
-    const {handleError} = useApiError()
 
     const {
         register,
@@ -37,10 +35,10 @@ export const SignIn = () => {
 
     const onSubmit: SubmitHandler<LoginRequestParams> = async (data) => {
         try {
-            await login(data).unwrap()
+            await login(data)
             showSuccess('Success login')
         } catch (error) {
-            handleError(error)
+            showError(JSON.stringify(error))
         }
     }
 
