@@ -23,6 +23,7 @@ export const ConfirmLogout = ({ isOpen, onClose, email }: Props) => {
             router.push("/login")
         } catch (e) {
             console.error("Logout error:", e)
+            toast.error("Something went wrong during logout")
         }
     }
 

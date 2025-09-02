@@ -8,8 +8,8 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const httpsOptions = {
-    key: fs.readFileSync("./local.dev.ulens.org+1-key.pem"),
-    cert: fs.readFileSync("./local.dev.ulens.org+1.pem"),
+    key: fs.readFileSync("./local.dev.ulens.org-key.pem"),
+    cert: fs.readFileSync("./local.dev.ulens.org.pem"),
 };
 
 app.prepare().then(() => {
