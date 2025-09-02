@@ -21,7 +21,9 @@ export const handleError = async (api: CustomBaseQueryApi, result: QueryReturnVa
         error = 'Ошибка парсинга. Свяжетесь с тех поддержкой'
         break
       case 401:
-        error = '401 Unauthorized. Session expired'
+        if (isErrorWithMessage(result.error.data)) {
+          error = result.error.data.message
+        }else{ error = '401 Unauthorized. Session expired'}
         break
       case 403:
         error = '403 Forbidden Error. Check API-KEY'
