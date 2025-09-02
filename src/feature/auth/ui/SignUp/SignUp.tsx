@@ -6,7 +6,7 @@ import {Button} from "@/src/common/components/Button/Button";
 import Image from "next/image";
 import googleSvg from "@/public/google-svg.svg";
 import gitHubSvg from "@/public/github-svg.svg";
-import {FieldErrors, SubmitHandler, useForm} from "react-hook-form";
+import {SubmitHandler, useForm, useWatch} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {RegistrationInputs, registrationSchema} from "@/src/feature/auth/lib/schemas";
 import {useRegistrationMutation} from "@/src/feature/auth/api/authApi";
@@ -30,6 +30,8 @@ export const SignUp = () => {
         handleSubmit,
         reset,
         setError,
+        control,
+        trigger,
         clearErrors,
         formState: {errors, isValid},
     } = useForm<RegistrationInputs>({
@@ -38,6 +40,11 @@ export const SignUp = () => {
         defaultValues: {
             agreePolitics: false
         }
+    })
+
+    const agreePoliticsValue = useWatch({
+        control,
+        name: "agreePolitics"
     })
 
 
@@ -75,6 +82,11 @@ export const SignUp = () => {
         }
     }
 
+    useEffect(() => {
+        if (agreePoliticsValue !== undefined) {
+            trigger("agreePolitics");
+        }
+    }, [agreePoliticsValue, trigger]);
 
     useEffect(() => {
         if (isSuccess) openModal()
