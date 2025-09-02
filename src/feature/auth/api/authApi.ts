@@ -25,14 +25,14 @@ export const authApi = baseApi.injectEndpoints({
                     localStorage.setItem("accessToken", res.data.accessToken)
                     await dispatch(authApi.endpoints.getMe.initiate());
                 } catch (error) {
-                    console.log("login endpoint err: ", error)
+                    console.log("login endpoint error: ", error)
                 }
             },
         }),
         getMe: build.query<getMeResponse, void>({
             query: () => "auth/me",
         }),
-        passwordRecovery: build.mutation<any, { email: string, recaptchaToken: string }>({
+        passwordRecovery: build.mutation<void, { email: string, recaptchaToken: string }>({
             query: (body) => ({method: "post", url: "auth/password-recovery", body}),
         }),
         checkRecoveryCode: build.mutation<any, { code: string }>({

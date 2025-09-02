@@ -23,6 +23,7 @@ const ReCaptcha = ({errorMessage, setCaptcha, invisible}: Props) => {
         return
       }
       setCaptcha(token)
+      setLoader('complete')
     };
     // @ts-ignore
     window.expiredCallback = () => {
@@ -73,7 +74,7 @@ const ReCaptcha = ({errorMessage, setCaptcha, invisible}: Props) => {
     grecaptcha.reset();
     // @ts-ignore
     grecaptcha.execute()
-    setLoader('complete')
+
   };
 
   return (

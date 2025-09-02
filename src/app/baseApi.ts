@@ -14,6 +14,12 @@ export const baseApi = createApi({
     try {
       const fetchResult = await fetchBaseQuery({
         baseUrl: process.env.NEXT_PUBLIC_BASE_URL,
+        responseHandler: async (response) => {
+          if (response.status === 204) {
+            return {};
+          }
+          return response.json();
+        },
         credentials: "include",
         prepareHeaders: (headers) => {
           const token = localStorage.getItem('accessToken');
@@ -32,6 +38,7 @@ export const baseApi = createApi({
     }
 
   },
+
   endpoints: () => ({
 
   }),
