@@ -3,7 +3,7 @@ import s from '@/src/common/components/Navigation/Navigation.module.scss';
 
 export const Path = {
     Main: '/',
-    'Profile': '/profile',
+    Profile: '/profile',
     Settings: '/settings',
     SignIn: '/sign-in',
     SignUp: '/sign-up',

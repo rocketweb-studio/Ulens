@@ -19,7 +19,7 @@ import Link from "next/link";
 export const SignIn = () => {
     const isLoading = useRedirectIfAuthorized()
     const {showSuccess} = useToast()
-    const [login,] = useLoginMutation()
+    const [login] = useLoginMutation()
     const {
         register,
         handleSubmit,
