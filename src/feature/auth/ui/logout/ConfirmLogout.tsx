@@ -12,7 +12,7 @@ type Props = {
     email: string
 }
 
-export const ConfirmLogoutModal = ({ isOpen, onClose, email }: Props) => {
+export const ConfirmLogout = ({ isOpen, onClose, email }: Props) => {
     const router = useRouter()
     const [logout] = useLogoutMutation()
 
