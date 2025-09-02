@@ -1,6 +1,6 @@
 'use client'
 import Image from "next/image";
-import {useLoginMutation} from "@/src/feature/auth/api/authApi";
+import { useLoginMutation} from "@/src/feature/auth/api/authApi";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import gitHubSvg from "@/public/github-svg.svg"
@@ -18,8 +18,7 @@ import {useToast} from "@/src/common/hooks/useToast";
 export const SignIn = () => {
     const isLoading = useRedirectIfAuthorized()
     const {showSuccess} = useToast()
-    const [login] = useLoginMutation()
-
+    const [login,] = useLoginMutation()
     const {
         register,
         handleSubmit,
