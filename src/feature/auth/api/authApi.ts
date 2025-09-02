@@ -29,7 +29,7 @@ export const authApi = baseApi.injectEndpoints({
         getMe: build.query<getMeResponse, void>({
             query: () => "auth/me",
         }),
-        passwordRecovery: build.mutation<void, { email: string, recaptchaToken: string }>({
+        passwordRecovery: build.mutation<any, { email: string, recaptchaToken: string }>({
             query: (body) => ({method: "post", url: "auth/password-recovery", body}),
         }),
         checkRecoveryCode: build.mutation<any, { code: string }>({

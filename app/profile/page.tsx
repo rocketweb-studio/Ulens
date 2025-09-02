@@ -9,5 +9,4 @@ export default function ProfilePage() {
     redirect(`/profile/${userId}`)
   }
 
-  // "/profile" - редирект на мой профиль ("profile/123" - где 123 мой id) или, если не авторизован, то на "/"
 }

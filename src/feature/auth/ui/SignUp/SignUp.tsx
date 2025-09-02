@@ -51,7 +51,6 @@ export const SignUp = () => {
 
     const onSubmit: SubmitHandler<RegistrationInputs> = async (data) => {
         const {userName, email, password} = data
-        console.log(data)
         try {
             const res = await registration({userName, email, password}).unwrap()
             showSuccess('You are successfully registered!')

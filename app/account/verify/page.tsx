@@ -15,14 +15,11 @@ export default async function Verify({searchParams}:{searchParams:{ [key: string
         })
 
         if (response.status === 400) {
-            console.log(`redirect /sign-up/resend-verification-link`)
             redirect("/sign-up/resend-verification-link")
         }
         if (response.status === 204) redirect("/sign-up/confirmed-email")
 
-        const data = await response.json()
 
-        console.log(data)
 
     return (
         <div>

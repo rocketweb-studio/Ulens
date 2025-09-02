@@ -3,7 +3,6 @@ import Image from "next/image";
 import ReCaptcha_logo from '@/public/reCaptcha.svg'
 import checked from '@/public/check.svg'
 import s from './ReCaptcha.module.scss'
-import {delay} from "@/src/common/utils";
 
 type Props = {
   errorMessage: string | boolean | undefined
@@ -55,6 +54,8 @@ const ReCaptcha = ({errorMessage, setCaptcha, invisible}: Props) => {
       delete window.onSubmit;
       // @ts-ignore
       delete window.expiredCallback;
+      // @ts-ignore
+      delete window.grecaptcha;
     }
   }, []);
 
@@ -69,12 +70,10 @@ const ReCaptcha = ({errorMessage, setCaptcha, invisible}: Props) => {
 
   const onSubmitHandler = async () => {
     setLoader('loading')
-    await delay(1000)
     // @ts-ignore
     grecaptcha.reset();
     // @ts-ignore
     grecaptcha.execute()
-
   };
 
   return (

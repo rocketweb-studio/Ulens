@@ -3,7 +3,7 @@
 import {Input} from '@/src/common/components/Input/Input';
 import s from './ResetPassword.module.scss'
 import {Button} from "@/src/common/components/Button/Button";
-import {FieldErrors, SubmitHandler, useForm} from "react-hook-form"
+import {SubmitHandler, useForm} from "react-hook-form"
 import {usePasswordRecoveryMutation, useSetNewPasswordMutation} from "@/src/feature/auth/api/authApi";
 import Image from "next/image";
 import imgResend from 'public/rafiki.svg'
@@ -15,7 +15,7 @@ import {useModal} from "@/src/common/hooks/useModal";
 import {delay} from "@/src/common/utils";
 import ReCaptcha from "@/src/feature/auth/ui/PasswordRecovery/ReCaptcha/ReCaptcha";
 import {useEffect, useState} from "react";
-import {useToast} from "@/src/common/hooks/useToast";
+import {Path} from "@/src/common/components/Navigation/Navigation";
 
 type Inputs = {
   password: string
@@ -35,6 +35,10 @@ export const ResetPassword = ({isValidCode, recoveryCode, email}: Props) => {
   const [captcha, setCaptcha] = useState('')
   const router = useRouter();
 
+  useEffect(() => {
+    if (result.isSuccess) openModal()
+  }, [result.isSuccess, openModal])
+
   const {
     register,
     handleSubmit,
@@ -47,14 +51,13 @@ export const ResetPassword = ({isValidCode, recoveryCode, email}: Props) => {
 
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data)
     setNewPassword({newPassword: data.password, recoveryCode})
     reset()
   }
 
    if (newPassResult?.isSuccess && !isOpen) {
     delay(1000).then(() => {
-      router.push('/sign-in')
+      router.push(Path.SignIn)
     })
   }
 
@@ -62,10 +65,6 @@ export const ResetPassword = ({isValidCode, recoveryCode, email}: Props) => {
     sendEmail({email, recaptchaToken: captcha})
   }
 
-  if (result?.isSuccess && !isOpen) {
-    openModal()
-    result.reset()
-  }
 
   return (
     <>
@@ -86,7 +85,7 @@ export const ResetPassword = ({isValidCode, recoveryCode, email}: Props) => {
                          showPasswordToggle/>
                   <p className={s.infoMessage}>Your password must be between 6 and 20 characters</p>
                   <div className={s.buttonWrapper}>
-                      <Button>Create new password и перенаправление на вход в систему</Button>
+                      <Button>Create new password</Button>
                   </div>
               </form>
           </div>}
@@ -96,7 +95,7 @@ export const ResetPassword = ({isValidCode, recoveryCode, email}: Props) => {
               <h1 className={s.pageTitle2}>Email verification link expired</h1>
               <p className={s.infoMessage2}>Looks like the verification link has expired. Not to worry, we can send the
                   link again</p>
-              <Button onClick={resendEmail} className={s.button}>Resend link</Button>
+              <Button onClick={resendEmail} className={s.button} disabled={!!captcha}>Resend link</Button>
               <Image priority={true} width={470} height={350} src={imgResend} alt={'imgResend'}/>
 
           </div>}

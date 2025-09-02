@@ -3,9 +3,6 @@ import {ResetPassword} from "@/src/feature/auth/ui/PasswordRecovery/ResetPasswor
 export default async function ResetPasswordPage({searchParams}:{searchParams:{ [key: string]: string | undefined }}) {
   const {token, email} = await searchParams
 
-
-
-  console.log({token, email})
   let isValidCode: boolean = false
 
   try {
@@ -20,10 +17,7 @@ export default async function ResetPasswordPage({searchParams}:{searchParams:{ [
           code: token,
         })
       })
-    const data = await res.json()
 
-    console.log(res)
-    console.log(data)
 
     if (res.status !== 200) {
       isValidCode = false
@@ -34,9 +28,6 @@ export default async function ResetPasswordPage({searchParams}:{searchParams:{ [
   } catch (error) {
     console.log(error)
   }
-
-
-
 
   return (
     <div>

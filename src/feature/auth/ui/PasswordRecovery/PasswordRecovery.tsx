@@ -11,7 +11,8 @@ import {emailSchema} from "@/src/feature/auth/lib/schemas/emailSchema";
 import {useRouter} from "next/navigation";
 import {useModal} from "@/src/common/hooks/useModal";
 import ReCaptcha from "@/src/feature/auth/ui/PasswordRecovery/ReCaptcha/ReCaptcha";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import { Path } from '@/src/common/components/Navigation/Navigation';
 
 type Inputs = {
   email: string
@@ -23,6 +24,12 @@ export const PasswordRecovery = () => {
   const {isOpen, openModal, closeModal} = useModal()
   const router = useRouter();
   const [email, setEmail] = useState('')
+
+
+  useEffect(() => {
+    if (result.isSuccess) openModal()
+  }, [result.isSuccess, openModal])
+
 
   const {
     register,
@@ -36,16 +43,12 @@ export const PasswordRecovery = () => {
   })
 
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setEmail(data.email)
-    sendEmail({email: data.email, recaptchaToken: data.recaptchaToken})
+    await sendEmail({email: data.email, recaptchaToken: data.recaptchaToken})
     reset()
   }
 
-  if (result?.isSuccess && !isOpen) {
-    openModal()
-    result.reset()
-  }
 
   const setCaptcha = (token: string) => {
     setValue('recaptchaToken', token)
@@ -64,9 +67,7 @@ export const PasswordRecovery = () => {
             If you don’t receive an email send link again</p>}
         <div className={s.buttonWrapper}>
           <Button type='submit'>{result.isSuccess ? 'Send Link Again' : 'Send Link'}</Button>
-          <Button onClick={() => {
-            router.push('/sign-in')
-          }} variant={"text"}>Back to Sign In</Button>
+          <Button  tagType={"link"} path={Path.SignIn} variant={"text"}>Back to Sign In</Button>
 
         </div>
         {!result.isSuccess &&
