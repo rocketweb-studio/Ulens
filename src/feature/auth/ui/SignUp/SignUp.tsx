@@ -13,21 +13,24 @@ import {useRegistrationMutation} from "@/src/feature/auth/api/authApi";
 import {useModal} from "@/src/common/hooks/useModal";
 import {Modal} from "@/src/common/components/Modal/Modal";
 import {useEffect, useState} from "react";
-import {useRouter} from "next/navigation";
 import {useToast} from "@/src/common/hooks/useToast";
 import {Path} from "@/src/common/components/Navigation/Navigation";
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
+import {SerializedError} from "@reduxjs/toolkit";
+import {ServerErrorType} from "@/src/feature/auth/types";
 
 export const SignUp = () => {
-    const [registration, {isSuccess, error}] = useRegistrationMutation()
+    const [registration, {isSuccess, error, isError}] = useRegistrationMutation()
     const {isOpen, openModal, closeModal} = useModal()
-    const {showSuccess, showError} = useToast()
+    const {showSuccess} = useToast()
     const [email, setEmail] = useState('')
-    const router = useRouter();
 
     const {
         register,
         handleSubmit,
         reset,
+        setError,
+        clearErrors,
         formState: {errors, isValid},
     } = useForm<RegistrationInputs>({
         mode: "onBlur",
@@ -46,23 +49,42 @@ export const SignUp = () => {
             showSuccess('You are successfully registered!')
             setEmail(email)
             reset()
-        } catch (error) {
-
+        } catch (e) {
         }
     }
+
+    const handleServerError = (error: FetchBaseQueryError | SerializedError | undefined) => {
+        if (!error) return
+
+        clearErrors()
+
+        if ('status' in error) {
+            if (error.status === 400 && error.data) {
+                const serverError = error.data as ServerErrorType
+                const errorsMessages = serverError.errorsMessages
+                if (errorsMessages && errorsMessages.length > 0) {
+                    serverError.errorsMessages.forEach((errorMessage) => {
+                        const fieldName = errorMessage.field as keyof RegistrationInputs
+                        setError(fieldName, {
+                            type: 'serverError',
+                            message: errorMessage.message,
+                        })
+                    })
+                }
+            }
+        }
+    }
+
 
     useEffect(() => {
         if (isSuccess) openModal()
     }, [isSuccess, openModal])
 
     useEffect(() => {
-        for (const key in errors) {
-            if (errors.hasOwnProperty(key)) {
-                const errorMessage = (errors as FieldErrors<RegistrationInputs>)[key as keyof RegistrationInputs]?.message
-                if (errorMessage) showError(errorMessage)
-            }
+        if (isError) {
+            handleServerError(error);
         }
-    }, [errors])
+    }, [isError]);
 
     return (
         <div className={styles.formWrapper}>
