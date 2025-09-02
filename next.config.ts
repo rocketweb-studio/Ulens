@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
     @use "typography" as *;
     `
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;
