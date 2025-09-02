@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     @use "colors" as *;
     @use "typography" as *;
     `
-  }
+  },
 };
 
 export default nextConfig;

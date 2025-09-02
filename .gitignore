@@ -35,7 +35,7 @@ yarn-error.log*
 local.dev.ulens.org-key.pem
 local.dev.ulens.org.pem
 # env files (can opt-in for committing if needed)
-.env*
+.env.local
 
 # vercel
 .vercel
@@ -49,4 +49,6 @@ next-env.d.ts
 !/certs/README.md
 local.dev.ulens.org.pem
 local.dev.ulens.org-key.pem
+local.dev.ulens.org+1-key.pem
+local.dev.ulens.org+1.pem
 certificates

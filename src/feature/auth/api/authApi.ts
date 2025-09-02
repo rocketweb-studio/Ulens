@@ -2,7 +2,6 @@ import {baseApi} from "@/src/app/baseApi";
 import {LoginRequestParams,LoginResponse,getMeResponse, UserType} from "@/src/feature/auth/api/authApi.types";
 import {RegistrationRequest, RegistrationResponce} from "@/src/feature/auth/types";
 
-// @ts-ignore
 export const authApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         getUsers: build.query<UserType[], void>({
@@ -39,13 +38,16 @@ export const authApi = baseApi.injectEndpoints({
         setNewPassword: build.mutation<any, { newPassword: string, recoveryCode: string }>({
             query: (body) => ({method: "post", url: "auth/new-password", body}),
         }),
-
+        logout: build.mutation<void, void>({
+            query: () => ({method: "post", url: "auth/logout"})
+        })
     }),
 })
 
 export const {
     useGetUsersQuery,
     useLoginMutation,
+    useLogoutMutation,
     usePasswordRecoveryMutation,
     useRegistrationMutation,
     useConfirmRegistrationMutation,
