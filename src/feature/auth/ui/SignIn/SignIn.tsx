@@ -14,12 +14,14 @@ import {useRedirectIfAuthorized} from "@/src/common/hooks/useRedirectIfAuthorize
 import {LoginRequestParams} from "@/src/feature/auth/api/authApi.types";
 import {useToast} from "@/src/common/hooks/useToast";
 import {useEffect} from "react";
+import {useApiError} from "@/src/common/utils/useApiError";
 
 
 export const SignIn = () => {
     const isLoading = useRedirectIfAuthorized()
     const {showSuccess, showError} = useToast()
     const [login] = useLoginMutation()
+    const {handleError} = useApiError()
 
     const {
         register,
@@ -33,23 +35,15 @@ export const SignIn = () => {
         },
     })
 
+
     const onSubmit: SubmitHandler<LoginRequestParams> = async (data) => {
         try {
             await login(data)
             showSuccess('Success login')
         } catch (error) {
-            showError(JSON.stringify(error))
+            handleError(error)
         }
-    };
-
-    useEffect(() => {
-        for (const key in errors) {
-            if (errors.hasOwnProperty(key)) {
-                const errorMessage = (errors as FieldErrors<LoginRequestParams>)[key as keyof LoginRequestParams]?.message
-                if (errorMessage) showError(errorMessage)
-            }
-        }
-    }, [errors])
+    }
 
     return (
         <article className={styles.authWrapper}>

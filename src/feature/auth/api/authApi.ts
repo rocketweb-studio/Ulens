@@ -24,7 +24,6 @@ export const authApi = baseApi.injectEndpoints({
                     const res = await queryFulfilled;
                     localStorage.setItem("accessToken", res.data.accessToken)
                     await dispatch(authApi.endpoints.getMe.initiate());
-
                 } catch (error) {
                     console.log("login endpoint err: ", error)
                 }
