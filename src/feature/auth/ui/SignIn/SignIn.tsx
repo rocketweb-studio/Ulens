@@ -13,7 +13,6 @@ import {Path} from "@/src/common/components/Navigation/Navigation";
 import {useRedirectIfAuthorized} from "@/src/common/hooks/useRedirectIfAuthorized";
 import {LoginRequestParams} from "@/src/feature/auth/api/authApi.types";
 import {useToast} from "@/src/common/hooks/useToast";
-import {ApiError} from "next/dist/server/api-utils";
 
 
 export const SignIn = () => {
@@ -24,6 +23,7 @@ export const SignIn = () => {
     const {
         register,
         handleSubmit,
+        reset,
         formState: {errors},
     } = useForm<LoginRequestParams>({
         resolver: zodResolver(loginSchema),
@@ -38,6 +38,7 @@ export const SignIn = () => {
         try {
             await login(data).unwrap()
             showSuccess('Success login')
+            reset()
         } catch (error) {
             if (error && typeof error === 'object' && 'data' in error && error.data && typeof error.data === 'object' && 'message' in error.data) {
                 showError((error.data as { message: string }).message);
