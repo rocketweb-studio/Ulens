@@ -12,7 +12,7 @@ import {RegistrationInputs, registrationSchema} from "@/src/feature/auth/lib/sch
 import {useRegistrationMutation} from "@/src/feature/auth/api/authApi";
 import {useModal} from "@/src/common/hooks/useModal";
 import {Modal} from "@/src/common/components/Modal/Modal";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useToast} from "@/src/common/hooks/useToast";
 import {Path} from "@/src/common/components/Navigation/Navigation";
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
@@ -24,6 +24,7 @@ export const SignUp = () => {
     const {isOpen, openModal, closeModal} = useModal()
     const {showSuccess} = useToast()
     const [email, setEmail] = useState('')
+    const isFirstRender = useRef(true)
 
     const {
         register,
@@ -83,7 +84,13 @@ export const SignUp = () => {
     }
 
     useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false
+            return
+        }
+
         if (agreePoliticsValue !== undefined) {
+            debugger
             trigger("agreePolitics");
         }
     }, [agreePoliticsValue, trigger]);
