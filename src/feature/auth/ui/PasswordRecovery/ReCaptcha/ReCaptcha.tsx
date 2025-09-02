@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Image from "next/image";
 import ReCaptcha_logo from '@/public/reCaptcha.svg'
-import checked from '@/public/check.svg'
+import checked from '@/public/сheck.svg'
 import s from './ReCaptcha.module.scss'
 
 type Props = {
