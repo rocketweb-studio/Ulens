@@ -3,7 +3,7 @@ import s from '@/src/common/components/Navigation/Navigation.module.scss';
 
 export const Path = {
     Main: '/',
-    Profile: '/profile',
+    'Profile': '/profile',
     Settings: '/settings',
     SignIn: '/sign-in',
     SignUp: '/sign-up',
@@ -13,6 +13,7 @@ export const Path = {
     PasswordRecovery: '/password-recovery',
     ResetPassword: '/account/reset-password',
 } as const
+export type PathValue = typeof Path[keyof typeof Path];
 
 export const Navigation = () => {
     return (
