@@ -9,12 +9,10 @@
   color: #fff;
 }
 
-.logotype{
-  font-size: 26px;
-}
-
 .linksWrap{
   display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
   gap: 10px ;
   text-transform: capitalize;
 }
