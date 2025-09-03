@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import s from '@/src/common/components/Navigation/Navigation.module.scss';
-import {Logout} from "@/src/feature/auth/ui/logout/ui";
+import {Logout} from "@/src/feature/auth/ui/Logout";
 
 export const Path = {
     Main: '/',

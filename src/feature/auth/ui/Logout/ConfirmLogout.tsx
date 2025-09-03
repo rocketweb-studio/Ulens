@@ -24,7 +24,7 @@ export const ConfirmLogout = ({ isOpen, onClose, email }: Props) => {
             router.push(Path.SignIn)
         } catch (e) {
             console.error("Logout error:", e)
-            toast.error("Something went wrong during logout")
+            toast.error("Something went wrong during Logout")
         }
     }
 

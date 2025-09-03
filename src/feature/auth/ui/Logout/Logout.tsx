@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ConfirmLogout } from "@/src/feature/auth/ui/logout/ConfirmLogout"
+import { ConfirmLogout } from "@/src/feature/auth/ui/Logout/ConfirmLogout"
 import styles from "@/src/feature/auth/ui/SignIn/SignIn.module.scss"
 import { useGetMeQuery } from "@/src/feature/auth/api/authApi"
 import { useRouter } from "next/navigation"
@@ -36,7 +36,6 @@ export const Logout = () => {
             <button
                 className={styles.submitBtn}
                 onClick={() => {
-                    console.log("Logout clicked")
                     setIsModalOpen(true)
                 }}
             >
