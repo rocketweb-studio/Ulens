@@ -1,5 +1,9 @@
 @use 'src/common/styles/colors' as colors;
 
+.grecaptchaWrapper {
+  position: absolute;
+}
+
 .boxModel {
   border: 1px solid colors.color(dark,300);
   border-radius: 2px;
