@@ -1,4 +1,4 @@
-@use '../../styles/colors';
+@use '../../styles/colors' as colors;
 @use '../../styles/typography' as typography;
 
 .inputContainer {
@@ -6,6 +6,7 @@
   flex-direction: column;
   width: 100%;
   position: relative;
+  padding-bottom: 24px;
 }
 
 .inputWrapper {
@@ -18,14 +19,13 @@
   font-size: 14px;
   line-height: 24px;
   font-weight: 400;
-  color: color(light, 900);
-  margin-top: 4px;
+  color: colors.color(light, 900);
 }
 
 .input {
   padding: 6px 12px;
-  border: 1px solid color(light, 900);
-  color: color(light, 900);
+  border: 1px solid colors.color(light, 900);
+  color: colors.color(light, 900);
   border-radius: 0;
   font-size: 16px;
   line-height: 24px ;
@@ -35,16 +35,16 @@
   width: 100%;
 
   &:focus {
-    background-color: color(dark, 500);
-    border: 1px solid color(light, 100);
-    color: color(light, 100);
+    background-color: colors.color(dark, 500);
+    border: 1px solid colors.color(light, 100);
+    color: colors.color(light, 100);
     outline: none;
   }
 
   &:disabled {
-    background-color: color(dark, 100);
-    border: 1px solid color(dark, 100);
-    color: color(dark, 100);
+    background-color: colors.color(dark, 100);
+    border: 1px solid colors.color(dark, 100);
+    color: colors.color(dark, 100);
   }
 
   &::placeholder {
@@ -52,12 +52,12 @@
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;
-    color: color(light, 900);
+    color: colors.color(light, 900);
   }
 
   &:hover {
-    color: color(light, 900);
-    border: 1px solid color(light, 900);
+    color: colors.color(light, 900);
+    border: 1px solid colors.color(light, 900);
   }
 }
 
@@ -73,7 +73,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: color(light, 700);
+  color: colors.color(light, 700);
   padding: 4px;
   border-radius: 4px;
   display: flex;
@@ -81,13 +81,13 @@
   justify-content: center;
 
   &:hover {
-    color: color(light, 900);
+    color: colors.color(light, 900);
     background-color: rgba(255, 255, 255, 0.1);
   }
 
   &:disabled {
     cursor: not-allowed;
-    color: color(dark, 300);
+    color: colors.color(dark, 300);
 
     &:hover {
       background-color: transparent;
@@ -116,7 +116,7 @@
   justify-content: center;
   width: 18px;
   height: 18px;
-  background-color: color(light, 100);
+  background-color: colors.color(light, 100);
   border-radius: 2px;
   transition: all 0.3s ease;
 
@@ -126,7 +126,7 @@
     display: none;
     width: 5px;
     height: 10px;
-    border: solid color(dark, 900);
+    border: solid colors.color(dark, 900);
     border-width: 0 2px 2px 0;
     transform: rotate(45deg) translate(-1px, -1px);
   }
@@ -134,7 +134,7 @@
 
 .checkboxInput:checked ~ .checkboxCustom {
   background-color: white;
-  border-color: color(accent, 500);
+  border-color: colors.color(accent, 500);
 
   &::after {
     display: block;
@@ -142,12 +142,12 @@
 }
 
 .checkboxInput:disabled ~ .checkboxCustom {
-  background-color: color(dark, 100);
-  border-color: color(dark, 300);
+  background-color: colors.color(dark, 100);
+  border-color: colors.color(dark, 300);
   cursor: not-allowed;
 
   &::after {
-    border-color: color(dark, 300);
+    border-color: colors.color(dark, 300);
   }
 }
 
@@ -159,17 +159,17 @@
   font-size: 12px;
   line-height: 16px;
   font-weight: 400;
-  color: color(light, 100);
+  color: colors.color(light, 100);
   cursor: pointer;
 }
 
 .checkboxInput:disabled ~ .checkboxLabel {
-  color: color(dark, 100);
+  color: colors.color(dark, 100);
   cursor: not-allowed;
 }
 
 .errorInput {
-  border-color: color(danger, 500);
+  border-color: colors.color(danger, 500);
 
   &:focus {
     box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
@@ -177,7 +177,42 @@
 }
 
 .errorText {
+  position: absolute;
+  bottom: 0;
   color: color(danger, 500);
   font-size: 14px;
   margin-top: 2px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.errorTextContent {
+  display: inline-block;
+}
+
+@keyframes scrollError {
+  0% {
+    transform: translateX(0);
+  }
+  15% {
+    transform: translateX(0); // Пауза в начале
+  }
+  85% {
+    transform: translateX(var(--scroll-amount, 0));
+  }
+  100% {
+    transform: translateX(var(--scroll-amount, 0));
+  }
+}
+
+.errorTextContent.animated {
+  animation: scrollError 6s infinite;
+  animation-timing-function: linear;
+
+  @at-root {
+    .errorText:hover .errorTextContent.animated {
+      animation-play-state: paused;
+    }
+  }
 }

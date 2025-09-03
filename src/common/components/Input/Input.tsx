@@ -1,6 +1,6 @@
 'use client';
 
-import React, {ReactNode, useState} from 'react';
+import React, {ChangeEvent, ReactNode, useEffect, useRef, useState} from 'react';
 import styles from '@/src/common/components/Input/Input.module.scss';
 import {FieldValues, Path, UseFormRegister} from "react-hook-form";
 import {RegistrationInputs} from "@/src/feature/auth/lib/schemas";
@@ -14,7 +14,7 @@ type Props<T extends FieldValues = RegistrationInputs> = {
     id?: string
     value?: string
     checked?: boolean
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    onChange?: (e: ChangeEvent<HTMLInputElement>) => void
     placeholder?: string
     label?: string | ReactNode
     error?: string
@@ -39,8 +39,36 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
                                                                       register,
                                                                       showPasswordToggle = false
                                                                   }: Props<T>) => {
-    const [showPassword, setShowPassword] = useState(false);
-    const inputType = showPasswordToggle && type === 'password' && showPassword ? 'text' : type;
+    const [showPassword, setShowPassword] = useState(false)
+    const errorRef = useRef<HTMLDivElement>(null)
+    const errorTextRef = useRef<HTMLSpanElement>(null);
+    const [isOverflowing, setIsOverflowing] = useState(false);
+    const inputType = showPasswordToggle && type === 'password' && showPassword ? 'text' : type
+
+    useEffect(() => {
+        if (!errorRef.current || !errorTextRef.current || !error) return;
+
+        const checkOverflow = () => {
+            const containerWidth = errorRef.current?.clientWidth || 0;
+            const textWidth = errorTextRef.current?.scrollWidth || 0;
+
+            const overflowing = textWidth > containerWidth;
+            setIsOverflowing(overflowing);
+
+            if (overflowing && errorTextRef.current) {
+                const scrollAmount = textWidth - containerWidth;
+                errorTextRef.current.style.setProperty('--scroll-amount', `-${scrollAmount}px`);
+
+                const duration = (scrollAmount / 100) + 4; // 20px в секунду
+                errorTextRef.current.style.setProperty('--animation-duration', `${duration}s`);
+            }
+        };
+
+        checkOverflow();
+
+        window.addEventListener('resize', checkOverflow);
+        return () => window.removeEventListener('resize', checkOverflow);
+    }, [error]);
 
     if (type === 'checkbox') {
         return (
@@ -60,7 +88,11 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
                         </span>
                     )}
                 </label>
-                {error && <span className={styles.errorText}>{error}</span>}
+                {error && (
+                    <div ref={errorRef} className={styles.errorText}>
+                        {error}
+                    </div>
+                )}
             </div>
         );
     }
@@ -98,7 +130,16 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
                     </button>
                 )}
             </div>
-            {error && <span className={styles.errorText}>{error}</span>}
+            {error && (
+                <div ref={errorRef} className={styles.errorText}>
+                    <span
+                        ref={errorTextRef}
+                        className={`${styles.errorTextContent} ${isOverflowing ? styles.animated : ''}`}
+                    >
+                        {error}
+                    </span>
+                </div>
+            )}
         </div>
     );
 };
