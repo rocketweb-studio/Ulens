@@ -5,6 +5,7 @@ import { ConfirmLogout } from "@/src/feature/auth/ui/logout/ConfirmLogout"
 import styles from "@/src/feature/auth/ui/SignIn/SignIn.module.scss"
 import { useGetMeQuery } from "@/src/feature/auth/api/authApi"
 import { useRouter } from "next/navigation"
+import {Path} from "@/src/common/components/Navigation/Navigation";
 
 export const Logout = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -15,7 +16,7 @@ export const Logout = () => {
         if (isError) {
             const status = (error as any)?.status
             if (status === 401) {
-                router.push("/login")
+                router.push(Path.SignIn)
             }
         }
     }, [isError, error, router])
