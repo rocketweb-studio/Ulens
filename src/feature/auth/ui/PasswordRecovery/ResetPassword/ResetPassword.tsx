@@ -12,9 +12,8 @@ import {passwordSchema} from "@/src/feature/auth/lib/schemas";
 import {useRouter} from "next/navigation";
 import {Modal} from "@/src/common/components/Modal/Modal";
 import {useModal} from "@/src/common/hooks/useModal";
-import {delay} from "@/src/common/utils";
 import ReCaptcha from "@/src/feature/auth/ui/PasswordRecovery/ReCaptcha/ReCaptcha";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Path} from "@/src/common/components/Navigation/Navigation";
 
 type Inputs = {
@@ -30,14 +29,11 @@ type Props = {
 
 export const ResetPassword = ({isValidCode, recoveryCode, email}: Props) => {
   const {isOpen, openModal, closeModal} = useModal()
-  const [sendEmail, result] = usePasswordRecoveryMutation()
-  const [setNewPassword, newPassResult] = useSetNewPasswordMutation()
+  const [sendEmail] = usePasswordRecoveryMutation()
+  const [setNewPassword] = useSetNewPasswordMutation()
   const [captcha, setCaptcha] = useState('')
+  const [isCaptchaOpen, setIsCaptchaOpen] = useState<boolean>(false);
   const router = useRouter();
-
-  useEffect(() => {
-    if (result.isSuccess) openModal()
-  }, [result.isSuccess, openModal])
 
   const {
     register,
@@ -50,21 +46,26 @@ export const ResetPassword = ({isValidCode, recoveryCode, email}: Props) => {
   })
 
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    setNewPassword({newPassword: data.password, recoveryCode})
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      await setNewPassword({newPassword: data.password, recoveryCode}).unwrap()
+      openModal()
+    } catch (e) {}
     reset()
   }
 
-   if (newPassResult?.isSuccess && !isOpen) {
-    delay(1000).then(() => {
-      router.push(Path.SignIn)
-    })
+  const openCaptchaHandler = () => {
+    setIsCaptchaOpen(true)
   }
 
   const resendEmail = () => {
     sendEmail({email, recaptchaToken: captcha})
   }
 
+   const onCloseModalHandler = () => {
+     closeModal()
+     router.replace(Path.SignIn)
+   }
 
   return (
     <>
@@ -95,14 +96,16 @@ export const ResetPassword = ({isValidCode, recoveryCode, email}: Props) => {
               <h1 className={s.pageTitle2}>Email verification link expired</h1>
               <p className={s.infoMessage2}>Looks like the verification link has expired. Not to worry, we can send the
                   link again</p>
-              <Button onClick={resendEmail} className={s.button} disabled={!!captcha}>Resend link</Button>
+            {!isCaptchaOpen
+              ?<Button onClick={openCaptchaHandler} className={s.button}>Resend link</Button>
+              : <>
+                <Button onClick={resendEmail} className={s.button} disabled={!captcha} >Resend link</Button>
+                <ReCaptcha setCaptcha={setCaptcha} />
+              </>}
               <Image priority={true} width={470} height={350} src={imgResend} alt={'imgResend'}/>
-
           </div>}
 
-      <ReCaptcha setCaptcha={setCaptcha} errorMessage={''} invisible={true}/>
-
-      <Modal modalTitle={'Email sent'} isOpen={isOpen} onClose={closeModal}>
+      <Modal modalTitle={'Email sent'} isOpen={isOpen} onClose={onCloseModalHandler}>
         <p className={s.infoMessage3}>We have sent a link to confirm your email to {email}</p>
       </Modal>
 
