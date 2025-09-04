@@ -18,13 +18,6 @@ export const authApi = baseApi.injectEndpoints({
         }),
         login: build.mutation<LoginResponse, LoginRequestParams>({
             query: (body) => ({method: "post", url: "auth/login", body}),
-            async onQueryStarted(_arg, {dispatch, queryFulfilled}) {
-                try {
-                    const res = await queryFulfilled;
-                    localStorage.setItem("accessToken", res.data.accessToken)
-                    await dispatch(authApi.endpoints.getMe.initiate());
-                } catch (error) {}
-            },
         }),
         getMe: build.query<getMeResponse, void>({
             query: () => "auth/me",
