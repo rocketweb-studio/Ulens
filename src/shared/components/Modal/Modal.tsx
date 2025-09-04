@@ -3,7 +3,7 @@ import {createPortal} from "react-dom"
 import s from "./Modal.module.scss"
 import Image from "next/image";
 import closeIcon from "@/public/close.svg"
-import {Button} from "@/src/common/components/Button/Button";
+import {Button} from "@/src/shared/components/Button/Button";
 
 export type Props = {
     isOpen: boolean
@@ -19,7 +19,7 @@ export const Modal = ({
                           onClose,
                           children,
                           modalTitle,
-                          closeOnOverlayClick = true,
+                          // closeOnOverlayClick = true,
                           closeOnEsc = true
                       }: Props) => {
     useEffect(() => {

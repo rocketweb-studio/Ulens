@@ -1,7 +1,7 @@
 'use client';
 
 import React, {ChangeEvent, ReactNode, useEffect, useRef, useState} from 'react';
-import styles from '@/src/common/components/Input/Input.module.scss';
+import styles from '@/src/shared/components/Input/Input.module.scss';
 import {FieldValues, Path, UseFormRegister} from "react-hook-form";
 import {RegistrationInputs} from "@/src/feature/auth/lib/schemas";
 import Image from "next/image";
@@ -59,7 +59,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
                 const scrollAmount = textWidth - containerWidth;
                 errorTextRef.current.style.setProperty('--scroll-amount', `-${scrollAmount}px`);
 
-                const duration = (scrollAmount / 100) + 4; // 20px в секунду
+                const duration = (scrollAmount / 100) + 4;
                 errorTextRef.current.style.setProperty('--animation-duration', `${duration}s`);
             }
         };
@@ -71,6 +71,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
     }, [error]);
 
     if (type === 'checkbox') {
+
         return (
             <div className={`${styles.inputContainer} ${className}`}>
                 <label className={styles.checkboxContainer} htmlFor={id}>
@@ -79,7 +80,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
                         disabled={disabled}
                         className={styles.checkboxInput}
                         id={id}
-                        {...(register && name ? register(name) : {name, onChange, checked})}
+                        {...(register && name ? register(name, {onChange}) : {name, onChange, checked})}
                     />
                     <span className={styles.checkboxCustom}/>
                     {label && (
@@ -112,7 +113,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
                     disabled={disabled}
                     className={`${styles.input} ${error ? styles.errorInput : ''} ${showPasswordToggle && type === 'password' ? styles.passwordInput : ''}`}
                     id={id}
-                    {...(register && name ? register(name) : {name, onChange})}
+                    {...(register && name ? register(name, {onChange}) : {name, onChange})}
                 />
                 {showPasswordToggle && type === "password" && (
                     <button

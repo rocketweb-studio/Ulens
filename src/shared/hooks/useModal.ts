@@ -10,12 +10,12 @@ export const useModal = (initialState = false): Props => {
     const [isOpen, setIsOpen] = useState(initialState);
 
     const openModal = useCallback(() => {
-        setIsOpen(true)
-    }, [])
+        if (!isOpen) setIsOpen(true)
+    }, [isOpen])
 
     const closeModal = useCallback(() => {
-        setIsOpen(false)
-    }, [])
+        if (isOpen) setIsOpen(false)
+    }, [isOpen])
 
     return {
         isOpen,

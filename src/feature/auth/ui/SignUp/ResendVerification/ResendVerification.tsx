@@ -1,21 +1,21 @@
 'use client'
 
 import style from './ResendVerification.module.scss'
-import {FlexContainer} from "@/src/common/components/FlexContainer";
-import {Button} from "@/src/common/components/Button/Button";
+import {FlexContainer} from "@/src/shared/components/FlexContainer";
+import {Button} from "@/src/shared/components/Button/Button";
 import Image from "next/image";
 import resendVerificationImage from "@/public/sign-up/resend-verification-link.svg"
-import {Input} from '@/src/common/components/Input/Input';
+import {Input} from '@/src/shared/components/Input/Input';
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {emailConfirmationSchema, EmailInput} from "@/src/feature/auth/lib/schemas/emailConfirmationSchema";
 import {useResendRegistrationEmailMutation} from "@/src/feature/auth/api/authApi";
-import {useEffect, useState} from "react";
-import {Modal} from "@/src/common/components/Modal/Modal";
-import {useModal} from "@/src/common/hooks/useModal";
+import {useState} from "react";
+import {Modal} from "@/src/shared/components/Modal/Modal";
+import {useModal} from "@/src/shared/hooks/useModal";
 
 export const ResendVerification = () => {
-    const [resend, {isSuccess}] = useResendRegistrationEmailMutation()
+    const [resend] = useResendRegistrationEmailMutation()
     const [email, setEmail] = useState('')
     const {isOpen, openModal, closeModal} = useModal()
 
@@ -32,17 +32,13 @@ export const ResendVerification = () => {
         const {email} = data
 
         try {
-            const res = await resend({email, recaptchaToken: '123456'})
-                .unwrap()
+            const res = await resend({email, recaptchaToken: ''}).unwrap()
             setEmail(email)
+            openModal()
             reset()
         } catch (error) {
         }
     }
-
-    useEffect(() => {
-        if (isSuccess) openModal()
-    }, [isSuccess, openModal])
 
     return (
         <section className={style.section}>
@@ -54,7 +50,8 @@ export const ResendVerification = () => {
                     Looks like the verification link has expired. Not to worry, we can send the link again
                 </p>
                 <form className={style.form} onSubmit={handleSubmit(onSubmit)}>
-                    <Input className={style.input} name={"email"} register={register} error={errors.email?.message} placeholder={"Epam@epam.com"}
+                    <Input className={style.input} name={"email"} register={register} error={errors.email?.message}
+                           placeholder={"Epam@epam.com"}
                            label={"Email"} id={"email"}/>
                     <Button className={style.button} disabled={!isValid}>Resend verification link</Button>
                 </form>

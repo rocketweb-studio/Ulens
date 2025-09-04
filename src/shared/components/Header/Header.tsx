@@ -1,7 +1,7 @@
-import {Navigation, Path} from "@/src/common/components/Navigation/Navigation";
+import {Navigation, Path} from "@/src/shared/components/Navigation/Navigation";
 import s from "./Header.module.scss";
 import Link from "next/link";
-import {FlexContainer} from "@/src/common/components/FlexContainer";
+import {FlexContainer} from "@/src/shared/components/FlexContainer";
 
 export const Header = () => {
     return (

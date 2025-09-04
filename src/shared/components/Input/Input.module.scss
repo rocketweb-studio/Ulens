@@ -196,7 +196,7 @@
     transform: translateX(0);
   }
   15% {
-    transform: translateX(0); // Пауза в начале
+    transform: translateX(0);
   }
   85% {
     transform: translateX(var(--scroll-amount, 0));
@@ -207,7 +207,7 @@
 }
 
 .errorTextContent.animated {
-  animation: scrollError 6s infinite;
+  animation: scrollError var(--animation-duration, 15s) infinite;
   animation-timing-function: linear;
 
   @at-root {

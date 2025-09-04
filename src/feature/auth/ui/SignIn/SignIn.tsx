@@ -1,22 +1,23 @@
 'use client'
 import Image from "next/image";
-import { useLoginMutation} from "@/src/feature/auth/api/authApi";
+import {authApi, useLoginMutation} from "@/src/feature/auth/api/authApi";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import gitHubSvg from "@/public/github-svg.svg"
 import googleSvg from "@/public/google-svg.svg"
-import {Input} from "@/src/common/components/Input/Input";
-import {Button} from "@/src/common/components/Button/Button";
+import {Input} from "@/src/shared/components/Input/Input";
+import {Button} from "@/src/shared/components/Button/Button";
 import {loginSchema} from "@/src/feature/auth/lib/schemas/loginSchema";
 import styles from "./SignIn.module.scss"
-import {Path} from "@/src/common/components/Navigation/Navigation";
-import {useRedirectIfAuthorized} from "@/src/common/hooks/useRedirectIfAuthorized";
+import {Path} from "@/src/shared/components/Navigation/Navigation";
+import {useRedirectIfAuthorized} from "@/src/shared/hooks/useRedirectIfAuthorized";
 import {LoginRequestParams} from "@/src/feature/auth/api/authApi.types";
-import {useToast} from "@/src/common/hooks/useToast";
-import Link from "next/link";
+import {useToast} from "@/src/shared/hooks/useToast";
+import {useAppDispatch} from "@/src/shared/hooks/useAppDispatch";
 
 
 export const SignIn = () => {
+    const dispatch = useAppDispatch()
     const isLoading = useRedirectIfAuthorized()
     const {showSuccess} = useToast()
     const [login] = useLoginMutation()
@@ -36,10 +37,13 @@ export const SignIn = () => {
 
     const onSubmit: SubmitHandler<LoginRequestParams> = async (data) => {
         try {
-            await login(data).unwrap()
+            const res = await login(data).unwrap()
+            localStorage.setItem("accessToken", res.accessToken)
+            // dispatch(authApi.endpoints.getMe.initiate());
             showSuccess('Success login')
             reset()
-        } catch (error) {}
+        } catch (error) {
+        }
     }
 
     return (
@@ -58,14 +62,14 @@ export const SignIn = () => {
 
                     <Input register={register} name={"password"} error={errors.password?.message} label={"Password"}
                            type={"password"} showPasswordToggle/>
-                    <Link href={Path.PasswordRecovery} className={styles.forgotPassword}>
+                    <a href={Path.PasswordRecovery} className={styles.forgotPassword}>
                         Forgot Password
-                    </Link>
+                    </a>
                 </div>
                 <Button disabled={isLoading} variant={"primary"} fullWidth className={styles.submitBtn}>Sign In</Button>
 
                 <span>Don’t have an account?</span>
-                <Link className={styles.signUpLink} href={Path.SignUp}>Sign Up</Link>
+                <a className={styles.signUpLink} href={Path.SignUp}>Sign Up</a>
             </form>
 
         </article>

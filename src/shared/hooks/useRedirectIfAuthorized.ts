@@ -1,18 +1,18 @@
 import {useRouter} from "next/navigation";
 import {useEffect} from "react";
-import {Path, PathValue} from "@/src/common/components/Navigation/Navigation"
+import {Path, PathValue} from "@/src/shared/components/Navigation/Navigation"
 import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
 
 
 export const useRedirectIfAuthorized = (redirectTo:PathValue = Path.Profile) => {
     const router = useRouter()
-    const {data, isLoading} = useGetMeQuery()
+    const {data, isLoading, error} = useGetMeQuery()
 
     useEffect(() => {
-        if (data) {
+        if (data && !error) {
             router.push(redirectTo)
         }
-    }, [data])
+    }, [data, error])
 
-    return isLoading
+    return isLoading && !error
 }

@@ -3,7 +3,7 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   sassOptions: {
-    includePaths: [path.join(process.cwd(), "src", "common", "styles")],
+    includePaths: [path.join(process.cwd(), "src", "shared", "styles")],
     additionalData: `
     @use "colors" as *;
     @use "typography" as *;

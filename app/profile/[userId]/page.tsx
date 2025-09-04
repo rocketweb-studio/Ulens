@@ -1,6 +1,6 @@
 import {UserProfile} from "@/src/feature/userProfile/UserProfile";
-import CreatePostModal from "@/src/common/components/CreatePostModal/CreatePostModal";
-import PostModal from "@/src/common/components/PostModal/PostModal";
+import CreatePostModal from "@/src/shared/components/CreatePostModal/CreatePostModal";
+import PostModal from "@/src/shared/components/PostModal/PostModal";
 
 export default async function UserPage({params,searchParams}: {
   params: Promise<{ userId: string }>,
