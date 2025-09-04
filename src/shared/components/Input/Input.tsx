@@ -113,7 +113,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
                     disabled={disabled}
                     className={`${styles.input} ${error ? styles.errorInput : ''} ${showPasswordToggle && type === 'password' ? styles.passwordInput : ''}`}
                     id={id}
-                    {...(register && name ? register(name) : {name, onChange})}
+                    {...(register && name ? register(name, {onChange}) : {name, onChange})}
                 />
                 {showPasswordToggle && type === "password" && (
                     <button

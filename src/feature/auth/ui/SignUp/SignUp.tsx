@@ -94,12 +94,12 @@ export const SignUp = () => {
                            type={"password"} showPasswordToggle id={"passwordConfirmation"}/>
                 </div>
                 <div className={styles.signUpWrapper}>
-                    <Input register={register} onChange={() => { trigger("agreePolitics")}} name={"agreePolitics"} error={errors.agreePolitics?.message}
+                    <Input register={register} onChange={() => trigger("agreePolitics")} name={"agreePolitics"} error={errors.agreePolitics?.message}
                            label={<span>I agree to the <Button tagType={"link"} path={Path.TermOfService}
-                                                               variant={"in-text"} size={"inherit"} underlineText={true}
-                                                               withoutPadding={true}>Terms of Service</Button> and <Button
+                                                               variant={"in-text"} size={"inherit"} underlineText
+                                                               withoutPadding>Terms of Service</Button> and <Button
                                tagType={"link"} path={Path.PrivacyPolicy} variant={"in-text"} size={"inherit"}
-                               underlineText={true} withoutPadding={true}>Privacy Policy</Button></span>}
+                               underlineText withoutPadding>Privacy Policy</Button></span>}
                            type={"checkbox"} id={"agreePolitics"}/>
                     <Button type="submit" disabled={!isValid}>Sign Up</Button>
                 </div>
