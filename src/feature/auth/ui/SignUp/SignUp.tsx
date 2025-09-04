@@ -12,11 +12,14 @@ import {RegistrationInputs, registrationSchema} from "@/src/feature/auth/lib/sch
 import {useRegistrationMutation} from "@/src/feature/auth/api/authApi";
 import {useModal} from "@/src/shared/hooks/useModal";
 import {Modal} from "@/src/shared/components/Modal/Modal";
-import {useState} from "react";
+import {ChangeEvent, useState} from "react";
 import {Path} from "@/src/shared/components/Navigation/Navigation";
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {ServerErrorType} from "@/src/feature/auth/types";
 import {isFetchBaseQueryError} from "@/src/shared/utils";
+
+
+const COUNT_SYMBOLS_FOR_START_VALIDATE = 6
 
 export const SignUp = () => {
     const [registration] = useRegistrationMutation()
@@ -53,6 +56,10 @@ export const SignUp = () => {
         }
     }
 
+    const handleOnChangeInputTypeValue = (event: ChangeEvent<HTMLInputElement>, triggeredField: keyof RegistrationInputs) => {
+        if (event.target.value.length > COUNT_SYMBOLS_FOR_START_VALIDATE) trigger(triggeredField)
+    }
+
     const handleServerError = (error: FetchBaseQueryError) => {
         if (!error) return
         clearErrors()
@@ -83,11 +90,11 @@ export const SignUp = () => {
                     <a href="https://ulens.org/api/v1/auth/github-login"><Image src={gitHubSvg} alt={"GitHub"}/></a>
                 </div>
                 <div className={styles.inputsTextWrapper}>
-                    <Input register={register} name={"userName"} error={errors.userName?.message} placeholder={"Epam11"}
+                    <Input register={register} name={"userName"} onChange={(evt) => handleOnChangeInputTypeValue(evt, "userName")} error={errors.userName?.message} placeholder={"Epam11"}
                            label={"Username"} id={"userName"}/>
                     <Input register={register} name={"email"} error={errors.email?.message}
                            placeholder={"Epam@epam.com"} label={"Email"} id={"email"}/>
-                    <Input register={register} name={"password"} error={errors.password?.message} label={"Password"}
+                    <Input register={register} name={"password"} onChange={(evt) => handleOnChangeInputTypeValue(evt, "password")} error={errors.password?.message} label={"Password"}
                            type={"password"} showPasswordToggle id={"password"}/>
                     <Input register={register} name={"passwordConfirmation"}
                            error={errors.passwordConfirmation?.message} label={"Password Confirmation"}
