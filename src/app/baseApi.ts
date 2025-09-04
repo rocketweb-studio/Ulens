@@ -1,14 +1,14 @@
-import {fetchBaseQuery, createApi} from "@reduxjs/toolkit/query/react";
-import {delay} from "@/src/shared/utils";
-import {handleError} from "@/src/shared/utils/handleError";
-import {setLoaderStatus} from "@/src/app/app-slice";
+import { fetchBaseQuery, createApi } from "@reduxjs/toolkit/query/react"
+import { delay } from "@/src/shared/utils"
+import { handleError } from "@/src/shared/utils/handleError"
+import { setLoaderStatus } from "@/src/app/app-slice"
 
 export const baseApi = createApi({
   reducerPath: "Ulens",
 
   baseQuery: async (args, api, extraOptions) => {
-    api.dispatch(setLoaderStatus({ status: 'loading' }))
-    if (args.url?.includes('auth/')) {
+    api.dispatch(setLoaderStatus({ status: "loading" }))
+    if (args.url?.includes("auth/")) {
       await delay(1000)
     }
     try {
@@ -16,11 +16,11 @@ export const baseApi = createApi({
         baseUrl: process.env.NEXT_PUBLIC_BASE_URL,
         credentials: "include",
         prepareHeaders: (headers) => {
-          const token = localStorage.getItem('accessToken');
+          const token = localStorage.getItem("accessToken")
           if (token) {
-            headers.set('Authorization', `Bearer ${token}`);
+            headers.set("Authorization", `Bearer ${token}`)
           }
-          return headers;
+          return headers
         },
       })(args, api, extraOptions)
 
@@ -28,12 +28,9 @@ export const baseApi = createApi({
 
       return fetchResult
     } finally {
-      api.dispatch(setLoaderStatus({ status: 'idle' }))
+      api.dispatch(setLoaderStatus({ status: "idle" }))
     }
-
   },
 
-  endpoints: () => ({
-
-  }),
+  endpoints: () => ({}),
 })

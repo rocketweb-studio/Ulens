@@ -1,7 +1,7 @@
-@use 'src/shared/styles/colors';
-@use 'src/shared/styles/typography' as typography;
+@use "src/shared/styles/colors";
+@use "src/shared/styles/typography" as typography;
 
-.navWrapper{
+.navWrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -9,10 +9,10 @@
   color: #fff;
 }
 
-.linksWrap{
+.linksWrap {
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
-  gap: 10px ;
+  gap: 10px;
   text-transform: capitalize;
 }

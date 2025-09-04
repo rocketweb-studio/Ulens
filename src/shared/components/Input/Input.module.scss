@@ -1,5 +1,5 @@
-@use '../../styles/colors' as colors;
-@use '../../styles/typography' as typography;
+@use "../../styles/colors" as colors;
+@use "../../styles/typography" as typography;
 
 .inputContainer {
   display: flex;
@@ -28,9 +28,11 @@
   color: colors.color(light, 900);
   border-radius: 0;
   font-size: 16px;
-  line-height: 24px ;
+  line-height: 24px;
   font-weight: 400;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
   background-color: rgba(0, 0, 0, 0);
   width: 100%;
 
@@ -121,7 +123,7 @@
   transition: all 0.3s ease;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     display: none;
     width: 5px;

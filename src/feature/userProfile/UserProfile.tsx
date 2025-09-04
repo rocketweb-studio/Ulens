@@ -1,12 +1,7 @@
 type Props = {
-  userId: string,
+  userId: string
 }
 
-export const UserProfile = ({userId}: Props) => {
-
-  return (
-    <div>
-
-    </div>
-  );
-};
+export const UserProfile = ({ userId }: Props) => {
+  return <div></div>
+}

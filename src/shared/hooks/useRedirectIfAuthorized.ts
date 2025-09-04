@@ -1,18 +1,17 @@
-import {useRouter} from "next/navigation";
-import {useEffect} from "react";
-import {Path, PathValue} from "@/src/shared/components/Navigation/Navigation"
-import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
+import { Path, PathValue } from "@/src/shared/components/Navigation/Navigation"
+import { useGetMeQuery } from "@/src/feature/auth/api/authApi"
 
+export const useRedirectIfAuthorized = (redirectTo: PathValue = Path.Profile) => {
+  const router = useRouter()
+  const { data, isLoading } = useGetMeQuery()
 
-export const useRedirectIfAuthorized = (redirectTo:PathValue = Path.Profile) => {
-    const router = useRouter()
-    const {data, isLoading} = useGetMeQuery()
+  useEffect(() => {
+    if (data) {
+      router.push(redirectTo)
+    }
+  }, [data])
 
-    useEffect(() => {
-        if (data) {
-            router.push(redirectTo)
-        }
-    }, [data])
-
-    return isLoading
+  return isLoading
 }

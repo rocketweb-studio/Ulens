@@ -1,2 +1,2 @@
-export {delay} from './delay';
-export {isFetchBaseQueryError} from './isFetchBaseQueryError'
+export { delay } from "./delay"
+export { isFetchBaseQueryError } from "./isFetchBaseQueryError"
