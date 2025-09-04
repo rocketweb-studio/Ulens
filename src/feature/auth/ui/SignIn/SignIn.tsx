@@ -39,7 +39,7 @@ export const SignIn = () => {
         try {
             const res = await login(data).unwrap()
             localStorage.setItem("accessToken", res.accessToken)
-            // dispatch(authApi.endpoints.getMe.initiate());
+            dispatch(authApi.endpoints.getMe.initiate());
             showSuccess('Success login')
             reset()
         } catch (error) {
