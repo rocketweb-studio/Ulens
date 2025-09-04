@@ -3,7 +3,7 @@ import {passwordSchema} from "@/src/feature/auth/lib/schemas/passwordSchema";
 
 export type RegistrationInputs = z.infer<typeof registrationSchema>
 
-export const registrationSchema = passwordSchema.extend({
+export const registrationSchema = passwordSchema.safeExtend({
     userName: z.string()
         .trim()
         .min(6, {error: 'Minimum number of characters 6'})
