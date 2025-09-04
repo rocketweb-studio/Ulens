@@ -5,6 +5,7 @@ import { Modal } from "@/src/shared/components/Modal/Modal"
 import { Button } from "@/src/shared/components/Button/Button"
 import {useLogoutMutation} from "@/src/feature/auth/api/authApi";
 import {toast} from "react-toastify";
+import {Path} from "@/src/common/components/Navigation/Navigation";
 
 type Props = {
     isOpen: boolean
@@ -20,10 +21,10 @@ export const ConfirmLogout = ({ isOpen, onClose, email }: Props) => {
         try {
             await logout().unwrap()
             onClose()
-            router.push("/login")
+            router.push(Path.SignIn)
         } catch (e) {
             console.error("Logout error:", e)
-            toast.error("Something went wrong during logout")
+            toast.error("Something went wrong during Logout")
         }
     }
 
