@@ -6,32 +6,28 @@ import {Button} from "@/src/common/components/Button/Button";
 import Image from "next/image";
 import googleSvg from "@/public/google-svg.svg";
 import gitHubSvg from "@/public/github-svg.svg";
-import {SubmitHandler, useForm, useWatch} from "react-hook-form";
+import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {RegistrationInputs, registrationSchema} from "@/src/feature/auth/lib/schemas";
 import {useRegistrationMutation} from "@/src/feature/auth/api/authApi";
 import {useModal} from "@/src/common/hooks/useModal";
 import {Modal} from "@/src/common/components/Modal/Modal";
-import {useEffect, useRef, useState} from "react";
-import {useToast} from "@/src/common/hooks/useToast";
+import {useState} from "react";
 import {Path} from "@/src/common/components/Navigation/Navigation";
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
-import {SerializedError} from "@reduxjs/toolkit";
 import {ServerErrorType} from "@/src/feature/auth/types";
+import {isFetchBaseQueryError} from "@/src/common/utils";
 
 export const SignUp = () => {
-    const [registration, {isSuccess, error, isError}] = useRegistrationMutation()
+    const [registration] = useRegistrationMutation()
     const {isOpen, openModal, closeModal} = useModal()
-    const {showSuccess} = useToast()
     const [email, setEmail] = useState('')
-    const isFirstRender = useRef(true)
 
     const {
         register,
         handleSubmit,
         reset,
         setError,
-        control,
         trigger,
         clearErrors,
         formState: {errors, isValid},
@@ -43,26 +39,22 @@ export const SignUp = () => {
         }
     })
 
-    const agreePoliticsValue = useWatch({
-        control,
-        name: "agreePolitics"
-    })
-
-
     const onSubmit: SubmitHandler<RegistrationInputs> = async (data) => {
         const {userName, email, password} = data
         try {
             const res = await registration({userName, email, password}).unwrap()
-            showSuccess('You are successfully registered!')
+            openModal()
             setEmail(email)
             reset()
-        } catch (e) {
+        } catch (err) {
+            if (isFetchBaseQueryError(err)) {
+                handleServerError(err)
+            }
         }
     }
 
-    const handleServerError = (error: FetchBaseQueryError | SerializedError | undefined) => {
+    const handleServerError = (error: FetchBaseQueryError) => {
         if (!error) return
-
         clearErrors()
 
         if ('status' in error) {
@@ -81,27 +73,6 @@ export const SignUp = () => {
             }
         }
     }
-
-    useEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false
-            return
-        }
-
-        if (agreePoliticsValue !== undefined) {
-            trigger("agreePolitics");
-        }
-    }, [agreePoliticsValue, trigger]);
-
-    useEffect(() => {
-        if (isSuccess) openModal()
-    }, [isSuccess, openModal])
-
-    useEffect(() => {
-        if (isError) {
-            handleServerError(error);
-        }
-    }, [isError]);
 
     return (
         <div className={styles.formWrapper}>
@@ -123,7 +94,7 @@ export const SignUp = () => {
                            type={"password"} showPasswordToggle id={"passwordConfirmation"}/>
                 </div>
                 <div className={styles.signUpWrapper}>
-                    <Input register={register} name={"agreePolitics"} error={errors.agreePolitics?.message}
+                    <Input register={register} onChange={() => { trigger("agreePolitics")}} name={"agreePolitics"} error={errors.agreePolitics?.message}
                            label={<span>I agree to the <Button tagType={"link"} path={Path.TermOfService}
                                                                variant={"in-text"} size={"inherit"} underlineText={true}
                                                                withoutPadding={true}>Terms of Service</Button> and <Button

@@ -71,6 +71,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
     }, [error]);
 
     if (type === 'checkbox') {
+
         return (
             <div className={`${styles.inputContainer} ${className}`}>
                 <label className={styles.checkboxContainer} htmlFor={id}>
@@ -79,7 +80,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
                         disabled={disabled}
                         className={styles.checkboxInput}
                         id={id}
-                        {...(register && name ? register(name) : {name, onChange, checked})}
+                        {...(register && name ? register(name, {onChange}) : {name, onChange, checked})}
                     />
                     <span className={styles.checkboxCustom}/>
                     {label && (
