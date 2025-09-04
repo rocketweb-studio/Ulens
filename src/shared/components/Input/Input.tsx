@@ -59,7 +59,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
                 const scrollAmount = textWidth - containerWidth;
                 errorTextRef.current.style.setProperty('--scroll-amount', `-${scrollAmount}px`);
 
-                const duration = (scrollAmount / 100) + 4; // 20px в секунду
+                const duration = (scrollAmount / 100) + 4;
                 errorTextRef.current.style.setProperty('--animation-duration', `${duration}s`);
             }
         };
