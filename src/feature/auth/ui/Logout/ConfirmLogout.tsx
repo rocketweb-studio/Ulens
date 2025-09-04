@@ -5,7 +5,7 @@ import { Modal } from "@/src/shared/components/Modal/Modal"
 import { Button } from "@/src/shared/components/Button/Button"
 import {useLogoutMutation} from "@/src/feature/auth/api/authApi";
 import {toast} from "react-toastify";
-import {Path} from "@/src/common/components/Navigation/Navigation";
+import {Path} from "@/src/shared/components/Navigation/Navigation";
 
 type Props = {
     isOpen: boolean
