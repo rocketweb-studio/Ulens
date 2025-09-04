@@ -5,15 +5,15 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import gitHubSvg from "@/public/github-svg.svg"
 import googleSvg from "@/public/google-svg.svg"
-import {Input} from "@/src/common/components/Input/Input";
-import {Button} from "@/src/common/components/Button/Button";
+import {Input} from "@/src/shared/components/Input/Input";
+import {Button} from "@/src/shared/components/Button/Button";
 import {loginSchema} from "@/src/feature/auth/lib/schemas/loginSchema";
 import styles from "./SignIn.module.scss"
-import {Path} from "@/src/common/components/Navigation/Navigation";
-import {useRedirectIfAuthorized} from "@/src/common/hooks/useRedirectIfAuthorized";
+import {Path} from "@/src/shared/components/Navigation/Navigation";
+import {useRedirectIfAuthorized} from "@/src/shared/hooks/useRedirectIfAuthorized";
 import {LoginRequestParams} from "@/src/feature/auth/api/authApi.types";
-import {useToast} from "@/src/common/hooks/useToast";
-import {useAppDispatch} from "@/src/common/hooks/useAppDispatch";
+import {useToast} from "@/src/shared/hooks/useToast";
+import {useAppDispatch} from "@/src/shared/hooks/useAppDispatch";
 
 
 export const SignIn = () => {

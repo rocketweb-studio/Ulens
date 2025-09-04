@@ -1,8 +1,8 @@
 'use client'
 
-import {Input} from "@/src/common/components/Input/Input";
+import {Input} from "@/src/shared/components/Input/Input";
 import styles from "./SignUp.module.scss"
-import {Button} from "@/src/common/components/Button/Button";
+import {Button} from "@/src/shared/components/Button/Button";
 import Image from "next/image";
 import googleSvg from "@/public/google-svg.svg";
 import gitHubSvg from "@/public/github-svg.svg";
@@ -10,13 +10,13 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {RegistrationInputs, registrationSchema} from "@/src/feature/auth/lib/schemas";
 import {useRegistrationMutation} from "@/src/feature/auth/api/authApi";
-import {useModal} from "@/src/common/hooks/useModal";
-import {Modal} from "@/src/common/components/Modal/Modal";
+import {useModal} from "@/src/shared/hooks/useModal";
+import {Modal} from "@/src/shared/components/Modal/Modal";
 import {useState} from "react";
-import {Path} from "@/src/common/components/Navigation/Navigation";
+import {Path} from "@/src/shared/components/Navigation/Navigation";
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {ServerErrorType} from "@/src/feature/auth/types";
-import {isFetchBaseQueryError} from "@/src/common/utils";
+import {isFetchBaseQueryError} from "@/src/shared/utils";
 
 export const SignUp = () => {
     const [registration] = useRegistrationMutation()

@@ -3,10 +3,10 @@ import {Geist, Geist_Mono} from "next/font/google";
 import "@/src/app/globals.scss";
 import {StoreWrapper} from "@/src/app/store-wrapper";
 import React from "react";
-import {AppLoader} from "@/src/common/components/AppLoader/AppLoader";
+import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
 import 'react-toastify/ReactToastify.css'
-import {AlertSnackbar} from "@/src/common/components/AlertSnackbar/AlertSnackbar";
-import {Header} from "@/src/common/components/Header/Header";
+import {AlertSnackbar} from "@/src/shared/components/AlertSnackbar/AlertSnackbar";
+import {Header} from "@/src/shared/components/Header/Header";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",

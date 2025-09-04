@@ -1,6 +1,6 @@
 import {fetchBaseQuery, createApi} from "@reduxjs/toolkit/query/react";
-import {delay} from "@/src/common/utils";
-import {handleError} from "@/src/common/utils/handleError";
+import {delay} from "@/src/shared/utils";
+import {handleError} from "@/src/shared/utils/handleError";
 import {setLoaderStatus} from "@/src/app/app-slice";
 
 export const baseApi = createApi({

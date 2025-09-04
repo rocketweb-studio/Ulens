@@ -1,8 +1,8 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { Modal } from "@/src/common/components/Modal/Modal"
-import { Button } from "@/src/common/components/Button/Button"
+import { Modal } from "@/src/shared/components/Modal/Modal"
+import { Button } from "@/src/shared/components/Button/Button"
 import {useLogoutMutation} from "@/src/feature/auth/api/authApi";
 import {toast} from "react-toastify";
 
