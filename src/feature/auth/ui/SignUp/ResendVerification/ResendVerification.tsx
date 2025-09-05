@@ -10,12 +10,12 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { emailConfirmationSchema, EmailInput } from '@/src/feature/auth/lib/schemas/emailConfirmationSchema'
 import { useResendRegistrationEmailMutation } from '@/src/feature/auth/api/authApi'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Modal } from '@/src/shared/components/Modal/Modal'
 import { useModal } from '@/src/shared/hooks/useModal'
 
 export const ResendVerification = () => {
-  const [resend, { isSuccess }] = useResendRegistrationEmailMutation()
+  const [resend] = useResendRegistrationEmailMutation()
   const [email, setEmail] = useState('')
   const { isOpen, openModal, closeModal } = useModal()
 
@@ -32,15 +32,12 @@ export const ResendVerification = () => {
     const { email } = data
 
     try {
-      const res = await resend({ email, recaptchaToken: '123456' }).unwrap()
+      const res = await resend({ email, recaptchaToken: '' }).unwrap()
       setEmail(email)
+      openModal()
       reset()
     } catch (error) {}
   }
-
-  useEffect(() => {
-    if (isSuccess) openModal()
-  }, [isSuccess, openModal])
 
   return (
     <section className={style.section}>

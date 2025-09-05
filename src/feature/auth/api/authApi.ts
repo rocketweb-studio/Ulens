@@ -4,64 +4,58 @@ import { RegistrationRequest, RegistrationResponce } from '@/src/feature/auth/ty
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getUsers: build.query<UserType[], void>({
-      query: () => 'auth/users',
+    getMe: build.query<getMeResponse, void>({
+      query: () => 'auth/me',
+      providesTags: ['Auth'],
     }),
+
     registration: build.mutation<RegistrationResponce, RegistrationRequest>({
       query: (body) => ({ method: 'post', url: 'auth/registration', body }),
+      invalidatesTags: ['Auth'],
     }),
     confirmRegistration: build.mutation<any, { code: string }>({
-      query: (body) => ({
-        method: 'post',
-        url: 'auth/registration-confirmation',
-        body,
-      }),
+      query: (body) => ({ method: 'post', url: 'auth/registration-confirmation', body }),
+      invalidatesTags: ['Auth'],
     }),
     resendRegistrationEmail: build.mutation<any, { email: string; recaptchaToken: string }>({
-      query: (body) => ({
-        method: 'post',
-        url: 'auth/registration-email-resending',
-        body,
-      }),
+      query: (body) => ({ method: 'post', url: 'auth/registration-email-resending', body }),
     }),
     login: build.mutation<LoginResponse, LoginRequestParams>({
       query: (body) => ({ method: 'post', url: 'auth/login', body }),
-      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-        try {
-          const res = await queryFulfilled
-          localStorage.setItem('accessToken', res.data.accessToken)
-          await dispatch(authApi.endpoints.getMe.initiate())
-        } catch (error) {}
-      },
+      invalidatesTags: ['Auth'],
     }),
-    getMe: build.query<getMeResponse, void>({
-      query: () => 'auth/me',
-    }),
+
     passwordRecovery: build.mutation<any, { email: string; recaptchaToken: string }>({
-      query: (body) => ({
-        method: 'post',
-        url: 'auth/password-recovery',
-        body,
-      }),
+      query: (body) => ({ method: 'post', url: 'auth/password-recovery', body }),
     }),
     checkRecoveryCode: build.mutation<any, { code: string }>({
-      query: (body) => ({
-        method: 'post',
-        url: 'auth/check-recovery-code',
-        body,
-      }),
+      query: (body) => ({ method: 'post', url: 'auth/check-recovery-code', body }),
     }),
     setNewPassword: build.mutation<any, { newPassword: string; recoveryCode: string }>({
       query: (body) => ({ method: 'post', url: 'auth/new-password', body }),
+      invalidatesTags: ['Auth'],
     }),
     logout: build.mutation<void, void>({
       query: () => ({ method: 'post', url: 'auth/logout' }),
+      invalidatesTags: ['Auth'],
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled
+          localStorage.removeItem('accessToken')
+        } catch (error) {
+          console.error('Logout error:', error)
+        }
+      },
     }),
+    // getUsers: build.query<UserType[], void>({
+    //     query: () => "auth/users",
+    //     providesTags: ['User']
+    // }),
   }),
 })
 
 export const {
-  useGetUsersQuery,
+  //useGetUsersQuery,
   useLoginMutation,
   useLogoutMutation,
   usePasswordRecoveryMutation,

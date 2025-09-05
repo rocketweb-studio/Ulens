@@ -19,7 +19,7 @@ export const Modal = ({
   onClose,
   children,
   modalTitle,
-  closeOnOverlayClick = true,
+  // closeOnOverlayClick = true,
   closeOnEsc = true,
 }: Props) => {
   useEffect(() => {

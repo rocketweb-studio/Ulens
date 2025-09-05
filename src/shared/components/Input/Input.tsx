@@ -59,7 +59,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
         const scrollAmount = textWidth - containerWidth
         errorTextRef.current.style.setProperty('--scroll-amount', `-${scrollAmount}px`)
 
-        const duration = scrollAmount / 100 + 4 // 20px в секунду
+        const duration = scrollAmount / 100 + 4
         errorTextRef.current.style.setProperty('--animation-duration', `${duration}s`)
       }
     }
@@ -79,7 +79,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
             disabled={disabled}
             className={styles.checkboxInput}
             id={id}
-            {...(register && name ? register(name) : { name, onChange, checked })}
+            {...(register && name ? register(name, { onChange }) : { name, onChange, checked })}
           />
           <span className={styles.checkboxCustom} />
           {label && <span className={styles.checkboxLabel}>{label}</span>}
@@ -108,7 +108,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
           disabled={disabled}
           className={`${styles.input} ${error ? styles.errorInput : ''} ${showPasswordToggle && type === 'password' ? styles.passwordInput : ''}`}
           id={id}
-          {...(register && name ? register(name) : { name, onChange })}
+          {...(register && name ? register(name, { onChange }) : { name, onChange })}
         />
         {showPasswordToggle && type === 'password' && (
           <button

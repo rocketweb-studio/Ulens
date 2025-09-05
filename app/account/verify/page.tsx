@@ -16,8 +16,9 @@ export default async function Verify({ searchParams }: { searchParams: { [key: s
 
   if (response.status === 400) {
     redirect('/sign-up/resend-verification-link')
+  } else if (response.status === 204) {
+    redirect('/sign-up/confirmed-email')
+  } else {
+    return <div>Please try again</div>
   }
-  if (response.status === 204) redirect('/sign-up/confirmed-email')
-
-  return <div></div>
 }

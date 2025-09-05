@@ -8,10 +8,9 @@ import { usePasswordRecoveryMutation } from '@/src/feature/auth/api/authApi'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { emailSchema } from '@/src/feature/auth/lib/schemas/emailSchema'
-import { useRouter } from 'next/navigation'
 import { useModal } from '@/src/shared/hooks/useModal'
 import ReCaptcha from '@/src/feature/auth/ui/PasswordRecovery/ReCaptcha/ReCaptcha'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Path } from '@/src/shared/components/Navigation/Navigation'
 
 type Inputs = {
@@ -22,12 +21,7 @@ type Inputs = {
 export const PasswordRecovery = () => {
   const [sendEmail, result] = usePasswordRecoveryMutation() // {data, isLoading, error}
   const { isOpen, openModal, closeModal } = useModal()
-  const router = useRouter()
   const [email, setEmail] = useState('')
-
-  useEffect(() => {
-    if (result.isSuccess) openModal()
-  }, [result.isSuccess, openModal])
 
   const {
     register,
@@ -42,7 +36,13 @@ export const PasswordRecovery = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setEmail(data.email)
-    await sendEmail({ email: data.email, recaptchaToken: data.recaptchaToken })
+    try {
+      await sendEmail({
+        email: data.email,
+        recaptchaToken: data.recaptchaToken,
+      }).unwrap()
+      openModal()
+    } catch (e) {}
     reset()
   }
 
@@ -75,7 +75,11 @@ export const PasswordRecovery = () => {
           </p>
         )}
         <div className={s.buttonWrapper}>
-          <Button type='submit'>{result.isSuccess ? 'Send Link Again' : 'Send Link'}</Button>
+          {result.isSuccess ?
+            <Button onClick={() => result.reset()} type={'button'}>
+              Send Link Again
+            </Button>
+          : <Button type='submit'>Send Link</Button>}
           <Button tagType={'link'} path={Path.SignIn} variant={'text'}>
             Back to Sign In
           </Button>
