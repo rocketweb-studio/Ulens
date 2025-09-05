@@ -1,5 +1,5 @@
-@use '@/src/shared/styles/typography' as typography;
-@use '@/src/shared/styles/colors' as colors;
+@use "@/src/shared/styles/typography" as typography;
+@use "@/src/shared/styles/colors" as colors;
 
 .button {
   @include typography.h3;
@@ -41,7 +41,6 @@
       background-color: colors.color(accent, 700);
       color: colors.color(light, 500);
       outline: 2px solid transparent;
-
     }
 
     &:disabled {
@@ -68,7 +67,6 @@
       background-color: colors.color(dark, 100);
       color: colors.color(light, 100);
       outline: 2px solid transparent;
-
     }
 
     &:disabled {
@@ -99,7 +97,6 @@
       color: colors.color(accent, 700);
       border: 1px solid transparent;
     }
-
   }
 
   &.variant-text {

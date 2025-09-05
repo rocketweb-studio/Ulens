@@ -1,2 +1,2 @@
-export * from './registrationTypes'
-export * from './serverErrorType'
+export * from "./registrationTypes";
+export * from "./serverErrorType";

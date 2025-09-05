@@ -1,8 +1,3 @@
-
 export const UserSettings = () => {
-  return (
-    <div>
-
-    </div>
-  );
+  return <div></div>;
 };

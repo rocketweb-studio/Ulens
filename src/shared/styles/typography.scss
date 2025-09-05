@@ -1,4 +1,4 @@
-$font-family: 'Inter', sans-serif;
+$font-family: "Inter", sans-serif;
 
 $font-weight-light: 300;
 $font-weight-regular: 400;
@@ -19,7 +19,6 @@ $font-weight-bold: 700;
   font-size: 16px;
   line-height: 150%;
 }
-
 
 @mixin regular_text_14 {
   font-family: $font-family;

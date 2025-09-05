@@ -1,8 +1,3 @@
 export const UserProfile = () => {
-
-  return (
-    <div>
-
-    </div>
-  );
+  return <div></div>;
 };
