@@ -6,20 +6,31 @@ import styles from "@/src/feature/auth/ui/SignIn/SignIn.module.scss"
 import { useGetMeQuery } from "@/src/feature/auth/api/authApi"
 import { useRouter } from "next/navigation"
 import {Path} from "@/src/common/components/Navigation/Navigation";
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
+import {SerializedError} from "@reduxjs/toolkit";
 
 export const Logout = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const { data, isLoading, isError, error } = useGetMeQuery()
     const router = useRouter()
 
-    useEffect(() => {
-        if (isError) {
-            const status = (error as any)?.status
-            if (status === 401) {
+    const handleServerError = (
+        error: FetchBaseQueryError | SerializedError | undefined
+    ) => {
+        if (!error) return
+
+        if ("status" in error) {
+            if (error.status === 401) {
                 router.push(Path.SignIn)
             }
         }
-    }, [isError, error, router])
+    }
+
+    useEffect(() => {
+        if (isError) {
+            handleServerError(error)
+        }
+    }, [isError, error])
 
     if (isLoading) {
         return (
