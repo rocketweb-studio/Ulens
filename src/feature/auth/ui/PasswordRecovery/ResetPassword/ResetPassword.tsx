@@ -123,8 +123,8 @@ export const ResetPassword = ({ isValidCode, recoveryCode, email }: Props) => {
         </div>
       )}
 
-      <Modal modalTitle={'Email sent'} isOpen={isOpen} onClose={onCloseModalHandler}>
-        <p className={s.infoMessage3}>We have sent a link to confirm your email to {email}</p>
+      <Modal modalTitle={'Password changed'} isOpen={isOpen} onClose={onCloseModalHandler}>
+        <p className={s.infoMessage3}>The password changed successfully</p>
       </Modal>
     </>
   )
