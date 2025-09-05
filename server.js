@@ -1,23 +1,23 @@
-const { createServer } = require("https");
-const { parse } = require("url");
-const next = require("next");
-const fs = require("fs");
+const { createServer } = require('https')
+const { parse } = require('url')
+const next = require('next')
+const fs = require('fs')
 
-const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
-const handle = app.getRequestHandler();
+const dev = process.env.NODE_ENV !== 'production'
+const app = next({ dev })
+const handle = app.getRequestHandler()
 
 const httpsOptions = {
-  key: fs.readFileSync("./local.dev.ulens.org-key.pem"),
-  cert: fs.readFileSync("./local.dev.ulens.org.pem"),
-};
+  key: fs.readFileSync('./local.dev.ulens.org-key.pem'),
+  cert: fs.readFileSync('./local.dev.ulens.org.pem'),
+}
 
 app.prepare().then(() => {
   createServer(httpsOptions, (req, res) => {
-    const parsedUrl = parse(req.url, true);
-    handle(req, res, parsedUrl);
+    const parsedUrl = parse(req.url, true)
+    handle(req, res, parsedUrl)
   }).listen(3000, (err) => {
-    if (err) throw err;
-    console.log("> Server ready on https://local.dev.ulens.org:3000");
-  });
-});
+    if (err) throw err
+    console.log('> Server ready on https://local.dev.ulens.org:3000')
+  })
+})

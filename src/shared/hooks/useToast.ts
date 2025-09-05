@@ -1,28 +1,28 @@
-"use client";
+'use client'
 
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify'
 
 export const useToast = () => {
   const showSuccess = (message: string) => {
-    toast.success(message);
-  };
+    toast.success(message)
+  }
 
   const showError = (message: string) => {
-    toast.error(message);
-  };
+    toast.error(message)
+  }
 
   const showWarning = (message: string) => {
-    toast.warning(message);
-  };
+    toast.warning(message)
+  }
 
   const showInfo = (message: string) => {
-    toast.info(message);
-  };
+    toast.info(message)
+  }
 
   return {
     showSuccess,
     showError,
     showWarning,
     showInfo,
-  };
-};
+  }
+}

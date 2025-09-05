@@ -1,43 +1,37 @@
-import React, { ButtonHTMLAttributes } from "react";
-import styles from "./Button.module.scss";
-import Link from "next/link";
+import React, { ButtonHTMLAttributes } from 'react'
+import styles from './Button.module.scss'
+import Link from 'next/link'
 
-export type ButtonVariant =
-  | "primary"
-  | "secondary"
-  | "outline"
-  | "text"
-  | "text-white"
-  | "in-text";
-export type ButtonSize = "small" | "medium" | "large" | "inherit";
-export type TagType = "button" | "link";
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'text' | 'text-white' | 'in-text'
+export type ButtonSize = 'small' | 'medium' | 'large' | 'inherit'
+export type TagType = 'button' | 'link'
 
 type Props = {
-  tagType?: TagType;
-  path?: string;
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  fullWidth?: boolean;
-  isLoading?: boolean;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
-  underlineText?: boolean;
-  withoutPadding?: boolean;
-} & ButtonHTMLAttributes<HTMLButtonElement>;
+  tagType?: TagType
+  path?: string
+  variant?: ButtonVariant
+  size?: ButtonSize
+  fullWidth?: boolean
+  isLoading?: boolean
+  leftIcon?: React.ReactNode
+  rightIcon?: React.ReactNode
+  underlineText?: boolean
+  withoutPadding?: boolean
+} & ButtonHTMLAttributes<HTMLButtonElement>
 
 export const Button = ({
   children,
-  tagType = "button",
-  path = "/",
-  variant = "primary",
-  size = "medium",
+  tagType = 'button',
+  path = '/',
+  variant = 'primary',
+  size = 'medium',
   fullWidth = false,
   isLoading = false,
   disabled = false,
   leftIcon,
   rightIcon,
   underlineText = false,
-  className = "",
+  className = '',
   withoutPadding = false,
   ...props
 }: Props) => {
@@ -52,7 +46,7 @@ export const Button = ({
     className,
   ]
     .filter(Boolean)
-    .join(" ");
+    .join(' ')
 
   const content = (
     <>
@@ -61,31 +55,22 @@ export const Button = ({
       {rightIcon && <span className={styles.rightIcon}>{rightIcon}</span>}
       {isLoading && <span className={styles.loader}>Loading...</span>}
     </>
-  );
+  )
 
-  if (tagType === "link") {
+  if (tagType === 'link') {
     return (
-      <Link
-        href={path}
-        className={buttonClasses}
-        aria-disabled={disabled || isLoading}
-      >
+      <Link href={path} className={buttonClasses} aria-disabled={disabled || isLoading}>
         {content}
       </Link>
-    );
+    )
   }
 
   return (
-    <button
-      className={buttonClasses}
-      disabled={disabled || isLoading}
-      aria-busy={isLoading}
-      {...props}
-    >
+    <button className={buttonClasses} disabled={disabled || isLoading} aria-busy={isLoading} {...props}>
       {leftIcon && <span className={styles.leftIcon}>{leftIcon}</span>}
       {children}
       {rightIcon && <span className={styles.rightIcon}>{rightIcon}</span>}
       {isLoading && <span className={styles.loader}>Loading...</span>}
     </button>
-  );
-};
+  )
+}
