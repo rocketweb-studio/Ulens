@@ -1,8 +1,8 @@
 'use client'
 
-import {Input} from '@/src/common/components/Input/Input';
+import {Input} from '@/src/shared/components/Input/Input';
 import s from './ResetPassword.module.scss'
-import {Button} from "@/src/common/components/Button/Button";
+import {Button} from "@/src/shared/components/Button/Button";
 import {SubmitHandler, useForm} from "react-hook-form"
 import {usePasswordRecoveryMutation, useSetNewPasswordMutation} from "@/src/feature/auth/api/authApi";
 import Image from "next/image";
@@ -10,12 +10,12 @@ import imgResend from 'public/rafiki.svg'
 import {zodResolver} from "@hookform/resolvers/zod";
 import {passwordSchema} from "@/src/feature/auth/lib/schemas";
 import {useRouter} from "next/navigation";
-import {Modal} from "@/src/common/components/Modal/Modal";
-import {useModal} from "@/src/common/hooks/useModal";
-import {delay} from "@/src/common/utils";
+import {Modal} from "@/src/shared/components/Modal/Modal";
+import {useModal} from "@/src/shared/hooks/useModal";
+import {delay} from "@/src/shared/utils";
 import ReCaptcha from "@/src/feature/auth/ui/PasswordRecovery/ReCaptcha/ReCaptcha";
 import {useEffect, useState} from "react";
-import {Path} from "@/src/common/components/Navigation/Navigation";
+import {Path} from "@/src/shared/components/Navigation/Navigation";
 
 type Inputs = {
   password: string

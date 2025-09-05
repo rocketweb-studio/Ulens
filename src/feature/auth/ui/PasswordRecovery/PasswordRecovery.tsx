@@ -1,18 +1,18 @@
 'use client'
 
-import {Input} from '@/src/common/components/Input/Input';
+import {Input} from '@/src/shared/components/Input/Input';
 import s from './PasswordRecovery.module.scss'
-import {Button} from "@/src/common/components/Button/Button";
-import {Modal} from "@/src/common/components/Modal/Modal";
+import {Button} from "@/src/shared/components/Button/Button";
+import {Modal} from "@/src/shared/components/Modal/Modal";
 import {usePasswordRecoveryMutation} from "@/src/feature/auth/api/authApi";
 import {SubmitHandler, useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {emailSchema} from "@/src/feature/auth/lib/schemas/emailSchema";
 import {useRouter} from "next/navigation";
-import {useModal} from "@/src/common/hooks/useModal";
+import {useModal} from "@/src/shared/hooks/useModal";
 import ReCaptcha from "@/src/feature/auth/ui/PasswordRecovery/ReCaptcha/ReCaptcha";
 import {useEffect, useState} from "react";
-import { Path } from '@/src/common/components/Navigation/Navigation';
+import { Path } from '@/src/shared/components/Navigation/Navigation';
 
 type Inputs = {
   email: string

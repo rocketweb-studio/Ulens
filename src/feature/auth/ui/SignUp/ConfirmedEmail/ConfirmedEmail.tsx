@@ -1,10 +1,10 @@
 import styles from './ConfirmedEmail.module.scss'
-import {FlexContainer} from "@/src/common/components/FlexContainer";
-import {Button} from "@/src/common/components/Button/Button";
+import {FlexContainer} from "@/src/shared/components/FlexContainer";
+import {Button} from "@/src/shared/components/Button/Button";
 import Image from "next/image";
 import confirmedEmailImage from "@/public/sign-up/confirmed-email.svg"
 import {useRouter} from "next/navigation";
-import {Path} from "@/src/common/components/Navigation/Navigation";
+import {Path} from "@/src/shared/components/Navigation/Navigation";
 
 export const ConfirmedEmail = () => {
     const {push} = useRouter()

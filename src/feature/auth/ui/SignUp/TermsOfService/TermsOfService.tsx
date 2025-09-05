@@ -4,9 +4,9 @@ import React from 'react';
 import {useRouter} from "next/navigation";
 import styles from "./TermsOfService.module.scss"
 import arrow from "@/public/icons/arrow-left.svg"
-import {Button} from "@/src/common/components/Button/Button";
+import {Button} from "@/src/shared/components/Button/Button";
 import Image from "next/image";
-import {Path} from "@/src/common/components/Navigation/Navigation";
+import {Path} from "@/src/shared/components/Navigation/Navigation";
 export const TermsOfService = () => {
     const {push} = useRouter()
 

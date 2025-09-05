@@ -1,4 +1,4 @@
-@use 'src/common/styles/colors' as colors;
+@use '../../../../../shared/styles/colors' as colors;
 
 .boxModel {
   border: 1px solid colors.color(dark,300);

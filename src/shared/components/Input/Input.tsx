@@ -1,7 +1,7 @@
 'use client';
 
 import React, {ChangeEvent, ReactNode, useEffect, useRef, useState} from 'react';
-import styles from '@/src/common/components/Input/Input.module.scss';
+import styles from '@/src/shared/components/Input/Input.module.scss';
 import {FieldValues, Path, UseFormRegister} from "react-hook-form";
 import {RegistrationInputs} from "@/src/feature/auth/lib/schemas";
 import Image from "next/image";

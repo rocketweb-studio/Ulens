@@ -5,7 +5,7 @@ import { ConfirmLogout } from "@/src/feature/auth/ui/Logout/ConfirmLogout"
 import styles from "@/src/feature/auth/ui/SignIn/SignIn.module.scss"
 import { useGetMeQuery } from "@/src/feature/auth/api/authApi"
 import { useRouter } from "next/navigation"
-import {Path} from "@/src/common/components/Navigation/Navigation";
+import {Path} from "@/src/shared/components/Navigation/Navigation";
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {SerializedError} from "@reduxjs/toolkit";
 

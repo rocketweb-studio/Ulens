@@ -1,5 +1,5 @@
-@use 'src/common/styles/colors';
-@use 'src/common/styles/typography' as typography;
+@use '../../styles/colors';
+@use '../../styles/typography' as typography;
 
 .navWrapper{
   display: flex;

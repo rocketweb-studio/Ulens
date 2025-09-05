@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import s from '@/src/common/components/Navigation/Navigation.module.scss';
+import s from '@/src/shared/components/Navigation/Navigation.module.scss';
 
 export const Path = {
     Main: '/',
