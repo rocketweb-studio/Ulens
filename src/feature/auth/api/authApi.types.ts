@@ -1,5 +1,5 @@
-import { z } from "zod"
-import { loginSchema } from "@/src/feature/auth/lib/schemas/loginSchema"
+import { z } from 'zod'
+import { loginSchema } from '@/src/feature/auth/lib/schemas/loginSchema'
 
 export type UserType = {
   id: number

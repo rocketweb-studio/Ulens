@@ -1,9 +1,9 @@
-import React from "react"
-import styles from "./FlexContainer.module.scss"
+import React from 'react'
+import styles from './FlexContainer.module.scss'
 
-export type FlexDirection = "row" | "column" | "row-reverse" | "column-reverse"
-export type JustifyContent = "start" | "end" | "center" | "between" | "around"
-export type AlignItems = "stretch" | "start" | "end" | "center"
+export type FlexDirection = 'row' | 'column' | 'row-reverse' | 'column-reverse'
+export type JustifyContent = 'start' | 'end' | 'center' | 'between' | 'around'
+export type AlignItems = 'stretch' | 'start' | 'end' | 'center'
 export type Gap = number | string
 
 export type Props = {
@@ -19,12 +19,12 @@ export type Props = {
 
 export const FlexContainer = ({
   children,
-  direction = "row",
-  justify = "start",
-  align = "stretch",
+  direction = 'row',
+  justify = 'start',
+  align = 'stretch',
   gap = 0,
   wrap = false,
-  className = "",
+  className = '',
   style = {},
 }: Props) => {
   const flexClass = `
@@ -32,12 +32,12 @@ export const FlexContainer = ({
                  ${styles[`dir-${direction}`]}
                  ${styles[`justify-${justify}`]}
                  ${styles[`align-${align}`]}
-                 ${wrap ? styles.wrap : ""}
+                 ${wrap ? styles.wrap : ''}
                  ${className}
                  `.trim()
 
   const flexStyle: React.CSSProperties = {
-    gap: typeof gap === "number" ? `${gap}px` : gap,
+    gap: typeof gap === 'number' ? `${gap}px` : gap,
     ...style,
   }
 

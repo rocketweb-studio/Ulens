@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from '@reduxjs/toolkit'
 
-export type RequestStatus = "idle" | "loading" | "succeeded" | "failed"
+export type RequestStatus = 'idle' | 'loading' | 'succeeded' | 'failed'
 
 export const appSlice = createSlice({
-  name: "app",
+  name: 'app',
   initialState: {
-    loaderStatus: "idle" as RequestStatus,
+    loaderStatus: 'idle' as RequestStatus,
     isLoggedIn: false,
   },
   reducers: (create) => ({

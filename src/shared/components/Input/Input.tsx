@@ -1,12 +1,12 @@
-"use client"
+'use client'
 
-import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from "react"
-import styles from "@/src/shared/components/Input/Input.module.scss"
-import { FieldValues, Path, UseFormRegister } from "react-hook-form"
-import { RegistrationInputs } from "@/src/feature/auth/lib/schemas"
-import Image from "next/image"
-import eyeOnSvg from "@/public/eye-outline.svg"
-import eyeOffSvg from "@/public/eye-off-outline.svg"
+import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react'
+import styles from '@/src/shared/components/Input/Input.module.scss'
+import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
+import { RegistrationInputs } from '@/src/feature/auth/lib/schemas'
+import Image from 'next/image'
+import eyeOnSvg from '@/public/eye-outline.svg'
+import eyeOffSvg from '@/public/eye-off-outline.svg'
 
 type Props<T extends FieldValues = RegistrationInputs> = {
   type?: string
@@ -25,17 +25,17 @@ type Props<T extends FieldValues = RegistrationInputs> = {
 }
 
 export const Input = <T extends FieldValues = RegistrationInputs>({
-  type = "text",
+  type = 'text',
   name,
   value,
   checked,
   onChange,
-  placeholder = "",
+  placeholder = '',
   label,
   error,
   id,
   disabled = false,
-  className = "",
+  className = '',
   register,
   showPasswordToggle = false,
 }: Props<T>) => {
@@ -43,7 +43,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
   const errorRef = useRef<HTMLDivElement>(null)
   const errorTextRef = useRef<HTMLSpanElement>(null)
   const [isOverflowing, setIsOverflowing] = useState(false)
-  const inputType = showPasswordToggle && type === "password" && showPassword ? "text" : type
+  const inputType = showPasswordToggle && type === 'password' && showPassword ? 'text' : type
 
   useEffect(() => {
     if (!errorRef.current || !errorTextRef.current || !error) return
@@ -57,25 +57,25 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
 
       if (overflowing && errorTextRef.current) {
         const scrollAmount = textWidth - containerWidth
-        errorTextRef.current.style.setProperty("--scroll-amount", `-${scrollAmount}px`)
+        errorTextRef.current.style.setProperty('--scroll-amount', `-${scrollAmount}px`)
 
         const duration = scrollAmount / 100 + 4
-        errorTextRef.current.style.setProperty("--animation-duration", `${duration}s`)
+        errorTextRef.current.style.setProperty('--animation-duration', `${duration}s`)
       }
     }
 
     checkOverflow()
 
-    window.addEventListener("resize", checkOverflow)
-    return () => window.removeEventListener("resize", checkOverflow)
+    window.addEventListener('resize', checkOverflow)
+    return () => window.removeEventListener('resize', checkOverflow)
   }, [error])
 
-  if (type === "checkbox") {
+  if (type === 'checkbox') {
     return (
       <div className={`${styles.inputContainer} ${className}`}>
         <label className={styles.checkboxContainer} htmlFor={id}>
           <input
-            type="checkbox"
+            type='checkbox'
             disabled={disabled}
             className={styles.checkboxInput}
             id={id}
@@ -106,20 +106,20 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
           value={value}
           placeholder={placeholder}
           disabled={disabled}
-          className={`${styles.input} ${error ? styles.errorInput : ""} ${showPasswordToggle && type === "password" ? styles.passwordInput : ""}`}
+          className={`${styles.input} ${error ? styles.errorInput : ''} ${showPasswordToggle && type === 'password' ? styles.passwordInput : ''}`}
           id={id}
           {...(register && name ? register(name, { onChange }) : { name, onChange })}
         />
-        {showPasswordToggle && type === "password" && (
+        {showPasswordToggle && type === 'password' && (
           <button
-            type="button"
+            type='button'
             className={styles.passwordToggle}
             onClick={() => setShowPassword(!showPassword)}
             disabled={disabled}
           >
             <Image
               src={showPassword ? eyeOnSvg : eyeOffSvg}
-              alt={showPassword ? "Hide" : "Show"}
+              alt={showPassword ? 'Hide' : 'Show'}
               width={24}
               height={24}
             />
@@ -128,7 +128,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
       </div>
       {error && (
         <div ref={errorRef} className={styles.errorText}>
-          <span ref={errorTextRef} className={`${styles.errorTextContent} ${isOverflowing ? styles.animated : ""}`}>
+          <span ref={errorTextRef} className={`${styles.errorTextContent} ${isOverflowing ? styles.animated : ''}`}>
             {error}
           </span>
         </div>

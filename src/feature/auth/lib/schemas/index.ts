@@ -1,3 +1,3 @@
-export * from "./registrationSchema"
-export * from "./passwordSchema"
-export * from "./emailSchema"
+export * from './registrationSchema'
+export * from './passwordSchema'
+export * from './emailSchema'

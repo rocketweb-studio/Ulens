@@ -1,25 +1,25 @@
-"use-client"
+'use-client'
 
-import React from "react"
-import { useRouter } from "next/navigation"
-import styles from "./TermsOfService.module.scss"
-import arrow from "@/public/icons/arrow-left.svg"
-import { Button } from "@/src/shared/components/Button/Button"
-import Image from "next/image"
-import { Path } from "@/src/shared/components/Navigation/Navigation"
+import React from 'react'
+import { useRouter } from 'next/navigation'
+import styles from './TermsOfService.module.scss'
+import arrow from '@/public/icons/arrow-left.svg'
+import { Button } from '@/src/shared/components/Button/Button'
+import Image from 'next/image'
+import { Path } from '@/src/shared/components/Navigation/Navigation'
 export const TermsOfService = () => {
   const { push } = useRouter()
 
   return (
     <section>
       <Button
-        tagType={"link"}
+        tagType={'link'}
         path={Path.SignUp}
-        variant={"text-white"}
+        variant={'text-white'}
         leftIcon={
           <Image
             src={arrow}
-            alt={"Arrow-left icon"}
+            alt={'Arrow-left icon'}
             onClick={() => {
               push(Path.SignUp)
             }}

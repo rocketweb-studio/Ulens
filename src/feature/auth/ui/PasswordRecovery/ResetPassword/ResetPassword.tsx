@@ -1,20 +1,20 @@
-"use client"
+'use client'
 
-import { Input } from "@/src/shared/components/Input/Input"
-import s from "./ResetPassword.module.scss"
-import { Button } from "@/src/shared/components/Button/Button"
-import { SubmitHandler, useForm } from "react-hook-form"
-import { usePasswordRecoveryMutation, useSetNewPasswordMutation } from "@/src/feature/auth/api/authApi"
-import Image from "next/image"
-import imgResend from "public/rafiki.svg"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { passwordSchema } from "@/src/feature/auth/lib/schemas"
-import { useRouter } from "next/navigation"
-import { Modal } from "@/src/shared/components/Modal/Modal"
-import { useModal } from "@/src/shared/hooks/useModal"
-import ReCaptcha from "@/src/feature/auth/ui/PasswordRecovery/ReCaptcha/ReCaptcha"
-import { useState } from "react"
-import { Path } from "@/src/shared/components/Navigation/Navigation"
+import { Input } from '@/src/shared/components/Input/Input'
+import s from './ResetPassword.module.scss'
+import { Button } from '@/src/shared/components/Button/Button'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { usePasswordRecoveryMutation, useSetNewPasswordMutation } from '@/src/feature/auth/api/authApi'
+import Image from 'next/image'
+import imgResend from 'public/rafiki.svg'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { passwordSchema } from '@/src/feature/auth/lib/schemas'
+import { useRouter } from 'next/navigation'
+import { Modal } from '@/src/shared/components/Modal/Modal'
+import { useModal } from '@/src/shared/hooks/useModal'
+import ReCaptcha from '@/src/feature/auth/ui/PasswordRecovery/ReCaptcha/ReCaptcha'
+import { useState } from 'react'
+import { Path } from '@/src/shared/components/Navigation/Navigation'
 
 type Inputs = {
   password: string
@@ -31,7 +31,7 @@ export const ResetPassword = ({ isValidCode, recoveryCode, email }: Props) => {
   const { isOpen, openModal, closeModal } = useModal()
   const [sendEmail] = usePasswordRecoveryMutation()
   const [setNewPassword] = useSetNewPasswordMutation()
-  const [captcha, setCaptcha] = useState("")
+  const [captcha, setCaptcha] = useState('')
   const [isCaptchaOpen, setIsCaptchaOpen] = useState<boolean>(false)
   const router = useRouter()
 
@@ -42,7 +42,7 @@ export const ResetPassword = ({ isValidCode, recoveryCode, email }: Props) => {
     formState: { errors },
   } = useForm<Inputs>({
     resolver: zodResolver(passwordSchema),
-    defaultValues: { password: "", passwordConfirmation: "" },
+    defaultValues: { password: '', passwordConfirmation: '' },
   })
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -78,20 +78,20 @@ export const ResetPassword = ({ isValidCode, recoveryCode, email }: Props) => {
             <Input
               className={s.input}
               register={register}
-              name="password"
-              placeholder="*********"
-              label="New password"
-              type={"password"}
+              name='password'
+              placeholder='*********'
+              label='New password'
+              type={'password'}
               error={errors.password?.message}
               showPasswordToggle
             />
             <Input
-              name="passwordConfirmation"
+              name='passwordConfirmation'
               register={register}
-              placeholder="*********"
-              label="Password confirmation"
+              placeholder='*********'
+              label='Password confirmation'
               error={errors.passwordConfirmation?.message}
-              type={"password"}
+              type={'password'}
               showPasswordToggle
             />
             <p className={s.infoMessage}>Your password must be between 6 and 20 characters</p>
@@ -108,23 +108,22 @@ export const ResetPassword = ({ isValidCode, recoveryCode, email }: Props) => {
           <p className={s.infoMessage2}>
             Looks like the verification link has expired. Not to worry, we can send the link again
           </p>
-          {!isCaptchaOpen ? (
+          {!isCaptchaOpen ?
             <Button onClick={openCaptchaHandler} className={s.button}>
               Resend link
             </Button>
-          ) : (
-            <>
+          : <>
               <Button onClick={resendEmail} className={s.button} disabled={!captcha}>
                 Resend link
               </Button>
               <ReCaptcha setCaptcha={setCaptcha} />
             </>
-          )}
-          <Image priority={true} width={470} height={350} src={imgResend} alt={"imgResend"} />
+          }
+          <Image priority={true} width={470} height={350} src={imgResend} alt={'imgResend'} />
         </div>
       )}
 
-      <Modal modalTitle={"Email sent"} isOpen={isOpen} onClose={onCloseModalHandler}>
+      <Modal modalTitle={'Email sent'} isOpen={isOpen} onClose={onCloseModalHandler}>
         <p className={s.infoMessage3}>We have sent a link to confirm your email to {email}</p>
       </Modal>
     </>

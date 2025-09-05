@@ -1,4 +1,4 @@
-import { ResetPassword } from "@/src/feature/auth/ui/PasswordRecovery/ResetPassword"
+import { ResetPassword } from '@/src/feature/auth/ui/PasswordRecovery/ResetPassword'
 
 export default async function ResetPasswordPage({
   searchParams,
@@ -11,10 +11,10 @@ export default async function ResetPasswordPage({
 
   try {
     const res = await fetch(`https://ulens.org/api/v1/auth/check-recovery-code`, {
-      method: "post",
-      credentials: "include",
+      method: 'post',
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         code: token,
@@ -32,7 +32,7 @@ export default async function ResetPasswordPage({
 
   return (
     <div>
-      <ResetPassword isValidCode={isValidCode} recoveryCode={token ? token : ""} email={email ? email : ""} />
+      <ResetPassword isValidCode={isValidCode} recoveryCode={token ? token : ''} email={email ? email : ''} />
     </div>
   )
 }

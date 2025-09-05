@@ -1,5 +1,5 @@
-@use "@/src/shared/styles/colors" as colors;
-@use "@/src/shared/styles/typography" as typography;
+@use '@/src/shared/styles/colors' as colors;
+@use '@/src/shared/styles/typography' as typography;
 
 .authWrapper {
   background-color: colors.color(dark, 500);
@@ -20,13 +20,13 @@
     @include typography.h1;
     text-align: center;
     margin-bottom: 13px;
-    color: colors.color("light", 100);
+    color: colors.color('light', 100);
   }
 
   &__subtitle {
     @include typography.regular-text-14;
     text-align: center;
-    color: colors.color("light", 900);
+    color: colors.color('light', 900);
     margin-bottom: 24px;
   }
 
@@ -34,11 +34,11 @@
     @include typography.regular-text-16;
     font-weight: typography.$font-weight-semi-bold;
     margin-top: 13px;
-    color: colors.color("accent", 500);
+    color: colors.color('accent', 500);
     text-decoration: none;
 
     &:hover {
-      color: colors.color("accent", 300);
+      color: colors.color('accent', 300);
       text-decoration: underline;
     }
   }
@@ -54,12 +54,12 @@
     @include typography.regular-text-14;
     background: none;
     border: none;
-    color: colors.color("light", 100);
+    color: colors.color('light', 100);
     cursor: pointer;
     padding: 8px;
 
     &:hover {
-      color: colors.color("accent", 500);
+      color: colors.color('accent', 500);
     }
   }
 }
@@ -72,40 +72,40 @@
 
   &__label {
     @include typography.regular-text-14;
-    color: colors.color("light", 100);
+    color: colors.color('light', 100);
     margin-bottom: 4px;
   }
 
   &__input {
     @include typography.regular-text-16;
     padding: 12px 16px;
-    background-color: colors.color("dark", 500);
-    border: 1px solid colors.color("dark", 300);
+    background-color: colors.color('dark', 500);
+    border: 1px solid colors.color('dark', 300);
     border-radius: 4px;
-    color: colors.color("light", 100);
+    color: colors.color('light', 100);
 
     &::placeholder {
-      color: colors.color("light", 700);
+      color: colors.color('light', 700);
     }
 
     &:focus {
       outline: none;
-      border-color: colors.color("accent", 500);
+      border-color: colors.color('accent', 500);
     }
   }
 
   .forgotPassword {
-    content: "Forgot Password";
+    content: 'Forgot Password';
     position: absolute;
     @include typography.regular-text-14;
-    color: colors.color("light", 900);
+    color: colors.color('light', 900);
     top: 200px;
     right: 0;
     cursor: pointer;
     z-index: 777;
 
     &:hover {
-      color: colors.color("accent", 500);
+      color: colors.color('accent', 500);
     }
   }
 }
@@ -115,31 +115,31 @@
   margin-top: 72px;
   margin-bottom: 18px;
   padding: 12px 24px;
-  background-color: colors.color("accent", 500);
-  color: colors.color("light", 100);
+  background-color: colors.color('accent', 500);
+  color: colors.color('light', 100);
   border: none;
   border-radius: 4px;
   cursor: pointer;
   width: 100%;
 
   &:hover {
-    background-color: colors.color("accent", 500);
+    background-color: colors.color('accent', 500);
   }
 
   &:disabled {
-    background-color: colors.color("dark", 300);
+    background-color: colors.color('dark', 300);
     cursor: not-allowed;
   }
 }
 
 .errorMessage {
   @include typography.regular-text-14;
-  color: colors.color("danger", 500);
+  color: colors.color('danger', 500);
   margin-top: 4px;
 }
 
 .successMessage {
   @include typography.regular-text-14;
-  color: colors.color("success", 500);
+  color: colors.color('success', 500);
   margin-top: 4px;
 }
