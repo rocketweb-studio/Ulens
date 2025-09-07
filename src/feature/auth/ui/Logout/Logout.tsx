@@ -1,62 +1,56 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import { ConfirmLogout } from "@/src/feature/auth/ui/Logout/ConfirmLogout";
-import styles from "@/src/feature/auth/ui/SignIn/SignIn.module.scss";
-import { useGetMeQuery } from "@/src/feature/auth/api/authApi";
-import { useRouter } from "next/navigation";
-import { Path } from "@/src/shared/components/Navigation/Navigation";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
-import { SerializedError } from "@reduxjs/toolkit";
+import { useEffect, useState } from 'react'
+import { ConfirmLogout } from '@/src/feature/auth/ui/Logout/ConfirmLogout'
+import styles from '@/src/feature/auth/ui/SignIn/SignIn.module.scss'
+import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
+import { useRouter } from 'next/navigation'
+import { Path } from '@/src/shared/components/Navigation/Navigation'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
+import { SerializedError } from '@reduxjs/toolkit'
 
 export const Logout = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data, isLoading, isError, error } = useGetMeQuery();
-  const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const { data, isLoading, isError, error } = useGetMeQuery()
+  const router = useRouter()
 
-  const handleServerError = (
-    error: FetchBaseQueryError | SerializedError | undefined,
-  ) => {
-    if (!error) return;
+  const handleServerError = (error: FetchBaseQueryError | SerializedError | undefined) => {
+    if (!error) return
 
-    if ("status" in error) {
+    if ('status' in error) {
       if (error.status === 401) {
-        router.push(Path.SignIn);
+        router.push(Path.SignIn)
       }
     }
-  };
+  }
 
   useEffect(() => {
     if (isError) {
-      handleServerError(error);
+      handleServerError(error)
     }
-  }, [isError, error]);
+  }, [isError, error])
 
   if (isLoading) {
     return (
       <button disabled className={styles.submitBtn}>
         Loading...
       </button>
-    );
+    )
   }
 
-  const email = data?.email ?? "email";
+  const email = data?.email ?? 'email'
 
   return (
     <>
       <button
         className={styles.submitBtn}
         onClick={() => {
-          setIsModalOpen(true);
+          setIsModalOpen(true)
         }}
       >
         Log out
       </button>
-      <ConfirmLogout
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        email={email}
-      />
+      <ConfirmLogout isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={email} />
     </>
-  );
-};
+  )
+}

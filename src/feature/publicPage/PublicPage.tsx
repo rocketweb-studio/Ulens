@@ -1,5 +1,5 @@
-"use client";
+'use client'
 
 export const PublicPage = () => {
-  return <div></div>;
-};
+  return <div></div>
+}

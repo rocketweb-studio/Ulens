@@ -32,8 +32,6 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 # localhost
-local.dev.ulens.org-key.pem
-local.dev.ulens.org.pem
 # env files (can opt-in for committing if needed)
 .env.local
 

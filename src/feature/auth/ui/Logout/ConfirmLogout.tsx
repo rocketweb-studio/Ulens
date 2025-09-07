@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useRouter } from "next/navigation";
 import { Modal } from "@/src/shared/components/Modal/Modal";
@@ -11,10 +11,10 @@ import { baseApi } from "@/src/app/baseApi";
 import s from "./confirmLogout.module.scss";
 
 type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  email: string;
-};
+  isOpen: boolean
+  onClose: () => void
+  email: string
+}
 
 export const ConfirmLogout = ({ isOpen, onClose, email }: Props) => {
   const router = useRouter();
@@ -31,15 +31,15 @@ export const ConfirmLogout = ({ isOpen, onClose, email }: Props) => {
       onClose();
       router.push(Path.SignIn);
     } catch (e) {
-      console.error("Logout error:", e);
-      toast.error("Something went wrong during Logout");
+      console.error('Logout error:', e)
+      toast.error('Something went wrong during Logout')
     }
-  };
+  }
 
   const handleNo = () => {
-    toast.error(`User with this email doesn't exist`);
-    onClose();
-  };
+    toast.error(`User with this email doesn't exist`)
+    onClose()
+  }
 
   return (
     <Modal
@@ -60,5 +60,5 @@ export const ConfirmLogout = ({ isOpen, onClose, email }: Props) => {
         </button>
       </div>
     </Modal>
-  );
-};
+  )
+}

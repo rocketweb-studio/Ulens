@@ -1,5 +1,5 @@
-@use "../../styles/colors" as colors;
-@use "../../styles/typography" as typography;
+@use '../../styles/colors' as colors;
+@use '../../styles/typography' as typography;
 
 .inputContainer {
   display: flex;
@@ -123,7 +123,7 @@
   transition: all 0.3s ease;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     display: none;
     width: 5px;
@@ -198,7 +198,7 @@
     transform: translateX(0);
   }
   15% {
-    transform: translateX(0); // Пауза в начале
+    transform: translateX(0);
   }
   85% {
     transform: translateX(var(--scroll-amount, 0));
@@ -209,7 +209,7 @@
 }
 
 .errorTextContent.animated {
-  animation: scrollError 6s infinite;
+  animation: scrollError var(--animation-duration, 15s) infinite;
   animation-timing-function: linear;
 
   @at-root {

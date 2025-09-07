@@ -1,20 +1,20 @@
-import Link from "next/link";
-import s from "@/src/shared/components/Navigation/Navigation.module.scss";
+import Link from 'next/link'
+import s from '@/src/shared/components/Navigation/Navigation.module.scss'
 
 export const Path = {
-  Main: "/",
-  Profile: "/profile",
-  Settings: "/settings",
-  SignIn: "/sign-in",
-  SignUp: "/sign-up",
-  TermOfService: "/sign-up/term-of-service",
-  PrivacyPolicy: "/sign-up/privacy-policy",
-  Logout: "/logout",
-  SignUpConfirmedEmail: "/sign-up/confirmed-email",
-  PasswordRecovery: "/password-recovery",
-  ResetPassword: "/account/reset-password",
-} as const;
-export type PathValue = (typeof Path)[keyof typeof Path];
+  Main: '/',
+  Profile: '/profile',
+  Settings: '/settings',
+  SignIn: '/sign-in',
+  SignUp: '/sign-up',
+  TermOfService: '/sign-up/term-of-service',
+  PrivacyPolicy: '/sign-up/privacy-policy',
+  Logout: '/logout',
+  SignUpConfirmedEmail: '/sign-up/confirmed-email',
+  PasswordRecovery: '/password-recovery',
+  ResetPassword: '/account/reset-password',
+} as const
+export type PathValue = (typeof Path)[keyof typeof Path]
 
 export const Navigation = () => {
   return (
@@ -29,5 +29,5 @@ export const Navigation = () => {
         <Link href={Path.Logout}>Logout</Link>
       </div>
     </nav>
-  );
-};
+  )
+}
