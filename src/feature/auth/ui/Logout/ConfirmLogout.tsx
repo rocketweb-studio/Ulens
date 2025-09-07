@@ -6,6 +6,8 @@ import { Button } from "@/src/shared/components/Button/Button";
 import { useLogoutMutation } from "@/src/feature/auth/api/authApi";
 import { toast } from "react-toastify";
 import { Path } from "@/src/shared/components/Navigation/Navigation";
+import { useDispatch } from "react-redux";
+import { baseApi } from "@/src/app/baseApi";
 
 type Props = {
   isOpen: boolean;
@@ -16,10 +18,15 @@ type Props = {
 export const ConfirmLogout = ({ isOpen, onClose, email }: Props) => {
   const router = useRouter();
   const [logout] = useLogoutMutation();
+  const dispatch = useDispatch();
 
   const handleYes = async () => {
     try {
       await logout().unwrap();
+      localStorage.removeItem("accessToken");
+
+      dispatch(baseApi.util.resetApiState());
+
       onClose();
       router.push(Path.SignIn);
     } catch (e) {
