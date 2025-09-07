@@ -12,6 +12,7 @@ export type Props = {
   closeOnOverlayClick?: boolean;
   closeOnEsc?: boolean;
   modalTitle: string;
+  hideDefaultButton?: boolean;
 };
 
 export const Modal = ({
@@ -21,6 +22,7 @@ export const Modal = ({
   modalTitle,
   closeOnOverlayClick = true,
   closeOnEsc = true,
+  hideDefaultButton = false,
 }: Props) => {
   useEffect(() => {
     if (!isOpen || !closeOnEsc) return;
@@ -56,9 +58,11 @@ export const Modal = ({
         </button>
         <div className={s.flexContainer}>
           {children}
-          <Button className={s.button} onClick={onClose}>
-            ОК
-          </Button>
+          {!hideDefaultButton && (
+            <Button className={s.button} onClick={onClose}>
+              ОК
+            </Button>
+          )}
         </div>
       </div>
     </div>,

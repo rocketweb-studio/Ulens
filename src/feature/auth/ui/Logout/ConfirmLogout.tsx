@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { Path } from "@/src/shared/components/Navigation/Navigation";
 import { useDispatch } from "react-redux";
 import { baseApi } from "@/src/app/baseApi";
+import s from "./confirmLogout.module.scss";
 
 type Props = {
   isOpen: boolean;
@@ -41,17 +42,22 @@ export const ConfirmLogout = ({ isOpen, onClose, email }: Props) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} modalTitle="Confirm Logout">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      modalTitle="Log Out"
+      hideDefaultButton
+    >
       <p>
         Are you really want to log out of your account <b>{email}</b>?
       </p>
-      <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
-        <Button variant="primary" onClick={handleYes}>
+      <div className={s.button}>
+        <button className={s.yesBtn} onClick={handleYes}>
           Yes
-        </Button>
-        <Button variant="secondary" onClick={handleNo}>
+        </button>
+        <button className={s.noBtn} onClick={handleNo}>
           No
-        </Button>
+        </button>
       </div>
     </Modal>
   );
