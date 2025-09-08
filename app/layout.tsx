@@ -7,6 +7,7 @@ import { AppLoader } from '@/src/shared/components/AppLoader/AppLoader'
 import 'react-toastify/ReactToastify.css'
 import { AlertSnackbar } from '@/src/shared/components/AlertSnackbar/AlertSnackbar'
 import { Header } from '@/src/shared/components/Header/Header'
+import '@rocketweb-studio/ulens-ui-kit/dist/index.css'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

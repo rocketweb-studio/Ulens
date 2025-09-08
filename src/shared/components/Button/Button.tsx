@@ -48,6 +48,7 @@ export const Button = ({
     .filter(Boolean)
     .join(' ')
 
+
   const content = (
     <>
       {leftIcon && <span className={styles.leftIcon}>{leftIcon}</span>}

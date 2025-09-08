@@ -1,20 +1,20 @@
 'use client'
 
-import { Input } from '@/src/shared/components/Input/Input'
+import {Input} from '@/src/shared/components/Input/Input'
 import s from './ResetPassword.module.scss'
-import { Button } from '@/src/shared/components/Button/Button'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { usePasswordRecoveryMutation, useSetNewPasswordMutation } from '@/src/feature/auth/api/authApi'
+import {Button} from '@/src/shared/components/Button/Button'
+import {SubmitHandler, useForm} from 'react-hook-form'
+import {usePasswordRecoveryMutation, useSetNewPasswordMutation} from '@/src/feature/auth/api/authApi'
 import Image from 'next/image'
 import imgResend from 'public/rafiki.svg'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { passwordSchema } from '@/src/feature/auth/lib/schemas'
-import { useRouter } from 'next/navigation'
-import { Modal } from '@/src/shared/components/Modal/Modal'
-import { useModal } from '@/src/shared/hooks/useModal'
-import ReCaptcha from '@/src/feature/auth/ui/PasswordRecovery/ReCaptcha/ReCaptcha'
-import { useState } from 'react'
-import { Path } from '@/src/shared/components/Navigation/Navigation'
+import {zodResolver} from '@hookform/resolvers/zod'
+import {passwordSchema} from '@/src/feature/auth/lib/schemas'
+import {useRouter} from 'next/navigation'
+import {Modal} from '@/src/shared/components/Modal/Modal'
+import {useModal} from '@/src/shared/hooks/useModal'
+import {ReCaptcha} from '@rocketweb-studio/ulens-ui-kit'
+import {useState} from 'react'
+import {Path} from '@/src/shared/components/Navigation/Navigation'
 
 type Inputs = {
   password: string
@@ -27,8 +27,8 @@ type Props = {
   recoveryCode: string
 }
 
-export const ResetPassword = ({ isValidCode, recoveryCode, email }: Props) => {
-  const { isOpen, openModal, closeModal } = useModal()
+export const ResetPassword = ({isValidCode, recoveryCode, email}: Props) => {
+  const {isOpen, openModal, closeModal} = useModal()
   const [sendEmail] = usePasswordRecoveryMutation()
   const [setNewPassword] = useSetNewPasswordMutation()
   const [captcha, setCaptcha] = useState('')
@@ -39,10 +39,10 @@ export const ResetPassword = ({ isValidCode, recoveryCode, email }: Props) => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: {errors},
   } = useForm<Inputs>({
     resolver: zodResolver(passwordSchema),
-    defaultValues: { password: '', passwordConfirmation: '' },
+    defaultValues: {password: '', passwordConfirmation: ''},
   })
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -52,7 +52,8 @@ export const ResetPassword = ({ isValidCode, recoveryCode, email }: Props) => {
         recoveryCode,
       }).unwrap()
       openModal()
-    } catch (e) {}
+    } catch (e) {
+    }
     reset()
   }
 
@@ -61,7 +62,7 @@ export const ResetPassword = ({ isValidCode, recoveryCode, email }: Props) => {
   }
 
   const resendEmail = () => {
-    sendEmail({ email, recaptchaToken: captcha })
+    sendEmail({email, recaptchaToken: captcha})
   }
 
   const onCloseModalHandler = () => {
@@ -112,14 +113,15 @@ export const ResetPassword = ({ isValidCode, recoveryCode, email }: Props) => {
             <Button onClick={openCaptchaHandler} className={s.button}>
               Resend link
             </Button>
-          : <>
+            : <>
               <Button onClick={resendEmail} className={s.button} disabled={!captcha}>
                 Resend link
               </Button>
-              <ReCaptcha setCaptcha={setCaptcha} />
+              <ReCaptcha setCaptcha={setCaptcha}
+                         recaptchaToken={process.env.NEXT_PUBLIC_RECAPTCHA_TOKEN!}/>
             </>
           }
-          <Image priority={true} width={470} height={350} src={imgResend} alt={'imgResend'} />
+          <Image priority={true} width={470} height={350} src={imgResend} alt={'imgResend'}/>
         </div>
       )}
 

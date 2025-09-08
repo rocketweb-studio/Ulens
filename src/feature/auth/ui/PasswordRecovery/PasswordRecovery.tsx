@@ -1,17 +1,17 @@
 'use client'
 
-import { Input } from '@/src/shared/components/Input/Input'
+import {Input} from '@/src/shared/components/Input/Input'
 import s from './PasswordRecovery.module.scss'
-import { Button } from '@/src/shared/components/Button/Button'
-import { Modal } from '@/src/shared/components/Modal/Modal'
-import { usePasswordRecoveryMutation } from '@/src/feature/auth/api/authApi'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { emailSchema } from '@/src/feature/auth/lib/schemas/emailSchema'
-import { useModal } from '@/src/shared/hooks/useModal'
-import ReCaptcha from '@/src/feature/auth/ui/PasswordRecovery/ReCaptcha/ReCaptcha'
-import { useState } from 'react'
-import { Path } from '@/src/shared/components/Navigation/Navigation'
+import {Button} from '@/src/shared/components/Button/Button'
+import {Modal} from '@/src/shared/components/Modal/Modal'
+import {usePasswordRecoveryMutation} from '@/src/feature/auth/api/authApi'
+import {SubmitHandler, useForm} from 'react-hook-form'
+import {zodResolver} from '@hookform/resolvers/zod'
+import {emailSchema} from '@/src/feature/auth/lib/schemas/emailSchema'
+import {useModal} from '@/src/shared/hooks/useModal'
+import {ReCaptcha} from '@rocketweb-studio/ulens-ui-kit'
+import {useState} from 'react'
+import {Path} from '@/src/shared/components/Navigation/Navigation'
 
 type Inputs = {
   email: string
@@ -20,7 +20,7 @@ type Inputs = {
 
 export const PasswordRecovery = () => {
   const [sendEmail, result] = usePasswordRecoveryMutation() // {data, isLoading, error}
-  const { isOpen, openModal, closeModal } = useModal()
+  const {isOpen, openModal, closeModal} = useModal()
   const [email, setEmail] = useState('')
 
   const {
@@ -28,10 +28,10 @@ export const PasswordRecovery = () => {
     handleSubmit,
     reset,
     setValue,
-    formState: { errors },
+    formState: {errors},
   } = useForm<Inputs>({
     resolver: zodResolver(emailSchema),
-    defaultValues: { email: '', recaptchaToken: '' },
+    defaultValues: {email: '', recaptchaToken: ''},
   })
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -42,7 +42,8 @@ export const PasswordRecovery = () => {
         recaptchaToken: data.recaptchaToken,
       }).unwrap()
       openModal()
-    } catch (e) {}
+    } catch (e) {
+    }
     reset()
   }
 
@@ -61,16 +62,16 @@ export const PasswordRecovery = () => {
           register={register}
           error={
             result?.isError ? "User with this email doesn't exist"
-            : errors ?
-              errors.email?.message
-            : ''
+              : errors ?
+                errors.email?.message
+                : ''
           }
         />
         <p className={s.infoMessage}>Enter your email address and we will send you further instructions</p>
         {result?.isSuccess && (
           <p className={s.infoMessage2}>
             The link has been sent by email.
-            <br />
+            <br/>
             If you don’t receive an email send link again
           </p>
         )}
@@ -79,13 +80,14 @@ export const PasswordRecovery = () => {
             <Button onClick={() => result.reset()} type={'button'}>
               Send Link Again
             </Button>
-          : <Button type='submit'>Send Link</Button>}
+            : <Button type='submit'>Send Link</Button>}
           <Button tagType={'link'} path={Path.SignIn} variant={'text'}>
             Back to Sign In
           </Button>
         </div>
         {!result.isSuccess && (
-          <ReCaptcha setCaptcha={setCaptcha} errorMessage={errors.recaptchaToken?.message || result?.isError} />
+          <ReCaptcha setCaptcha={setCaptcha} errorMessage={errors.recaptchaToken?.message || result?.isError}
+                     recaptchaToken={process.env.NEXT_PUBLIC_RECAPTCHA_TOKEN!}/>
         )}
       </form>
 
