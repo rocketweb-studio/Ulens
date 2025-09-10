@@ -1,0 +1,27 @@
+@use '@/src/shared/styles/typography' as typography;
+@use '@/src/shared/styles/colors' as colors;
+
+.sidebarWrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 220px;
+  padding: 70px 0 35px 60px;
+  border-right: 1px solid colors.color(dark, 300);
+  flex-shrink: 0;
+
+  .linkWrapper:nth-child(5) {
+    margin-bottom: 60px;
+  }
+
+  .linkWrapper:nth-child(7) {
+    margin-bottom: 180px;
+  }
+}
+
+.link {
+  @include typography.regular-text-14;
+  text-decoration: none;
+  margin-bottom: 10px;
+}

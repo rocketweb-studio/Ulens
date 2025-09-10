@@ -10,4 +10,5 @@ export const Path = {
   SignUpConfirmedEmail: '/sign-up/confirmed-email',
   PasswordRecovery: '/password-recovery',
   ResetPassword: '/account/reset-password',
+  InDevelopment: '/in-development',
 } as const
