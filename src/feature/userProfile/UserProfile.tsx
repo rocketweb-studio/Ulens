@@ -3,5 +3,5 @@ type Props = {
 }
 
 export const UserProfile = ({ userId }: Props) => {
-  return <div></div>
+  return <h1> PROFILE PAGE </h1>
 }

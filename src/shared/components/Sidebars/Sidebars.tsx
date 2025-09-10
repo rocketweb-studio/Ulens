@@ -22,17 +22,14 @@ const sidebarsLinks = [
   {icon: IconSearch, title: 'Search', href: Path.InDevelopment},
   {icon: IconTrendingUpOutline, title: 'Statistics', href: Path.InDevelopment},
   {icon: IconBookmarkOutline, title: 'Favorites', href: Path.InDevelopment},
-  {icon: IconLogOutOutline, title: 'Log Out', href: Path.InDevelopment},
+  {icon: IconLogOutOutline, title: 'Log Out', href: Path.Logout},
 ]
 
 
-type Props = {
-  isAuth?: boolean;
-};
-export const Sidebars = ({isAuth}: Props) => {
+export const Sidebars = () => {
   const { error } = useGetMeQuery()
 
-  isAuth = !error
+  const isAuth = !error
   return (isAuth &&
       <div className={s.sidebarWrapper}>
         {sidebarsLinks.map(({title, href, icon: Icon}, i) => (
