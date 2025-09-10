@@ -9,11 +9,10 @@ import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
 import {IconOutlineBell} from '@rocketweb-studio/ulens-ui-kit';
 
 export const Header = () => {
-  const {error} = useGetMeQuery()
+  const {data} = useGetMeQuery()
 
-  const isAuth = !error
+  const isAuth = !!data?.id
 
-  console.log(error)
   return (
     <header className={s.header}>
       <FlexContainer justify={'between'} align={'center'}>

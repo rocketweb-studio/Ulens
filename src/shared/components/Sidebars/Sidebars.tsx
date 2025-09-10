@@ -27,9 +27,11 @@ const sidebarsLinks = [
 
 
 export const Sidebars = () => {
-  const { error } = useGetMeQuery()
+  const { data } = useGetMeQuery()
 
-  const isAuth = !error
+  const isAuth = !!data?.id
+
+  console.log({data})
   return (isAuth &&
       <div className={s.sidebarWrapper}>
         {sidebarsLinks.map(({title, href, icon: Icon}, i) => (
