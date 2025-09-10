@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import { baseQueryWithReauth } from '@/src/app/baseQueryWithReauth'
+import { baseQueryWithReauth } from '@/src/store/baseQueryWithReauth'
 
 export const baseApi = createApi({
   reducerPath: 'Ulens',

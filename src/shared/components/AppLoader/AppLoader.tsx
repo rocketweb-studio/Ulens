@@ -2,7 +2,7 @@
 
 import { useAppSelector } from '../../hooks/useAppSelector'
 import s from './AppLoader.module.scss'
-import { selectLoaderStatus } from '@/src/app/app-slice'
+import { selectLoaderStatus } from '@/src/store/app-slice'
 
 export const AppLoader = () => {
   const loaderStatus = useAppSelector(selectLoaderStatus)

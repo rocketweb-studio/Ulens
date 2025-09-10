@@ -11,7 +11,8 @@ import {emailSchema} from '@/src/feature/auth/lib/schemas/emailSchema'
 import {useModal} from '@/src/shared/hooks/useModal'
 import {ReCaptcha} from '@rocketweb-studio/ulens-ui-kit'
 import {useState} from 'react'
-import {Path} from '@/src/shared/components/Navigation/Navigation'
+
+import {Path} from "@/src/shared/constants/Path";
 
 type Inputs = {
   email: string

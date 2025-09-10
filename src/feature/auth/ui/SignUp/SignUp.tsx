@@ -13,10 +13,10 @@ import { useRegistrationMutation } from '@/src/feature/auth/api/authApi'
 import { useModal } from '@/src/shared/hooks/useModal'
 import { Modal } from '@/src/shared/components/Modal/Modal'
 import { ChangeEvent, useState } from 'react'
-import { Path } from '@/src/shared/components/Navigation/Navigation'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { ServerErrorType } from '@/src/feature/auth/types'
 import { isFetchBaseQueryError } from '@/src/shared/utils'
+import {Path} from "@/src/shared/constants/Path";
 
 const COUNT_SYMBOLS_FOR_START_VALIDATE = 6
 

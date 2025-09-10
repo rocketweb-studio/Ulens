@@ -1,8 +1,8 @@
 import { Mutex } from 'async-mutex'
 import { BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
-import { setLoaderStatus } from '@/src/app/app-slice'
+import { setLoaderStatus } from '@/src/store/app-slice'
 import { handleError } from '@/src/shared/utils/handleError'
-import { baseApi } from '@/src/app/baseApi'
+import { baseApi } from '@/src/store/baseApi'
 
 const mutex = new Mutex()
 

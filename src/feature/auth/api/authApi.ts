@@ -1,4 +1,4 @@
-import { baseApi } from '@/src/app/baseApi'
+import { baseApi } from '@/src/store/baseApi'
 import { LoginRequestParams, LoginResponse, getMeResponse, UserType } from '@/src/feature/auth/api/authApi.types'
 import { RegistrationRequest, RegistrationResponce } from '@/src/feature/auth/types'
 

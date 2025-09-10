@@ -14,7 +14,8 @@ import {Modal} from '@/src/shared/components/Modal/Modal'
 import {useModal} from '@/src/shared/hooks/useModal'
 import {ReCaptcha} from '@rocketweb-studio/ulens-ui-kit'
 import {useState} from 'react'
-import {Path} from '@/src/shared/components/Navigation/Navigation'
+
+import {Path} from "@/src/shared/constants/Path";
 
 type Inputs = {
   password: string

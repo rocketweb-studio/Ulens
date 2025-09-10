@@ -1,3 +1,5 @@
+import {Path} from "@/src/shared/constants/Path";
+
 'use-client'
 
 import React from 'react'
@@ -6,7 +8,6 @@ import styles from './TermsOfService.module.scss'
 import arrow from '@/public/icons/arrow-left.svg'
 import { Button } from '@/src/shared/components/Button/Button'
 import Image from 'next/image'
-import { Path } from '@/src/shared/components/Navigation/Navigation'
 export const TermsOfService = () => {
   const { push } = useRouter()
 

@@ -5,10 +5,10 @@ import { Modal } from "@/src/shared/components/Modal/Modal";
 import { Button } from "@/src/shared/components/Button/Button";
 import { useLogoutMutation } from "@/src/feature/auth/api/authApi";
 import { toast } from "react-toastify";
-import { Path } from "@/src/shared/components/Navigation/Navigation";
 import { useDispatch } from "react-redux";
-import { baseApi } from "@/src/app/baseApi";
+import { baseApi } from "@/src/store/baseApi";
 import s from "./confirmLogout.module.scss";
+import {Path} from "@/src/shared/constants/Path";
 
 type Props = {
   isOpen: boolean

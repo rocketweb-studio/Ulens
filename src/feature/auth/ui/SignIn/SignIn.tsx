@@ -9,11 +9,11 @@ import { Input } from '@/src/shared/components/Input/Input'
 import { Button } from '@/src/shared/components/Button/Button'
 import { loginSchema } from '@/src/feature/auth/lib/schemas/loginSchema'
 import styles from './SignIn.module.scss'
-import { Path } from '@/src/shared/components/Navigation/Navigation'
 import { useRedirectIfAuthorized } from '@/src/shared/hooks/useRedirectIfAuthorized'
 import { LoginRequestParams } from '@/src/feature/auth/api/authApi.types'
 import { useToast } from '@/src/shared/hooks/useToast'
 import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
+import {Path} from "@/src/shared/constants/Path";
 
 export const SignIn = () => {
   const dispatch = useAppDispatch()

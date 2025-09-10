@@ -4,7 +4,8 @@ import { Button } from '@/src/shared/components/Button/Button'
 import Image from 'next/image'
 import confirmedEmailImage from '@/public/sign-up/confirmed-email.svg'
 import { useRouter } from 'next/navigation'
-import { Path } from '@/src/shared/components/Navigation/Navigation'
+
+import {Path} from "@/src/shared/constants/Path";
 
 export const ConfirmedEmail = () => {
   const { push } = useRouter()

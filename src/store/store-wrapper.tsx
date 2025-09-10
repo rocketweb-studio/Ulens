@@ -2,7 +2,7 @@
 
 import { ReactElement, ReactNode } from 'react'
 import { Provider } from 'react-redux'
-import { store } from '@/src/app/store'
+import { store } from '@/src/store/store'
 
 type ReactChild = ReactElement | undefined | null | ReactNode
 
