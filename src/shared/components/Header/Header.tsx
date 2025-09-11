@@ -1,17 +1,36 @@
-import { Navigation } from '@/src/shared/components/Navigation/Navigation'
+'use client'
+
 import s from './Header.module.scss'
 import Link from 'next/link'
-import { FlexContainer } from '@/src/shared/components/FlexContainer'
+import {FlexContainer} from '@/src/shared/components/FlexContainer'
 import {Path} from "@/src/shared/constants/Path";
+import {Button} from "@/src/shared/components/Button/Button";
+import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
+import {IconOutlineBell} from '@rocketweb-studio/ulens-ui-kit';
 
 export const Header = () => {
+  const {data} = useGetMeQuery()
+
+  const isAuth = !!data?.id
+
   return (
-    <header>
-      <FlexContainer justify='between'>
+    <header className={s.header}>
+      <FlexContainer justify={'between'} align={'center'}>
         <div className={s.logotype}>
           <Link href={Path.Main}>Ulens</Link>
         </div>
-        <Navigation />
+
+          {isAuth ?
+
+            <IconOutlineBell/>
+            :
+            <FlexContainer gap={'25px'} >
+              <Button tagType={'link'} variant={'text'} path={Path.SignIn}>Log in</Button>
+              <Button tagType={'link'}  path={Path.SignUp}>Sing Up</Button>
+            </FlexContainer>
+          }
+
+
       </FlexContainer>
     </header>
   )
