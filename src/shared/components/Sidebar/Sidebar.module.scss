@@ -20,8 +20,37 @@
   }
 }
 
+.activeLink, .activeLink:visited {
+  @include typography.bold_text_14;
+  color: colors.color(accent, 500);
+}
+
 .link {
   @include typography.regular-text-14;
   text-decoration: none;
   margin-bottom: 10px;
+
+  &:hover {
+    @include typography.medium_text_14;
+    color: colors.color(accent, 500);
+  }
+
+
+  &:focus-visible{
+    outline: none;
+    border: 2px solid colors.color(accent, 700);
+    border-radius: 2px;
+  }
+
+  &:disabled {
+    color: colors.color(dark, 100);
+  }
+
+}
+
+.icon {
+  margin-right: 12px;
+  display: inline-block;
+  vertical-align: -5px;
+
 }

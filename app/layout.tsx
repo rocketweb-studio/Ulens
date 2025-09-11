@@ -8,7 +8,7 @@ import 'react-toastify/ReactToastify.css'
 import { AlertSnackbar } from '@/src/shared/components/AlertSnackbar/AlertSnackbar'
 import { Header } from '@/src/shared/components/Header/Header'
 import '@rocketweb-studio/ulens-ui-kit/dist/index.css'
-import {Sidebars} from "@/src/shared/components/Sidebars";
+import {Sidebar} from "@/src/shared/components/Sidebar";
 import {FlexContainer} from "@/src/shared/components/FlexContainer";
 
 const geistSans = Geist({
@@ -34,7 +34,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <StoreWrapper>
           <Header />
           <FlexContainer>
-            <Sidebars/>
+            <Sidebar/>
             <main style={{flexGrow: 1}}>{children}</main>
           </FlexContainer>
           <AppLoader />
