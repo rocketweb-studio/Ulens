@@ -1,17 +1,21 @@
 import {baseApi} from '@/src/store/baseApi'
-import {PostImageType} from "@/src/feature/Posts/api/postsApi.types";
+import {
+  CreatePostResponse,
+  GetPostsByUserIdResponse,
+  UploadPostImageResponse
+} from "@/src/feature/Posts/api/postsApi.types";
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getPosts: build.query<any, string>({
-      query: (userId) => `/api/v1/posts/${userId}`,
+    getPostsByUsedId: build.query<GetPostsByUserIdResponse, string | undefined>({
+      query: (userId) => `posts/${userId}`,
     }),
 
-    createPost: build.mutation<void, { description: string }>(
+    createPost: build.mutation<CreatePostResponse, { description: string }>(
       {
         query: (body) => ({
           method: 'POST',
-          url: '/api/v1/posts',
+          url: 'posts',
           body,
         }),
       }
@@ -21,7 +25,7 @@ export const postsApi = baseApi.injectEndpoints({
       {
         query: ({ postId, ...body }) => ({
           method: 'PUT',
-          url: `/api/v1/posts/${postId}`,
+          url: `posts/${postId}`,
           body,
         }),
       }
@@ -30,18 +34,18 @@ export const postsApi = baseApi.injectEndpoints({
     deletePost: build.mutation<void, string>({
       query: (postId) => ({
         method: 'DELETE',
-        url: `/api/v1/posts/${postId}`,
+        url: `posts/${postId}`,
       }),
     }),
 
-    uploadPostImages: build.mutation<PostImageType[], { postId: string; images: File[] }>(
+    uploadPostImages: build.mutation<UploadPostImageResponse[], { postId: string; images: File[] }>(
       {
         query: ({ postId, images }) => {
           const formData = new FormData()
           images.forEach((img) => formData.append('images', img))
           return {
             method: 'POST',
-            url: `/api/v1/posts/${postId}/images`,
+            url: `posts/${postId}/images`,
             body: formData,
           }
         },
@@ -51,7 +55,7 @@ export const postsApi = baseApi.injectEndpoints({
 })
 
 export const {
-  useGetPostsQuery,
+  useGetPostsByUsedIdQuery,
   useCreatePostMutation,
   useDeletePostMutation,
   useUpdatePostMutation,
