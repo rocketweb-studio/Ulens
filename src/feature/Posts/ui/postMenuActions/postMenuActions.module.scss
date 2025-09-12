@@ -1,0 +1,67 @@
+.wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.dotsButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: auto;
+  height: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+
+  span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #3b82f6; // синий (tailwind blue-500)
+    display: block;
+  }
+
+  &:hover span {
+    background-color: #2563eb; // синий потемнее
+  }
+}
+
+.menu {
+  position: absolute;
+  top: 24px;
+  right: 0;
+  background: #111; // тёмный фон
+  color: white;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  min-width: 150px;
+  z-index: 20;
+  padding: 4px 0;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 14px;
+
+  &:hover {
+    background: #1f1f1f;
+  }
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
