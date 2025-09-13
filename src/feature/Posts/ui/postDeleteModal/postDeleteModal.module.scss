@@ -4,3 +4,31 @@
   gap: 12px;
   margin-top: 16px;
 }
+
+.yesBtn {
+  border: 1px solid #3b82f6;
+  background: transparent;
+  color: #3b82f6;
+  padding: 0.5rem 2.5rem;
+  border-radius: 2px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(59, 130, 246, 0.1);
+  }
+}
+
+.noBtn {
+  border: 1px solid #3b82f6;
+  background: #3b82f6;
+  color: #fff;
+  padding: 0.5rem 2.5rem;
+  border-radius: 2px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background: #2563eb;
+  }
+}

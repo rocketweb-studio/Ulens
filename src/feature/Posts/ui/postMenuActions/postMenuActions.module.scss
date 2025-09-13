@@ -20,12 +20,12 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background-color: #3b82f6; // синий (tailwind blue-500)
+    background-color: #3b82f6;
     display: block;
   }
 
   &:hover span {
-    background-color: #2563eb; // синий потемнее
+    background-color: #2563eb;
   }
 }
 
@@ -33,7 +33,7 @@
   position: absolute;
   top: 24px;
   right: 0;
-  background: #111; // тёмный фон
+  background: #111;
   color: white;
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
@@ -57,11 +57,4 @@
   &:hover {
     background: #1f1f1f;
   }
-}
-
-.modalButtons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 16px;
 }

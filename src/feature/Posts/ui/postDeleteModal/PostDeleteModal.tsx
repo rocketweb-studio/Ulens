@@ -4,7 +4,6 @@ import { useDeletePostMutation } from '@/src/feature/Posts/api/postsApi'
 import { useRouter } from 'next/navigation'
 import { Path } from '@/src/shared/constants/Path'
 import { Modal } from '@/src/shared/components/Modal/Modal'
-import { Button } from '@rocketweb-studio/ulens-ui-kit'
 import s from './postDeleteModal.module.scss'
 
 type Props = {
@@ -31,12 +30,12 @@ export const PostDeleteModal = ({ postId, isOpen, onClose }: Props) => {
     <Modal isOpen={isOpen} onClose={onClose} modalTitle={'Delete Post'} hideDefaultButton>
       <p>Are you sure you want to delete this post?</p>
       <div className={s.modalButtons}>
-        <Button onClick={handleDelete} disabled={isLoading}>
+        <button className={s.yesBtn} onClick={handleDelete} disabled={isLoading}>
           Yes
-        </Button>
-        <Button onClick={onClose} disabled={isLoading}>
+        </button>
+        <button className={s.noBtn} onClick={onClose} disabled={isLoading}>
           No
-        </Button>
+        </button>
       </div>
     </Modal>
   )
