@@ -7,10 +7,6 @@ export type UploadPostImageResponse = {
   uploadId: string
 }
 
-export type CreatePostResponse = {
-  id: string
-}
-
 export type GetPostsByUserIdResponse = {
   totalCount: number
   pageSize: number
