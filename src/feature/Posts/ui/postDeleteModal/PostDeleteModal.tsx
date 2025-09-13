@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Path } from '@/src/shared/constants/Path'
 import { Modal } from '@/src/shared/components/Modal/Modal'
 import { Button } from '@rocketweb-studio/ulens-ui-kit'
+import s from './postDeleteModal.module.scss'
 
 type Props = {
   postId: string

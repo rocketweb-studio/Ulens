@@ -32,7 +32,7 @@ export const PostMenuActions = ({ postId }: Props) => {
   }
 
   return (
-    <div className={s.wrapper}>
+    <div className={s.container}>
       <button className={s.dotsButton} onClick={() => setMenuOpen((prev) => !prev)}>
         <span />
         <span />
