@@ -18,7 +18,7 @@ export const PostDeleteModal = ({ postId, isOpen, onClose }: Props) => {
 
   const handleDelete = async () => {
     try {
-      await deletePost(postId).unwrap()
+      await deletePost({ postId }).unwrap()
       onClose()
       router.push(Path.Profile)
     } catch (error) {
