@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { HTMLAttributes, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import s from './Modal.module.scss'
 import Image from 'next/image'
@@ -16,7 +16,7 @@ export type Props = {
   hideCloseButton?: boolean
   buttonRightInModalHeader?: React.ReactNode
   buttonLeftInModalHeader?: React.ReactNode
-}
+} & HTMLAttributes<HTMLDivElement>
 
 export const Modal = ({
   isOpen,

@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Button } from '@/src/shared/components/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
-import Image from 'next/image'
+import { ImageCropper } from '@/src/shared/components/ImageCropper/ImageCropper'
+import { FilterPanel } from '@/src/shared/components/FilterPanel/FilterPanel'
 
 type Props = {
   isModalOpen: boolean
@@ -29,7 +30,7 @@ const FILES_VALIDATE = {
 export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const [step, setStep] = useState<Steps>('add')
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
-  const [currentFile, setCurrentFile] = useState<File | null>(null)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   console.log(uploadedFiles)
 
   const onDrop = (acceptedFiles: File[]) => {
@@ -49,6 +50,46 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     maxFiles: FILES_VALIDATE.maxFiles,
     maxSize: FILES_VALIDATE.maxSize,
   })
+
+  const handleCropComplete = (croppedImage: string) => {
+    setUploadedFiles((prev) =>
+      prev.map((file, index) => (index === currentImageIndex ? { ...file, croppedImage } : file)),
+    )
+    setStep('filter')
+  }
+
+  const handleFilterApply = (filter: string) => {
+    setUploadedFiles((prev) => prev.map((file, index) => (index === currentImageIndex ? { ...file, filter } : file)))
+  }
+
+  const handleNext = () => {
+    if (step === 'add' && uploadedFiles.length > 0) {
+      setStep('crop')
+    } else if (step === 'crop') {
+      setStep('filter')
+    } else if (step === 'filter') {
+      if (currentImageIndex < uploadedFiles.length - 1) {
+        setCurrentImageIndex((prev) => prev + 1)
+        setStep('crop')
+      } else {
+        setStep('publication')
+      }
+    }
+  }
+
+  const handleBack = () => {
+    if (step === 'crop') {
+      if (currentImageIndex > 0) {
+        setCurrentImageIndex((prev) => prev - 1)
+      } else {
+        setStep('add')
+      }
+    } else if (step === 'filter') {
+      setStep('crop')
+    } else if (step === 'publication') {
+      setStep('filter')
+    }
+  }
 
   const changeNextStep = () => {
     debugger
@@ -79,16 +120,23 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     }
   }
 
+  const currentImage = uploadedFiles[currentImageIndex]
+
   return (
     <div className={s.wrapper}>
       {step === 'add' && (
-        <Modal isOpen={isModalOpen} onClose={onModalClose} modalTitle={'Add Photo'} hideDefaultButton>
+        <Modal
+          className={s.modal}
+          isOpen={isModalOpen}
+          onClose={onModalClose}
+          modalTitle={'Add Photo'}
+          hideDefaultButton
+        >
           <div className={s.addStep}>
             <div {...getRootProps()} className={`${s.dropzone} ${isDragActive ? s.active : ''}`}>
               <input {...getInputProps()} />
               <div className={s.dropzoneContent}>
-                <p>Drag photos here or click to select</p>
-                <span className={s.fileInfo}>Up to 10 photos, max 10MB each</span>
+                <Button variant={'primary'}>Select from Computer</Button>
               </div>
             </div>
           </div>
@@ -112,28 +160,51 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
             </Button>
           }
         >
-          {uploadedFiles.length > 0 && (
-            <div className={s.uploadedFiles}>
-              <h3>Selected photos ({uploadedFiles.length}/10)</h3>
-              <div className={s.thumbnails}>
-                {uploadedFiles.map((file, index) => (
-                  <div key={index} className={s.thumbnail}>
-                    <Image
-                      src={file.preview}
-                      alt={`Preview ${index}`}
-                      width={80}
-                      height={80}
-                      style={{ objectFit: 'cover' }}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          <ImageCropper image={currentImage.preview} onCropComplete={handleCropComplete} />
         </Modal>
       )}
-      {step === 'filter' && <Modal isOpen={isModalOpen} onClose={onModalClose} modalTitle={'Filters'}></Modal>}
-      {step === 'publication' && <Modal isOpen={isModalOpen} onClose={onModalClose} modalTitle={'Publication'}></Modal>}
+      {step === 'filter' && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={onModalClose}
+          modalTitle={'Filters'}
+          hideCloseButton
+          hideDefaultButton
+          buttonRightInModalHeader={
+            <Button tagType={'button'} variant={'text'} withoutPadding onClick={changeNextStep}>
+              Next
+            </Button>
+          }
+          buttonLeftInModalHeader={
+            <Button tagType={'button'} variant={'text'} withoutPadding onClick={changePrevStep}>
+              <IconArrowIosBackOutline />
+            </Button>
+          }
+        >
+          <div>
+            <div className={s.filterStep}>
+              <FilterPanel
+                image={currentImage.croppedImage || currentImage.preview}
+                onFilterApply={handleFilterApply}
+                currentFilter={currentImage.filter}
+              />
+              <div className={s.filterControls}>
+                <Button variant='outline' onClick={handleBack}>
+                  Back
+                </Button>
+                <Button onClick={handleNext}>
+                  {currentImageIndex < uploadedFiles.length - 1 ? 'Next Photo' : 'Continue'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
+      {step === 'publication' && (
+        <Modal isOpen={isModalOpen} onClose={onModalClose} modalTitle={'Publication'}>
+          <div></div>
+        </Modal>
+      )}
     </div>
   )
 }
