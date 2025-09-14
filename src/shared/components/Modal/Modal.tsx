@@ -6,14 +6,17 @@ import closeIcon from '@/public/close.svg'
 import { Button } from '@/src/shared/components/Button/Button'
 
 export type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
-  closeOnOverlayClick?: boolean;
-  closeOnEsc?: boolean;
-  modalTitle: string;
-  hideDefaultButton?: boolean;
-};
+  isOpen: boolean
+  onClose: () => void
+  children: React.ReactNode
+  closeOnOverlayClick?: boolean
+  closeOnEsc?: boolean
+  modalTitle: string
+  hideDefaultButton?: boolean
+  hideCloseButton?: boolean
+  buttonRightInModalHeader?: React.ReactNode
+  buttonLeftInModalHeader?: React.ReactNode
+}
 
 export const Modal = ({
   isOpen,
@@ -23,6 +26,9 @@ export const Modal = ({
   // closeOnOverlayClick = true,
   closeOnEsc = true,
   hideDefaultButton = false,
+  hideCloseButton = false,
+  buttonRightInModalHeader,
+  buttonLeftInModalHeader,
 }: Props) => {
   useEffect(() => {
     if (!isOpen || !closeOnEsc) return
@@ -52,10 +58,16 @@ export const Modal = ({
   return createPortal(
     <div className={s.overlay}>
       <div className={s.content}>
-        <h3 className={s.title}>{modalTitle}</h3>
-        <button className={s.closeButton} onClick={onClose}>
-          <Image src={closeIcon} alt={'closeIcon'} />
-        </button>
+        <div className={s.header}>
+          {buttonLeftInModalHeader}
+          <h3 className={s.title}>{modalTitle}</h3>
+          {buttonRightInModalHeader}
+          {!hideCloseButton && (
+            <button className={s.closeButton} onClick={onClose}>
+              <Image src={closeIcon} alt={'closeIcon'} />
+            </button>
+          )}
+        </div>
         <div className={s.flexContainer}>
           {children}
           {!hideDefaultButton && (

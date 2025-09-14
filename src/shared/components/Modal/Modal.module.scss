@@ -20,21 +20,31 @@
   padding: 12px 24px;
 }
 
-.title {
-  @include typography.h1;
-  color: colors.color(light, 100);
-  margin: 0 25px 45px 0;
+.header {
+  position:relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 0 0 25px 0;
 
   &::after {
     content: '';
     display: block;
-    width: 100%;
+    width: calc(100% + 48px);
     height: 1px;
     margin-top: 11px;
     background-color: colors.color(dark, 100);
     position: absolute;
+    left: 0;
+    bottom: 0;
     transform: translatex(-25px);
   }
+}
+
+.title {
+  @include typography.h1;
+  color: colors.color(light, 100);
+  margin: 0 25px 25px 0;
 }
 
 .closeButton {
