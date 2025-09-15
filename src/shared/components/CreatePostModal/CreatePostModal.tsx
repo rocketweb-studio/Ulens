@@ -3,6 +3,7 @@
 import { useModal } from '@/src/shared/hooks/useModal'
 import { FlexContainer } from '@/src/shared/components/FlexContainer'
 import { PostMenuActions } from '@/src/feature/Posts/ui/postMenuActions'
+import {PostCreateModal} from "@/src/feature/postCreate/ui/PostCreateModal/PostCreateModal";
 
 export default function CreatePostModal() {
   const { isOpen, closeModal } = useModal(true)
@@ -16,7 +17,7 @@ export default function CreatePostModal() {
         <textarea placeholder='Текст поста' style={{ width: '100%' }} />
         <button type='submit'>Опубликовать</button>
       </form>
-      {/*<PostCreateModal isModalOpen={false} onModalClose={closeModal} />*/}
+      <PostCreateModal isModalOpen={true} onModalClose={closeModal} />
     </FlexContainer>
   )
 }

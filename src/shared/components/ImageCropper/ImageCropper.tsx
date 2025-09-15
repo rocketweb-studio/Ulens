@@ -42,7 +42,21 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: 
   }, [])
 
   const handleAspectRatioChange = (ratio: AspectRatio) => {
+    debugger
     setCurrentAspectRatio(ratio)
+  }
+
+  const handleCropComplete = async () => {
+    debugger
+    const croppedImage = await getCroppedImg()
+    onCropComplete(croppedImage)
+  }
+
+  const handleReset = () => {
+    setCrop({ x: 0, y: 0 })
+    setZoom(1)
+    setRotation(0)
+    setCurrentAspectRatio('1:1')
   }
 
   const getCroppedImg = async (): Promise<string> => {
@@ -63,7 +77,6 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: 
       canvas.width = croppedAreaPixels.width
       canvas.height = croppedAreaPixels.height
 
-      // Apply rotation
       ctx.translate(canvas.width / 2, canvas.height / 2)
       ctx.rotate((rotation * Math.PI) / 180)
       ctx.translate(-canvas.width / 2, -canvas.height / 2)
@@ -87,18 +100,6 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: 
     }
   }
 
-  const handleCropComplete = async () => {
-    const croppedImage = await getCroppedImg()
-    onCropComplete(croppedImage)
-  }
-
-  const handleReset = () => {
-    setCrop({ x: 0, y: 0 })
-    setZoom(1)
-    setRotation(0)
-    setCurrentAspectRatio('1:1')
-  }
-
   return (
     <div className={s.cropper}>
       <div className={s.cropContainer}>
@@ -117,58 +118,62 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: 
             cropAreaClassName: s.cropArea,
           }}
         />
-      </div>
+        <div className={s.cropControlsBox}>
+          <div className={s.aspectRatioSelector}>
+            <h4>Aspect Ratio</h4>
+            <div className={s.aspectRatioButtons}>
+              {(['1:1', '4:5', '16:9', 'free'] as AspectRatio[]).map((ratio) => (
+                <button
+                  key={ratio}
+                  className={`${s.aspectRatioButton} ${currentAspectRatio === ratio ? s.active : ''}`}
+                  onClick={() => {
+                    handleAspectRatioChange(ratio)
+                    handleCropComplete()
+                  }}
+                >
+                  {ratio === 'free' ? 'Free' : ratio}
+                </button>
+              ))}
+            </div>
+          </div>
 
-      <div className={s.aspectRatioSelector}>
-        <h4>Aspect Ratio</h4>
-        <div className={s.aspectRatioButtons}>
-          {(['1:1', '4:5', '16:9', 'free'] as AspectRatio[]).map((ratio) => (
-            <button
-              key={ratio}
-              className={`${s.aspectRatioButton} ${currentAspectRatio === ratio ? s.active : ''}`}
-              onClick={() => handleAspectRatioChange(ratio)}
-            >
-              {ratio === 'free' ? 'Free' : ratio}
-            </button>
-          ))}
+          <div className={s.controls}>
+            <div className={s.sliderGroup}>
+              <label>Zoom</label>
+              <input
+                type='range'
+                min='1'
+                max='3'
+                step='0.1'
+                value={zoom}
+                onChange={(e) => setZoom(Number(e.target.value))}
+                className={s.slider}
+              />
+              <span>{zoom.toFixed(1)}x</span>
+            </div>
+
+            <div className={s.sliderGroup}>
+              <label>Rotation</label>
+              <input
+                type='range'
+                min='-180'
+                max='180'
+                step='1'
+                value={rotation}
+                onChange={(e) => setRotation(Number(e.target.value))}
+                className={s.slider}
+              />
+              <span>{rotation}°</span>
+            </div>
+          </div>
+
+          <div className={s.actions}>
+            <Button variant='outline' onClick={handleReset}>
+              Reset
+            </Button>
+            <Button onClick={handleCropComplete}>Apply Crop</Button>
+          </div>
         </div>
-      </div>
-
-      <div className={s.controls}>
-        <div className={s.sliderGroup}>
-          <label>Zoom</label>
-          <input
-            type='range'
-            min='1'
-            max='3'
-            step='0.1'
-            value={zoom}
-            onChange={(e) => setZoom(Number(e.target.value))}
-            className={s.slider}
-          />
-          <span>{zoom.toFixed(1)}x</span>
-        </div>
-
-        <div className={s.sliderGroup}>
-          <label>Rotation</label>
-          <input
-            type='range'
-            min='-180'
-            max='180'
-            step='1'
-            value={rotation}
-            onChange={(e) => setRotation(Number(e.target.value))}
-            className={s.slider}
-          />
-          <span>{rotation}°</span>
-        </div>
-      </div>
-
-      <div className={s.actions}>
-        <Button variant='outline' onClick={handleReset}>
-          Reset
-        </Button>
-        <Button onClick={handleCropComplete}>Apply Crop</Button>
       </div>
     </div>
   )

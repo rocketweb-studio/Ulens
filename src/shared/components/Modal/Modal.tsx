@@ -13,6 +13,7 @@ export type Props = {
   closeOnEsc?: boolean
   modalTitle: string
   className?: string
+  withoutPadding?: boolean
   hideDefaultButton?: boolean
   hideCloseButton?: boolean
   buttonRightInModalHeader?: React.ReactNode
@@ -24,9 +25,10 @@ export const Modal = ({
   onClose,
   children,
   modalTitle,
-  className,
+  className = '',
   // closeOnOverlayClick = true,
   closeOnEsc = true,
+  withoutPadding = false,
   hideDefaultButton = false,
   hideCloseButton = false,
   buttonRightInModalHeader,
@@ -70,7 +72,7 @@ export const Modal = ({
             </button>
           )}
         </div>
-        <div className={s.flexContainer}>
+        <div className={`${s.flexContainer} ${withoutPadding ? s.withoutPadding : ''}`}>
           {children}
           {!hideDefaultButton && (
             <Button className={s.button} onClick={onClose}>

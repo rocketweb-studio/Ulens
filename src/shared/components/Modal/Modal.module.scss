@@ -16,7 +16,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   max-height: 85vh;
-  padding: 12px 24px;
+
 }
 
 .header {
@@ -24,18 +24,15 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin: 0 0 25px 0;
-  padding: 0 0 12px 0;
+  padding: 12px 24px;
 
   &::after {
     content: '';
     display: block;
-    width: calc(100% + 48px);
+    width: 100%;
     height: 1px;
-    margin-top: 11px;
     background-color: colors.color(dark, 100);
     position: absolute;
-    left: 0;
     bottom: 0;
     transform: translatex(-25px);
   }
@@ -53,7 +50,7 @@
   height: 25px;
   width: 25px;
   position: absolute;
-  top: 5px;
+  top: 16px;
   right: 18px;
 
   &:hover {
@@ -68,6 +65,11 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+  padding: 30px 24px 36px;
+}
+
+.flexContainer.withoutPadding {
+  padding: 0;
 }
 
 .button {

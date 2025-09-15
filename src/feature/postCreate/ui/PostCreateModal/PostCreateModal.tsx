@@ -38,7 +38,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       file,
       preview: URL.createObjectURL(file),
     }))
-    setUploadedFiles((prev) => [...prev, ...newFiles])
+    setUploadedFiles(newFiles)
     changeNextStep()
   }
 
@@ -52,10 +52,10 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   })
 
   const handleCropComplete = (croppedImage: string) => {
+    debugger
     setUploadedFiles((prev) =>
       prev.map((file, index) => (index === currentImageIndex ? { ...file, croppedImage } : file)),
     )
-    setStep('filter')
   }
 
   const handleFilterApply = (filter: string) => {
@@ -92,7 +92,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   }
 
   const changeNextStep = () => {
-    debugger
     switch (step) {
       case 'add':
         setStep('crop')
@@ -144,9 +143,11 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       )}
       {step === 'crop' && (
         <Modal
+          className={`${s.modal} ${s.cropModal}`}
           isOpen={isModalOpen}
           onClose={onModalClose}
           modalTitle={'Cropping'}
+          withoutPadding
           hideCloseButton
           hideDefaultButton
           buttonRightInModalHeader={
