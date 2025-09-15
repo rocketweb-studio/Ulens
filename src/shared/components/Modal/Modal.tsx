@@ -12,6 +12,7 @@ export type Props = {
   closeOnOverlayClick?: boolean
   closeOnEsc?: boolean
   modalTitle: string
+  className?: string
   hideDefaultButton?: boolean
   hideCloseButton?: boolean
   buttonRightInModalHeader?: React.ReactNode
@@ -23,6 +24,7 @@ export const Modal = ({
   onClose,
   children,
   modalTitle,
+  className,
   // closeOnOverlayClick = true,
   closeOnEsc = true,
   hideDefaultButton = false,
@@ -57,7 +59,7 @@ export const Modal = ({
 
   return createPortal(
     <div className={s.overlay}>
-      <div className={s.content}>
+      <div className={`${s.content} ${className}`}>
         <div className={s.header}>
           {buttonLeftInModalHeader}
           <h3 className={s.title}>{modalTitle}</h3>
