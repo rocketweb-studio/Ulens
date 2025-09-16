@@ -52,7 +52,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   })
 
   const handleCropComplete = (croppedImage: string) => {
-    debugger
     setUploadedFiles((prev) =>
       prev.map((file, index) => (index === currentImageIndex ? { ...file, croppedImage } : file)),
     )
@@ -189,20 +188,26 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
                 onFilterApply={handleFilterApply}
                 currentFilter={currentImage.filter}
               />
-              <div className={s.filterControls}>
-                <Button variant='outline' onClick={handleBack}>
-                  Back
-                </Button>
-                <Button onClick={handleNext}>
-                  {currentImageIndex < uploadedFiles.length - 1 ? 'Next Photo' : 'Continue'}
-                </Button>
-              </div>
             </div>
           </div>
         </Modal>
       )}
       {step === 'publication' && (
-        <Modal isOpen={isModalOpen} onClose={onModalClose} modalTitle={'Publication'}>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={onModalClose}
+          modalTitle={'Publication'}
+          buttonRightInModalHeader={
+            <Button tagType={'button'} variant={'text'} withoutPadding onClick={changeNextStep}>
+              Next
+            </Button>
+          }
+          buttonLeftInModalHeader={
+            <Button tagType={'button'} variant={'text'} withoutPadding onClick={changePrevStep}>
+              Publish
+            </Button>
+          }
+        >
           <div></div>
         </Modal>
       )}

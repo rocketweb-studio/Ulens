@@ -1,3 +1,5 @@
+@use '@/src/shared/styles/typography' as typography;
+@use '@/src/shared/styles/colors' as colors;
 .cropper {
   display: flex;
   flex-direction: column;
@@ -15,6 +17,9 @@
   position: absolute;
   bottom: 0;
   width: 100%;
+  display: flex;
+  gap: 24px;
+  padding: 12px;
 }
 
 .cropArea {
@@ -22,18 +27,13 @@
 }
 
 .aspectRatioSelector {
-  h4 {
-    margin: 0 0 12px 0;
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-  }
+  position: relative;
 }
 
 .aspectRatioButtons {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 12px 0;
 }
 
 .aspectRatioButton {
@@ -60,10 +60,31 @@
 }
 
 .controls {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 0 10px;
+  position: relative;
+}
+
+.zoomMenuWrapper {
+  position:  absolute;
+  top: 0;
+}
+
+.zoomMenu {
+  position: absolute;
+  bottom: 2px;
+}
+
+.aspectRatioMenuWrapper {
+  position: absolute;
+  top: 0;
+}
+
+.aspectRatioMenu {
+  position: absolute;
+  bottom: 2px;
+  padding: 10px 15px 10px 12px;
+  background-color: rgba(colors.color(dark, 500), 0.8);
+  border-radius: 2px;
+
 }
 
 .sliderGroup {

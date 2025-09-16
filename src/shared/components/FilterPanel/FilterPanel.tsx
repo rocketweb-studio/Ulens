@@ -166,7 +166,10 @@ export const FilterPanel = ({ image, onFilterApply, currentFilter = 'original' }
               max='100'
               step='1'
               value={intensity}
-              onChange={(e) => handleIntensityChange(Number(e.target.value))}
+              onChange={(e) => {
+                handleIntensityChange(Number(e.target.value))
+                handleApplyFilter()
+              }}
               className={s.intensitySlider}
             />
           </div>
@@ -179,7 +182,10 @@ export const FilterPanel = ({ image, onFilterApply, currentFilter = 'original' }
               <div
                 key={filter.value}
                 className={`${s.filterThumbnail} ${selectedFilter === filter.value ? s.active : ''}`}
-                onClick={() => handleFilterSelect(filter.value)}
+                onClick={() => {
+                  handleFilterSelect(filter.value)
+                  handleApplyFilter()
+                }}
               >
                 <div className={s.thumbnailImage}>
                   <Image
@@ -200,11 +206,11 @@ export const FilterPanel = ({ image, onFilterApply, currentFilter = 'original' }
         </div>
       </div>
 
-      <div className={s.actions}>
-        <Button onClick={handleApplyFilter} className={s.applyButton}>
-          Apply Filter
-        </Button>
-      </div>
+      {/*<div className={s.actions}>*/}
+      {/*  <Button onClick={handleApplyFilter} className={s.applyButton}>*/}
+      {/*    Apply Filter*/}
+      {/*  </Button>*/}
+      {/*</div>*/}
     </div>
   )
 }
