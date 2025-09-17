@@ -1,3 +1,5 @@
+@use '@/src/shared/styles/colors' as colors;
+
 .modalButtons {
   display: flex;
   justify-content: flex-end;
@@ -6,9 +8,9 @@
 }
 
 .yesBtn {
-  border: 1px solid #3b82f6;
+  border: 1px solid colors.color(accent, 500);
   background: transparent;
-  color: #3b82f6;
+  color: colors.color(accent, 500);
   padding: 0.5rem 2.5rem;
   border-radius: 2px;
   font-weight: 500;
@@ -20,15 +22,15 @@
 }
 
 .noBtn {
-  border: 1px solid #3b82f6;
-  background: #3b82f6;
-  color: #fff;
+  border: 1px solid colors.color(accent, 500);
+  background: colors.color(accent, 500);
+  color: colors.color(light, 100);
   padding: 0.5rem 2.5rem;
   border-radius: 2px;
   font-weight: 500;
   cursor: pointer;
 
   &:hover {
-    background: #2563eb;
+    background: colors.color(accent, 700);
   }
 }
