@@ -1,11 +1,12 @@
 import s from './PostCreateModal.module.scss'
 import { Modal } from '@/src/shared/components/Modal/Modal'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Button } from '@/src/shared/components/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
 import { ImageCropper } from '@/src/shared/components/ImageCropper/ImageCropper'
 import { FilterPanel } from '@/src/shared/components/FilterPanel/FilterPanel'
+import Image from 'next/image'
 
 type Props = {
   isModalOpen: boolean
@@ -18,7 +19,23 @@ type UploadedFile = {
   file: File
   preview: string
   croppedImage?: string
+  filteredImage?: FilteredImage
   filter?: string
+}
+
+export type Filter = {
+  name: string
+  value: string
+  cssFilter: string
+  preview: string
+}
+
+export type FilteredImage = {
+  file: File
+  filter: string
+  preview: string
+  intensity: number
+  originalImage: string
 }
 
 const FILES_VALIDATE = {
@@ -55,11 +72,25 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     setUploadedFiles((prev) =>
       prev.map((file, index) => (index === currentImageIndex ? { ...file, croppedImage } : file)),
     )
+    console.log(uploadedFiles)
   }
 
-  const handleFilterApply = (filter: string) => {
-    setUploadedFiles((prev) => prev.map((file, index) => (index === currentImageIndex ? { ...file, filter } : file)))
-  }
+  const handleFilterApply = useCallback(
+    (filteredData: FilteredImage) => {
+      setUploadedFiles((prev) =>
+        prev.map((file, index) =>
+          index === currentImageIndex ?
+            {
+              ...file,
+              filteredImage: filteredData,
+              filter: `${filteredData.filter}-${filteredData.intensity}`,
+            }
+          : file,
+        ),
+      )
+    },
+    [currentImageIndex],
+  )
 
   const handleNext = () => {
     if (step === 'add' && uploadedFiles.length > 0) {
@@ -186,7 +217,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
               <FilterPanel
                 image={currentImage.croppedImage || currentImage.preview}
                 onFilterApply={handleFilterApply}
-                currentFilter={currentImage.filter}
+                currentFilter={currentImage.filter?.split('-')[0]} // Извлекаем только название фильтра
               />
             </div>
           </div>
@@ -197,18 +228,27 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
           isOpen={isModalOpen}
           onClose={onModalClose}
           modalTitle={'Publication'}
-          buttonRightInModalHeader={
-            <Button tagType={'button'} variant={'text'} withoutPadding onClick={changeNextStep}>
-              Next
-            </Button>
-          }
+          hideCloseButton
+          hideDefaultButton
           buttonLeftInModalHeader={
             <Button tagType={'button'} variant={'text'} withoutPadding onClick={changePrevStep}>
+              <IconArrowIosBackOutline />
+            </Button>
+          }
+          buttonRightInModalHeader={
+            <Button tagType={'button'} variant={'text'} withoutPadding onClick={changeNextStep}>
               Publish
             </Button>
           }
         >
-          <div></div>
+          <div className={s.publication}>
+            <div className={s.publicationWrapper}>
+              <div className={s.publicationImg}>
+                <Image src={currentImage.filteredImage?.preview || ''} alt={'Download img'} width={400} height={400} />
+              </div>
+              <div className={s.publicationContent}></div>
+            </div>
+          </div>
         </Modal>
       )}
     </div>
