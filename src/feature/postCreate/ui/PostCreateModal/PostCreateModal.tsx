@@ -7,6 +7,14 @@ import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
 import { ImageCropper } from '@/src/shared/components/ImageCropper/ImageCropper'
 import { FilterPanel } from '@/src/shared/components/FilterPanel/FilterPanel'
 import Image from 'next/image'
+import {
+  useCreatePostMutation,
+  useGetPostByIdQuery,
+  useUploadPostImagesMutation,
+} from '@/src/feature/Posts/api/postsApi'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 type Props = {
   isModalOpen: boolean
@@ -38,17 +46,50 @@ export type FilteredImage = {
   originalImage: string
 }
 
+export type FormData = {
+  description: string
+}
+
 const FILES_VALIDATE = {
   maxFiles: 10,
   maxSize: 10 * 1024 * 1024,
   formats: ['.jpeg', '.jpg', '.png', '.gif', '.webp'],
 } as const
 
+const publicationSchema = z.object({
+  description: z
+    .string()
+    .min(10, { message: 'Описание должно содержать минимум 10 символов' })
+    .max(500, { message: 'Описание не может превышать 500 символов' }),
+})
+
+type PublicationFormData = z.infer<typeof publicationSchema>
+
+type PublicationTextareaProps = {
+  onSubmit: (data: PublicationFormData) => void
+}
+
 export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const [step, setStep] = useState<Steps>('add')
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [createPost, { data: dataCreatePost }] = useCreatePostMutation()
+  const [uploadImages] = useUploadPostImagesMutation()
+  const { data: post } = useGetPostByIdQuery({ postId: dataCreatePost?.id })
   console.log(uploadedFiles)
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    trigger,
+  } = useForm<PublicationFormData>({
+    resolver: zodResolver(publicationSchema),
+    defaultValues: {
+      description: '',
+    },
+  })
 
   const onDrop = (acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.slice(0, 10 - uploadedFiles.length).map((file) => ({
@@ -151,6 +192,31 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
 
   const currentImage = uploadedFiles[currentImageIndex]
 
+  const descriptionValue = watch('description', '')
+  const characterCount = descriptionValue.length
+  const onPublishHandler = () => {
+    handleSubmit(onFormSubmit)()
+  }
+
+  const onFormSubmit: SubmitHandler<PublicationFormData> = async (data) => {
+    try {
+      const res = await createPost(data).unwrap()
+      const id = res.id
+      const images = uploadedFiles
+        .map((item) => {
+          if (item?.filteredImage?.file) {
+            return item.filteredImage.file
+          } else {
+            return null
+          }
+        })
+        .filter((item) => item != null)
+      await uploadImages({ postId: id, images }).unwrap()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className={s.wrapper}>
       {step === 'add' && (
@@ -236,7 +302,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
             </Button>
           }
           buttonRightInModalHeader={
-            <Button tagType={'button'} variant={'text'} withoutPadding onClick={changeNextStep}>
+            <Button tagType={'button'} variant={'text'} withoutPadding onClick={onPublishHandler}>
               Publish
             </Button>
           }
@@ -246,7 +312,34 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
               <div className={s.publicationImg}>
                 <Image src={currentImage.filteredImage?.preview || ''} alt={'Download img'} width={400} height={400} />
               </div>
-              <div className={s.publicationContent}></div>
+              <div className={s.publicationContent}>
+                <form onSubmit={handleSubmit(onFormSubmit)} className={s.form}>
+                  <div className={s.container}>
+                    <label htmlFor='description' className={s.label}>
+                      Описание публикации
+                    </label>
+
+                    <Controller
+                      name='description'
+                      control={control}
+                      render={({ field }) => (
+                        <textarea
+                          {...field}
+                          id='description'
+                          className={`${s.textarea} ${errors.description ? s.error : ''}`}
+                          placeholder='Add publication descriptions'
+                          rows={5}
+                        />
+                      )}
+                    />
+
+                    <div className={s.footer}>
+                      {errors.description && <span className={s.errorMessage}>{errors.description.message}</span>}
+                      <div className={s.counter}>{characterCount}/500</div>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </Modal>
