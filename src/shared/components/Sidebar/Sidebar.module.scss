@@ -27,6 +27,7 @@
 
 .link {
   @include typography.regular-text-14;
+  color: #fff;
   text-decoration: none;
   margin-bottom: 10px;
 

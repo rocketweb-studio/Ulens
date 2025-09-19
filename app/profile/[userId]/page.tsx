@@ -1,4 +1,4 @@
-import { UserProfile } from '@/src/feature/userProfile/UserProfile'
+import { UserProfile } from '@/src/feature/userProfile/ui/UserProfile/UserProfile'
 import CreatePostModal from '@/src/shared/components/CreatePostModal/CreatePostModal'
 import PostModal from '@/src/shared/components/PostModal/PostModal'
 
