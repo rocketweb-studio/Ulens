@@ -7,11 +7,12 @@ import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
 import { useRouter } from 'next/navigation'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { SerializedError } from '@reduxjs/toolkit'
-import {Path} from "@/src/shared/constants/Path";
+import { Path } from '@/src/shared/constants/Path'
 
 export const Logout = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(true)
   const { data, isLoading, isError, error } = useGetMeQuery()
+  const email = data?.email ?? ''
   const router = useRouter()
 
   const handleServerError = (error: FetchBaseQueryError | SerializedError | undefined) => {
@@ -38,18 +39,8 @@ export const Logout = () => {
     )
   }
 
-  const email = data?.email ?? 'email'
-
   return (
     <>
-      <button
-        className={styles.submitBtn}
-        onClick={() => {
-          setIsModalOpen(true)
-        }}
-      >
-        Log out
-      </button>
       <ConfirmLogout isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={email} />
     </>
   )

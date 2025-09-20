@@ -35,7 +35,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <Header />
           <FlexContainer>
             <Sidebar/>
-            <main style={{flexGrow: 1}}>{children}</main>
+            <main style={{flexGrow: 1, padding: '25px'}}>{children}</main>
           </FlexContainer>
           <AppLoader />
           <AlertSnackbar />
