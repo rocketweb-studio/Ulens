@@ -12,7 +12,7 @@ type Props = {
 }
 
 export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: Props) => {
-  const [description, setDescription] = useState(initialDescription)
+  const [description, setDescription] = useState(initialDescription ?? '')
   const [showConfirmExit, setShowConfirmExit] = useState(false)
   const [updatePost, { isLoading }] = useUpdatePostMutation()
 
@@ -44,12 +44,18 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
   return (
     <>
       <Modal isOpen={isOpen} onClose={handleConfirmClose} modalTitle={'Edit Post'} hideDefaultButton>
-        <textarea className={s.textarea} value={description} onChange={(e) => setDescription(e.target.value)} />
+        <p>Add publication descriptions</p>
+        <textarea
+          className={s.textarea}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          maxLength={500}
+        />
+        <div className={s.counter}>{description?.length ?? 0}/500</div>
         <div className={s.actions}>
           <button disabled={isLoading} onClick={handleSave}>
             Save Changes
           </button>
-          <button onClick={handleConfirmClose}>Cancel</button>
         </div>
       </Modal>
 
