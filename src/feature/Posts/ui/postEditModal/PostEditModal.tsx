@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useUpdatePostMutation } from '@/src/feature/Posts/api/postsApi'
 import { toast } from 'react-toastify'
 import { Modal } from '@/src/shared/components/Modal/Modal'
-import s from './PostEditModal.module.scss'
+import s from './postEditModal.module.scss'
 
 type Props = {
   postId: string
