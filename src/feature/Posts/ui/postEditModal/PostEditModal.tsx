@@ -33,7 +33,7 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
     }
   }
 
-  const handleConfirnClose = () => {
+  const handleConfirmClose = () => {
     if (description !== initialDescription) {
       setShowConfirmExit(true)
     } else {
@@ -43,13 +43,13 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={handleConfirnClose} modalTitle={'Edit Post'} hideDefaultButton>
+      <Modal isOpen={isOpen} onClose={handleConfirmClose} modalTitle={'Edit Post'} hideDefaultButton>
         <textarea className={s.textarea} value={description} onChange={(e) => setDescription(e.target.value)} />
         <div className={s.actions}>
           <button disabled={isLoading} onClick={handleSave}>
             Save Changes
           </button>
-          <button onClick={handleConfirnClose}>Cancel</button>
+          <button onClick={handleConfirmClose}>Cancel</button>
         </div>
       </Modal>
 
