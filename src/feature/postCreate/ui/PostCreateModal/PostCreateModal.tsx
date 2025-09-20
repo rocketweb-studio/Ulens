@@ -1,11 +1,20 @@
 import s from './PostCreateModal.module.scss'
 import { Modal } from '@/src/shared/components/Modal/Modal'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Button } from '@/src/shared/components/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
 import { ImageCropper } from '@/src/shared/components/ImageCropper/ImageCropper'
 import { FilterPanel } from '@/src/shared/components/FilterPanel/FilterPanel'
+import Image from 'next/image'
+import {
+  useCreatePostMutation,
+  useGetPostByIdQuery,
+  useUploadPostImagesMutation,
+} from '@/src/feature/Posts/api/postsApi'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 type Props = {
   isModalOpen: boolean
@@ -18,7 +27,27 @@ type UploadedFile = {
   file: File
   preview: string
   croppedImage?: string
+  filteredImage?: FilteredImage
   filter?: string
+}
+
+export type Filter = {
+  name: string
+  value: string
+  cssFilter: string
+  preview: string
+}
+
+export type FilteredImage = {
+  file: File
+  filter: string
+  preview: string
+  intensity: number
+  originalImage: string
+}
+
+export type FormData = {
+  description: string
 }
 
 const FILES_VALIDATE = {
@@ -27,11 +56,40 @@ const FILES_VALIDATE = {
   formats: ['.jpeg', '.jpg', '.png', '.gif', '.webp'],
 } as const
 
+const publicationSchema = z.object({
+  description: z
+    .string()
+    .min(10, { message: 'Описание должно содержать минимум 10 символов' })
+    .max(500, { message: 'Описание не может превышать 500 символов' }),
+})
+
+type PublicationFormData = z.infer<typeof publicationSchema>
+
+type PublicationTextareaProps = {
+  onSubmit: (data: PublicationFormData) => void
+}
+
 export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const [step, setStep] = useState<Steps>('add')
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [createPost, { data: dataCreatePost }] = useCreatePostMutation()
+  const [uploadImages] = useUploadPostImagesMutation()
+  const { data: post } = useGetPostByIdQuery({ postId: dataCreatePost?.id })
   console.log(uploadedFiles)
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    trigger,
+  } = useForm<PublicationFormData>({
+    resolver: zodResolver(publicationSchema),
+    defaultValues: {
+      description: '',
+    },
+  })
 
   const onDrop = (acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.slice(0, 10 - uploadedFiles.length).map((file) => ({
@@ -52,15 +110,28 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   })
 
   const handleCropComplete = (croppedImage: string) => {
-    debugger
     setUploadedFiles((prev) =>
       prev.map((file, index) => (index === currentImageIndex ? { ...file, croppedImage } : file)),
     )
+    console.log(uploadedFiles)
   }
 
-  const handleFilterApply = (filter: string) => {
-    setUploadedFiles((prev) => prev.map((file, index) => (index === currentImageIndex ? { ...file, filter } : file)))
-  }
+  const handleFilterApply = useCallback(
+    (filteredData: FilteredImage) => {
+      setUploadedFiles((prev) =>
+        prev.map((file, index) =>
+          index === currentImageIndex ?
+            {
+              ...file,
+              filteredImage: filteredData,
+              filter: `${filteredData.filter}-${filteredData.intensity}`,
+            }
+          : file,
+        ),
+      )
+    },
+    [currentImageIndex],
+  )
 
   const handleNext = () => {
     if (step === 'add' && uploadedFiles.length > 0) {
@@ -120,6 +191,31 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   }
 
   const currentImage = uploadedFiles[currentImageIndex]
+
+  const descriptionValue = watch('description', '')
+  const characterCount = descriptionValue.length
+  const onPublishHandler = () => {
+    handleSubmit(onFormSubmit)()
+  }
+
+  const onFormSubmit: SubmitHandler<PublicationFormData> = async (data) => {
+    try {
+      const res = await createPost(data).unwrap()
+      const id = res.id
+      const images = uploadedFiles
+        .map((item) => {
+          if (item?.filteredImage?.file) {
+            return item.filteredImage.file
+          } else {
+            return null
+          }
+        })
+        .filter((item) => item != null)
+      await uploadImages({ postId: id, images }).unwrap()
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className={s.wrapper}>
@@ -187,23 +283,65 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
               <FilterPanel
                 image={currentImage.croppedImage || currentImage.preview}
                 onFilterApply={handleFilterApply}
-                currentFilter={currentImage.filter}
+                currentFilter={currentImage.filter?.split('-')[0]} // Извлекаем только название фильтра
               />
-              <div className={s.filterControls}>
-                <Button variant='outline' onClick={handleBack}>
-                  Back
-                </Button>
-                <Button onClick={handleNext}>
-                  {currentImageIndex < uploadedFiles.length - 1 ? 'Next Photo' : 'Continue'}
-                </Button>
-              </div>
             </div>
           </div>
         </Modal>
       )}
       {step === 'publication' && (
-        <Modal isOpen={isModalOpen} onClose={onModalClose} modalTitle={'Publication'}>
-          <div></div>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={onModalClose}
+          modalTitle={'Publication'}
+          hideCloseButton
+          hideDefaultButton
+          buttonLeftInModalHeader={
+            <Button tagType={'button'} variant={'text'} withoutPadding onClick={changePrevStep}>
+              <IconArrowIosBackOutline />
+            </Button>
+          }
+          buttonRightInModalHeader={
+            <Button tagType={'button'} variant={'text'} withoutPadding onClick={onPublishHandler}>
+              Publish
+            </Button>
+          }
+        >
+          <div className={s.publication}>
+            <div className={s.publicationWrapper}>
+              <div className={s.publicationImg}>
+                <Image src={currentImage.filteredImage?.preview || ''} alt={'Download img'} width={400} height={400} />
+              </div>
+              <div className={s.publicationContent}>
+                <form onSubmit={handleSubmit(onFormSubmit)} className={s.form}>
+                  <div className={s.container}>
+                    <label htmlFor='description' className={s.label}>
+                      Описание публикации
+                    </label>
+
+                    <Controller
+                      name='description'
+                      control={control}
+                      render={({ field }) => (
+                        <textarea
+                          {...field}
+                          id='description'
+                          className={`${s.textarea} ${errors.description ? s.error : ''}`}
+                          placeholder='Add publication descriptions'
+                          rows={5}
+                        />
+                      )}
+                    />
+
+                    <div className={s.footer}>
+                      {errors.description && <span className={s.errorMessage}>{errors.description.message}</span>}
+                      <div className={s.counter}>{characterCount}/500</div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
         </Modal>
       )}
     </div>

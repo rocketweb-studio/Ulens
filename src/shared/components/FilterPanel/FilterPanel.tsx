@@ -1,11 +1,12 @@
-import { useState } from 'react'
-import Image from 'next/image'
+import { useCallback, useRef, useState } from 'react'
+import ImageNext from 'next/image'
 import { Button } from '@/src/shared/components/Button/Button'
 import s from './FilterPanel.module.scss'
+import { FilteredImage } from '@/src/feature/postCreate/ui/PostCreateModal/PostCreateModal'
 
 type Props = {
   image: string
-  onFilterApply: (filter: string) => void
+  onFilterApply: (filteredData: FilteredImage) => void
   currentFilter?: string
 }
 
@@ -82,6 +83,49 @@ export const filters: Filter[] = [
 export const FilterPanel = ({ image, onFilterApply, currentFilter = 'original' }: Props) => {
   const [selectedFilter, setSelectedFilter] = useState<string>(currentFilter)
   const [intensity, setIntensity] = useState<number>(100)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  // Функция для применения фильтра и получения Blob
+  const applyFilterToImage = useCallback(async (): Promise<Blob> => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const canvas = canvasRef.current || document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        if (!ctx) throw new Error('Canvas context not available')
+
+        const img = new Image()
+        img.crossOrigin = 'anonymous'
+        img.src = image
+
+        await new Promise((resolve, reject) => {
+          img.onload = resolve
+          img.onerror = reject
+        })
+
+        canvas.width = img.width
+        canvas.height = img.height
+
+        // Применяем фильтр
+        ctx.filter = getCssFilterValue(selectedFilter, intensity)
+        ctx.drawImage(img, 0, 0)
+
+        // Конвертируем в Blob
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              resolve(blob)
+            } else {
+              reject(new Error('Failed to create blob'))
+            }
+          },
+          'image/jpeg',
+          0.9,
+        )
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }, [image, selectedFilter, intensity])
 
   const handleFilterSelect = (filterValue: string) => {
     setSelectedFilter(filterValue)
@@ -91,29 +135,49 @@ export const FilterPanel = ({ image, onFilterApply, currentFilter = 'original' }
     setIntensity(value)
   }
 
-  const handleApplyFilter = () => {
-    if (selectedFilter === 'original') {
-      onFilterApply('original')
-    } else {
-      onFilterApply(`${selectedFilter}-${intensity}`)
+  const handleApplyFilter = async () => {
+    try {
+      if (selectedFilter === 'original') {
+        // Для оригинального изображения создаем File из data URL
+        const response = await fetch(image)
+        const blob = await response.blob()
+        const file = new File([blob], `original-${Date.now()}.jpg`, { type: 'image/jpeg' })
+        const preview = URL.createObjectURL(file)
+
+        onFilterApply({
+          file,
+          filter: 'original',
+          preview,
+          intensity: 100,
+          originalImage: image,
+        })
+      } else {
+        const filteredBlob = await applyFilterToImage()
+        const fileName = `filtered-${selectedFilter}-${Date.now()}.jpg`
+        const filteredFile = new File([filteredBlob], fileName, { type: 'image/jpeg' })
+        const preview = URL.createObjectURL(filteredFile)
+
+        onFilterApply({
+          file: filteredFile,
+          filter: selectedFilter,
+          preview,
+          intensity,
+          originalImage: image,
+        })
+      }
+    } catch (error) {
+      console.error('Error applying filter:', error)
     }
   }
-
-  const getFilterStyle = (filterValue: string, customIntensity?: number) => {
-    if (filterValue === 'original') return {}
+  const getCssFilterValue = (filterValue: string, intensityValue: number): string => {
+    if (filterValue === 'original') return 'none'
 
     const filter = filters.find((f) => f.value === filterValue)
-    if (!filter) return {}
+    if (!filter) return 'none'
 
-    const intensityValue = customIntensity !== undefined ? customIntensity : intensity
     const intensityMultiplier = intensityValue / 100
 
-    if (intensityValue === 100) {
-      return { filter: filter.cssFilter }
-    }
-
-    // Динамическое изменение интенсивности фильтра
-    const cssFilter = filter.cssFilter
+    return filter.cssFilter
       .replace(/contrast\(([\d.]+)\)/g, (match, value) => {
         const newValue = 1 + (parseFloat(value) - 1) * intensityMultiplier
         return `contrast(${newValue.toFixed(2)})`
@@ -134,15 +198,26 @@ export const FilterPanel = ({ image, onFilterApply, currentFilter = 'original' }
         const newValue = parseFloat(value) * intensityMultiplier
         return `grayscale(${newValue.toFixed(2)})`
       })
+  }
+
+  const getFilterStyle = (filterValue: string, customIntensity?: number) => {
+    if (filterValue === 'original') return {}
+
+    const filter = filters.find((f) => f.value === filterValue)
+    if (!filter) return {}
+
+    const intensityValue = customIntensity !== undefined ? customIntensity : intensity
+    const cssFilter = getCssFilterValue(filterValue, intensityValue)
 
     return { filter: cssFilter }
   }
 
   return (
     <div className={s.filterPanel}>
+      <canvas ref={canvasRef} style={{ display: 'none' }} />
       <div className={s.preview}>
         <div className={s.mainPreview}>
-          <Image
+          <ImageNext
             src={image}
             alt='Filter preview'
             width={400}
@@ -182,7 +257,7 @@ export const FilterPanel = ({ image, onFilterApply, currentFilter = 'original' }
                 onClick={() => handleFilterSelect(filter.value)}
               >
                 <div className={s.thumbnailImage}>
-                  <Image
+                  <ImageNext
                     src={image}
                     alt={filter.name}
                     width={60}

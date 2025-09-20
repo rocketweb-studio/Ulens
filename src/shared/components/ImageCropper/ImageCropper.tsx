@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import Cropper, { Area } from 'react-easy-crop'
 import { Button } from '@/src/shared/components/Button/Button'
 import s from './ImageCropper.module.scss'
+import { IconExpandOutline, IconMaximizeOutline } from '@rocketweb-studio/ulens-ui-kit'
 
 type Props = {
   image: string
@@ -9,13 +10,14 @@ type Props = {
   aspectRatio?: number
   initialAspectRatio?: number
 }
-type AspectRatio = '1:1' | '4:5' | '16:9' | 'free'
+type AspectRatio = '1:1' | '4:5' | '16:9' | 'original'
+type MenuName = 'aspectRatio' | 'zoom' | null
 
 const ASPECT_RATIO_MAP: Record<AspectRatio, number> = {
   '1:1': 1,
   '4:5': 4 / 5,
   '16:9': 16 / 9,
-  free: 0,
+  original: 0,
 } as const
 
 export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: Props) => {
@@ -24,6 +26,7 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: 
   const [rotation, setRotation] = useState(0)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
   const [currentAspectRatio, setCurrentAspectRatio] = useState<AspectRatio>('1:1')
+  const [activeMenu, setActiveMenu] = useState<MenuName>(null)
 
   const onCropChange = useCallback((crop: { x: number; y: number }) => {
     setCrop(crop)
@@ -42,12 +45,10 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: 
   }, [])
 
   const handleAspectRatioChange = (ratio: AspectRatio) => {
-    debugger
     setCurrentAspectRatio(ratio)
   }
 
   const handleCropComplete = async () => {
-    debugger
     const croppedImage = await getCroppedImg()
     onCropComplete(croppedImage)
   }
@@ -108,7 +109,7 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: 
           crop={crop}
           zoom={zoom}
           rotation={rotation}
-          aspect={currentAspectRatio === 'free' ? undefined : ASPECT_RATIO_MAP[currentAspectRatio]}
+          aspect={currentAspectRatio === 'original' ? undefined : ASPECT_RATIO_MAP[currentAspectRatio]}
           onCropChange={onCropChange}
           onZoomChange={onZoomChange}
           onRotationChange={onRotationChange}
@@ -120,59 +121,87 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: 
         />
         <div className={s.cropControlsBox}>
           <div className={s.aspectRatioSelector}>
-            <h4>Aspect Ratio</h4>
-            <div className={s.aspectRatioButtons}>
-              {(['1:1', '4:5', '16:9', 'free'] as AspectRatio[]).map((ratio) => (
-                <button
-                  key={ratio}
-                  className={`${s.aspectRatioButton} ${currentAspectRatio === ratio ? s.active : ''}`}
-                  onClick={() => {
-                    handleAspectRatioChange(ratio)
-                    handleCropComplete()
-                  }}
-                >
-                  {ratio === 'free' ? 'Free' : ratio}
-                </button>
-              ))}
+            <Button
+              variant={'secondary'}
+              onClick={() => (activeMenu === 'aspectRatio' ? setActiveMenu(null) : setActiveMenu('aspectRatio'))}
+            >
+              <IconExpandOutline />
+            </Button>
+            <div className={s.aspectRatioMenuWrapper}>
+              {activeMenu === 'aspectRatio' && (
+                <div className={s.aspectRatioMenu}>
+                  <h4>Aspect Ratio</h4>
+                  <ul className={s.aspectRatioButtons}>
+                    {activeMenu === 'aspectRatio' &&
+                      (['1:1', '4:5', '16:9', 'original'] as AspectRatio[]).map((ratio) => (
+                        <li key={ratio}>
+                          <button
+                            className={`${s.aspectRatioButton} ${currentAspectRatio === ratio ? s.active : ''}`}
+                            onClick={() => {
+                              handleAspectRatioChange(ratio)
+                              handleCropComplete()
+                            }}
+                          >
+                            {ratio === 'original' ? 'original' : ratio}
+                          </button>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
 
           <div className={s.controls}>
-            <div className={s.sliderGroup}>
-              <label>Zoom</label>
-              <input
-                type='range'
-                min='1'
-                max='3'
-                step='0.1'
-                value={zoom}
-                onChange={(e) => setZoom(Number(e.target.value))}
-                className={s.slider}
-              />
-              <span>{zoom.toFixed(1)}x</span>
-            </div>
-
-            <div className={s.sliderGroup}>
-              <label>Rotation</label>
-              <input
-                type='range'
-                min='-180'
-                max='180'
-                step='1'
-                value={rotation}
-                onChange={(e) => setRotation(Number(e.target.value))}
-                className={s.slider}
-              />
-              <span>{rotation}°</span>
-            </div>
-          </div>
-
-          <div className={s.actions}>
-            <Button variant='outline' onClick={handleReset}>
-              Reset
+            <Button
+              variant={'secondary'}
+              onClick={() => (activeMenu === 'zoom' ? setActiveMenu(null) : setActiveMenu('zoom'))}
+            >
+              <IconMaximizeOutline />
             </Button>
-            <Button onClick={handleCropComplete}>Apply Crop</Button>
+            <div className={s.zoomMenuWrapper}>
+              {activeMenu === 'zoom' && (
+                <div className={s.zoomMenu}>
+                  <div className={s.sliderGroup}>
+                    <input
+                      type='range'
+                      min='1'
+                      max='3'
+                      step='0.1'
+                      value={zoom}
+                      onChange={(e) => {
+                        setZoom(Number(e.target.value))
+                        handleCropComplete()
+                      }}
+                      className={s.slider}
+                    />
+                    <span>{zoom.toFixed(1)}x</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/*<div className={s.sliderGroup}>*/}
+            {/*  <label>Rotation</label>*/}
+            {/*  <input*/}
+            {/*    type='range'*/}
+            {/*    min='-180'*/}
+            {/*    max='180'*/}
+            {/*    step='1'*/}
+            {/*    value={rotation}*/}
+            {/*    onChange={(e) => setRotation(Number(e.target.value))}*/}
+            {/*    className={s.slider}*/}
+            {/*  />*/}
+            {/*  <span>{rotation}°</span>*/}
+            {/*</div>*/}
           </div>
+
+          {/*<div className={s.actions}>*/}
+          {/*  <Button variant='outline' onClick={handleReset}>*/}
+          {/*    Reset*/}
+          {/*  </Button>*/}
+          {/*  <Button onClick={handleCropComplete}>Apply Crop</Button>*/}
+          {/*</div>*/}
         </div>
       </div>
     </div>
