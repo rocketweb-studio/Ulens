@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Path } from '@/src/shared/constants/Path'
 import { Modal } from '@/src/shared/components/Modal/Modal'
 import s from './postDeleteModal.module.scss'
+import { toast } from 'react-toastify'
 
 type Props = {
   postId: string
@@ -23,6 +24,7 @@ export const PostDeleteModal = ({ postId, isOpen, onClose }: Props) => {
       router.push(Path.Profile)
     } catch (error) {
       console.error('Error deleting the post', error)
+      toast('Error deleting the post')
     }
   }
 
