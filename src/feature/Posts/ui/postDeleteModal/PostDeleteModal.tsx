@@ -24,7 +24,7 @@ export const PostDeleteModal = ({ postId, isOpen, onClose }: Props) => {
       router.push(Path.Profile)
     } catch (error) {
       console.error('Error deleting the post', error)
-      toast('Error deleting the post')
+      toast.error('Error deleting the post')
     }
   }
 
