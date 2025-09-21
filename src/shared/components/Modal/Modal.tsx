@@ -6,14 +6,14 @@ import closeIcon from '@/public/close.svg'
 import { Button } from '@/src/shared/components/Button/Button'
 
 export type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
-  closeOnOverlayClick?: boolean;
-  closeOnEsc?: boolean;
-  modalTitle: string;
-  hideDefaultButton?: boolean;
-};
+  isOpen: boolean
+  onClose: () => void
+  children: React.ReactNode
+  closeOnOverlayClick?: boolean
+  closeOnEsc?: boolean
+  modalTitle: string
+  hideDefaultButton?: boolean
+}
 
 export const Modal = ({
   isOpen,
@@ -50,8 +50,8 @@ export const Modal = ({
   if (!isOpen) return null
 
   return createPortal(
-    <div className={s.overlay}>
-      <div className={s.content}>
+    <div className={s.overlay} onClick={onClose}>
+      <div className={s.content} onClick={(e) => e.stopPropagation()}>
         <h3 className={s.title}>{modalTitle}</h3>
         <button className={s.closeButton} onClick={onClose}>
           <Image src={closeIcon} alt={'closeIcon'} />
