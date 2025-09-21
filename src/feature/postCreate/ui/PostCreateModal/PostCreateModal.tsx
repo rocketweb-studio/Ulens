@@ -1,20 +1,17 @@
 import s from './PostCreateModal.module.scss'
 import { Modal } from '@/src/shared/components/Modal/Modal'
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Button } from '@/src/shared/components/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
-import { ImageCropper } from '@/src/shared/components/ImageCropper/ImageCropper'
+import { getCroppedImg, ImageCropper } from '@/src/shared/components/ImageCropper/ImageCropper'
 import { FilterPanel } from '@/src/shared/components/FilterPanel/FilterPanel'
 import Image from 'next/image'
-import {
-  useCreatePostMutation,
-  useGetPostByIdQuery,
-  useUploadPostImagesMutation,
-} from '@/src/feature/Posts/api/postsApi'
+import { useCreatePostMutation, useUploadPostImagesMutation } from '@/src/feature/Posts/api/postsApi'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Area } from 'react-easy-crop'
 
 type Props = {
   isModalOpen: boolean
@@ -75,8 +72,8 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [createPost, { data: dataCreatePost }] = useCreatePostMutation()
   const [uploadImages] = useUploadPostImagesMutation()
-  const { data: post } = useGetPostByIdQuery({ postId: dataCreatePost?.id })
-  console.log(uploadedFiles)
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({ x: 0, y: 0, width: 0, height: 0 })
+  const filterPanelRef = useRef<{ applyFilter: () => void }>(null)
 
   const {
     control,
@@ -109,11 +106,17 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     maxSize: FILES_VALIDATE.maxSize,
   })
 
-  const handleCropComplete = (croppedImage: string) => {
+  const handleCropComplete = (croppedImage: string, areaPixels?: Area) => {
     setUploadedFiles((prev) =>
       prev.map((file, index) => (index === currentImageIndex ? { ...file, croppedImage } : file)),
     )
-    console.log(uploadedFiles)
+    if (areaPixels) {
+      setCroppedAreaPixels(areaPixels)
+    }
+  }
+
+  const handleCropAreaChange = (areaPixels: Area) => {
+    setCroppedAreaPixels(areaPixels)
   }
 
   const handleFilterApply = useCallback(
@@ -133,44 +136,26 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     [currentImageIndex],
   )
 
-  const handleNext = () => {
-    if (step === 'add' && uploadedFiles.length > 0) {
-      setStep('crop')
-    } else if (step === 'crop') {
-      setStep('filter')
-    } else if (step === 'filter') {
-      if (currentImageIndex < uploadedFiles.length - 1) {
-        setCurrentImageIndex((prev) => prev + 1)
-        setStep('crop')
-      } else {
-        setStep('publication')
-      }
-    }
-  }
-
-  const handleBack = () => {
-    if (step === 'crop') {
-      if (currentImageIndex > 0) {
-        setCurrentImageIndex((prev) => prev - 1)
-      } else {
-        setStep('add')
-      }
-    } else if (step === 'filter') {
-      setStep('crop')
-    } else if (step === 'publication') {
-      setStep('filter')
-    }
-  }
-
-  const changeNextStep = () => {
+  const changeNextStep = async () => {
     switch (step) {
       case 'add':
         setStep('crop')
         break
       case 'crop':
-        setStep('filter')
+        try {
+          const croppedImage = await getCroppedImg(currentImage.preview, croppedAreaPixels)
+          handleCropComplete(croppedImage)
+          setStep('filter')
+        } catch (error) {
+          console.error('Error cropping image:', error)
+          setStep('filter')
+        }
         break
       case 'filter':
+        // Вызываем применение фильтра перед переходом
+        if (filterPanelRef.current) {
+          await filterPanelRef.current.applyFilter()
+        }
         setStep('publication')
         break
     }
@@ -257,7 +242,11 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
             </Button>
           }
         >
-          <ImageCropper image={currentImage.preview} onCropComplete={handleCropComplete} />
+          <ImageCropper
+            image={currentImage.preview}
+            onCropComplete={handleCropComplete}
+            onCropAreaChange={handleCropAreaChange}
+          />
         </Modal>
       )}
       {step === 'filter' && (
@@ -281,9 +270,10 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
           <div>
             <div className={s.filterStep}>
               <FilterPanel
+                ref={filterPanelRef}
                 image={currentImage.croppedImage || currentImage.preview}
                 onFilterApply={handleFilterApply}
-                currentFilter={currentImage.filter?.split('-')[0]} // Извлекаем только название фильтра
+                currentFilter={currentImage.filter?.split('-')[0]}
               />
             </div>
           </div>

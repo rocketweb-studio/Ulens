@@ -9,6 +9,7 @@ type Props = {
   onCropComplete: (croppedImage: string) => void
   aspectRatio?: number
   initialAspectRatio?: number
+  onCropAreaChange?: (areaPixels: Area) => void
 }
 type AspectRatio = '1:1' | '4:5' | '16:9' | 'original'
 type MenuName = 'aspectRatio' | 'zoom' | null
@@ -20,13 +21,79 @@ const ASPECT_RATIO_MAP: Record<AspectRatio, number> = {
   original: 0,
 } as const
 
-export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: Props) => {
+export type FlipOptions = {
+  horizontal: boolean
+  vertical: boolean
+}
+
+export type PixelCrop = {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
+export type Size = {
+  width: number
+  height: number
+}
+
+export const createImage = (url: string): Promise<HTMLImageElement> =>
+  new Promise((resolve, reject) => {
+    const image = new Image()
+    image.addEventListener('load', () => resolve(image))
+    image.addEventListener('error', (error) => reject(error))
+    image.setAttribute('crossOrigin', 'anonymous')
+    image.src = url
+  })
+
+export const getRadianAngle = (degreeValue: number): number => (degreeValue * Math.PI) / 180
+
+export const rotateSize = (width: number, height: number, rotation: number): Size => {
+  const rotRad = getRadianAngle(rotation)
+
+  return {
+    width: Math.abs(Math.cos(rotRad) * width) + Math.abs(Math.sin(rotRad) * height),
+    height: Math.abs(Math.sin(rotRad) * width) + Math.abs(Math.cos(rotRad) * height),
+  }
+}
+
+export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<string> => {
+  const image = await createImage(imageSrc)
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+
+  if (!ctx) {
+    return ''
+  }
+
+  canvas.width = pixelCrop.width
+  canvas.height = pixelCrop.height
+
+  ctx.drawImage(
+    image,
+    pixelCrop.x,
+    pixelCrop.y,
+    pixelCrop.width,
+    pixelCrop.height,
+    0,
+    0,
+    pixelCrop.width,
+    pixelCrop.height,
+  )
+
+  return canvas.toDataURL('image/jpeg', 1)
+}
+
+export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1, onCropAreaChange }: Props) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
-  const [rotation, setRotation] = useState(0)
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
+  const [rotation, setRotation] = useState(initialAspectRatio)
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({ x: 0, y: 0, width: 0, height: 0 })
   const [currentAspectRatio, setCurrentAspectRatio] = useState<AspectRatio>('1:1')
   const [activeMenu, setActiveMenu] = useState<MenuName>(null)
+
+  console.log(croppedAreaPixels)
 
   const onCropChange = useCallback((crop: { x: number; y: number }) => {
     setCrop(crop)
@@ -40,16 +107,22 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: 
     setRotation(rotation)
   }, [])
 
-  const onCropAreaComplete = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
-    setCroppedAreaPixels(croppedAreaPixels)
-  }, [])
+  const onCropAreaComplete = useCallback(
+    (croppedArea: Area, croppedAreaPixels: Area) => {
+      setCroppedAreaPixels(croppedAreaPixels)
+      if (onCropAreaChange) {
+        onCropAreaChange(croppedAreaPixels)
+      }
+    },
+    [onCropAreaChange],
+  )
 
   const handleAspectRatioChange = (ratio: AspectRatio) => {
     setCurrentAspectRatio(ratio)
   }
 
   const handleCropComplete = async () => {
-    const croppedImage = await getCroppedImg()
+    const croppedImage = await getCroppedImg(image, croppedAreaPixels)
     onCropComplete(croppedImage)
   }
 
@@ -58,47 +131,6 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: 
     setZoom(1)
     setRotation(0)
     setCurrentAspectRatio('1:1')
-  }
-
-  const getCroppedImg = async (): Promise<string> => {
-    if (!croppedAreaPixels) return image
-
-    try {
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')
-      if (!ctx) return image
-
-      const imageEl = new Image()
-      imageEl.src = image
-
-      await new Promise((resolve) => {
-        imageEl.onload = resolve
-      })
-
-      canvas.width = croppedAreaPixels.width
-      canvas.height = croppedAreaPixels.height
-
-      ctx.translate(canvas.width / 2, canvas.height / 2)
-      ctx.rotate((rotation * Math.PI) / 180)
-      ctx.translate(-canvas.width / 2, -canvas.height / 2)
-
-      ctx.drawImage(
-        imageEl,
-        croppedAreaPixels.x,
-        croppedAreaPixels.y,
-        croppedAreaPixels.width,
-        croppedAreaPixels.height,
-        0,
-        0,
-        croppedAreaPixels.width,
-        croppedAreaPixels.height,
-      )
-
-      return canvas.toDataURL('image/jpeg', 0.9)
-    } catch (error) {
-      console.error('Error cropping image:', error)
-      return image
-    }
   }
 
   return (
@@ -110,10 +142,11 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: 
           zoom={zoom}
           rotation={rotation}
           aspect={currentAspectRatio === 'original' ? undefined : ASPECT_RATIO_MAP[currentAspectRatio]}
-          onCropChange={onCropChange}
+          onCropChange={setCrop}
           onZoomChange={onZoomChange}
           onRotationChange={onRotationChange}
           onCropComplete={onCropAreaComplete}
+          onCropAreaChange={onCropAreaComplete}
           classes={{
             containerClassName: s.cropContainer,
             cropAreaClassName: s.cropArea,
@@ -139,7 +172,6 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: 
                             className={`${s.aspectRatioButton} ${currentAspectRatio === ratio ? s.active : ''}`}
                             onClick={() => {
                               handleAspectRatioChange(ratio)
-                              handleCropComplete()
                             }}
                           >
                             {ratio === 'original' ? 'original' : ratio}
@@ -171,7 +203,6 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: 
                       value={zoom}
                       onChange={(e) => {
                         setZoom(Number(e.target.value))
-                        handleCropComplete()
                       }}
                       className={s.slider}
                     />
@@ -180,28 +211,7 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1 }: 
                 </div>
               )}
             </div>
-
-            {/*<div className={s.sliderGroup}>*/}
-            {/*  <label>Rotation</label>*/}
-            {/*  <input*/}
-            {/*    type='range'*/}
-            {/*    min='-180'*/}
-            {/*    max='180'*/}
-            {/*    step='1'*/}
-            {/*    value={rotation}*/}
-            {/*    onChange={(e) => setRotation(Number(e.target.value))}*/}
-            {/*    className={s.slider}*/}
-            {/*  />*/}
-            {/*  <span>{rotation}°</span>*/}
-            {/*</div>*/}
           </div>
-
-          {/*<div className={s.actions}>*/}
-          {/*  <Button variant='outline' onClick={handleReset}>*/}
-          {/*    Reset*/}
-          {/*  </Button>*/}
-          {/*  <Button onClick={handleCropComplete}>Apply Crop</Button>*/}
-          {/*</div>*/}
         </div>
       </div>
     </div>

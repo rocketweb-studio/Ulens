@@ -1,6 +1,5 @@
-import { useCallback, useRef, useState } from 'react'
+import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react'
 import ImageNext from 'next/image'
-import { Button } from '@/src/shared/components/Button/Button'
 import s from './FilterPanel.module.scss'
 import { FilteredImage } from '@/src/feature/postCreate/ui/PostCreateModal/PostCreateModal'
 
@@ -8,6 +7,10 @@ type Props = {
   image: string
   onFilterApply: (filteredData: FilteredImage) => void
   currentFilter?: string
+}
+
+export type FilterPanelHandle = {
+  applyFilter: () => void
 }
 
 export type Filter = {
@@ -80,206 +83,164 @@ export const filters: Filter[] = [
   },
 ]
 
-export const FilterPanel = ({ image, onFilterApply, currentFilter = 'original' }: Props) => {
-  const [selectedFilter, setSelectedFilter] = useState<string>(currentFilter)
-  const [intensity, setIntensity] = useState<number>(100)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
+  ({ image, onFilterApply, currentFilter = 'original' }, ref) => {
+    const [selectedFilter, setSelectedFilter] = useState<string>(currentFilter)
+    const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  // Функция для применения фильтра и получения Blob
-  const applyFilterToImage = useCallback(async (): Promise<Blob> => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const canvas = canvasRef.current || document.createElement('canvas')
-        const ctx = canvas.getContext('2d')
-        if (!ctx) throw new Error('Canvas context not available')
+    const applyFilterToImage = useCallback(async (): Promise<Blob> => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const canvas = canvasRef.current || document.createElement('canvas')
+          const ctx = canvas.getContext('2d')
+          if (!ctx) throw new Error('Canvas context not available')
 
-        const img = new Image()
-        img.crossOrigin = 'anonymous'
-        img.src = image
+          const img = new Image()
+          img.crossOrigin = 'anonymous'
+          img.src = image
 
-        await new Promise((resolve, reject) => {
-          img.onload = resolve
-          img.onerror = reject
-        })
+          await new Promise((resolve, reject) => {
+            img.onload = resolve
+            img.onerror = reject
+          })
 
-        canvas.width = img.width
-        canvas.height = img.height
+          canvas.width = img.width
+          canvas.height = img.height
 
-        // Применяем фильтр
-        ctx.filter = getCssFilterValue(selectedFilter, intensity)
-        ctx.drawImage(img, 0, 0)
+          // Применяем фильтр с фиксированной интенсивностью 100%
+          ctx.filter = getCssFilterValue(selectedFilter, 100)
+          ctx.drawImage(img, 0, 0)
 
-        // Конвертируем в Blob
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              resolve(blob)
-            } else {
-              reject(new Error('Failed to create blob'))
-            }
-          },
-          'image/jpeg',
-          0.9,
-        )
-      } catch (error) {
-        reject(error)
-      }
-    })
-  }, [image, selectedFilter, intensity])
+          // Конвертируем в Blob
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                resolve(blob)
+              } else {
+                reject(new Error('Failed to create blob'))
+              }
+            },
+            'image/jpeg',
+            0.9,
+          )
+        } catch (error) {
+          reject(error)
+        }
+      })
+    }, [image, selectedFilter])
 
-  const handleFilterSelect = (filterValue: string) => {
-    setSelectedFilter(filterValue)
-  }
-
-  const handleIntensityChange = (value: number) => {
-    setIntensity(value)
-  }
-
-  const handleApplyFilter = async () => {
-    try {
-      if (selectedFilter === 'original') {
-        // Для оригинального изображения создаем File из data URL
-        const response = await fetch(image)
-        const blob = await response.blob()
-        const file = new File([blob], `original-${Date.now()}.jpg`, { type: 'image/jpeg' })
-        const preview = URL.createObjectURL(file)
-
-        onFilterApply({
-          file,
-          filter: 'original',
-          preview,
-          intensity: 100,
-          originalImage: image,
-        })
-      } else {
-        const filteredBlob = await applyFilterToImage()
-        const fileName = `filtered-${selectedFilter}-${Date.now()}.jpg`
-        const filteredFile = new File([filteredBlob], fileName, { type: 'image/jpeg' })
-        const preview = URL.createObjectURL(filteredFile)
-
-        onFilterApply({
-          file: filteredFile,
-          filter: selectedFilter,
-          preview,
-          intensity,
-          originalImage: image,
-        })
-      }
-    } catch (error) {
-      console.error('Error applying filter:', error)
+    const handleFilterSelect = (filterValue: string) => {
+      setSelectedFilter(filterValue)
     }
-  }
-  const getCssFilterValue = (filterValue: string, intensityValue: number): string => {
-    if (filterValue === 'original') return 'none'
 
-    const filter = filters.find((f) => f.value === filterValue)
-    if (!filter) return 'none'
+    const handleApplyFilter = async () => {
+      try {
+        if (selectedFilter === 'original') {
+          const response = await fetch(image)
+          const blob = await response.blob()
+          const file = new File([blob], `original-${Date.now()}.jpg`, { type: 'image/jpeg' })
+          const preview = URL.createObjectURL(file)
 
-    const intensityMultiplier = intensityValue / 100
+          onFilterApply({
+            file,
+            filter: 'original',
+            preview,
+            intensity: 100,
+            originalImage: image,
+          })
+        } else {
+          const filteredBlob = await applyFilterToImage()
+          const fileName = `filtered-${selectedFilter}-${Date.now()}.jpg`
+          const filteredFile = new File([filteredBlob], fileName, { type: 'image/jpeg' })
+          const preview = URL.createObjectURL(filteredFile)
 
-    return filter.cssFilter
-      .replace(/contrast\(([\d.]+)\)/g, (match, value) => {
-        const newValue = 1 + (parseFloat(value) - 1) * intensityMultiplier
-        return `contrast(${newValue.toFixed(2)})`
-      })
-      .replace(/saturate\(([\d.]+)\)/g, (match, value) => {
-        const newValue = 1 + (parseFloat(value) - 1) * intensityMultiplier
-        return `saturate(${newValue.toFixed(2)})`
-      })
-      .replace(/brightness\(([\d.]+)\)/g, (match, value) => {
-        const newValue = 1 + (parseFloat(value) - 1) * intensityMultiplier
-        return `brightness(${newValue.toFixed(2)})`
-      })
-      .replace(/sepia\(([\d.]+)\)/g, (match, value) => {
-        const newValue = parseFloat(value) * intensityMultiplier
-        return `sepia(${newValue.toFixed(2)})`
-      })
-      .replace(/grayscale\(([\d.]+)\)/g, (match, value) => {
-        const newValue = parseFloat(value) * intensityMultiplier
-        return `grayscale(${newValue.toFixed(2)})`
-      })
-  }
+          onFilterApply({
+            file: filteredFile,
+            filter: selectedFilter,
+            preview,
+            intensity: 100,
+            originalImage: image,
+          })
+        }
+      } catch (error) {
+        console.error('Error applying filter:', error)
+      }
+    }
 
-  const getFilterStyle = (filterValue: string, customIntensity?: number) => {
-    if (filterValue === 'original') return {}
+    useImperativeHandle(
+      ref,
+      () => ({
+        applyFilter: handleApplyFilter,
+      }),
+      [handleApplyFilter],
+    )
 
-    const filter = filters.find((f) => f.value === filterValue)
-    if (!filter) return {}
+    const getCssFilterValue = (filterValue: string, intensityValue: number): string => {
+      if (filterValue === 'original') return 'none'
 
-    const intensityValue = customIntensity !== undefined ? customIntensity : intensity
-    const cssFilter = getCssFilterValue(filterValue, intensityValue)
+      const filter = filters.find((f) => f.value === filterValue)
+      if (!filter) return 'none'
 
-    return { filter: cssFilter }
-  }
+      return filter.cssFilter
+    }
 
-  return (
-    <div className={s.filterPanel}>
-      <canvas ref={canvasRef} style={{ display: 'none' }} />
-      <div className={s.preview}>
-        <div className={s.mainPreview}>
-          <ImageNext
-            src={image}
-            alt='Filter preview'
-            width={400}
-            height={400}
-            style={{
-              objectFit: 'contain',
-              ...getFilterStyle(selectedFilter),
-            }}
-            className={s.previewImage}
-          />
-        </div>
-      </div>
+    const getFilterStyle = (filterValue: string) => {
+      if (filterValue === 'original') return {}
 
-      <div className={s.filterControls}>
-        {selectedFilter !== 'original' && (
-          <div className={s.intensityControl}>
-            <label>Intensity: {intensity}%</label>
-            <input
-              type='range'
-              min='0'
-              max='100'
-              step='1'
-              value={intensity}
-              onChange={(e) => handleIntensityChange(Number(e.target.value))}
-              className={s.intensitySlider}
+      const filter = filters.find((f) => f.value === filterValue)
+      if (!filter) return {}
+
+      return { filter: filter.cssFilter }
+    }
+
+    return (
+      <div className={s.filterPanel}>
+        <canvas ref={canvasRef} style={{ display: 'none' }} />
+        <div className={s.preview}>
+          <div className={s.mainPreview}>
+            <ImageNext
+              src={image}
+              alt='Filter preview'
+              width={400}
+              height={400}
+              style={{
+                objectFit: 'contain',
+                ...getFilterStyle(selectedFilter),
+              }}
+              className={s.previewImage}
             />
           </div>
-        )}
+        </div>
 
-        <div className={s.filterList}>
-          <h4>Filters</h4>
-          <div className={s.filterThumbnails}>
-            {filters.map((filter) => (
-              <div
-                key={filter.value}
-                className={`${s.filterThumbnail} ${selectedFilter === filter.value ? s.active : ''}`}
-                onClick={() => handleFilterSelect(filter.value)}
-              >
-                <div className={s.thumbnailImage}>
-                  <ImageNext
-                    src={image}
-                    alt={filter.name}
-                    width={60}
-                    height={60}
-                    style={{
-                      objectFit: 'cover',
-                      ...getFilterStyle(filter.value, 100),
-                    }}
-                  />
+        <div className={s.filterControls}>
+          <div className={s.filterList}>
+            <h4>Filters</h4>
+            <div className={s.filterThumbnails}>
+              {filters.map((filter) => (
+                <div
+                  key={filter.value}
+                  className={`${s.filterThumbnail} ${selectedFilter === filter.value ? s.active : ''}`}
+                  onClick={() => handleFilterSelect(filter.value)}
+                >
+                  <div className={s.thumbnailImage}>
+                    <ImageNext
+                      src={image}
+                      alt={filter.name}
+                      width={60}
+                      height={60}
+                      style={{
+                        objectFit: 'cover',
+                        ...getFilterStyle(filter.value),
+                      }}
+                    />
+                  </div>
+                  <span className={s.filterName}>{filter.name}</span>
                 </div>
-                <span className={s.filterName}>{filter.name}</span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
-
-      <div className={s.actions}>
-        <Button onClick={handleApplyFilter} className={s.applyButton}>
-          Apply Filter
-        </Button>
-      </div>
-    </div>
-  )
-}
+    )
+  },
+)
