@@ -1,3 +1,6 @@
+@use '/src/shared/styles/colors' as colors;
+@use '/src/shared/styles/typography' as typography;
+
 .wrapper {
 
 }
@@ -14,9 +17,6 @@
   display: flex;
   justify-content: center;
 }
-
-
-
 
 .form {
   width: 100%;
@@ -35,40 +35,6 @@
   margin-bottom: 8px;
   font-weight: 500;
   color: #333;
-}
-
-.textarea {
-  width: 100%;
-  padding: 16px;
-  border: 1px solid #e1e1e1;
-  border-radius: 8px;
-  resize: vertical;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #333;
-  background-color: #fff;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-  transition: border-color 0.2s, box-shadow 0.2s;
-  box-sizing: border-box;
-
-  &:focus {
-    outline: none;
-    border-color: #4a90e2;
-    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
-  }
-
-  &::placeholder {
-    color: #999;
-  }
-
-  &.error {
-    border-color: #e74c3c;
-
-    &:focus {
-      border-color: #e74c3c;
-      box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
-    }
-  }
 }
 
 .footer {
@@ -115,7 +81,6 @@
   }
 }
 
-
 .publication {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -147,4 +112,22 @@
   grid-column: 2;
   padding: 24px 15px;
   overflow-y: auto;
+}
+
+.publicationProfile {
+  display: flex;
+  align-items: center;
+  gap: 0 12px;
+  margin-bottom: 24px;
+}
+
+.accessCloseModalText {
+  @include typography.regular_text_16
+
+}
+
+.accessCloseModalButtons {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 24px;
 }

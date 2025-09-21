@@ -1,6 +1,6 @@
 import s from './PostCreateModal.module.scss'
 import { Modal } from '@/src/shared/components/Modal/Modal'
-import { useCallback, useRef, useState } from 'react'
+import { MouseEvent, useCallback, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Button } from '@/src/shared/components/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
@@ -12,6 +12,8 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Area } from 'react-easy-crop'
+import { TextArea } from '@/src/shared/components/TextArea/TextArea'
+import { useModal } from '@/src/shared/hooks/useModal'
 
 type Props = {
   isModalOpen: boolean
@@ -72,8 +74,10 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [createPost, { data: dataCreatePost }] = useCreatePostMutation()
   const [uploadImages] = useUploadPostImagesMutation()
+  const [draftStep, setDraftStep] = useState<Steps | null>(null)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({ x: 0, y: 0, width: 0, height: 0 })
   const filterPanelRef = useRef<{ applyFilter: () => void }>(null)
+  const { isOpen, openModal, closeModal } = useModal()
 
   const {
     control,
@@ -152,7 +156,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         }
         break
       case 'filter':
-        // Вызываем применение фильтра перед переходом
         if (filterPanelRef.current) {
           await filterPanelRef.current.applyFilter()
         }
@@ -175,12 +178,19 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     }
   }
 
+  const onOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      openModal()
+    }
+  }
+
   const currentImage = uploadedFiles[currentImageIndex]
 
   const descriptionValue = watch('description', '')
   const characterCount = descriptionValue.length
   const onPublishHandler = () => {
     handleSubmit(onFormSubmit)()
+    onModalClose()
   }
 
   const onFormSubmit: SubmitHandler<PublicationFormData> = async (data) => {
@@ -220,6 +230,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
               </div>
             </div>
           </div>
+          {draftStep && <Button variant={'primary'}>OpenDraft</Button>}
         </Modal>
       )}
       {step === 'crop' && (
@@ -227,6 +238,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
           className={`${s.modal} ${s.cropModal}`}
           isOpen={isModalOpen}
           onClose={onModalClose}
+          onOverlayClick={onOverlayClick}
           modalTitle={'Cropping'}
           withoutPadding
           hideCloseButton
@@ -254,6 +266,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         <Modal
           isOpen={isModalOpen}
           onClose={onModalClose}
+          onOverlayClick={onOverlayClick}
           modalTitle={'Filters'}
           hideCloseButton
           hideDefaultButton
@@ -281,6 +294,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         <Modal
           isOpen={isModalOpen}
           onClose={onModalClose}
+          onOverlayClick={onOverlayClick}
           modalTitle={'Publication'}
           withoutPadding
           hideCloseButton
@@ -304,36 +318,54 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
             </div>
 
             <div className={s.publicationContent}>
-              <form onSubmit={handleSubmit(onFormSubmit)} className={s.form}>
-                <div className={s.container}>
-                  <label htmlFor='description' className={s.label}>
-                    Описание публикации
-                  </label>
-
-                  <Controller
-                    name='description'
-                    control={control}
-                    render={({ field }) => (
-                      <textarea
-                        {...field}
-                        id='description'
-                        className={`${s.textarea} ${errors.description ? s.error : ''}`}
-                        placeholder='Add publication descriptions'
-                        rows={5}
-                      />
-                    )}
-                  />
-
-                  <div className={s.footer}>
-                    {errors.description && <span className={s.errorMessage}>{errors.description.message}</span>}
-                    <div className={s.counter}>{characterCount}/500</div>
-                  </div>
+              <div className={s.publicationProfile}>
+                <div className={s.publicationProfileImage}>
+                  <Image src={'/avatar/avatar_mini.png'} alt={'Avatar'} width={36} height={36} />
                 </div>
+                <p className={s.publicationProfileURL}> URLProfile</p>
+              </div>
+              <form onSubmit={handleSubmit(onFormSubmit)} className={s.form}>
+                <Controller
+                  name='description'
+                  control={control}
+                  render={({ field }) => (
+                    <TextArea
+                      {...field}
+                      id='description'
+                      className={s.textarea}
+                      error={errors.description?.message}
+                      label={'Add publication descriptions'}
+                      placeholder='Enter the text'
+                      rows={5}
+                      maxLength={500}
+                      withCounter
+                    />
+                  )}
+                />
               </form>
             </div>
           </div>
         </Modal>
       )}
+      <Modal isOpen={isOpen} onClose={closeModal} modalTitle={'Сlose'} hideDefaultButton>
+        <p className={s.accessCloseModalText}>
+          Do you really want to close the creation of a publication? If you close everything will be deleted
+        </p>
+        <div className={s.accessCloseModalButtons}>
+          <Button variant={'outline'} onClick={closeModal}>
+            Discard
+          </Button>
+          <Button
+            variant={'primary'}
+            onClick={() => {
+              closeModal()
+              onModalClose()
+            }}
+          >
+            Yes
+          </Button>
+        </div>
+      </Modal>
     </div>
   )
 }

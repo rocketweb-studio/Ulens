@@ -1,0 +1,125 @@
+@use '../../styles/colors' as colors;
+@use '../../styles/typography' as typography;
+
+.textAreaContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  padding-bottom: 24px;
+}
+
+.textAreaWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  @include typography.regular_text_14;
+  color: colors.color(light, 900);
+  margin-bottom: 8px;
+}
+
+.textArea {
+  @include typography.regular_text_16;
+  padding: 12px;
+  border: 1px solid colors.color(dark, 100);
+  color: colors.color(light, 900);
+  border-radius: 2px;
+  transition:
+          border-color 0.3s ease,
+          background-color 0.3s ease;
+  background-color: colors.color(dark, 500);
+  width: 100%;
+  resize: none;
+  min-height: 80px;
+  font-family: inherit;
+
+  &:active {
+    border: 1px solid colors.color(light, 100);
+    color: colors.color(light, 100);
+  }
+
+  &:focus {
+    background-color: colors.color(dark, 500);
+    border: 1px solid colors.color(accent, 500);
+    color: colors.color(light, 100);
+    outline: none;
+  }
+
+
+  &:disabled {
+    background-color: colors.color(dark, 100);
+    border: 1px solid colors.color(dark, 100);
+    color: colors.color(dark, 100);
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    font-weight: inherit;
+    color: colors.color(light, 900);
+  }
+
+  &:hover:not(:disabled) {
+    color: colors.color(light, 900);
+    border: 1px solid colors.color(light, 900);
+  }
+}
+
+.counter {
+  @include typography.small_text;
+  color: colors.color(light, 900);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.errorInput {
+  border-color: colors.color(danger, 500);
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+  }
+}
+
+.errorText {
+  position: absolute;
+  bottom: 0;
+  color: colors.color(danger, 500);
+  font-size: 14px;
+  margin-top: 2px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.errorTextContent {
+  display: inline-block;
+}
+
+@keyframes scrollError {
+  0% {
+    transform: translateX(0);
+  }
+  15% {
+    transform: translateX(0);
+  }
+  85% {
+    transform: translateX(var(--scroll-amount, 0));
+  }
+  100% {
+    transform: translateX(var(--scroll-amount, 0));
+  }
+}
+
+.errorTextContent.animated {
+  animation: scrollError var(--animation-duration, 15s) infinite;
+  animation-timing-function: linear;
+
+  &:hover {
+    animation-play-state: paused;
+  }
+}

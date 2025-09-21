@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useEffect } from 'react'
+import React, { HTMLAttributes, MouseEvent, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import s from './Modal.module.scss'
 import Image from 'next/image'
@@ -11,6 +11,7 @@ export type Props = {
   children: React.ReactNode
   closeOnOverlayClick?: boolean
   closeOnEsc?: boolean
+  onOverlayClick?: (e: MouseEvent<HTMLDivElement>) => void
   modalTitle: string
   className?: string
   withoutPadding?: boolean
@@ -23,6 +24,7 @@ export type Props = {
 export const Modal = ({
   isOpen,
   onClose,
+  onOverlayClick,
   children,
   modalTitle,
   className = '',
@@ -60,7 +62,7 @@ export const Modal = ({
   if (!isOpen) return null
 
   return createPortal(
-    <div className={s.overlay}>
+    <div className={s.overlay} onClick={onOverlayClick}>
       <div className={`${s.content} ${className}`}>
         <div className={s.header}>
           {buttonLeftInModalHeader}

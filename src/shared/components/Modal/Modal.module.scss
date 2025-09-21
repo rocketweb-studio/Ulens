@@ -2,13 +2,14 @@
 @use '@/src/shared/styles/colors' as colors;
 
 .overlay {
+  z-index: 1000;
   background: rgba(colors.color(dark, 900), 0.8);
   position: absolute;
   inset: 0;
-  z-index: 1000;
 }
 
 .content {
+  z-index: 1001;
   border: 1px solid colors.color(dark, 100);
   border-radius: 2px;
   background-color: colors.color(dark, 300);

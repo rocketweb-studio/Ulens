@@ -3,10 +3,19 @@
 import { useModal } from '@/src/shared/hooks/useModal'
 import { FlexContainer } from '@/src/shared/components/FlexContainer'
 import { PostMenuActions } from '@/src/feature/Posts/ui/postMenuActions'
-import {PostCreateModal} from "@/src/feature/postCreate/ui/PostCreateModal/PostCreateModal";
+import { PostCreateModal } from '@/src/feature/postCreate/ui/PostCreateModal/PostCreateModal'
+import { useRouter } from 'next/navigation'
+import { Path } from '@/src/shared/constants/Path'
 
 export default function CreatePostModal() {
-  const { isOpen, closeModal } = useModal(true)
+  const { isOpen, closeModal, openModal } = useModal(true)
+  const { replace } = useRouter()
+
+  const onModalCloseHandler = () => {
+    closeModal()
+    replace(Path.Profile)
+  }
+
   return (
     <FlexContainer align={'center'} justify={'center'}>
       <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -17,7 +26,7 @@ export default function CreatePostModal() {
         <textarea placeholder='Текст поста' style={{ width: '100%' }} />
         <button type='submit'>Опубликовать</button>
       </form>
-      <PostCreateModal isModalOpen={true} onModalClose={closeModal} />
+      <PostCreateModal isModalOpen={isOpen} onModalClose={onModalCloseHandler} />
     </FlexContainer>
   )
 }
