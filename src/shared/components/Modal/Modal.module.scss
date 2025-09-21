@@ -5,6 +5,7 @@
   background: rgba(colors.color(dark, 900), 0.8);
   position: absolute;
   inset: 0;
+  z-index: 1000;
 }
 
 .content {
@@ -16,14 +17,13 @@
   left: 50%;
   transform: translate(-50%, -50%);
   max-height: 85vh;
-
 }
 
 .header {
   position:relative;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   padding: 12px 24px;
 
   &::after {

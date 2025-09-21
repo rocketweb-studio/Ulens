@@ -257,6 +257,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
           modalTitle={'Filters'}
           hideCloseButton
           hideDefaultButton
+          withoutPadding
           buttonRightInModalHeader={
             <Button tagType={'button'} variant={'text'} withoutPadding onClick={changeNextStep}>
               Next
@@ -268,16 +269,12 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
             </Button>
           }
         >
-          <div>
-            <div className={s.filterStep}>
-              <FilterPanel
-                ref={filterPanelRef}
-                image={currentImage.croppedImage || currentImage.preview}
-                onFilterApply={handleFilterApply}
-                currentFilter={currentImage.filter?.split('-')[0]}
-              />
-            </div>
-          </div>
+          <FilterPanel
+            ref={filterPanelRef}
+            image={currentImage.croppedImage || currentImage.preview}
+            onFilterApply={handleFilterApply}
+            currentFilter={currentImage.filter?.split('-')[0]}
+          />
         </Modal>
       )}
       {step === 'publication' && (
@@ -285,6 +282,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
           isOpen={isModalOpen}
           onClose={onModalClose}
           modalTitle={'Publication'}
+          withoutPadding
           hideCloseButton
           hideDefaultButton
           buttonLeftInModalHeader={
@@ -299,38 +297,39 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
           }
         >
           <div className={s.publication}>
-            <div className={s.publicationWrapper}>
+            <div className={s.publicationImgWrapper}>
               <div className={s.publicationImg}>
                 <Image src={currentImage.filteredImage?.preview || ''} alt={'Download img'} width={400} height={400} />
               </div>
-              <div className={s.publicationContent}>
-                <form onSubmit={handleSubmit(onFormSubmit)} className={s.form}>
-                  <div className={s.container}>
-                    <label htmlFor='description' className={s.label}>
-                      Описание публикации
-                    </label>
+            </div>
 
-                    <Controller
-                      name='description'
-                      control={control}
-                      render={({ field }) => (
-                        <textarea
-                          {...field}
-                          id='description'
-                          className={`${s.textarea} ${errors.description ? s.error : ''}`}
-                          placeholder='Add publication descriptions'
-                          rows={5}
-                        />
-                      )}
-                    />
+            <div className={s.publicationContent}>
+              <form onSubmit={handleSubmit(onFormSubmit)} className={s.form}>
+                <div className={s.container}>
+                  <label htmlFor='description' className={s.label}>
+                    Описание публикации
+                  </label>
 
-                    <div className={s.footer}>
-                      {errors.description && <span className={s.errorMessage}>{errors.description.message}</span>}
-                      <div className={s.counter}>{characterCount}/500</div>
-                    </div>
+                  <Controller
+                    name='description'
+                    control={control}
+                    render={({ field }) => (
+                      <textarea
+                        {...field}
+                        id='description'
+                        className={`${s.textarea} ${errors.description ? s.error : ''}`}
+                        placeholder='Add publication descriptions'
+                        rows={5}
+                      />
+                    )}
+                  />
+
+                  <div className={s.footer}>
+                    {errors.description && <span className={s.errorMessage}>{errors.description.message}</span>}
+                    <div className={s.counter}>{characterCount}/500</div>
                   </div>
-                </form>
-              </div>
+                </div>
+              </form>
             </div>
           </div>
         </Modal>

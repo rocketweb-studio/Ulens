@@ -75,12 +75,6 @@ export const filters: Filter[] = [
     cssFilter: 'sepia(0.3) hue-rotate(350deg) saturate(1.6)',
     preview: 'W',
   },
-  {
-    name: 'X-Pro II',
-    value: 'xpro2',
-    cssFilter: 'contrast(1.3) sepia(0.3)',
-    preview: 'X',
-  },
 ]
 
 export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
@@ -201,10 +195,9 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
             <ImageNext
               src={image}
               alt='Filter preview'
-              width={400}
-              height={400}
+              width={490}
+              height={530}
               style={{
-                objectFit: 'contain',
                 ...getFilterStyle(selectedFilter),
               }}
               className={s.previewImage}
@@ -214,10 +207,9 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
 
         <div className={s.filterControls}>
           <div className={s.filterList}>
-            <h4>Filters</h4>
-            <div className={s.filterThumbnails}>
+            <ul className={s.filterThumbnails}>
               {filters.map((filter) => (
-                <div
+                <li
                   key={filter.value}
                   className={`${s.filterThumbnail} ${selectedFilter === filter.value ? s.active : ''}`}
                   onClick={() => handleFilterSelect(filter.value)}
@@ -235,9 +227,9 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
                     />
                   </div>
                   <span className={s.filterName}>{filter.name}</span>
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </div>
       </div>

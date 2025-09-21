@@ -114,3 +114,37 @@
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.4);
   }
 }
+
+
+.publication {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  min-width: 80vw;
+  overflow: hidden;
+}
+
+.publicationImgWrapper {
+  grid-column: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.publicationImg {
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.publicationContent {
+  grid-column: 2;
+  padding: 24px 15px;
+  overflow-y: auto;
+}
