@@ -8,7 +8,7 @@ type Props = {
   image: string
   onCropComplete: (croppedImage: string) => void
   aspectRatio?: number
-  initialAspectRatio?: number
+  initialAspectRatio?: AspectRatio
   onCropAreaChange?: (areaPixels: Area) => void
 }
 type AspectRatio = '1:1' | '4:5' | '16:9' | 'original'
@@ -85,12 +85,12 @@ export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<
   return canvas.toDataURL('image/jpeg', 1)
 }
 
-export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1, onCropAreaChange }: Props) => {
+export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = '1:1', onCropAreaChange }: Props) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
-  const [rotation, setRotation] = useState(initialAspectRatio)
+  const [rotation, setRotation] = useState(0)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({ x: 0, y: 0, width: 0, height: 0 })
-  const [currentAspectRatio, setCurrentAspectRatio] = useState<AspectRatio>('1:1')
+  const [currentAspectRatio, setCurrentAspectRatio] = useState<AspectRatio>(initialAspectRatio)
   const [activeMenu, setActiveMenu] = useState<MenuName>(null)
 
   console.log(croppedAreaPixels)
@@ -138,6 +138,7 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = 1, on
       <div className={s.cropContainer}>
         <Cropper
           image={image}
+          objectFit={'cover'}
           crop={crop}
           zoom={zoom}
           rotation={rotation}

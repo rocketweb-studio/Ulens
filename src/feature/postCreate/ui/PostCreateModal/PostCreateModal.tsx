@@ -246,6 +246,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
             image={currentImage.preview}
             onCropComplete={handleCropComplete}
             onCropAreaChange={handleCropAreaChange}
+            initialAspectRatio={'4:5'}
           />
         </Modal>
       )}
