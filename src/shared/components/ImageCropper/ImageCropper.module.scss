@@ -37,25 +37,19 @@
 }
 
 .aspectRatioButton {
-  padding: 8px 16px;
-  border: 2px solid #e0e0e0;
-  border-radius: 6px;
-  background: white;
-  color: #666;
-  font-size: 14px;
-  font-weight: 500;
+  @include typography.regular_text_16;
+  background: none;
+  border: none;
+  color: colors.color(light, 900);
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: #007bff;
-    color: #007bff;
+    color: colors.color(light, 100);
   }
 
   &.active {
-    border-color: #007bff;
-    background: #007bff;
-    color: white;
+    color: colors.color(accent, 500);
   }
 }
 
@@ -65,7 +59,7 @@
 
 .zoomMenuWrapper {
   position:  absolute;
-  top: 0;
+  top: -10px;
 }
 
 .zoomMenu {
@@ -80,7 +74,7 @@
 
 .aspectRatioMenu {
   position: absolute;
-  bottom: 2px;
+  bottom: 5px;
   padding: 10px 15px 10px 12px;
   background-color: rgba(colors.color(dark, 500), 0.8);
   border-radius: 2px;
@@ -95,13 +89,13 @@
   label {
     font-size: 14px;
     font-weight: 500;
-    color: #333;
+    color: colors.color(light, 100);
     min-width: 60px;
   }
 
   span {
     font-size: 14px;
-    color: #666;
+    color: colors.color(light, 100);
     min-width: 40px;
     text-align: right;
   }
@@ -110,7 +104,7 @@
 .slider {
   flex: 1;
   height: 4px;
-  background: #ddd;
+  background: colors.color(light, 900);
   border-radius: 2px;
   outline: none;
   appearance: none;
@@ -119,7 +113,7 @@
     appearance: none;
     width: 16px;
     height: 16px;
-    background: #007bff;
+    background: colors.color(accent, 500);
     border-radius: 50%;
     cursor: pointer;
   }
@@ -127,7 +121,7 @@
   &::-moz-range-thumb {
     width: 16px;
     height: 16px;
-    background: #007bff;
+    background: colors.color(accent, 500);
     border-radius: 50%;
     cursor: pointer;
     border: none;

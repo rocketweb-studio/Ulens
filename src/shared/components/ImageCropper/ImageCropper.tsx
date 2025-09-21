@@ -164,7 +164,6 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = '1:1'
             <div className={s.aspectRatioMenuWrapper}>
               {activeMenu === 'aspectRatio' && (
                 <div className={s.aspectRatioMenu}>
-                  <h4>Aspect Ratio</h4>
                   <ul className={s.aspectRatioButtons}>
                     {activeMenu === 'aspectRatio' &&
                       (['1:1', '4:5', '16:9', 'original'] as AspectRatio[]).map((ratio) => (
