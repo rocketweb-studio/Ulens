@@ -1,0 +1,41 @@
+@use '@/src/shared/styles/colors' as colors;
+
+.textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 8px;
+  border: 1px solid colors.color(dark, 100);
+  border-radius: 6px;
+  font-size: 14px;
+  resize: vertical;
+  background-color: colors.color(dark, 500);
+}
+
+.counter {
+  text-align: right;
+  font-size: 12px;
+  color: colors.color(light, 900);
+  margin-top: 1px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+
+  button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+    background: colors.color(accent, 500);
+    color: colors.color(light, 100);
+
+    &:hover {
+      background: colors.color(accent, 700);
+    }
+  }
+}

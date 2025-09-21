@@ -4,14 +4,17 @@ import { useState } from 'react'
 import s from './postMenuActions.module.scss'
 import { PostDeleteModal } from '@/src/feature/Posts/ui/postDeleteModal'
 import { IconEdit2, IconTrash } from '@rocketweb-studio/ulens-ui-kit'
+import { PostEditModal } from '@/src/feature/Posts/ui/postEditModal'
 
 type Props = {
   postId: string
+  description: string
 }
 
-export const PostMenuActions = ({ postId }: Props) => {
+export const PostMenuActions = ({ postId, description }: Props) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [editOpen, setEditOpen] = useState(false)
 
   return (
     <div className={s.container}>
@@ -23,7 +26,7 @@ export const PostMenuActions = ({ postId }: Props) => {
 
       {menuOpen && (
         <div className={s.menu}>
-          <button className={s.menuItem} onClick={() => alert('Edit post clicked')}>
+          <button className={s.menuItem} onClick={() => setEditOpen(true)}>
             <IconEdit2 width={16} height={16} />
             Edit Post
           </button>
@@ -40,6 +43,12 @@ export const PostMenuActions = ({ postId }: Props) => {
         </div>
       )}
 
+      <PostEditModal
+        postId={postId}
+        initialDescription={description}
+        isOpen={editOpen}
+        onClose={() => setEditOpen(false)}
+      />
       <PostDeleteModal postId={postId} isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} />
     </div>
   )
