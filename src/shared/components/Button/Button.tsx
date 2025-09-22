@@ -17,7 +17,6 @@ type Props = {
   rightIcon?: React.ReactNode
   underlineText?: boolean
   withoutPadding?: boolean
-  buttonHandler?: () => void
 } & ButtonHTMLAttributes<HTMLButtonElement>
 
 export const Button = ({
@@ -34,7 +33,6 @@ export const Button = ({
   underlineText = false,
   className = '',
   withoutPadding = false,
-  buttonHandler,
   ...props
 }: Props) => {
   const buttonClasses = [
@@ -69,7 +67,7 @@ export const Button = ({
   }
 
   return (
-    <button onClick={buttonHandler} className={buttonClasses} disabled={disabled || isLoading} aria-busy={isLoading} {...props}>
+    <button className={buttonClasses} disabled={disabled || isLoading} aria-busy={isLoading} {...props}>
       {leftIcon && <span className={styles.leftIcon}>{leftIcon}</span>}
       {children}
       {rightIcon && <span className={styles.rightIcon}>{rightIcon}</span>}

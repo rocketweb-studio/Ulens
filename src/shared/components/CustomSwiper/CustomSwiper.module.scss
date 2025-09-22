@@ -16,6 +16,7 @@ $swiper-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !default;
 .swiperWrapper {
   border-radius: $swiper-border-radius;
   overflow: hidden;
+  height: 500px;
 }
 
 .slide {

@@ -18,14 +18,14 @@ export default function CreatePostModal() {
 
   return (
     <FlexContainer align={'center'} justify={'center'}>
-      <div style={{ display: 'flex', justifyContent: 'end' }}>
-        <PostMenuActions postId={'1'}></PostMenuActions>
-      </div>
-      <h2>Создать пост</h2>
-      <form>
-        <textarea placeholder='Текст поста' style={{ width: '100%' }} />
-        <button type='submit'>Опубликовать</button>
-      </form>
+      {/*<div style={{ display: 'flex', justifyContent: 'end' }}>*/}
+      {/*  <PostMenuActions postId={'1'}></PostMenuActions>*/}
+      {/*</div>*/}
+      {/*<h2>Создать пост</h2>*/}
+      {/*<form>*/}
+      {/*  <textarea placeholder='Текст поста' style={{ width: '100%' }} />*/}
+      {/*  <button type='submit'>Опубликовать</button>*/}
+      {/*</form>*/}
       <PostCreateModal isModalOpen={isOpen} onModalClose={onModalCloseHandler} />
     </FlexContainer>
   )

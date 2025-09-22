@@ -1,3 +1,5 @@
+import {ReactNode} from "react";
+
 export type TSlide = {
   id: string | number
   content: ReactNode

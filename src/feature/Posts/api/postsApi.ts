@@ -7,11 +7,11 @@ import {
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getPostsByUsedId: build.query<GetPostsByUserIdResponse, { userId: string | undefined }>({
-      query: ({ userId }) => `posts/${userId}`,
+    getPostsByUsedId: build.query<GetPostsByUserIdResponse, { userId: string }>({
+      query: ({ userId }) => `posts/user/${userId}`,
       providesTags: ['getPostsByUsedId'],
     }),
-    getPostById: build.query<GetPostByIdResponse, { postId: string | undefined }>({
+    getPostById: build.query<GetPostByIdResponse, { postId: string }>({
       query: ({ postId }) => `posts/${postId}`,
     }),
     createPost: build.mutation<{ id: string }, { description: string }>({

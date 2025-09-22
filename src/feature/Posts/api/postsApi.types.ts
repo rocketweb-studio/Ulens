@@ -46,35 +46,32 @@ export type GetPostsByUserIdResponse = {
 }
 
 export type GetPostByIdResponse = {
-  totalCount: number
-  pageSize: number
-  items: {
-    id: string // postId
-    userName: string
-    description: string
-    location: {
-      city: string | null
-      country: string | null
-      region: string | null
-    }
-    images: {
-      url: string
-      width: number
-      height: number
-      fileSize: number
-      createdAt: string // ISO
-      uploadId: string
-    }[]
-    createdAt: string // ISO
-    updatedAt: string // ISO
-    ownerId: string // userId
-    avatarOwner: string | null // avatar url ('' если нет)
-    owner: {
-      firstName: string | null
-      lastName: string | null
-    }
-    likeCount: number
-    isLiked: boolean
-    avatarWhoLikes: boolean
-  }
+  id: string,
+  userName: string,
+  description: string,
+  location: {
+    city: string,
+    country: string,
+    region: string
+  },
+  images: {
+    url: string,
+    width: number,
+    height: number,
+    fileSize: number,
+    size: string,
+    createdAt: string,
+    uploadId: string
+  }[],
+  createdAt: string,
+  updatedAt: string,
+  ownerId: string,
+  avatarOwner: string,
+  owner: {
+    firstName: string,
+    lastName: string
+  },
+  likeCount: number,
+  isLiked: boolean,
+  avatarWhoLikes: boolean
 }

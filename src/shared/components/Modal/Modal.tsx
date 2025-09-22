@@ -64,16 +64,18 @@ export const Modal = ({
   return createPortal(
     <div className={s.overlay} onClick={onOverlayClick}>
       <div className={`${s.content} ${className}`}>
-        <div className={s.header}>
-          {buttonLeftInModalHeader}
-          <h3 className={s.title}>{modalTitle}</h3>
-          {buttonRightInModalHeader}
-          {!hideCloseButton && (
-            <button className={s.closeButton} onClick={onClose}>
-              <Image src={closeIcon} alt={'closeIcon'} />
-            </button>
-          )}
-        </div>
+        {modalTitle.length > 0 &&
+          <div className={s.header}>
+            {buttonLeftInModalHeader}
+            <h3 className={s.title}>{modalTitle}</h3>
+            {buttonRightInModalHeader}
+            {!hideCloseButton && (
+              <button className={s.closeButton} onClick={onClose}>
+                <Image src={closeIcon} alt={'closeIcon'} />
+              </button>
+            )}
+          </div>
+        }
         <div className={`${s.flexContainer} ${withoutPadding ? s.withoutPadding : ''}`}>
           {children}
           {!hideDefaultButton && (

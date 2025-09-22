@@ -117,7 +117,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   })
 
   const createSlides = (files: UploadedFile[]) => {
-    debugger
     return setSlides(
       files.map((file, index) => ({
         id: index,
@@ -241,6 +240,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     }
   }
 
+  console.log(slides)
   return (
     <div className={s.wrapper}>
       {step === 'add' && (

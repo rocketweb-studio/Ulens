@@ -1,0 +1,19 @@
+.viewPostModal{
+  width: 75vw;
+}
+.publication{
+  display: flex;
+  gap: 20px;
+}
+.publicationImg{
+  flex: 0 0 50%;
+  min-width: 0;
+}
+.publicationContent{
+  flex: 0 0 50%;
+  min-width: 0;
+  padding: 20px 0;
+}
+.customSwiper{
+  padding: 0;
+}

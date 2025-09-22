@@ -11,8 +11,7 @@ export type UserType = {
 export type LoginRequestParams = z.infer<typeof loginSchema>
 export type LoginResponse = { accessToken: string }
 export type getMeResponse = {
-  id: number
+  id: string
   userName: string
   email: string
-  isBlocked?: boolean
 }

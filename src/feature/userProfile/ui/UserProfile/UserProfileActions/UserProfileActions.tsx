@@ -14,10 +14,10 @@ export const UserProfileActions = () => {
 
     return (
         <FlexContainer gap={'15px'}>
-            <Button size={"medium"} variant={'primary'} buttonHandler={handleFollow}>
+            <Button size={"medium"} variant={'primary'} onClick={handleFollow}>
                 Follow
             </Button>
-            <Button size={"medium"} variant={'secondary'} buttonHandler={handleSendMessage}>
+            <Button size={"medium"} variant={'secondary'} onClick={handleSendMessage}>
                 Send Message
             </Button>
         </FlexContainer>
