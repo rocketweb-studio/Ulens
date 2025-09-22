@@ -10,6 +10,8 @@ import {Modal} from "@/src/shared/components/Modal/Modal";
 import {MouseEvent} from "react";
 import {useGetPostByIdQuery} from "@/src/feature/Posts/api/postsApi";
 import {CustomSwiper} from "@/src/shared/components/CustomSwiper";
+import {useGetProfileByUsedIdQuery} from "@/src/feature/userProfile/api/userProfileApi";
+import Link from "next/link";
 
 export default function ViewPostModal({ userId, postId }: { userId: string, postId: string }) {
   const { isOpen, closeModal } = useModal(true)
@@ -27,6 +29,7 @@ export default function ViewPostModal({ userId, postId }: { userId: string, post
     }
   }
   const {data: postInfo} = useGetPostByIdQuery({postId})
+  const {data: user} = useGetProfileByUsedIdQuery({userId})
 
   return (
     <FlexContainer align={'center'} justify={'center'}>
@@ -72,8 +75,8 @@ export default function ViewPostModal({ userId, postId }: { userId: string, post
             <div className={s.publicationProfile}>
               <div className={s.publicationProfileImage}>
                 <Image src={'/avatar/avatar_mini.png'} alt={'Avatar'} width={36} height={36} />
+                <Link href={Path.UserProfile(userId)} className={s.publicationProfileURL}>{user?.userName}</Link>
               </div>
-              <p className={s.publicationProfileURL}> URLProfile</p>
             </div>
           </div>
         </div>
