@@ -1,6 +1,6 @@
 import s from './PostCreateModal.module.scss'
 import { Modal } from '@/src/shared/components/Modal/Modal'
-import { MouseEvent, useCallback, useRef, useState } from 'react'
+import { MouseEvent, ReactNode, useCallback, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Button } from '@/src/shared/components/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
@@ -14,6 +14,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Area } from 'react-easy-crop'
 import { TextArea } from '@/src/shared/components/TextArea/TextArea'
 import { useModal } from '@/src/shared/hooks/useModal'
+import { CustomSwiper } from '@/src/shared/components/CustomSwiper'
+import { TSlide } from '@/src/shared/components/CustomSwiper/types'
 
 type Props = {
   isModalOpen: boolean
@@ -78,6 +80,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({ x: 0, y: 0, width: 0, height: 0 })
   const filterPanelRef = useRef<{ applyFilter: () => void }>(null)
   const { isOpen, openModal, closeModal } = useModal()
+  const [slides, setSlides] = useState<TSlide[]>([])
 
   const {
     control,
@@ -98,7 +101,10 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       preview: URL.createObjectURL(file),
     }))
     setUploadedFiles(newFiles)
-    changeNextStep()
+    createSlides(uploadedFiles)
+    if (acceptedFiles.length > 0) {
+      changeNextStep()
+    }
   }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -110,9 +116,30 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     maxSize: FILES_VALIDATE.maxSize,
   })
 
+  const createSlides = (files: UploadedFile[]) => {
+    debugger
+    return setSlides(
+      files.map((file, index) => ({
+        id: index,
+        content: (
+          <div className={s.slideContent}>
+            <ImageCropper
+              image={file.preview}
+              onCropComplete={handleCropComplete}
+              onCropAreaChange={handleCropAreaChange}
+              initialAspectRatio={'4:5'}
+            />
+          </div>
+        ),
+      })),
+    )
+  }
+
   const handleCropComplete = (croppedImage: string, areaPixels?: Area) => {
     setUploadedFiles((prev) =>
-      prev.map((file, index) => (index === currentImageIndex ? { ...file, croppedImage } : file)),
+      prev.map((file, index) =>
+        index === currentImageIndex ? { ...file, croppedImage, preview: croppedImage } : file,
+      ),
     )
     if (areaPixels) {
       setCroppedAreaPixels(areaPixels)
@@ -149,6 +176,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         try {
           const croppedImage = await getCroppedImg(currentImage.preview, croppedAreaPixels)
           handleCropComplete(croppedImage)
+          createSlides(uploadedFiles)
           setStep('filter')
         } catch (error) {
           console.error('Error cropping image:', error)
@@ -158,6 +186,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       case 'filter':
         if (filterPanelRef.current) {
           await filterPanelRef.current.applyFilter()
+          createSlides(uploadedFiles)
         }
         setStep('publication')
         break
@@ -254,12 +283,27 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
             </Button>
           }
         >
-          <ImageCropper
-            image={currentImage.preview}
-            onCropComplete={handleCropComplete}
-            onCropAreaChange={handleCropAreaChange}
-            initialAspectRatio={'4:5'}
+          <CustomSwiper
+            slides={slides}
+            navigation={true}
+            pagination={true}
+            className={s.customSwiper}
+            allowTouchMove={false}
+            swiperProps={{
+              spaceBetween: 0,
+              slidesPerView: 1,
+              initialSlide: currentImageIndex,
+              noSwiping: true,
+              noSwipingClass: 'swiper-slide',
+              preventInteractionOnTransition: true,
+            }}
           />
+          {/*<ImageCropper*/}
+          {/*  image={currentImage.preview}*/}
+          {/*  onCropComplete={handleCropComplete}*/}
+          {/*  onCropAreaChange={handleCropAreaChange}*/}
+          {/*  initialAspectRatio={'4:5'}*/}
+          {/*/>*/}
         </Modal>
       )}
       {step === 'filter' && (
