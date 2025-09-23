@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import s from './postMenuActions.module.scss'
 import { PostDeleteModal } from '@/src/feature/Posts/ui/postDeleteModal'
 import { IconEdit2, IconTrash } from '@rocketweb-studio/ulens-ui-kit'
@@ -16,8 +16,25 @@ export const PostMenuActions = ({ postId, description }: Props) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
 
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!menuOpen) return
+
+    const handlerClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handlerClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handlerClickOutside)
+    }
+  }, [menuOpen])
+
   return (
-    <div className={s.container}>
+    <div className={s.container} ref={containerRef}>
       <button className={s.dotsButton} onClick={() => setMenuOpen((prev) => !prev)}>
         <span />
         <span />
