@@ -24,7 +24,7 @@ type Props = {
 
 type Steps = 'add' | 'crop' | 'filter' | 'publication'
 
-type UploadedFile = {
+export type UploadedFile = {
   file: File
   preview: string
   croppedImage?: string
@@ -47,10 +47,6 @@ export type FilteredImage = {
   originalImage: string
 }
 
-export type FormData = {
-  description: string
-}
-
 const FILES_VALIDATE = {
   maxFiles: 10,
   maxSize: 10 * 1024 * 1024,
@@ -65,10 +61,6 @@ const publicationSchema = z.object({
 })
 
 type PublicationFormData = z.infer<typeof publicationSchema>
-
-type PublicationTextareaProps = {
-  onSubmit: (data: PublicationFormData) => void
-}
 
 export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const [step, setStep] = useState<Steps>('add')
@@ -114,7 +106,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     maxSize: FILES_VALIDATE.maxSize,
   })
 
-  const createSlides = (files: UploadedFile[]) =>
+  const createCropSlides = (files: UploadedFile[]): TSlide[] =>
     files.map((file, index) => ({
       id: index,
       content: (
@@ -146,10 +138,10 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   }
 
   const handleFilterApply = useCallback(
-    (filteredData: FilteredImage) => {
+    (filteredData: FilteredImage, indexActiveSlide: number) => {
       setUploadedFiles((prev) =>
         prev.map((file, index) =>
-          index === currentImageIndex ?
+          index === indexActiveSlide ?
             {
               ...file,
               filteredImage: filteredData,
@@ -171,7 +163,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         try {
           const croppedImage = await getCroppedImg(currentImage.preview, croppedAreaPixels)
           handleCropComplete(croppedImage)
-          createSlides(uploadedFiles)
           setStep('filter')
         } catch (error) {
           console.error('Error cropping image:', error)
@@ -181,7 +172,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       case 'filter':
         if (filterPanelRef.current) {
           await filterPanelRef.current.applyFilter()
-          createSlides(uploadedFiles)
         }
         setStep('publication')
         break
@@ -209,10 +199,8 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   }
 
   const currentImage = uploadedFiles[currentImageIndex]
-  const slides = createSlides(uploadedFiles)
+  const cropSlides = createCropSlides(uploadedFiles)
 
-  const descriptionValue = watch('description', '')
-  const characterCount = descriptionValue.length
   const onPublishHandler = () => {
     handleSubmit(onFormSubmit)()
     onModalClose()
@@ -240,6 +228,8 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       console.log(error)
     }
   }
+
+  console.log(uploadedFiles)
 
   return (
     <div className={s.wrapper}>
@@ -284,7 +274,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
           }
         >
           <CustomSwiper
-            slides={slides}
+            slides={cropSlides}
             navigation={true}
             pagination={true}
             className={s.customSwiper}
@@ -323,9 +313,10 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         >
           <FilterPanel
             ref={filterPanelRef}
-            image={currentImage.croppedImage || currentImage.preview}
+            // image={currentImage.croppedImage || currentImage.preview}
             onFilterApply={handleFilterApply}
             currentFilter={currentImage.filter?.split('-')[0]}
+            uploadedFiles={uploadedFiles}
           />
         </Modal>
       )}

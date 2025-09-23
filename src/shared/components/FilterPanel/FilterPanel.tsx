@@ -1,12 +1,15 @@
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react'
 import ImageNext from 'next/image'
 import s from './FilterPanel.module.scss'
-import { FilteredImage } from '@/src/feature/postCreate/ui/PostCreateModal/PostCreateModal'
+import { FilteredImage, UploadedFile } from '@/src/feature/postCreate/ui/PostCreateModal/PostCreateModal'
+import { TSlide } from '@/src/shared/components/CustomSwiper/types'
+import { CustomSwiper } from '@/src/shared/components/CustomSwiper'
 
 type Props = {
-  image: string
-  onFilterApply: (filteredData: FilteredImage) => void
+  onFilterApply: (filteredData: FilteredImage, indexActiveSlide: number) => void
   currentFilter?: string
+  slides?: TSlide[]
+  uploadedFiles: UploadedFile[]
 }
 
 export type FilterPanelHandle = {
@@ -78,87 +81,100 @@ export const filters: Filter[] = [
 ]
 
 export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
-  ({ image, onFilterApply, currentFilter = 'original' }, ref) => {
+  ({ onFilterApply, currentFilter = 'original', uploadedFiles }, ref) => {
     const [selectedFilter, setSelectedFilter] = useState<string>(currentFilter)
     const canvasRef = useRef<HTMLCanvasElement>(null)
+    const [currentImageIndex, setCurrentImageIndex] = useState(0)
+    const currentImage = uploadedFiles[currentImageIndex]
+    const image = currentImage.croppedImage || currentImage.preview
 
-    const applyFilterToImage = useCallback(async (): Promise<Blob> => {
-      return new Promise(async (resolve, reject) => {
-        try {
-          const canvas = canvasRef.current || document.createElement('canvas')
-          const ctx = canvas.getContext('2d')
-          if (!ctx) throw new Error('Canvas context not available')
+    const applyFilterToImage = useCallback(
+      async (filterValue: string): Promise<Blob> => {
+        return new Promise(async (resolve, reject) => {
+          try {
+            const canvas = canvasRef.current || document.createElement('canvas')
+            const ctx = canvas.getContext('2d')
+            if (!ctx) throw new Error('Canvas context not available')
 
-          const img = new Image()
-          img.crossOrigin = 'anonymous'
-          img.src = image
+            const img = new Image()
+            img.crossOrigin = 'anonymous'
+            img.src = image
 
-          await new Promise((resolve, reject) => {
-            img.onload = resolve
-            img.onerror = reject
-          })
+            await new Promise((resolve, reject) => {
+              img.onload = resolve
+              img.onerror = reject
+            })
 
-          canvas.width = img.width
-          canvas.height = img.height
+            canvas.width = img.width
+            canvas.height = img.height
 
-          // Применяем фильтр с фиксированной интенсивностью 100%
-          ctx.filter = getCssFilterValue(selectedFilter, 100)
-          ctx.drawImage(img, 0, 0)
+            // Используем переданный filterValue вместо selectedFilter
+            ctx.filter = getCssFilterValue(filterValue, 100)
+            ctx.drawImage(img, 0, 0)
 
-          // Конвертируем в Blob
-          canvas.toBlob(
-            (blob) => {
-              if (blob) {
-                resolve(blob)
-              } else {
-                reject(new Error('Failed to create blob'))
-              }
-            },
-            'image/jpeg',
-            0.9,
-          )
-        } catch (error) {
-          reject(error)
-        }
-      })
-    }, [image, selectedFilter])
+            canvas.toBlob(
+              (blob) => {
+                if (blob) {
+                  resolve(blob)
+                } else {
+                  reject(new Error('Failed to create blob'))
+                }
+              },
+              'image/jpeg',
+              0.9,
+            )
+          } catch (error) {
+            reject(error)
+          }
+        })
+      },
+      [image],
+    )
 
-    const handleFilterSelect = (filterValue: string) => {
+    const handleFilterSelect = async (filterValue: string) => {
       setSelectedFilter(filterValue)
-    }
 
-    const handleApplyFilter = async () => {
       try {
-        if (selectedFilter === 'original') {
+        if (filterValue === 'original') {
           const response = await fetch(image)
           const blob = await response.blob()
           const file = new File([blob], `original-${Date.now()}.jpg`, { type: 'image/jpeg' })
           const preview = URL.createObjectURL(file)
 
-          onFilterApply({
-            file,
-            filter: 'original',
-            preview,
-            intensity: 100,
-            originalImage: image,
-          })
+          onFilterApply(
+            {
+              file,
+              filter: 'original',
+              preview,
+              intensity: 100,
+              originalImage: image,
+            },
+            currentImageIndex,
+          )
         } else {
-          const filteredBlob = await applyFilterToImage()
-          const fileName = `filtered-${selectedFilter}-${Date.now()}.jpg`
+          const filteredBlob = await applyFilterToImage(filterValue)
+          const fileName = `filtered-${filterValue}-${Date.now()}.jpg`
           const filteredFile = new File([filteredBlob], fileName, { type: 'image/jpeg' })
           const preview = URL.createObjectURL(filteredFile)
 
-          onFilterApply({
-            file: filteredFile,
-            filter: selectedFilter,
-            preview,
-            intensity: 100,
-            originalImage: image,
-          })
+          onFilterApply(
+            {
+              file: filteredFile,
+              filter: filterValue,
+              preview,
+              intensity: 100,
+              originalImage: image,
+            },
+            currentImageIndex,
+          )
         }
       } catch (error) {
         console.error('Error applying filter:', error)
       }
+    }
+
+    const handleApplyFilter = async () => {
+      await handleFilterSelect(selectedFilter)
     }
 
     useImperativeHandle(
@@ -187,13 +203,13 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
       return { filter: filter.cssFilter }
     }
 
-    return (
-      <div className={s.filterPanel}>
-        <canvas ref={canvasRef} style={{ display: 'none' }} />
-        <div className={s.preview}>
-          <div className={s.mainPreview}>
+    const createFilterSlides = (files: UploadedFile[]) =>
+      files.map((file, index) => ({
+        id: index,
+        content: (
+          <div className={s.slideContent}>
             <ImageNext
-              src={image}
+              src={file.croppedImage || file.preview}
               alt='Filter preview'
               width={490}
               height={530}
@@ -201,6 +217,36 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
                 ...getFilterStyle(selectedFilter),
               }}
               className={s.previewImage}
+            />
+          </div>
+        ),
+      }))
+
+    const handleSlideChange = (swiper: any) => {
+      setCurrentImageIndex(swiper.activeIndex)
+    }
+
+    const slides = createFilterSlides(uploadedFiles)
+
+    return (
+      <div className={s.filterPanel}>
+        <canvas ref={canvasRef} style={{ display: 'none' }} />
+        <div className={s.preview}>
+          <div className={s.mainPreview}>
+            <CustomSwiper
+              slides={slides || []}
+              navigation={true}
+              pagination={true}
+              className={s.customSwiper}
+              allowTouchMove={false}
+              onSlideChange={handleSlideChange}
+              swiperProps={{
+                spaceBetween: 0,
+                slidesPerView: 1,
+                noSwiping: true,
+                noSwipingClass: 'swiper-slide',
+                preventInteractionOnTransition: true,
+              }}
             />
           </div>
         </div>
@@ -216,7 +262,7 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
                 >
                   <div className={s.thumbnailImage}>
                     <ImageNext
-                      src={image}
+                      src={currentImage.preview}
                       alt={filter.name}
                       width={60}
                       height={60}
