@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Cropper, { Area } from 'react-easy-crop'
 import { Button } from '@/src/shared/components/Button/Button'
 import s from './ImageCropper.module.scss'
@@ -10,6 +10,7 @@ type Props = {
   aspectRatio?: number
   initialAspectRatio?: AspectRatio
   onCropAreaChange?: (areaPixels: Area) => void
+  isActiveSlide?: boolean
 }
 type AspectRatio = '1:1' | '4:5' | '16:9' | 'original'
 type MenuName = 'aspectRatio' | 'zoom' | null
@@ -85,15 +86,19 @@ export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<
   return canvas.toDataURL('image/jpeg', 1)
 }
 
-export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = '1:1', onCropAreaChange }: Props) => {
+export const ImageCropper = ({
+  image,
+  onCropComplete,
+  initialAspectRatio = '1:1',
+  onCropAreaChange,
+  isActiveSlide,
+}: Props) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
   const [rotation, setRotation] = useState(0)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({ x: 0, y: 0, width: 0, height: 0 })
   const [currentAspectRatio, setCurrentAspectRatio] = useState<AspectRatio>(initialAspectRatio)
   const [activeMenu, setActiveMenu] = useState<MenuName>(null)
-
-  console.log(croppedAreaPixels)
 
   const onCropChange = useCallback((crop: { x: number; y: number }) => {
     setCrop(crop)
@@ -133,6 +138,12 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = '1:1'
     setCurrentAspectRatio('1:1')
   }
 
+  useEffect(() => {
+    if (!isActiveSlide) {
+      setActiveMenu(null)
+    }
+  }, [isActiveSlide])
+
   return (
     <div className={s.cropper}>
       <div className={s.cropContainer}>
@@ -143,7 +154,7 @@ export const ImageCropper = ({ image, onCropComplete, initialAspectRatio = '1:1'
           zoom={zoom}
           rotation={rotation}
           aspect={currentAspectRatio === 'original' ? undefined : ASPECT_RATIO_MAP[currentAspectRatio]}
-          onCropChange={setCrop}
+          onCropChange={onCropChange}
           onZoomChange={onZoomChange}
           onRotationChange={onRotationChange}
           onCropComplete={onCropAreaComplete}

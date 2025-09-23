@@ -124,6 +124,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
             onCropComplete={handleCropComplete}
             onCropAreaChange={handleCropAreaChange}
             initialAspectRatio={'4:5'}
+            isActiveSlide={index === currentImageIndex}
           />
         </div>
       ),
