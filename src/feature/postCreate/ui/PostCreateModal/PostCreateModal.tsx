@@ -122,6 +122,21 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       ),
     }))
 
+  const createPublicationSlides = (files: UploadedFile[]): TSlide[] =>
+    files.map((file, index) => ({
+      id: index,
+      content: (
+        <div className={s.slideContent}>
+          <Image
+            src={file.filteredImage?.preview || file.croppedImage || file.preview}
+            alt={'Download img'}
+            width={400}
+            height={400}
+          />
+        </div>
+      ),
+    }))
+
   const handleCropComplete = (croppedImage: string, areaPixels?: Area) => {
     setUploadedFiles((prev) =>
       prev.map((file, index) =>
@@ -200,6 +215,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
 
   const currentImage = uploadedFiles[currentImageIndex]
   const cropSlides = createCropSlides(uploadedFiles)
+  const publicationSlides = createPublicationSlides(uploadedFiles)
 
   const onPublishHandler = () => {
     handleSubmit(onFormSubmit)()
@@ -343,7 +359,23 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
           <div className={s.publication}>
             <div className={s.publicationImgWrapper}>
               <div className={s.publicationImg}>
-                <Image src={currentImage.filteredImage?.preview || ''} alt={'Download img'} width={400} height={400} />
+                <CustomSwiper
+                  slides={publicationSlides}
+                  navigation={true}
+                  pagination={true}
+                  className={s.customSwiper}
+                  allowTouchMove={false}
+                  // onSlideChange={handleSlideChange}
+                  swiperProps={{
+                    spaceBetween: 0,
+                    slidesPerView: 1,
+                    initialSlide: currentImageIndex,
+                    noSwiping: true,
+                    noSwipingClass: 'swiper-slide',
+                    preventInteractionOnTransition: true,
+                  }}
+                />
+                {/*<Image src={currentImage.filteredImage?.preview || ''} alt={'Download img'} width={400} height={400} />*/}
               </div>
             </div>
 

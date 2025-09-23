@@ -89,7 +89,8 @@
   max-width: 80vw;
   overflow: hidden;
 }
-.zaebalaimg{
+
+.img{
   width: 100%;
   height: auto;
 }
@@ -98,6 +99,7 @@
   grid-column: 1;
   display: flex;
   justify-content: center;
+  min-width: 0;
 }
 
 .publicationImg {
