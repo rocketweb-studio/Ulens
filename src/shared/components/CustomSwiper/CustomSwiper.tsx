@@ -18,6 +18,7 @@ export const CustomSwiper: React.FC<TCustomSwiperProps> = ({
   className = '',
   breakpoints,
   allowTouchMove = false,
+  onSlideChange,
 }: TCustomSwiperProps) => {
   const swiperRef = useRef<SwiperRef>(null)
   const [isBeginning, setIsBeginning] = useState(true)
@@ -36,14 +37,18 @@ export const CustomSwiper: React.FC<TCustomSwiperProps> = ({
     setIsBeginning(swiper.isBeginning)
     setIsEnd(swiper.isEnd)
     setActiveIndex(swiper.activeIndex)
+
+    if (onSlideChange) {
+      onSlideChange(swiper)
+    }
   }, [])
 
   const defaultSwiperProps = {
     modules: [Navigation, Pagination, Autoplay],
     spaceBetween: 30,
     slidesPerView: 1,
-    onSlideChange: handleSlideChange,
     allowTouchMove: allowTouchMove,
+    onSlideChange: handleSlideChange,
     onInit: (swiper: any) => {
       setIsBeginning(swiper.isBeginning)
       setIsEnd(swiper.isEnd)

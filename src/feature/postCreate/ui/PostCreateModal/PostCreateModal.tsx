@@ -80,7 +80,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({ x: 0, y: 0, width: 0, height: 0 })
   const filterPanelRef = useRef<{ applyFilter: () => void }>(null)
   const { isOpen, openModal, closeModal } = useModal()
-  const [slides, setSlides] = useState<TSlide[]>([])
 
   const {
     control,
@@ -101,7 +100,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       preview: URL.createObjectURL(file),
     }))
     setUploadedFiles(newFiles)
-    createSlides(uploadedFiles)
     if (acceptedFiles.length > 0) {
       changeNextStep()
     }
@@ -116,23 +114,20 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     maxSize: FILES_VALIDATE.maxSize,
   })
 
-  const createSlides = (files: UploadedFile[]) => {
-    return setSlides(
-      files.map((file, index) => ({
-        id: index,
-        content: (
-          <div className={s.slideContent}>
-            <ImageCropper
-              image={file.preview}
-              onCropComplete={handleCropComplete}
-              onCropAreaChange={handleCropAreaChange}
-              initialAspectRatio={'4:5'}
-            />
-          </div>
-        ),
-      })),
-    )
-  }
+  const createSlides = (files: UploadedFile[]) =>
+    files.map((file, index) => ({
+      id: index,
+      content: (
+        <div className={s.slideContent}>
+          <ImageCropper
+            image={file.preview}
+            onCropComplete={handleCropComplete}
+            onCropAreaChange={handleCropAreaChange}
+            initialAspectRatio={'4:5'}
+          />
+        </div>
+      ),
+    }))
 
   const handleCropComplete = (croppedImage: string, areaPixels?: Area) => {
     setUploadedFiles((prev) =>
@@ -213,12 +208,17 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   }
 
   const currentImage = uploadedFiles[currentImageIndex]
+  const slides = createSlides(uploadedFiles)
 
   const descriptionValue = watch('description', '')
   const characterCount = descriptionValue.length
   const onPublishHandler = () => {
     handleSubmit(onFormSubmit)()
     onModalClose()
+  }
+
+  const handleSlideChange = (swiper: any) => {
+    setCurrentImageIndex(swiper.activeIndex)
   }
 
   const onFormSubmit: SubmitHandler<PublicationFormData> = async (data) => {
@@ -240,7 +240,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     }
   }
 
-  console.log(slides)
   return (
     <div className={s.wrapper}>
       {step === 'add' && (
@@ -289,6 +288,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
             pagination={true}
             className={s.customSwiper}
             allowTouchMove={false}
+            onSlideChange={handleSlideChange}
             swiperProps={{
               spaceBetween: 0,
               slidesPerView: 1,
@@ -298,12 +298,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
               preventInteractionOnTransition: true,
             }}
           />
-          {/*<ImageCropper*/}
-          {/*  image={currentImage.preview}*/}
-          {/*  onCropComplete={handleCropComplete}*/}
-          {/*  onCropAreaChange={handleCropAreaChange}*/}
-          {/*  initialAspectRatio={'4:5'}*/}
-          {/*/>*/}
         </Modal>
       )}
       {step === 'filter' && (

@@ -1,4 +1,4 @@
-import {ReactNode} from "react";
+import { ReactNode } from 'react'
 
 export type TSlide = {
   id: string | number
@@ -15,6 +15,7 @@ export type TCustomSwiperProps = {
   className?: string
   breakpoints?: Record<string, any>
   allowTouchMove?: boolean
+  onSlideChange?: (swiper: any) => void
 }
 
 export type TNavigationButtonsProps = {
