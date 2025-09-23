@@ -1,0 +1,176 @@
+@use '../../styles/colors' as colors;
+@use '../../styles/typography' as typography;
+// Переменные
+$swiper-primary-color: colors.color(accent, 500) !default;
+$swiper-secondary-color: colors.color(light, 900) !default;
+$swiper-border-radius: 0 !default;
+$swiper-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !default;
+
+// Основные стили
+.swiperContainer {
+  position: relative;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.swiperWrapper {
+  border-radius: $swiper-border-radius;
+  overflow: hidden;
+  height: 500px;
+}
+
+.slide {
+  border-radius: $swiper-border-radius;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Навигация
+.navigation {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.navButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 2px;
+  background: rgba(colors.color(dark, 500), 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  pointer-events: all;
+  box-shadow: $swiper-shadow;
+  border: none;
+
+  &:hover:not(.disabled) {
+    background: $swiper-primary-color;
+
+    .navIcon {
+      stroke: white;
+    }
+  }
+
+  &.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.navIcon {
+  stroke: $swiper-primary-color;
+  stroke-width: 2;
+  transition: stroke 0.3s ease;
+
+  .navButton:hover:not(.disabled) & {
+    stroke: white;
+  }
+}
+
+.prevButton {
+  left: 11px;
+  position: relative;
+}
+
+.nextButton {
+  right: 11px;
+  position: relative;
+}
+
+// Пагинация
+.pagination {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.paginationBullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: $swiper-secondary-color;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.6;
+  border: none;
+
+  &:hover {
+    opacity: 0.8;
+    transform: scale(1.2);
+  }
+
+  &.active {
+    background: $swiper-primary-color;
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+// Progress bar
+.progressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, $swiper-primary-color, lighten($swiper-primary-color, 20%));
+  width: 0%;
+  transition: width 0.1s linear;
+  z-index: 10;
+  border-radius: $swiper-border-radius;
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .swiperContainer {
+    padding: 1rem 0;
+  }
+
+  .navButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .prevButton {
+    left: -15px;
+  }
+
+  .nextButton {
+    right: -15px;
+  }
+
+  .slide {
+    height: 250px;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navigation {
+    display: none;
+  }
+
+  .slide {
+    height: 200px;
+    padding: 1rem;
+  }
+}

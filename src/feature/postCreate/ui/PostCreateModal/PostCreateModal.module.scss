@@ -1,0 +1,141 @@
+@use '/src/shared/styles/colors' as colors;
+@use '/src/shared/styles/typography' as typography;
+
+.wrapper {
+
+}
+
+.modal {
+  width: 492px;
+}
+
+.cropModal {
+  padding: 0;
+}
+
+.addStep {
+  display: flex;
+  justify-content: center;
+}
+
+.form {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.counter {
+  font-size: 14px;
+  color: #999;
+  margin-left: auto;
+}
+
+.errorMessage {
+  font-size: 14px;
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+.submitButton {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #3a80d2;
+  }
+
+  &:active {
+    background-color: #2a70c2;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.4);
+  }
+}
+
+.publication {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  min-width: 80vw;
+  max-width: 80vw;
+  overflow: hidden;
+}
+
+.img{
+  width: 100%;
+  height: auto;
+}
+
+.publicationImgWrapper {
+  grid-column: 1;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.publicationImg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.publicationContent {
+  grid-column: 2;
+  padding: 24px 15px;
+  overflow-y: auto;
+}
+
+.publicationProfile {
+  display: flex;
+  align-items: center;
+  gap: 0 12px;
+  margin-bottom: 24px;
+}
+
+.accessCloseModalText {
+  @include typography.regular_text_16
+
+}
+
+.accessCloseModalButtons {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 24px;
+}

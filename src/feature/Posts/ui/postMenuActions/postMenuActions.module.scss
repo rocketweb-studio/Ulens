@@ -1,8 +1,12 @@
 @use '@/src/shared/styles/colors' as colors;
 
 .container {
-  position: relative;
+  position: absolute;
   display: inline-block;
+  top: 10px;
+  right: 15px;
+  z-index: 9;
+  color:#fff;
 }
 
 .dotsButton {
@@ -22,12 +26,12 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background-color: colors.color(accent, 500);
+    background-color: colors.color(light, 100);
     display: block;
   }
 
   &:hover span {
-    background-color: colors.color(accent, 700);
+    background-color: colors.color(light, 100);
   }
 }
 

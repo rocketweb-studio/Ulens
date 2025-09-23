@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { HTMLAttributes, MouseEvent, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import s from './Modal.module.scss'
 import Image from 'next/image'
@@ -11,18 +11,30 @@ export type Props = {
   children: React.ReactNode
   closeOnOverlayClick?: boolean
   closeOnEsc?: boolean
+  onOverlayClick?: (e: MouseEvent<HTMLDivElement>) => void
   modalTitle: string
+  className?: string
+  withoutPadding?: boolean
   hideDefaultButton?: boolean
-}
+  hideCloseButton?: boolean
+  buttonRightInModalHeader?: React.ReactNode
+  buttonLeftInModalHeader?: React.ReactNode
+} & HTMLAttributes<HTMLDivElement>
 
 export const Modal = ({
   isOpen,
   onClose,
+  onOverlayClick,
   children,
   modalTitle,
+  className = '',
   // closeOnOverlayClick = true,
   closeOnEsc = true,
+  withoutPadding = false,
   hideDefaultButton = false,
+  hideCloseButton = false,
+  buttonRightInModalHeader,
+  buttonLeftInModalHeader,
 }: Props) => {
   useEffect(() => {
     if (!isOpen || !closeOnEsc) return
@@ -50,13 +62,21 @@ export const Modal = ({
   if (!isOpen) return null
 
   return createPortal(
-    <div className={s.overlay} onClick={onClose}>
-      <div className={s.content} onClick={(e) => e.stopPropagation()}>
-        <h3 className={s.title}>{modalTitle}</h3>
-        <button className={s.closeButton} onClick={onClose}>
-          <Image src={closeIcon} alt={'closeIcon'} />
-        </button>
-        <div className={s.flexContainer}>
+    <div className={s.overlay} onClick={onOverlayClick}>
+      <div className={`${s.content} ${className}`}>
+        {modalTitle.length > 0 &&
+          <div className={s.header}>
+            {buttonLeftInModalHeader}
+            <h3 className={s.title}>{modalTitle}</h3>
+            {buttonRightInModalHeader}
+            {!hideCloseButton && (
+              <button className={s.closeButton} onClick={onClose}>
+                <Image src={closeIcon} alt={'closeIcon'} />
+              </button>
+            )}
+          </div>
+        }
+        <div className={`${s.flexContainer} ${withoutPadding ? s.withoutPadding : ''}`}>
           {children}
           {!hideDefaultButton && (
             <Button className={s.button} onClick={onClose}>
