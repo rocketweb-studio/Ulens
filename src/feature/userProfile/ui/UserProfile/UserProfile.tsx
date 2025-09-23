@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import s from './userProfile.module.scss'
-import photo3 from '@/src/assets/postsTmp/3.png'
+import avatar from '@/src/assets/avatarTmp/avatar.jpg'
 import {UserProfileActions} from "@/src/feature/userProfile/ui/UserProfile/UserProfileActions/UserProfileActions";
 import {useGetPostsByUsedIdQuery} from "@/src/feature/Posts/api/postsApi";
 import {PostMenuActions} from "@/src/feature/Posts/ui/postMenuActions";
@@ -27,7 +27,7 @@ export const UserProfile = ({ userId }: Props) => {
           <div className={s.profileAvatar}>
               {user && user?.avatars?.length > 0
                   ? <Image src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${user?.avatars[0].url}`} alt={'avatar'}/>
-                  : <Image src={photo3} alt={'avatar'}/>
+                  : <Image src={avatar} alt={'avatar'}/>
               }
 
           </div>
@@ -67,7 +67,7 @@ export const UserProfile = ({ userId }: Props) => {
         <div className={s.profilePosts}>
             {posts?.items.map(post => (
                 <div key={post.id} id={post.id} className={s.postItem}>
-                    {post.ownerId === meData?.id && <PostMenuActions postId={post.id} description={''}></PostMenuActions>}
+                    {post.ownerId === meData?.id && <PostMenuActions postId={post.id} description={''} className={s.postMenuActions}></PostMenuActions>}
                     <Link href={Path.ViewPost(userId, post.id)}>
                         {post.images.length > 0 && <Image src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${post.images[0].url}`} alt={post.description} fill style={{ objectFit: 'cover' }}/>}
                     </Link>

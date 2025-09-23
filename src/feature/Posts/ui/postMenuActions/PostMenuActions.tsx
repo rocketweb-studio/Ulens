@@ -9,9 +9,10 @@ import { PostEditModal } from '@/src/feature/Posts/ui/postEditModal'
 type Props = {
   postId: string
   description: string
+  className?: string
 }
 
-export const PostMenuActions = ({ postId, description }: Props) => {
+export const PostMenuActions = ({ postId, description, className }: Props) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
@@ -34,7 +35,7 @@ export const PostMenuActions = ({ postId, description }: Props) => {
   }, [menuOpen])
 
   return (
-    <div className={s.container} ref={containerRef}>
+    <div className={`${s.container} ${className || ''}`} ref={containerRef}>
       <button className={s.dotsButton} onClick={() => setMenuOpen((prev) => !prev)}>
         <span />
         <span />

@@ -42,19 +42,19 @@
 .profileHeader{
   display: flex;
   flex-wrap: nowrap;
-  gap: 10px;
+  gap: 25px;
   .profileAvatar{
-    flex: 0 0 calc(25% - 10px);
+    flex: 0 0 calc(25% - 25px);
     position: relative;
     overflow: hidden;
     img{
       border-radius: 50%;
-      width: 300px;
-      height: 300px;
+      width: 100%;
+      height: auto;
     }
   }
   .profileInfo{
-    flex: 0 0 calc(75% - 10px);
+    flex: 0 0 calc(75% - 25px);
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -78,4 +78,9 @@
       width: 200px;
     }
   }
+}
+.postMenuActions {
+  position: absolute !important;
+  top: 10px;
+  right: 15px;
 }
