@@ -66,15 +66,17 @@ export default function ViewPostModal({ userId, postId }: { userId: string; post
                   slides={mediumImage.map((image, index) => ({
                     id: index,
                     content: (
-                      <Image
-                        className={s.zaebalaimg}
-                        src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
-                        alt={''}
-                        // width={image.width}
-                        // height={image.height}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                      />
+                        <div className={s.slideImageWrapper}>
+                          <Image
+                              className={s.zaebalaimg}
+                              src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
+                              alt={''}
+                              width={image.width}
+                              height={image.height}
+                              // fill
+                              // style={{ objectFit: 'cover' }}
+                          />
+                        </div>
                     ),
                   }))}
                   navigation={true}
@@ -101,7 +103,7 @@ export default function ViewPostModal({ userId, postId }: { userId: string; post
                   </Link>
                 </div>
                 <div className={s.publicationMenu}>
-                  <PostMenuActions postId={userId} description={''} />
+                  <PostMenuActions postId={postId} description={''} />
                 </div>
               </div>
               <div className={s.publicationComments}>

@@ -11,13 +11,17 @@ $swiper-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !default;
   position: relative;
   padding: 2rem 0;
   width: 100%;
+  .swiperWrapper {
+    border-radius: $swiper-border-radius;
+    overflow: hidden;
+    .swiper-wrapper{
+      display: flex;
+      align-items: center;
+    }
+  }
 }
 
-.swiperWrapper {
-  border-radius: $swiper-border-radius;
-  overflow: hidden;
-  height: 500px;
-}
+
 
 .slide {
   border-radius: $swiper-border-radius;

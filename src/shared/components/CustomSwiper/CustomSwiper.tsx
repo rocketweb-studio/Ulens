@@ -1,13 +1,14 @@
 import React, { useRef, useState, useCallback } from 'react'
 import { Swiper, SwiperSlide, SwiperRef } from 'swiper/react'
 import { Navigation, Pagination, Autoplay } from 'swiper/modules'
-import styles from './CustomSwiper.module.scss'
 import type { TCustomSwiperProps, TSlide } from './types'
 import { CustomNavigation } from './CustomNavigation'
 
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
+
+import styles from './CustomSwiper.module.scss'
 
 export const CustomSwiper: React.FC<TCustomSwiperProps> = ({
   slides,
@@ -71,13 +72,13 @@ export const CustomSwiper: React.FC<TCustomSwiperProps> = ({
       )}
 
       <Swiper ref={swiperRef} {...defaultSwiperProps} autoplay={autoplayConfig} className={styles.swiperWrapper}>
-        {slides.map((slide: TSlide) => {
-          return (
-            <SwiperSlide key={slide.id} {...slide.slideProps} className={styles.slide}>
-              {slide.content}
-            </SwiperSlide>
-          )
-        })}
+          {slides.map((slide: TSlide) => {
+            return (
+                <SwiperSlide key={slide.id} {...slide.slideProps} className={styles.slide}>
+                  {slide.content}
+                </SwiperSlide>
+            )
+          })}
       </Swiper>
 
       {navigation && (
