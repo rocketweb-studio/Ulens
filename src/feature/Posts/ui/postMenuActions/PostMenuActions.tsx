@@ -5,7 +5,8 @@ import s from './postMenuActions.module.scss'
 import { PostDeleteModal } from '@/src/feature/Posts/ui/postDeleteModal'
 import { IconEdit2, IconTrash } from '@rocketweb-studio/ulens-ui-kit'
 import { PostEditModal } from '@/src/feature/Posts/ui/postEditModal'
-import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
+import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
+import { images } from 'next/dist/build/webpack/config/blocks/images'
 
 type Props = {
   postId: string
@@ -20,7 +21,7 @@ export const PostMenuActions = ({ postId, description, className }: Props) => {
 
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const {data: meData} = useGetMeQuery()
+  const { data: meData } = useGetMeQuery()
 
   useEffect(() => {
     if (!menuOpen) return
@@ -46,30 +47,30 @@ export const PostMenuActions = ({ postId, description, className }: Props) => {
       </button>
 
       {menuOpen && (
-          <>
-            {meData
-                ? <div className={s.menu}>
-                    <button className={s.menuItem} onClick={() => setEditOpen(true)}>
-                      <IconEdit2 width={16} height={16} />
-                      Edit Post
-                    </button>
-                    <button
-                        className={s.menuItem}
-                        onClick={() => {
-                          setMenuOpen(false)
-                          setDeleteModalOpen(true)
-                        }}
-                    >
-                      <IconTrash width={16} height={16} />
-                      Delete Post
-                    </button>
-                  </div>
-                : <div className={s.menu}>
-                    <button className={s.menuItem}>Follow/Unfollow</button>
-                    <button className={s.menuItem}>CopyLink</button>
-                  </div>
-            }
-          </>
+        <>
+          {meData ?
+            <div className={s.menu}>
+              <button className={s.menuItem} onClick={() => setEditOpen(true)}>
+                <IconEdit2 width={16} height={16} />
+                Edit Post
+              </button>
+              <button
+                className={s.menuItem}
+                onClick={() => {
+                  setMenuOpen(false)
+                  setDeleteModalOpen(true)
+                }}
+              >
+                <IconTrash width={16} height={16} />
+                Delete Post
+              </button>
+            </div>
+          : <div className={s.menu}>
+              <button className={s.menuItem}>Follow/Unfollow</button>
+              <button className={s.menuItem}>CopyLink</button>
+            </div>
+          }
+        </>
       )}
 
       <PostEditModal
@@ -77,6 +78,7 @@ export const PostMenuActions = ({ postId, description, className }: Props) => {
         initialDescription={description}
         isOpen={editOpen}
         onClose={() => setEditOpen(false)}
+        images={images}
       />
       <PostDeleteModal postId={postId} isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} />
     </div>

@@ -3,21 +3,24 @@ import { useUpdatePostMutation } from '@/src/feature/Posts/api/postsApi'
 import { toast } from 'react-toastify'
 import { Modal } from '@/src/shared/components/Modal/Modal'
 import s from './postEditModal.module.scss'
-import { Button } from '@/src/shared/components/Button/Button'
-import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
-import { CustomSwiper } from '@/src/shared/components/CustomSwiper'
 import Image from 'next/image'
-import { Controller } from 'react-hook-form'
-import { TextArea } from '@/src/shared/components/TextArea/TextArea'
+
+type ImageType = {
+  url: string
+  width: number
+  height: number
+  size: 'small' | 'medium' | 'large'
+}
 
 type Props = {
   postId: string
   initialDescription: string
+  images: ImageType[]
   isOpen: boolean
   onClose: () => void
 }
 
-export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: Props) => {
+export const PostEditModal = ({ postId, initialDescription, isOpen, onClose, images }: Props) => {
   const [description, setDescription] = useState(initialDescription ?? '')
   const [showConfirmExit, setShowConfirmExit] = useState(false)
   const [updatePost, { isLoading }] = useUpdatePostMutation()
@@ -39,6 +42,8 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
     }
   }
 
+  const image = images.find((img) => img.size === 'medium') ?? images[0]
+
   const handleConfirmClose = () => {
     if (description !== initialDescription) {
       setShowConfirmExit(true)
@@ -49,30 +54,20 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
 
   return (
     <>
-      {/*<Modal isOpen={isOpen} onClose={handleConfirmClose} modalTitle={'Edit Post'} hideDefaultButton>*/}
-      {/*  <p>Add publication descriptions</p>*/}
-      {/*  <textarea*/}
-      {/*    className={s.textarea}*/}
-      {/*    value={description}*/}
-      {/*    onChange={(e) => setDescription(e.target.value)}*/}
-      {/*    maxLength={500}*/}
-      {/*  />*/}
-      {/*  <div className={s.counter}>{description?.length ?? 0}/500</div>*/}
-      {/*  <div className={s.actions}>*/}
-      {/*    <button disabled={isLoading} onClick={handleSave}>*/}
-      {/*      Save Changes*/}
-      {/*    </button>*/}
-      {/*  </div>*/}
-      {/*</Modal>*/}
-
       <Modal isOpen={isOpen} onClose={handleConfirmClose} modalTitle='Edit Post' hideDefaultButton>
         <div className={s.wrapper}>
-          {/* Левая колонка с картинкой */}
           <div className={s.imageColumn}>
-            <Image src='/post-example.png' alt='Post image' width={600} height={600} className={s.postImage} />
+            {image && (
+              <Image
+                src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
+                alt='Post image'
+                width={image.width}
+                height={image.height}
+                className={s.postImage}
+              />
+            )}
           </div>
 
-          {/* Правая колонка */}
           <div className={s.contentColumn}>
             <div className={s.profile}>
               <Image src='/avatar/avatar_mini.png' alt='Avatar' width={36} height={36} className={s.avatar} />
