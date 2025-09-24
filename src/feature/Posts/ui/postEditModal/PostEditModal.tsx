@@ -81,15 +81,19 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
 
             <label className={s.label}>Add publication descriptions</label>
 
-            <textarea
-              className={s.textarea}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              maxLength={500}
-            />
+            <div className={s.textareaWrapper}>
+              <textarea
+                id='description'
+                className={s.textarea}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                maxLength={500}
+                rows={5}
+              />
+              <span className={s.counter}>{description?.length ?? 0}/500</span>
+            </div>
 
             <div className={s.footer}>
-              <span className={s.counter}>{description.length}/500</span>
               <button disabled={isLoading} className={s.saveButton} onClick={handleSave}>
                 Save Changes
               </button>
