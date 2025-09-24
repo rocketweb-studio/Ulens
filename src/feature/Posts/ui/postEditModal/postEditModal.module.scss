@@ -39,3 +39,98 @@
     }
   }
 }
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 900px; // фиксированная ширина модалки
+  max-height: 600px;
+}
+
+.imageColumn {
+  flex: 1;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .postImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.contentColumn {
+  flex: 1;
+  background: #2c2c2c;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+
+  .avatar {
+    border-radius: 50%;
+  }
+
+  .userName {
+    font-weight: 500;
+    color: #fff;
+  }
+}
+
+.label {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 8px;
+}
+
+.textarea {
+  flex: 1;
+  resize: none;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  outline: none;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.counter {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.saveButton {
+  background: #3b82f6;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  color: #fff;
+  cursor: pointer;
+
+  &:hover {
+    background: #2563eb;
+  }
+
+  &:disabled {
+    background: #555;
+    cursor: not-allowed;
+  }
+}
+
