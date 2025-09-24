@@ -80,59 +80,72 @@ export const filters: Filter[] = [
   },
 ]
 
+type ImageFilters = {
+  [imageIndex: number]: string
+}
+
 export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
   ({ onFilterApply, currentFilter = 'original', uploadedFiles }, ref) => {
-    const [selectedFilter, setSelectedFilter] = useState<string>(currentFilter)
-    const canvasRef = useRef<HTMLCanvasElement>(null)
+    const [imageFilters, setImageFilters] = useState<ImageFilters>(() => {
+      const initialFilters: ImageFilters = {}
+      uploadedFiles.forEach((_, index) => {
+        initialFilters[index] = currentFilter
+      })
+      return initialFilters
+    })
+
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
+    const canvasRef = useRef<HTMLCanvasElement>(null)
+
     const currentImage = uploadedFiles[currentImageIndex]
     const image = currentImage.croppedImage || currentImage.preview
 
-    const applyFilterToImage = useCallback(
-      async (filterValue: string): Promise<Blob> => {
-        return new Promise(async (resolve, reject) => {
-          try {
-            const canvas = canvasRef.current || document.createElement('canvas')
-            const ctx = canvas.getContext('2d')
-            if (!ctx) throw new Error('Canvas context not available')
+    const selectedFilter = imageFilters[currentImageIndex] || currentFilter
 
-            const img = new Image()
-            img.crossOrigin = 'anonymous'
-            img.src = image
+    const applyFilterToImage = useCallback(async (filterValue: string, imageForFilter: string): Promise<Blob> => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const canvas = canvasRef.current || document.createElement('canvas')
+          const ctx = canvas.getContext('2d')
+          if (!ctx) throw new Error('Canvas context not available')
 
-            await new Promise((resolve, reject) => {
-              img.onload = resolve
-              img.onerror = reject
-            })
+          const img = new Image()
+          img.crossOrigin = 'anonymous'
+          img.src = imageForFilter
 
-            canvas.width = img.width
-            canvas.height = img.height
+          await new Promise((resolve, reject) => {
+            img.onload = resolve
+            img.onerror = reject
+          })
 
-            // Используем переданный filterValue вместо selectedFilter
-            ctx.filter = getCssFilterValue(filterValue, 100)
-            ctx.drawImage(img, 0, 0)
+          canvas.width = img.width
+          canvas.height = img.height
 
-            canvas.toBlob(
-              (blob) => {
-                if (blob) {
-                  resolve(blob)
-                } else {
-                  reject(new Error('Failed to create blob'))
-                }
-              },
-              'image/jpeg',
-              0.9,
-            )
-          } catch (error) {
-            reject(error)
-          }
-        })
-      },
-      [image],
-    )
+          ctx.filter = getCssFilterValue(filterValue, 100)
+          ctx.drawImage(img, 0, 0)
+
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                resolve(blob)
+              } else {
+                reject(new Error('Failed to create blob'))
+              }
+            },
+            'image/jpeg',
+            0.9,
+          )
+        } catch (error) {
+          reject(error)
+        }
+      })
+    }, [])
 
     const handleFilterSelect = async (filterValue: string) => {
-      setSelectedFilter(filterValue)
+      setImageFilters((prev) => ({
+        ...prev,
+        [currentImageIndex]: filterValue,
+      }))
 
       try {
         if (filterValue === 'original') {
@@ -152,7 +165,7 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
             currentImageIndex,
           )
         } else {
-          const filteredBlob = await applyFilterToImage(filterValue)
+          const filteredBlob = await applyFilterToImage(filterValue, image)
           const fileName = `filtered-${filterValue}-${Date.now()}.jpg`
           const filteredFile = new File([filteredBlob], fileName, { type: 'image/jpeg' })
           const preview = URL.createObjectURL(filteredFile)
@@ -204,23 +217,27 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
     }
 
     const createFilterSlides = (files: UploadedFile[]) =>
-      files.map((file, index) => ({
-        id: index,
-        content: (
-          <div className={s.slideContent}>
-            <ImageNext
-              src={file.croppedImage || file.preview}
-              alt='Filter preview'
-              width={490}
-              height={530}
-              style={{
-                ...getFilterStyle(selectedFilter),
-              }}
-              className={s.previewImage}
-            />
-          </div>
-        ),
-      }))
+      files.map((file, index) => {
+        const slideFilter = imageFilters[index] || currentFilter
+
+        return {
+          id: index,
+          content: (
+            <div className={s.slideContent}>
+              <ImageNext
+                src={file.croppedImage || file.preview}
+                alt='Filter preview'
+                width={490}
+                height={530}
+                style={{
+                  ...getFilterStyle(slideFilter),
+                }}
+                className={s.previewImage}
+              />
+            </div>
+          ),
+        }
+      })
 
     const handleSlideChange = (swiper: any) => {
       setCurrentImageIndex(swiper.activeIndex)
