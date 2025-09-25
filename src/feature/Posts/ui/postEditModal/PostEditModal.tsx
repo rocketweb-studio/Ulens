@@ -5,22 +5,14 @@ import { Modal } from '@/src/shared/components/Modal/Modal'
 import s from './postEditModal.module.scss'
 import Image from 'next/image'
 
-type ImageType = {
-  url: string
-  width: number
-  height: number
-  size: 'small' | 'medium' | 'large'
-}
-
 type Props = {
   postId: string
   initialDescription: string
-  images: ImageType[]
   isOpen: boolean
   onClose: () => void
 }
 
-export const PostEditModal = ({ postId, initialDescription, isOpen, onClose, images }: Props) => {
+export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: Props) => {
   const [description, setDescription] = useState(initialDescription ?? '')
   const [showConfirmExit, setShowConfirmExit] = useState(false)
   const [updatePost, { isLoading }] = useUpdatePostMutation()
@@ -42,8 +34,6 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose, ima
     }
   }
 
-  const image = images.find((img) => img.size === 'medium') ?? images[0]
-
   const handleConfirmClose = () => {
     if (description !== initialDescription) {
       setShowConfirmExit(true)
@@ -57,15 +47,7 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose, ima
       <Modal isOpen={isOpen} onClose={handleConfirmClose} modalTitle='Edit Post' hideDefaultButton>
         <div className={s.wrapper}>
           <div className={s.imageColumn}>
-            {image && (
-              <Image
-                src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
-                alt='Post image'
-                width={image.width}
-                height={image.height}
-                className={s.postImage}
-              />
-            )}
+            <Image src={'/images/post_example.jpg'} alt='Post image' width={400} height={400} className={s.postImage} />
           </div>
 
           <div className={s.contentColumn}>

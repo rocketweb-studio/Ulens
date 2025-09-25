@@ -6,7 +6,6 @@ import { PostDeleteModal } from '@/src/feature/Posts/ui/postDeleteModal'
 import { IconEdit2, IconTrash } from '@rocketweb-studio/ulens-ui-kit'
 import { PostEditModal } from '@/src/feature/Posts/ui/postEditModal'
 import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
-import { images } from 'next/dist/build/webpack/config/blocks/images'
 
 type Props = {
   postId: string
@@ -78,7 +77,6 @@ export const PostMenuActions = ({ postId, description, className }: Props) => {
         initialDescription={description}
         isOpen={editOpen}
         onClose={() => setEditOpen(false)}
-        images={images}
       />
       <PostDeleteModal postId={postId} isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} />
     </div>
