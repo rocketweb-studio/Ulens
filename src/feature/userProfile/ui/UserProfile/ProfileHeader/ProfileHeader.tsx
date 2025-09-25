@@ -3,9 +3,14 @@
 import s from "@/src/feature/userProfile/ui/UserProfile/userProfile.module.scss";
 import Image from "next/image";
 import avatar from "@/src/assets/avatarTmp/avatar.jpg";
-import {UserProfileActions} from "@/src/feature/userProfile/ui/UserProfile/UserProfileActions/UserProfileActions";
 import {useGetProfileByUsedIdQuery} from "@/src/feature/userProfile/api/userProfileApi";
 import {Skeleton} from "@/src/shared/components/Skeleton/Skeleton";
+import {Button} from "@/src/shared/components/Button/Button";
+import {FlexContainer} from "@/src/shared/components/FlexContainer";
+import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
+import {PostMenuActions} from "@/src/feature/Posts/ui/postMenuActions";
+import Link from "next/link";
+import {Path} from "@/src/shared/constants/Path";
 
 type Props = {
     userId: string
@@ -13,7 +18,16 @@ type Props = {
 
 export const ProfileUserInfo = ({ userId }: Props) => {
 
+    const {data: meData} = useGetMeQuery()
     const {data: user, isLoading} = useGetProfileByUsedIdQuery({userId})
+
+    const handleFollow = () => {
+        console.log('handleFollow')
+    }
+
+    const handleSendMessage = () => {
+        console.log('handleSendMessage')
+    }
 
     if( isLoading ) {
         return (
@@ -61,7 +75,13 @@ export const ProfileUserInfo = ({ userId }: Props) => {
             <div className={s.profileInfo}>
                 <div className={s.nameAndFollowRow}>
                     <h1>{user?.userName}</h1>
-                    <UserProfileActions/>
+                        {user?.id === meData?.id
+                            ? <Link href={Path.Settings}><Button size={"medium"} variant={'secondary'} onClick={handleFollow}>Profile Settings</Button></Link>
+                            : <FlexContainer gap={'15px'}>
+                                <Button size={"medium"} variant={'primary'} onClick={handleFollow}>Follow</Button>
+                                <Button size={"medium"} variant={'secondary'} onClick={handleSendMessage}>Send Message</Button>
+                            </FlexContainer>
+                        }
                 </div>
                 <div className={s.statisticRow}>
                     <div className={s.statisticItem}>

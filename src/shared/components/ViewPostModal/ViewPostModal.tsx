@@ -28,17 +28,17 @@ const comments = [
 
 export default function ViewPostModal({ userId, postId }: { userId: string; postId: string }) {
   const { isOpen, closeModal } = useModal(true)
-  const { replace } = useRouter()
+  const { replace,  } = useRouter()
 
   const onModalCloseHandler = () => {
     closeModal()
-    replace(Path.Profile)
+    replace(Path.Profile + `/${userId}`)
   }
 
   const onOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       closeModal()
-      replace(Path.Profile)
+      replace(Path.Profile + `/${userId}`)
     }
   }
   const { data: postInfo } = useGetPostByIdQuery({ postId })

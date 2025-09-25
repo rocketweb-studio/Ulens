@@ -4,7 +4,7 @@ export const Path = {
   UserProfile: (userId: string | number) => `/profile/${userId}`,
   UserCreate: (userId: string | number) => `/profile/${userId}?action=create`,
   ViewPost: (userId: string, postId: string) => `/profile/${userId}?postId=${postId}`,
-  Settings: '/settings',
+  Settings: '/settings?part=info',
   SignIn: '/sign-in',
   SignUp: '/sign-up',
   TermOfService: '/sign-up/term-of-service',
