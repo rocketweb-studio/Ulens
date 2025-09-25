@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useGetPostByIdQuery, useUpdatePostMutation } from '@/src/feature/Posts/api/postsApi'
 import { toast } from 'react-toastify'
 import { Modal } from '@/src/shared/components/Modal/Modal'
@@ -19,10 +19,16 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
 
   const { data: postInfo } = useGetPostByIdQuery({ postId }, { skip: !isOpen })
 
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+
   useEffect(() => {
-    if (isOpen && postInfo) {
+    if (isOpen && postInfo && textareaRef.current) {
       setDescription(postInfo.description ?? '')
       setShowConfirmExit(false)
+
+      const textarea = textareaRef.current
+      textarea.focus()
+      textarea.selectionStart = textarea.selectionEnd = textarea.value.length
     }
   }, [isOpen, postInfo])
 
@@ -73,6 +79,7 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
             <div className={s.textareaWrapper}>
               <textarea
                 id='description'
+                ref={textareaRef}
                 className={s.textarea}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
