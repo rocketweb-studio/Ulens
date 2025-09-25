@@ -59,8 +59,8 @@ const FILES_VALIDATE = {
 const publicationSchema = z.object({
   description: z
     .string()
-    .min(10, { message: 'Описание должно содержать минимум 10 символов' })
-    .max(500, { message: 'Описание не может превышать 500 символов' }),
+    .min(10, { message: 'Must be more than 10 characters' })
+    .max(500, { message: 'Must be more than 500 characters' }),
 })
 
 type PublicationFormData = z.infer<typeof publicationSchema>
@@ -307,11 +307,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const cropSlides = createCropSlides(uploadedFiles)
   const publicationSlides = createPublicationSlides(uploadedFiles)
 
-  const onPublishHandler = () => {
-    handleSubmit(onFormSubmit)()
-    onModalClose()
-  }
-
   const handleSlideChange = (swiper: any) => {
     setCurrentImageIndex(swiper.activeIndex)
   }
@@ -330,6 +325,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         })
         .filter((item) => item != null)
       await uploadImages({ postId: id, images }).unwrap()
+      onModalClose()
     } catch (error) {
       console.log(error)
     }
@@ -443,7 +439,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
             </Button>
           }
           buttonRightInModalHeader={
-            <Button tagType={'button'} variant={'text'} withoutPadding onClick={onPublishHandler}>
+            <Button tagType={'button'} variant={'text'} withoutPadding onClick={handleSubmit(onFormSubmit)}>
               Publish
             </Button>
           }
