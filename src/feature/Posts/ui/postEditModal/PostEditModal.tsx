@@ -1,36 +1,36 @@
-import { useEffect, useState } from 'react'
-import { useUpdatePostMutation } from '@/src/feature/Posts/api/postsApi'
+import { useEffect, useRef, useState } from 'react'
+import { useGetPostByIdQuery, useUpdatePostMutation } from '@/src/feature/Posts/api/postsApi'
 import { toast } from 'react-toastify'
 import { Modal } from '@/src/shared/components/Modal/Modal'
 import s from './postEditModal.module.scss'
 import Image from 'next/image'
 
-type ImageType = {
-  url: string
-  width: number
-  height: number
-  size: 'small' | 'medium' | 'large'
-}
-
 type Props = {
   postId: string
   initialDescription: string
-  images: ImageType[]
   isOpen: boolean
   onClose: () => void
 }
 
-export const PostEditModal = ({ postId, initialDescription, isOpen, onClose, images }: Props) => {
+export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: Props) => {
   const [description, setDescription] = useState(initialDescription ?? '')
   const [showConfirmExit, setShowConfirmExit] = useState(false)
   const [updatePost, { isLoading }] = useUpdatePostMutation()
 
+  const { data: postInfo } = useGetPostByIdQuery({ postId }, { skip: !isOpen })
+
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+
   useEffect(() => {
-    if (isOpen) {
-      setDescription(initialDescription)
+    if (isOpen && postInfo && textareaRef.current) {
+      setDescription(postInfo.description ?? '')
       setShowConfirmExit(false)
+
+      const textarea = textareaRef.current
+      textarea.focus()
+      textarea.selectionStart = textarea.selectionEnd = textarea.value.length
     }
-  }, [isOpen, initialDescription])
+  }, [isOpen, postInfo])
 
   const handleSave = async () => {
     try {
@@ -42,8 +42,6 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose, ima
     }
   }
 
-  const image = images.find((img) => img.size === 'medium') ?? images[0]
-
   const handleConfirmClose = () => {
     if (description !== initialDescription) {
       setShowConfirmExit(true)
@@ -52,17 +50,19 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose, ima
     }
   }
 
+  const firstImage = postInfo?.images?.medium?.[0]
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={handleConfirmClose} modalTitle='Edit Post' hideDefaultButton>
         <div className={s.wrapper}>
           <div className={s.imageColumn}>
-            {image && (
+            {firstImage && (
               <Image
-                src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
+                src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${firstImage.url}`}
                 alt='Post image'
-                width={image.width}
-                height={image.height}
+                width={firstImage.width}
+                height={firstImage.height}
                 className={s.postImage}
               />
             )}
@@ -79,6 +79,7 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose, ima
             <div className={s.textareaWrapper}>
               <textarea
                 id='description'
+                ref={textareaRef}
                 className={s.textarea}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -104,8 +105,9 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose, ima
         hideDefaultButton
       >
         <p>Do you really want to finish editing? If you close the changes you have made will not be saved</p>
-        <div className={s.actions}>
+        <div className={s.modalButtons}>
           <button
+            className={s.yesBtn}
             onClick={() => {
               setShowConfirmExit(false)
               onClose()
@@ -113,7 +115,9 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose, ima
           >
             Yes
           </button>
-          <button onClick={() => setShowConfirmExit(false)}>No</button>
+          <button className={s.noBtn} onClick={() => setShowConfirmExit(false)}>
+            No
+          </button>
         </div>
       </Modal>
     </>
