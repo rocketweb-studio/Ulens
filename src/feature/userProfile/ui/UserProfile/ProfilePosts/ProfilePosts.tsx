@@ -41,7 +41,7 @@ export const ProfilePosts = ({ userId }: Props) => {
                 <div key={post.id} id={post.id} className={s.postItem}>
                     {post.ownerId === meData?.id && <PostMenuActions postId={post.id} description={''} className={s.postMenuActions}></PostMenuActions>}
                     <Link href={Path.ViewPost(userId, post.id)}>
-                        {post.images.length > 0 && <Image src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${post.images[0].url}`} alt={post.description} fill style={{ objectFit: 'cover' }}/>}
+                        {post.images.small.length > 0 && <Image src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${post.images.small[0].url}`} alt={post.description} fill style={{ objectFit: 'cover' }}/>}
                     </Link>
                 </div>
             ))}
