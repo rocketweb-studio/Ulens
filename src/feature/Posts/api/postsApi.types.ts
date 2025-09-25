@@ -7,6 +7,20 @@ export type UploadPostImageResponse = {
   uploadId: string
 }
 
+export type ImageSizeType = {
+  url: string;
+  width: number;
+  height: number;
+  fileSize: number;
+  createdAt: string;
+  uploadId: string;
+};
+
+export type ImagesType = {
+  small: ImageSizeType[];
+  medium: ImageSizeType[];
+};
+
 export type GetPostsByUserIdResponse = {
   totalCount: number
   pageSize: number
@@ -19,14 +33,7 @@ export type GetPostsByUserIdResponse = {
       country: string | null
       region: string | null
     }
-    images: {
-      url: string
-      width: number
-      height: number
-      fileSize: number
-      createdAt: string // ISO
-      uploadId: string
-    }[]
+    images: ImagesType
     createdAt: string // ISO
     updatedAt: string // ISO
     ownerId: string // userId
@@ -54,15 +61,7 @@ export type GetPostByIdResponse = {
     country: string,
     region: string
   },
-  images: {
-    url: string,
-    width: number,
-    height: number,
-    fileSize: number,
-    size: string,
-    createdAt: string,
-    uploadId: string
-  }[],
+  images: ImagesType,
   createdAt: string,
   updatedAt: string,
   ownerId: string,
