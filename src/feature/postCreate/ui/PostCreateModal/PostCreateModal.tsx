@@ -53,7 +53,7 @@ export type FilteredImage = {
 const FILES_VALIDATE = {
   maxFiles: 10,
   maxSize: 10 * 1024 * 1024,
-  formats: ['.jpeg', '.jpg', '.png', '.gif', '.webp'],
+  formats: ['.jpeg', '.jpg', '.png'],
 } as const
 
 const publicationSchema = z.object({
@@ -74,6 +74,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const [draftStep, setDraftStep] = useState<Steps | null>(null)
   const filterPanelRef = useRef<{ applyFilter: () => void }>(null)
   const { isOpen, openModal, closeModal } = useModal()
+  const [dropError, setDropError] = useState<string | null>(null)
 
   const {
     control,
@@ -88,14 +89,42 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     },
   })
 
-  const onDrop = (acceptedFiles: File[]) => {
+  const dropErrorSnackBar = (rejectedFiles: any[]): string => {
+    const firstError = rejectedFiles[0].errors[0]
+
+    let errorMessage = ''
+
+    switch (firstError.code) {
+      case 'file-too-large':
+        errorMessage = `The photos must be less than: ${FILES_VALIDATE.maxSize / (1024 * 1024)}MB`
+        break
+      case 'file-invalid-type':
+        errorMessage = `Invalid file format. Allowed formats: ${FILES_VALIDATE.formats.join(', ')}`
+        break
+      case 'too-many-files':
+        errorMessage = `There are too many files. Maximum: ${FILES_VALIDATE.maxFiles}`
+        break
+      default:
+        errorMessage = `Ошибка: ${firstError.message}`
+    }
+
+    return errorMessage
+  }
+
+  const onDrop = (acceptedFiles: File[], rejectedFiles: any[]) => {
+    setDropError(null)
     const newFiles = acceptedFiles.slice(0, 10 - uploadedFiles.length).map((file) => ({
       file,
-      originalPreview: URL.createObjectURL(file), // Сохраняем оригинальное изображение
-      preview: URL.createObjectURL(file), // Начинаем с оригинального
+      originalPreview: URL.createObjectURL(file),
+      preview: URL.createObjectURL(file),
       aspectRatio: 'original' as const,
     }))
     setUploadedFiles(newFiles)
+
+    if (rejectedFiles.length > 0) {
+      setDropError(dropErrorSnackBar(rejectedFiles))
+    }
+
     if (acceptedFiles.length > 0) {
       changeNextStep()
     }
@@ -110,20 +139,18 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     maxSize: FILES_VALIDATE.maxSize,
   })
 
-  // Функция для сброса к оригинальному изображению при возврате на шаг crop
-  const resetToOriginalImage = useCallback((index: number) => {
-    setUploadedFiles((prev) =>
-      prev.map((file, i) =>
-        i === index ?
-          {
-            ...file,
-            preview: file.originalPreview, // Возвращаем оригинальное изображение
-            // Сохраняем все остальные настройки (пропорции, область обрезки и т.д.)
-          }
-        : file,
-      ),
-    )
-  }, [])
+  // const resetToOriginalImage = useCallback((index: number) => {
+  //   setUploadedFiles((prev) =>
+  //     prev.map((file, i) =>
+  //       i === index ?
+  //         {
+  //           ...file,
+  //           preview: file.originalPreview,
+  //         }
+  //       : file,
+  //     ),
+  //   )
+  // }, [])
 
   const handleAspectRatioChange = useCallback(
     (aspectRatio: 'original' | '1:1' | '4:5' | '16:9', index?: number) => {
@@ -140,7 +167,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       content: (
         <div className={s.slideContent}>
           <ImageCropper
-            image={file.preview} // Используем текущее превью (оригинальное при возврате)
+            image={file.preview}
             onCropComplete={(croppedImage, areaPixels) => handleCropComplete(croppedImage, areaPixels, index)}
             onCropAreaChange={(areaPixels) => handleCropAreaChange(areaPixels, index)}
             onAspectRatioChange={(aspectRatio) => handleAspectRatioChange(aspectRatio, index)}
@@ -176,7 +203,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
           {
             ...file,
             croppedImage,
-            preview: croppedImage, // Обновляем превью на обрезанное
+            preview: croppedImage,
             croppedAreaPixels: areaPixels,
           }
         : file,
@@ -227,7 +254,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
             } else {
               return {
                 ...file,
-                croppedImage: file.originalPreview, // Используем оригинал если обрезки не было
+                croppedImage: file.originalPreview,
                 preview: file.originalPreview,
               }
             }
@@ -256,11 +283,10 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         setStep('filter')
         break
       case 'filter':
-        // При возврате на шаг crop сбрасываем изображения к оригинальным
         setUploadedFiles((prev) =>
           prev.map((file) => ({
             ...file,
-            preview: file.originalPreview, // Возвращаем оригинальное изображение
+            preview: file.originalPreview,
           })),
         )
         setStep('crop')
@@ -326,6 +352,11 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
                 <Button variant={'primary'}>Select from Computer</Button>
               </div>
             </div>
+            {dropError && (
+              <div className={s.dropError}>
+                <p className={s.dropErrorText}>{dropError}</p>
+              </div>
+            )}
           </div>
           {draftStep && <Button variant={'primary'}>OpenDraft</Button>}
         </Modal>
