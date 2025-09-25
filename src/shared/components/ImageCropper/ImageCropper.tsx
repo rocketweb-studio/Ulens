@@ -11,6 +11,7 @@ type Props = {
   initialAspectRatio?: AspectRatio
   onCropAreaChange?: (areaPixels: Area) => void
   isActiveSlide?: boolean
+  onAspectRatioChange?: (aspectRatio: AspectRatio) => void
 }
 type AspectRatio = '1:1' | '4:5' | '16:9' | 'original'
 type MenuName = 'aspectRatio' | 'zoom' | null
@@ -104,6 +105,7 @@ export const ImageCropper = ({
   initialAspectRatio = 'original',
   onCropAreaChange,
   isActiveSlide,
+  onAspectRatioChange,
 }: Props) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
@@ -151,14 +153,13 @@ export const ImageCropper = ({
     setRotation(rotation)
   }, [])
 
-  // Используем useRef для хранения последнего значения, чтобы избежать лишних вызовов
+  // Используем useRef для хранения последнего значения
   const lastCroppedAreaRef = useRef<Area | null>(null)
 
   const onCropAreaComplete = useCallback(
     (croppedArea: Area, croppedAreaPixels: Area) => {
       // Проверяем валидность области кадрирования
       if (croppedAreaPixels.width <= 0 || croppedAreaPixels.height <= 0) {
-        console.warn('Invalid crop area detected:', croppedAreaPixels)
         return
       }
 
@@ -186,6 +187,10 @@ export const ImageCropper = ({
   const handleAspectRatioChange = (ratio: AspectRatio) => {
     setCurrentAspectRatio(ratio)
     setActiveMenu(null)
+
+    if (onAspectRatioChange) {
+      onAspectRatioChange(ratio)
+    }
   }
 
   const handleCropComplete = async () => {

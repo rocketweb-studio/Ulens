@@ -26,11 +26,13 @@ type Steps = 'add' | 'crop' | 'filter' | 'publication'
 
 export type UploadedFile = {
   file: File
-  preview: string
+  originalPreview: string // Сохраняем оригинальное превью
+  preview: string // Текущее превью (может быть обрезанным)
   croppedImage?: string
   filteredImage?: FilteredImage
   filter?: string
   croppedAreaPixels?: Area
+  aspectRatio?: 'original' | '1:1' | '4:5' | '16:9'
 }
 
 export type Filter = {
@@ -89,7 +91,9 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const onDrop = (acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.slice(0, 10 - uploadedFiles.length).map((file) => ({
       file,
-      preview: URL.createObjectURL(file),
+      originalPreview: URL.createObjectURL(file), // Сохраняем оригинальное изображение
+      preview: URL.createObjectURL(file), // Начинаем с оригинального
+      aspectRatio: 'original' as const,
     }))
     setUploadedFiles(newFiles)
     if (acceptedFiles.length > 0) {
@@ -106,16 +110,41 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     maxSize: FILES_VALIDATE.maxSize,
   })
 
+  // Функция для сброса к оригинальному изображению при возврате на шаг crop
+  const resetToOriginalImage = useCallback((index: number) => {
+    setUploadedFiles((prev) =>
+      prev.map((file, i) =>
+        i === index ?
+          {
+            ...file,
+            preview: file.originalPreview, // Возвращаем оригинальное изображение
+            // Сохраняем все остальные настройки (пропорции, область обрезки и т.д.)
+          }
+        : file,
+      ),
+    )
+  }, [])
+
+  const handleAspectRatioChange = useCallback(
+    (aspectRatio: 'original' | '1:1' | '4:5' | '16:9', index?: number) => {
+      const targetIndex = index !== undefined ? index : currentImageIndex
+
+      setUploadedFiles((prev) => prev.map((file, i) => (i === targetIndex ? { ...file, aspectRatio } : file)))
+    },
+    [currentImageIndex],
+  )
+
   const createCropSlides = (files: UploadedFile[]): TSlide[] =>
     files.map((file, index) => ({
       id: index,
       content: (
         <div className={s.slideContent}>
           <ImageCropper
-            image={file.preview}
+            image={file.preview} // Используем текущее превью (оригинальное при возврате)
             onCropComplete={(croppedImage, areaPixels) => handleCropComplete(croppedImage, areaPixels, index)}
             onCropAreaChange={(areaPixels) => handleCropAreaChange(areaPixels, index)}
-            initialAspectRatio={'original'}
+            onAspectRatioChange={(aspectRatio) => handleAspectRatioChange(aspectRatio, index)}
+            initialAspectRatio={file.aspectRatio || 'original'}
             isActiveSlide={index === currentImageIndex}
           />
         </div>
@@ -147,7 +176,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
           {
             ...file,
             croppedImage,
-            preview: croppedImage,
+            preview: croppedImage, // Обновляем превью на обрезанное
             croppedAreaPixels: areaPixels,
           }
         : file,
@@ -189,11 +218,18 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         try {
           const cropPromises = uploadedFiles.map(async (file, index) => {
             if (file.croppedAreaPixels && file.croppedAreaPixels.width > 0 && file.croppedAreaPixels.height > 0) {
-              const croppedImage = await getCroppedImg(file.preview, file.croppedAreaPixels)
-              return { ...file, croppedImage, preview: croppedImage }
+              const croppedImage = await getCroppedImg(file.originalPreview, file.croppedAreaPixels) // Используем оригинал для обрезки
+              return {
+                ...file,
+                croppedImage,
+                preview: croppedImage,
+              }
             } else {
-              console.warn(`No valid crop area for file ${index}, using original image`)
-              return { ...file, croppedImage: file.preview }
+              return {
+                ...file,
+                croppedImage: file.originalPreview, // Используем оригинал если обрезки не было
+                preview: file.originalPreview,
+              }
             }
           })
 
@@ -220,6 +256,13 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         setStep('filter')
         break
       case 'filter':
+        // При возврате на шаг crop сбрасываем изображения к оригинальным
+        setUploadedFiles((prev) =>
+          prev.map((file) => ({
+            ...file,
+            preview: file.originalPreview, // Возвращаем оригинальное изображение
+          })),
+        )
         setStep('crop')
         break
       case 'crop':
@@ -265,8 +308,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       console.log(error)
     }
   }
-
-  console.log(uploadedFiles)
 
   return (
     <div className={s.wrapper}>
@@ -351,7 +392,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
           <FilterPanel
             ref={filterPanelRef}
             onFilterApply={handleFilterApply}
-            currentFilter={currentImage.filter?.split('-')[0]}
+            currentFilter={currentImage?.filter?.split('-')[0]}
             uploadedFiles={uploadedFiles}
           />
         </Modal>
