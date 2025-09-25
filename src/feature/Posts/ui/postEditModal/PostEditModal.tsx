@@ -20,11 +20,11 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
   const { data: postInfo } = useGetPostByIdQuery({ postId }, { skip: !isOpen })
 
   useEffect(() => {
-    if (isOpen) {
-      setDescription(initialDescription)
+    if (isOpen && postInfo) {
+      setDescription(postInfo.description ?? '')
       setShowConfirmExit(false)
     }
-  }, [isOpen, initialDescription])
+  }, [isOpen, postInfo])
 
   const handleSave = async () => {
     try {
