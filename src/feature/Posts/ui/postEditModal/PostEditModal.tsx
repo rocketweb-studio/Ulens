@@ -105,8 +105,9 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
         hideDefaultButton
       >
         <p>Do you really want to finish editing? If you close the changes you have made will not be saved</p>
-        <div className={s.actions}>
+        <div className={s.modalButtons}>
           <button
+            className={s.yesBtn}
             onClick={() => {
               setShowConfirmExit(false)
               onClose()
@@ -114,7 +115,9 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
           >
             Yes
           </button>
-          <button onClick={() => setShowConfirmExit(false)}>No</button>
+          <button className={s.noBtn} onClick={() => setShowConfirmExit(false)}>
+            No
+          </button>
         </div>
       </Modal>
     </>
