@@ -193,11 +193,9 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
     }
 
     const handleApplyFilter = async () => {
-      // Если это первый вызов, создаем файлы с фильтром "original" для всех изображений
       if (!hasAppliedInitialFiltersRef.current) {
         hasAppliedInitialFiltersRef.current = true
 
-        // Создаем файлы с фильтром "original" для всех изображений
         for (let i = 0; i < uploadedFiles.length; i++) {
           const imageUrl = uploadedFiles[i].croppedImage || uploadedFiles[i].preview
           const file = await createOriginalFile(imageUrl)
@@ -215,7 +213,6 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
           )
         }
       } else {
-        // Для последующих вызовов применяем фильтр только к текущему изображению
         await handleFilterSelect(selectedFilter)
       }
     }
