@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useUpdatePostMutation } from '@/src/feature/Posts/api/postsApi'
+import { useGetPostByIdQuery, useUpdatePostMutation } from '@/src/feature/Posts/api/postsApi'
 import { toast } from 'react-toastify'
 import { Modal } from '@/src/shared/components/Modal/Modal'
 import s from './postEditModal.module.scss'
@@ -16,6 +16,8 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
   const [description, setDescription] = useState(initialDescription ?? '')
   const [showConfirmExit, setShowConfirmExit] = useState(false)
   const [updatePost, { isLoading }] = useUpdatePostMutation()
+
+  const { data: postInfo } = useGetPostByIdQuery({ postId }, { skip: !isOpen })
 
   useEffect(() => {
     if (isOpen) {
@@ -42,12 +44,22 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
     }
   }
 
+  const firstImage = postInfo?.images?.medium?.[0]
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={handleConfirmClose} modalTitle='Edit Post' hideDefaultButton>
         <div className={s.wrapper}>
           <div className={s.imageColumn}>
-            <Image src={'/images/post_example.jpg'} alt='Post image' width={400} height={400} className={s.postImage} />
+            {firstImage && (
+              <Image
+                src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${firstImage.url}`}
+                alt='Post image'
+                width={firstImage.width}
+                height={firstImage.height}
+                className={s.postImage}
+              />
+            )}
           </div>
 
           <div className={s.contentColumn}>
