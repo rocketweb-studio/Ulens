@@ -17,32 +17,49 @@
   }
 }
 .profilePosts{
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 15px;
-}
-.postItem{
-  position: relative;
-  flex: 0 0 calc(25% - 15px);
-  background: #181818;
-  height: 300px;
-  box-sizing: border-box;
-  border-radius: 4px;
-  width: 100%;
-  overflow: hidden;
-  img{
-    transition: transform 0.1s ease-out;
+  .postItem{
+    position: relative;
+    background: #181818;
+    box-sizing: border-box;
+    border-radius: 4px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    img{
+      transition: transform 0.1s ease-out;
+    }
+    &:hover img{
+      cursor: pointer;
+      transform: scale(1.1)
+    }
   }
-  &:hover img{
-    cursor: pointer;
-    transform: scale(1.1)
+  &:has(> :nth-child(1)) {
+    grid-template-columns: repeat(auto-fit, minmax(269px, 0fr));
+  }
+  @media (max-width: 800px) {
+    &:has(> :nth-child(1)) {grid-template-columns: repeat(auto-fit, minmax(269px, 1fr));}
+  }
+  @media (min-width: 801px) and (max-width: 1000px){
+    &:has(> :nth-child(2)) {grid-template-columns: repeat(auto-fit, minmax(269px, 1fr));}
+  }
+  @media (min-width: 1001px) and (max-width: 1200px){
+    &:has(> :nth-child(3)) {grid-template-columns: repeat(auto-fit, minmax(269px, 1fr));}
+  }
+  @media (min-width: 1201px) and (max-width: 1500px){
+    &:has(> :nth-child(4)) {grid-template-columns: repeat(auto-fit, minmax(269px, 1fr));}
+  }
+  @media (min-width: 1501px) {
+    &:has(> :nth-child(5)) {grid-template-columns: repeat(auto-fit, minmax(234px, 1fr));}
   }
 }
+
 
 .profileHeader{
   display: flex;
   flex-wrap: nowrap;
   gap: 25px;
+  margin-bottom: 50px;
   .profileAvatar{
     flex: 0 0 calc(25% - 25px);
     position: relative;
@@ -58,12 +75,19 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
+    justify-content: space-between;
     gap: 35px;
   }
   .aboutUser{
     font-size: 18px;
     line-height: 30px;
     font-weight: 100;
+  }
+  .aboutUserSkeleton{
+    height: 150px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
   }
   .statisticRow{
     display: flex;
