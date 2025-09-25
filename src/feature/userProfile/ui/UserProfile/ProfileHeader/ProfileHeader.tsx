@@ -40,12 +40,10 @@ export const ProfileUserInfo = ({ userId }: Props) => {
                             <Skeleton height={'20px'} width={'80px'} radius={'10px'} border={'2px solid #0d0d0d'}/>
                         </div>
                     </div>
-                    <div className={`${s.aboutUser} ${s.aboutUserSkeleton}`} style={{height: '150px'}}>
+                    <div className={`${s.aboutUser} ${s.aboutUserSkeleton}`}>
                         <Skeleton height={'21px'} width={'100%'} radius={'10px'} border={'2px solid #0d0d0d'}/>
-                        <Skeleton height={'21px'} width={'90%'} radius={'10px'} border={'2px solid #0d0d0d'}/>
                         <Skeleton height={'21px'} width={'85%'} radius={'10px'} border={'2px solid #0d0d0d'}/>
-                        <Skeleton height={'21px'} width={'100%'} radius={'10px'} border={'2px solid #0d0d0d'}/>
-                        <Skeleton height={'21px'} width={'30%'} radius={'10px'} border={'2px solid #0d0d0d'}/>
+                        <Skeleton height={'21px'} width={'50%'} radius={'10px'} border={'2px solid #0d0d0d'}/>
                     </div>
                 </div>
             </div>
@@ -82,13 +80,11 @@ export const ProfileUserInfo = ({ userId }: Props) => {
                 <div className={s.aboutUser}>
                     {user?.aboutMe ? user.aboutMe :
                         <span>
-                          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur dolor ex hic iusto nulla optio
-                          sed totam voluptatem? Adipisci aliquid amet corporis deleniti earum eligendi error ipsum iste labore
-                          nobis, perferendis quas quasi rem soluta suscipit veniam vero voluptatem voluptatum? Accusamus aliquam
-                          architecto facilis ipsa, maxime non quasi quis sit. Adipisci aliquid amet corporis deleniti earum
-                          eligendi error ipsum iste labore nobis, perferendis quas quasi rem soluta suscipit veniam vero
-                          voluptatem voluptatum? Accusamus aliquam architecto facilis ipsa, maxime non quasi quis sit.
-                      </span>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur dolor ex hic iusto nulla optio
+                      sed totam voluptatem? Adipisci aliquid amet corporis deleniti earum eligendi error ipsum iste labore
+                      nobis, perferendis quas quasi rem soluta suscipit veniam vero voluptatem voluptatum? Accusamus aliquam
+                      architecto facilis ipsa, maxime non quasi quis sit.
+                  </span>
                     }
                 </div>
             </div>

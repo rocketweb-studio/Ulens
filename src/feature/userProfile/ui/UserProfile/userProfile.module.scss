@@ -6,9 +6,10 @@
 }
 .nameAndFollowRow{
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
   h1{
     font-weight: 700;
     font-size: 24px;
@@ -56,12 +57,14 @@
 
 
 .profileHeader{
-  display: flex;
-  flex-wrap: nowrap;
+  //display: flex;
+  //flex-wrap: nowrap;
+  display: grid;
   gap: 25px;
+  grid-template-columns: 260px 4fr;
   margin-bottom: 50px;
   .profileAvatar{
-    flex: 0 0 calc(25% - 25px);
+    flex: 0 0 calc(20% - 25px);
     position: relative;
     overflow: hidden;
     img{
@@ -71,7 +74,7 @@
     }
   }
   .profileInfo{
-    flex: 0 0 calc(75% - 25px);
+    flex: 0 0 calc(80% - 25px);
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -84,7 +87,7 @@
     font-weight: 100;
   }
   .aboutUserSkeleton{
-    height: 150px;
+    height: 90px; //for 3 row, 150 for 5 row
     display: flex;
     flex-wrap: wrap;
     align-content: space-between;
@@ -100,8 +103,15 @@
       flex-direction: column;
       gap: 5px;
       width: 200px;
+      @media (max-width: 1250px){
+        width: 100px;
+      }
+    }
+    @media (max-width: 850px){
+      justify-content: space-between;
     }
   }
+  @media (max-width: 850px) {grid-template-columns: 1fr;}
 }
 .postMenuActions {
   position: absolute !important;
