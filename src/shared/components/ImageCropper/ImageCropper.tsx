@@ -60,30 +60,42 @@ export const rotateSize = (width: number, height: number, rotation: number): Siz
 }
 
 export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<string> => {
-  const image = await createImage(imageSrc)
-  const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d')
-
-  if (!ctx) {
-    return ''
+  // Проверяем валидность области кадрирования
+  if (!pixelCrop || pixelCrop.width <= 0 || pixelCrop.height <= 0) {
+    console.warn('Invalid crop area:', pixelCrop)
+    return imageSrc // Возвращаем оригинальное изображение если область невалидна
   }
 
-  canvas.width = pixelCrop.width
-  canvas.height = pixelCrop.height
+  try {
+    const image = await createImage(imageSrc)
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
 
-  ctx.drawImage(
-    image,
-    pixelCrop.x,
-    pixelCrop.y,
-    pixelCrop.width,
-    pixelCrop.height,
-    0,
-    0,
-    pixelCrop.width,
-    pixelCrop.height,
-  )
+    if (!ctx) {
+      return imageSrc
+    }
 
-  return canvas.toDataURL('image/jpeg', 1)
+    // Устанавливаем размеры canvas на основе области кадрирования
+    canvas.width = Math.max(1, pixelCrop.width) // Минимальная ширина 1px
+    canvas.height = Math.max(1, pixelCrop.height) // Минимальная высота 1px
+
+    ctx.drawImage(
+      image,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0,
+      0,
+      pixelCrop.width,
+      pixelCrop.height,
+    )
+
+    return canvas.toDataURL('image/jpeg', 1)
+  } catch (error) {
+    console.error('Error cropping image:', error)
+    return imageSrc // Возвращаем оригинал в случае ошибки
+  }
 }
 
 export const ImageCropper = ({
@@ -110,10 +122,22 @@ export const ImageCropper = ({
     const img = await createImage(image)
     setImageSize({ width: img.width, height: img.height })
 
-    // Центрируем изображение (zoom остается = 1)
+    // Инициализируем область кадрирования по умолчанию
+    const defaultCropArea = {
+      x: 0,
+      y: 0,
+      width: img.width,
+      height: img.height,
+    }
+
+    setCroppedAreaPixels(defaultCropArea)
+    if (onCropAreaChange) {
+      onCropAreaChange(defaultCropArea)
+    }
+
     setCrop({ x: 0, y: 0 })
     isInitialized.current = true
-  }, [image])
+  }, [image, onCropAreaChange])
 
   const onCropChange = useCallback((crop: { x: number; y: number }) => {
     setCrop(crop)
@@ -132,7 +156,12 @@ export const ImageCropper = ({
 
   const onCropAreaComplete = useCallback(
     (croppedArea: Area, croppedAreaPixels: Area) => {
-      // Проверяем, изменилась ли область кадрирования
+      // Проверяем валидность области кадрирования
+      if (croppedAreaPixels.width <= 0 || croppedAreaPixels.height <= 0) {
+        console.warn('Invalid crop area detected:', croppedAreaPixels)
+        return
+      }
+
       const lastArea = lastCroppedAreaRef.current
       if (
         lastArea &&
@@ -141,7 +170,7 @@ export const ImageCropper = ({
         lastArea.width === croppedAreaPixels.width &&
         lastArea.height === croppedAreaPixels.height
       ) {
-        return // Пропускаем если область не изменилась
+        return
       }
 
       lastCroppedAreaRef.current = croppedAreaPixels

@@ -188,12 +188,14 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       case 'crop':
         try {
           const cropPromises = uploadedFiles.map(async (file, index) => {
-            debugger
-            if (file.croppedAreaPixels) {
+            // Проверяем наличие валидной области кадрирования
+            if (file.croppedAreaPixels && file.croppedAreaPixels.width > 0 && file.croppedAreaPixels.height > 0) {
               const croppedImage = await getCroppedImg(file.preview, file.croppedAreaPixels)
               return { ...file, croppedImage, preview: croppedImage }
             } else {
-              return file
+              // Если область кадрирования невалидна, используем оригинальное изображение
+              console.warn(`No valid crop area for file ${index}, using original image`)
+              return { ...file, croppedImage: file.preview }
             }
           })
 
