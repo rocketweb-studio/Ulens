@@ -9,7 +9,7 @@ $swiper-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !default;
 // Основные стили
 .swiperContainer {
   position: relative;
-  padding: 2rem 0;
+  //padding: 2rem 0;
   width: 100%;
   .swiperWrapper {
     border-radius: $swiper-border-radius;
@@ -137,7 +137,7 @@ $swiper-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !default;
   left: 0;
   height: 3px;
   background: linear-gradient(90deg, $swiper-primary-color, lighten($swiper-primary-color, 20%));
-  width: 0%;
+  width: 0;
   transition: width 0.1s linear;
   z-index: 10;
   border-radius: $swiper-border-radius;

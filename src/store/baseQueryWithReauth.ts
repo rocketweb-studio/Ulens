@@ -25,12 +25,12 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
 ) => {
   await mutex.waitForUnlock()
 
-  api.dispatch(setLoaderStatus({ status: 'loading' }))
+
 
   try {
-    // if (typeof args === 'object' && args.url?.includes('auth/')) {
-    //     await delay(1000);
-    // }
+    if (typeof args === 'object' && args.url?.includes('auth/')) {
+        api.dispatch(setLoaderStatus({ status: 'loading' }))
+    }
 
     let result = await baseQueryWithAccessToken(args, api, extraOptions)
 
@@ -71,6 +71,8 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
 
     return result
   } finally {
-    api.dispatch(setLoaderStatus({ status: 'idle' }))
+    if (typeof args === 'object' && args.url?.includes('auth/')) {
+      api.dispatch(setLoaderStatus({ status: 'idle' }))
+    }
   }
 }

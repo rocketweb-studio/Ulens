@@ -44,8 +44,6 @@ export default function ViewPostModal({ userId, postId }: { userId: string; post
   const { data: postInfo } = useGetPostByIdQuery({ postId })
   const { data: user } = useGetProfileByUsedIdQuery({ userId })
 
-  const mediumImage = postInfo?.images.filter(image => image.size === "medium")
-
   return (
     <FlexContainer align={'center'} justify={'center'}>
       <div className={s.wrapper}>
@@ -61,9 +59,9 @@ export default function ViewPostModal({ userId, postId }: { userId: string; post
         >
           <div className={s.publication}>
             <div className={s.publicationImg}>
-              {mediumImage && (
+              {postInfo?.images && (
                 <CustomSwiper
-                  slides={mediumImage.map((image, index) => ({
+                  slides={postInfo?.images.medium.map((image, index) => ({
                     id: index,
                     content: (
                         <div className={s.slideImageWrapper}>
@@ -73,8 +71,6 @@ export default function ViewPostModal({ userId, postId }: { userId: string; post
                               alt={''}
                               width={image.width}
                               height={image.height}
-                              // fill
-                              // style={{ objectFit: 'cover' }}
                           />
                         </div>
                     ),

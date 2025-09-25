@@ -1,10 +1,6 @@
 @use '/src/shared/styles/colors' as colors;
 @use '/src/shared/styles/typography' as typography;
 
-.wrapper {
-
-}
-
 .modal {
   width: 492px;
 }
@@ -15,6 +11,8 @@
 
 .addStep {
   display: flex;
+  flex-direction:  column;
+  align-items: center;
   justify-content: center;
 }
 
@@ -22,7 +20,6 @@
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 .container {
@@ -44,41 +41,13 @@
   margin-top: 8px;
 }
 
-.counter {
-  font-size: 14px;
-  color: #999;
-  margin-left: auto;
+.dropError {
+  margin-top: 20px;
 }
 
-.errorMessage {
-  font-size: 14px;
-  color: #e74c3c;
-  font-weight: 500;
-}
-
-.submitButton {
-  background-color: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #3a80d2;
-  }
-
-  &:active {
-    background-color: #2a70c2;
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.4);
-  }
+.dropErrorText {
+  @include typography.bold_text_16;
+  color: colors.color(danger, 500);
 }
 
 .publication {
@@ -138,4 +107,11 @@
   display: flex;
   justify-content: space-between;
   padding: 0 24px;
+}
+
+.slideContent {
+  img {
+    object-fit: contain;
+    object-position: top;
+  }
 }

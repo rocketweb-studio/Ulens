@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Cropper, { Area } from 'react-easy-crop'
 import { Button } from '@/src/shared/components/Button/Button'
 import s from './ImageCropper.module.scss'
@@ -6,11 +6,12 @@ import { IconExpandOutline, IconMaximizeOutline } from '@rocketweb-studio/ulens-
 
 type Props = {
   image: string
-  onCropComplete: (croppedImage: string) => void
+  onCropComplete: (croppedImage: string, areaPixels?: Area) => void
   aspectRatio?: number
   initialAspectRatio?: AspectRatio
   onCropAreaChange?: (areaPixels: Area) => void
   isActiveSlide?: boolean
+  onAspectRatioChange?: (aspectRatio: AspectRatio) => void
 }
 type AspectRatio = '1:1' | '4:5' | '16:9' | 'original'
 type MenuName = 'aspectRatio' | 'zoom' | null
@@ -60,38 +61,51 @@ export const rotateSize = (width: number, height: number, rotation: number): Siz
 }
 
 export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<string> => {
-  const image = await createImage(imageSrc)
-  const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d')
-
-  if (!ctx) {
-    return ''
+  // Проверяем валидность области кадрирования
+  if (!pixelCrop || pixelCrop.width <= 0 || pixelCrop.height <= 0) {
+    console.warn('Invalid crop area:', pixelCrop)
+    return imageSrc // Возвращаем оригинальное изображение если область невалидна
   }
 
-  canvas.width = pixelCrop.width
-  canvas.height = pixelCrop.height
+  try {
+    const image = await createImage(imageSrc)
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
 
-  ctx.drawImage(
-    image,
-    pixelCrop.x,
-    pixelCrop.y,
-    pixelCrop.width,
-    pixelCrop.height,
-    0,
-    0,
-    pixelCrop.width,
-    pixelCrop.height,
-  )
+    if (!ctx) {
+      return imageSrc
+    }
 
-  return canvas.toDataURL('image/jpeg', 1)
+    // Устанавливаем размеры canvas на основе области кадрирования
+    canvas.width = Math.max(1, pixelCrop.width) // Минимальная ширина 1px
+    canvas.height = Math.max(1, pixelCrop.height) // Минимальная высота 1px
+
+    ctx.drawImage(
+      image,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0,
+      0,
+      pixelCrop.width,
+      pixelCrop.height,
+    )
+
+    return canvas.toDataURL('image/jpeg', 1)
+  } catch (error) {
+    console.error('Error cropping image:', error)
+    return imageSrc // Возвращаем оригинал в случае ошибки
+  }
 }
 
 export const ImageCropper = ({
   image,
   onCropComplete,
-  initialAspectRatio = '1:1',
+  initialAspectRatio = 'original',
   onCropAreaChange,
   isActiveSlide,
+  onAspectRatioChange,
 }: Props) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
@@ -99,6 +113,33 @@ export const ImageCropper = ({
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({ x: 0, y: 0, width: 0, height: 0 })
   const [currentAspectRatio, setCurrentAspectRatio] = useState<AspectRatio>(initialAspectRatio)
   const [activeMenu, setActiveMenu] = useState<MenuName>(null)
+  const [imageSize, setImageSize] = useState<{ width: number; height: number }>({ width: 0, height: 0 })
+  const containerRef = useRef<HTMLDivElement>(null)
+  const isInitialized = useRef(false)
+
+  // Функция для получения размеров изображения и расчета начального zoom
+  const initializeImageSize = useCallback(async () => {
+    if (isInitialized.current) return
+
+    const img = await createImage(image)
+    setImageSize({ width: img.width, height: img.height })
+
+    // Инициализируем область кадрирования по умолчанию
+    const defaultCropArea = {
+      x: 0,
+      y: 0,
+      width: img.width,
+      height: img.height,
+    }
+
+    setCroppedAreaPixels(defaultCropArea)
+    if (onCropAreaChange) {
+      onCropAreaChange(defaultCropArea)
+    }
+
+    setCrop({ x: 0, y: 0 })
+    isInitialized.current = true
+  }, [image, onCropAreaChange])
 
   const onCropChange = useCallback((crop: { x: number; y: number }) => {
     setCrop(crop)
@@ -112,9 +153,30 @@ export const ImageCropper = ({
     setRotation(rotation)
   }, [])
 
+  // Используем useRef для хранения последнего значения
+  const lastCroppedAreaRef = useRef<Area | null>(null)
+
   const onCropAreaComplete = useCallback(
     (croppedArea: Area, croppedAreaPixels: Area) => {
+      // Проверяем валидность области кадрирования
+      if (croppedAreaPixels.width <= 0 || croppedAreaPixels.height <= 0) {
+        return
+      }
+
+      const lastArea = lastCroppedAreaRef.current
+      if (
+        lastArea &&
+        lastArea.x === croppedAreaPixels.x &&
+        lastArea.y === croppedAreaPixels.y &&
+        lastArea.width === croppedAreaPixels.width &&
+        lastArea.height === croppedAreaPixels.height
+      ) {
+        return
+      }
+
+      lastCroppedAreaRef.current = croppedAreaPixels
       setCroppedAreaPixels(croppedAreaPixels)
+
       if (onCropAreaChange) {
         onCropAreaChange(croppedAreaPixels)
       }
@@ -124,36 +186,50 @@ export const ImageCropper = ({
 
   const handleAspectRatioChange = (ratio: AspectRatio) => {
     setCurrentAspectRatio(ratio)
+    setActiveMenu(null)
+
+    if (onAspectRatioChange) {
+      onAspectRatioChange(ratio)
+    }
   }
 
   const handleCropComplete = async () => {
     const croppedImage = await getCroppedImg(image, croppedAreaPixels)
-    onCropComplete(croppedImage)
+    onCropComplete(croppedImage, croppedAreaPixels)
   }
 
-  const handleReset = () => {
-    setCrop({ x: 0, y: 0 })
-    setZoom(1)
-    setRotation(0)
-    setCurrentAspectRatio('1:1')
-  }
+  useEffect(() => {
+    if (isActiveSlide && image && !isInitialized.current) {
+      initializeImageSize()
+    }
+  }, [isActiveSlide, image, initializeImageSize])
 
   useEffect(() => {
     if (!isActiveSlide) {
       setActiveMenu(null)
+      isInitialized.current = false // Сбрасываем флаг инициализации при смене слайда
     }
   }, [isActiveSlide])
 
+  // Сбрасываем флаг инициализации при смене изображения
+  useEffect(() => {
+    isInitialized.current = false
+  }, [image])
+
   return (
-    <div className={s.cropper}>
+    <div className={s.cropper} ref={containerRef}>
       <div className={s.cropContainer}>
         <Cropper
           image={image}
-          objectFit={'cover'}
+          objectFit={'contain'}
           crop={crop}
           zoom={zoom}
           rotation={rotation}
-          aspect={currentAspectRatio === 'original' ? undefined : ASPECT_RATIO_MAP[currentAspectRatio]}
+          aspect={
+            currentAspectRatio === 'original' && imageSize.width > 0 ?
+              imageSize.width / imageSize.height
+            : ASPECT_RATIO_MAP[currentAspectRatio]
+          }
           onCropChange={onCropChange}
           onZoomChange={onZoomChange}
           onRotationChange={onRotationChange}
@@ -163,6 +239,8 @@ export const ImageCropper = ({
             containerClassName: s.cropContainer,
             cropAreaClassName: s.cropArea,
           }}
+          minZoom={0.1}
+          maxZoom={3}
         />
         <div className={s.cropControlsBox}>
           <div className={s.aspectRatioSelector}>
@@ -176,19 +254,16 @@ export const ImageCropper = ({
               {activeMenu === 'aspectRatio' && (
                 <div className={s.aspectRatioMenu}>
                   <ul className={s.aspectRatioButtons}>
-                    {activeMenu === 'aspectRatio' &&
-                      (['1:1', '4:5', '16:9', 'original'] as AspectRatio[]).map((ratio) => (
-                        <li key={ratio}>
-                          <button
-                            className={`${s.aspectRatioButton} ${currentAspectRatio === ratio ? s.active : ''}`}
-                            onClick={() => {
-                              handleAspectRatioChange(ratio)
-                            }}
-                          >
-                            {ratio === 'original' ? 'original' : ratio}
-                          </button>
-                        </li>
-                      ))}
+                    {(['1:1', '4:5', '16:9', 'original'] as AspectRatio[]).map((ratio) => (
+                      <li key={ratio}>
+                        <button
+                          className={`${s.aspectRatioButton} ${currentAspectRatio === ratio ? s.active : ''}`}
+                          onClick={() => handleAspectRatioChange(ratio)}
+                        >
+                          {ratio === 'original' ? 'Original' : ratio}
+                        </button>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               )}
@@ -208,7 +283,7 @@ export const ImageCropper = ({
                   <div className={s.sliderGroup}>
                     <input
                       type='range'
-                      min='1'
+                      min='0.1'
                       max='3'
                       step='0.1'
                       value={zoom}
