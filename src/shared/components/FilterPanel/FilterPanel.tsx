@@ -84,6 +84,13 @@ type ImageFilters = {
   [imageIndex: number]: string
 }
 
+// Функция для создания файла с оригинальным изображением
+const createOriginalFile = async (imageUrl: string): Promise<File> => {
+  const response = await fetch(imageUrl)
+  const blob = await response.blob()
+  return new File([blob], `original-${Date.now()}.jpg`, { type: 'image/jpeg' })
+}
+
 export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
   ({ onFilterApply, currentFilter = 'original', uploadedFiles }, ref) => {
     const [imageFilters, setImageFilters] = useState<ImageFilters>(() => {
@@ -96,6 +103,7 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const canvasRef = useRef<HTMLCanvasElement>(null)
+    const hasAppliedInitialFiltersRef = useRef(false)
 
     const currentImage = uploadedFiles[currentImageIndex]
     const image = currentImage.croppedImage || currentImage.preview
@@ -149,9 +157,7 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
 
       try {
         if (filterValue === 'original') {
-          const response = await fetch(image)
-          const blob = await response.blob()
-          const file = new File([blob], `original-${Date.now()}.jpg`, { type: 'image/jpeg' })
+          const file = await createOriginalFile(image)
           const preview = URL.createObjectURL(file)
 
           onFilterApply(
@@ -187,7 +193,31 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
     }
 
     const handleApplyFilter = async () => {
-      await handleFilterSelect(selectedFilter)
+      // Если это первый вызов, создаем файлы с фильтром "original" для всех изображений
+      if (!hasAppliedInitialFiltersRef.current) {
+        hasAppliedInitialFiltersRef.current = true
+
+        // Создаем файлы с фильтром "original" для всех изображений
+        for (let i = 0; i < uploadedFiles.length; i++) {
+          const imageUrl = uploadedFiles[i].croppedImage || uploadedFiles[i].preview
+          const file = await createOriginalFile(imageUrl)
+          const preview = URL.createObjectURL(file)
+
+          onFilterApply(
+            {
+              file,
+              filter: 'original',
+              preview,
+              intensity: 100,
+              originalImage: imageUrl,
+            },
+            i,
+          )
+        }
+      } else {
+        // Для последующих вызовов применяем фильтр только к текущему изображению
+        await handleFilterSelect(selectedFilter)
+      }
     }
 
     useImperativeHandle(

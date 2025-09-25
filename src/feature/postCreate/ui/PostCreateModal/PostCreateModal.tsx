@@ -1,6 +1,6 @@
 import s from './PostCreateModal.module.scss'
 import { Modal } from '@/src/shared/components/Modal/Modal'
-import { MouseEvent, ReactNode, useCallback, useRef, useState } from 'react'
+import { MouseEvent, useCallback, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Button } from '@/src/shared/components/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
@@ -324,12 +324,14 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
           }
         })
         .filter((item) => item != null)
+      console.log()
       await uploadImages({ postId: id, images }).unwrap()
       onModalClose()
     } catch (error) {
       console.log(error)
     }
   }
+  console.log(uploadedFiles)
 
   return (
     <div className={s.wrapper}>
