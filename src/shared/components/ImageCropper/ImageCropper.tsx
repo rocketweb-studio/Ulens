@@ -9,12 +9,12 @@ import { IconExpandOutline, IconMaximizeOutline } from '@rocketweb-studio/ulens-
 type Props = {
   image: string
   onCropComplete: (croppedImage: string, areaPixels?: Area) => void
-  aspectRatio?: number
   initialAspectRatio?: AspectRatio
   onCropAreaChange?: (areaPixels: Area) => void
   isActiveSlide?: boolean
   onAspectRatioChange?: (aspectRatio: AspectRatio) => void
 }
+
 type AspectRatio = '1:1' | '4:5' | '16:9' | 'original'
 type MenuName = 'aspectRatio' | 'zoom' | null
 
@@ -24,82 +24,6 @@ const ASPECT_RATIO_MAP: Record<AspectRatio, number> = {
   '16:9': 16 / 9,
   original: 0,
 } as const
-
-export type FlipOptions = {
-  horizontal: boolean
-  vertical: boolean
-}
-
-export type PixelCrop = {
-  x: number
-  y: number
-  width: number
-  height: number
-}
-
-export type Size = {
-  width: number
-  height: number
-}
-
-export const createImage = (url: string): Promise<HTMLImageElement> =>
-  new Promise((resolve, reject) => {
-    const image = new Image()
-    image.addEventListener('load', () => resolve(image))
-    image.addEventListener('error', (error) => reject(error))
-    image.setAttribute('crossOrigin', 'anonymous')
-    image.src = url
-  })
-
-export const getRadianAngle = (degreeValue: number): number => (degreeValue * Math.PI) / 180
-
-export const rotateSize = (width: number, height: number, rotation: number): Size => {
-  const rotRad = getRadianAngle(rotation)
-
-  return {
-    width: Math.abs(Math.cos(rotRad) * width) + Math.abs(Math.sin(rotRad) * height),
-    height: Math.abs(Math.sin(rotRad) * width) + Math.abs(Math.cos(rotRad) * height),
-  }
-}
-
-export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<string> => {
-  // Проверяем валидность области кадрирования
-  if (!pixelCrop || pixelCrop.width <= 0 || pixelCrop.height <= 0) {
-    console.warn('Invalid crop area:', pixelCrop)
-    return imageSrc // Возвращаем оригинальное изображение если область невалидна
-  }
-
-  try {
-    const image = await createImage(imageSrc)
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-
-    if (!ctx) {
-      return imageSrc
-    }
-
-    // Устанавливаем размеры canvas на основе области кадрирования
-    canvas.width = Math.max(1, pixelCrop.width) // Минимальная ширина 1px
-    canvas.height = Math.max(1, pixelCrop.height) // Минимальная высота 1px
-
-    ctx.drawImage(
-      image,
-      pixelCrop.x,
-      pixelCrop.y,
-      pixelCrop.width,
-      pixelCrop.height,
-      0,
-      0,
-      pixelCrop.width,
-      pixelCrop.height,
-    )
-
-    return canvas.toDataURL('image/jpeg', 1)
-  } catch (error) {
-    console.error('Error cropping image:', error)
-    return imageSrc // Возвращаем оригинал в случае ошибки
-  }
-}
 
 export const ImageCropper = ({
   image,
@@ -118,26 +42,78 @@ export const ImageCropper = ({
   const [imageSize, setImageSize] = useState<{ width: number; height: number }>({ width: 0, height: 0 })
   const containerRef = useRef<HTMLDivElement>(null)
   const isInitialized = useRef(false)
-  const initializeImageSize = useCallback(async () => {
+
+  const initializeImageSizeRef = useRef(async () => {
     if (isInitialized.current) return
 
-    const img = await createImage(image)
-    setImageSize({ width: img.width, height: img.height })
-    const defaultCropArea = {
-      x: 0,
-      y: 0,
-      width: img.width,
-      height: img.height,
-    }
+    try {
+      const img = await createImage(image)
 
-    setCroppedAreaPixels(defaultCropArea)
-    if (onCropAreaChange) {
-      onCropAreaChange(defaultCropArea)
-    }
+      if (imageSize.width !== img.width || imageSize.height !== img.height) {
+        setImageSize({ width: img.width, height: img.height })
+      }
 
-    setCrop({ x: 0, y: 0 })
-    isInitialized.current = true
+      const defaultCropArea = {
+        x: 0,
+        y: 0,
+        width: img.width,
+        height: img.height,
+      }
+
+      if (
+        !croppedAreaPixels ||
+        croppedAreaPixels.width !== defaultCropArea.width ||
+        croppedAreaPixels.height !== defaultCropArea.height
+      ) {
+        setCroppedAreaPixels(defaultCropArea)
+        if (onCropAreaChange) {
+          onCropAreaChange(defaultCropArea)
+        }
+      }
+
+      if (crop.x !== 0 || crop.y !== 0) {
+        setCrop({ x: 0, y: 0 })
+      }
+
+      isInitialized.current = true
+    } catch (error) {
+      console.error('Error initializing image:', error)
+    }
+  })
+
+  useEffect(() => {
+    initializeImageSizeRef.current = async () => {
+      if (isInitialized.current) return
+
+      try {
+        const img = await createImage(image)
+        setImageSize({ width: img.width, height: img.height })
+
+        const defaultCropArea = {
+          x: 0,
+          y: 0,
+          width: img.width,
+          height: img.height,
+        }
+
+        setCroppedAreaPixels(defaultCropArea)
+        if (onCropAreaChange) {
+          onCropAreaChange(defaultCropArea)
+        }
+
+        setCrop({ x: 0, y: 0 })
+        isInitialized.current = true
+      } catch (error) {
+        console.error('Error initializing image:', error)
+      }
+    }
   }, [image, onCropAreaChange])
+
+  useEffect(() => {
+    if (isActiveSlide && image && !isInitialized.current) {
+      initializeImageSizeRef.current()
+    }
+  }, [isActiveSlide, image])
 
   const onCropChange = useCallback((crop: { x: number; y: number }) => {
     setCrop(crop)
@@ -195,15 +171,8 @@ export const ImageCropper = ({
   }
 
   useEffect(() => {
-    if (isActiveSlide && image && !isInitialized.current) {
-      initializeImageSize()
-    }
-  }, [isActiveSlide, image, initializeImageSize])
-
-  useEffect(() => {
     if (!isActiveSlide) {
       setActiveMenu(null)
-      isInitialized.current = false
     }
   }, [isActiveSlide])
 
@@ -229,7 +198,6 @@ export const ImageCropper = ({
           onZoomChange={onZoomChange}
           onRotationChange={onRotationChange}
           onCropComplete={onCropAreaComplete}
-          onCropAreaChange={onCropAreaComplete}
           classes={{
             containerClassName: s.cropContainer,
             cropAreaClassName: s.cropArea,
@@ -297,4 +265,49 @@ export const ImageCropper = ({
       </div>
     </div>
   )
+}
+
+export const createImage = (url: string): Promise<HTMLImageElement> =>
+  new Promise((resolve, reject) => {
+    const image = new Image()
+    image.addEventListener('load', () => resolve(image))
+    image.addEventListener('error', (error) => reject(error))
+    image.setAttribute('crossOrigin', 'anonymous')
+    image.src = url
+  })
+
+export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<string> => {
+  if (!pixelCrop || pixelCrop.width <= 0 || pixelCrop.height <= 0) {
+    return imageSrc
+  }
+
+  try {
+    const image = await createImage(imageSrc)
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+
+    if (!ctx) {
+      return imageSrc
+    }
+
+    canvas.width = Math.max(1, pixelCrop.width)
+    canvas.height = Math.max(1, pixelCrop.height)
+
+    ctx.drawImage(
+      image,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0,
+      0,
+      pixelCrop.width,
+      pixelCrop.height,
+    )
+
+    return canvas.toDataURL('image/jpeg', 1)
+  } catch (error) {
+    console.error('Error cropping image:', error)
+    return imageSrc
+  }
 }
