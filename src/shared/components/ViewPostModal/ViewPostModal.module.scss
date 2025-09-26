@@ -1,4 +1,5 @@
 @use '@/src/shared/styles/colors' as colors;
+@use '@/src/shared/styles/typography' as typography;
 
 .viewPostModal{
   width: 75vw;
@@ -91,4 +92,67 @@
   display: flex;
   gap: 24px;
   }
+}
+.postData{
+  margin-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.likesPostContainer{
+display: flex;
+  gap: 12px;
+}
+.likeImagesContainer{
+
+  & .likeImage:nth-child(1){
+    z-index: 3;
+  }
+  & .likeImage:nth-child(2){
+    z-index: 2;
+    margin-left: -8px;
+  }
+  & .likeImage:nth-child(3){
+    z-index: 1;
+    margin-left: -8px;
+  }
+}
+.date{
+  @include typography.small_text;
+  font-family: typography.$font-family;
+  color: colors.color(light,900);
+}
+.addCommentContainer{
+  border-top: 1px solid colors.color(dark, 100);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+
+
+
+}
+
+.inputComment{
+  margin: 0;
+  width: 100%;
+  padding: 18px 0 18px 24px;
+  border: none;
+  background: none;
+  &::placeholder{
+    @include typography.regular_text_14;
+    font-family: typography.$font-family;
+    color: colors.color(light,900);
+  }
+&:focus{
+  border: none;
+  outline: none;
+}
+}
+
+.buttonComment{
+  padding: 18px 24px;
+  border: none;
+  background: none;
+  color: colors.color('accent',500);
 }
