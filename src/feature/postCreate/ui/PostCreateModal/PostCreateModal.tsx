@@ -26,8 +26,8 @@ type Steps = 'add' | 'crop' | 'filter' | 'publication'
 
 export type UploadedFile = {
   file: File
-  originalPreview: string // Сохраняем оригинальное превью
-  preview: string // Текущее превью (может быть обрезанным)
+  originalPreview: string
+  preview: string
   croppedImage?: string
   filteredImage?: FilteredImage
   filter?: string
@@ -69,19 +69,26 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const [step, setStep] = useState<Steps>('add')
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [createPost, { data: dataCreatePost }] = useCreatePostMutation()
+  const [createPost] = useCreatePostMutation()
   const [uploadImages] = useUploadPostImagesMutation()
   const [draftStep, setDraftStep] = useState<Steps | null>(null)
   const filterPanelRef = useRef<{ applyFilter: () => void }>(null)
   const { isOpen, openModal, closeModal } = useModal()
   const [dropError, setDropError] = useState<string | null>(null)
 
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'image/*': FILES_VALIDATE.formats,
+    },
+    maxFiles: FILES_VALIDATE.maxFiles,
+    maxSize: FILES_VALIDATE.maxSize,
+  })
+
   const {
     control,
     handleSubmit,
     formState: { errors },
-    watch,
-    trigger,
   } = useForm<PublicationFormData>({
     resolver: zodResolver(publicationSchema),
     defaultValues: {
@@ -111,7 +118,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     return errorMessage
   }
 
-  const onDrop = (acceptedFiles: File[], rejectedFiles: any[]) => {
+  function onDrop(acceptedFiles: File[], rejectedFiles: any[]) {
     setDropError(null)
     const newFiles = acceptedFiles.slice(0, 10 - uploadedFiles.length).map((file) => ({
       file,
@@ -129,28 +136,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       changeNextStep()
     }
   }
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: {
-      'image/*': FILES_VALIDATE.formats,
-    },
-    maxFiles: FILES_VALIDATE.maxFiles,
-    maxSize: FILES_VALIDATE.maxSize,
-  })
-
-  // const resetToOriginalImage = useCallback((index: number) => {
-  //   setUploadedFiles((prev) =>
-  //     prev.map((file, i) =>
-  //       i === index ?
-  //         {
-  //           ...file,
-  //           preview: file.originalPreview,
-  //         }
-  //       : file,
-  //     ),
-  //   )
-  // }, [])
 
   const handleAspectRatioChange = useCallback(
     (aspectRatio: 'original' | '1:1' | '4:5' | '16:9', index?: number) => {

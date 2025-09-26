@@ -1,3 +1,5 @@
+'use client'
+
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Cropper, { Area } from 'react-easy-crop'
 import { Button } from '@/src/shared/components/Button/Button'
@@ -116,15 +118,11 @@ export const ImageCropper = ({
   const [imageSize, setImageSize] = useState<{ width: number; height: number }>({ width: 0, height: 0 })
   const containerRef = useRef<HTMLDivElement>(null)
   const isInitialized = useRef(false)
-
-  // Функция для получения размеров изображения и расчета начального zoom
   const initializeImageSize = useCallback(async () => {
     if (isInitialized.current) return
 
     const img = await createImage(image)
     setImageSize({ width: img.width, height: img.height })
-
-    // Инициализируем область кадрирования по умолчанию
     const defaultCropArea = {
       x: 0,
       y: 0,
@@ -153,12 +151,10 @@ export const ImageCropper = ({
     setRotation(rotation)
   }, [])
 
-  // Используем useRef для хранения последнего значения
   const lastCroppedAreaRef = useRef<Area | null>(null)
 
   const onCropAreaComplete = useCallback(
     (croppedArea: Area, croppedAreaPixels: Area) => {
-      // Проверяем валидность области кадрирования
       if (croppedAreaPixels.width <= 0 || croppedAreaPixels.height <= 0) {
         return
       }
@@ -207,11 +203,10 @@ export const ImageCropper = ({
   useEffect(() => {
     if (!isActiveSlide) {
       setActiveMenu(null)
-      isInitialized.current = false // Сбрасываем флаг инициализации при смене слайда
+      isInitialized.current = false
     }
   }, [isActiveSlide])
 
-  // Сбрасываем флаг инициализации при смене изображения
   useEffect(() => {
     isInitialized.current = false
   }, [image])
