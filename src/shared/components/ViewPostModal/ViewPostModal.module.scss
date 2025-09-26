@@ -82,3 +82,13 @@
     height: auto;
   }
 }
+.postActions{
+  display: flex;
+  justify-content: space-between;
+  margin:12px 24px 20px;
+  flex-wrap: nowrap;
+  & .postActionsLeft{
+  display: flex;
+  gap: 24px;
+  }
+}
