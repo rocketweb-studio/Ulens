@@ -186,10 +186,10 @@ export default function ViewPostModal({userId, postId}: { userId: string; postId
                                 </div>
                                 <span className={s.date}>July 3, 2021</span>
                             </div>
-                            <div className={s.addCommentContainer}>
-                                <input placeholder={'Add a Comment...'} className={s.inputComment} />
+                            {data && <div className={s.addCommentContainer}>
+                                <input placeholder={'Add a Comment...'} className={s.inputComment}/>
                                 <button className={s.buttonComment}>Publish</button>
-                            </div>
+                            </div>}
                         </div>
                     </div>
                 </Modal>
