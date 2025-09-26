@@ -20,8 +20,9 @@ import {
   IconSearch,
   IconTrendingUpOutline,
 } from '@rocketweb-studio/ulens-ui-kit'
+import { Suspense } from 'react'
 
-export const Sidebar = () => {
+function SidebarContent() {
   const { data } = useGetMeQuery()
   const pathname = usePathname()
   const params = useSearchParams()
@@ -73,5 +74,19 @@ export const Sidebar = () => {
         </FlexContainer>
       ))}
     </div>
+  )
+}
+
+export const Sidebar = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className={s.sidebarWrapper}>
+          <div>Loading sidebar...</div>
+        </div>
+      }
+    >
+      <SidebarContent />
+    </Suspense>
   )
 }
