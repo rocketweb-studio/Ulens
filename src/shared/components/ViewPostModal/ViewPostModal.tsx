@@ -13,9 +13,8 @@ import {CustomSwiper} from '@/src/shared/components/CustomSwiper'
 import {useGetProfileByUsedIdQuery} from '@/src/feature/userProfile/api/userProfileApi'
 import Link from 'next/link'
 import {PostMenuActions} from '@/src/feature/Posts/ui/postMenuActions'
-import {Button, IconHeart, IconHeartOutline} from '@rocketweb-studio/ulens-ui-kit'
+import { IconHeart, IconHeartOutline} from '@rocketweb-studio/ulens-ui-kit'
 import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
-import { Input } from '../Input/Input'
 
 
 
@@ -183,7 +182,7 @@ export default function ViewPostModal({userId, postId}: { userId: string; postId
                                         <Image className={s.likeImage} width={24} height={24} src={"/github-svg.svg"} alt={'Saved'}/>
                                         <Image className={s.likeImage} width={24} height={24} src={"/github-svg.svg"} alt={'Saved'}/>
                                     </div>
-                                    <span>{`${2243} "Like"`}</span>
+                                    <span>{`${postInfo?.likeCount} "Like"`}</span>
                                 </div>
                                 <span className={s.date}>July 3, 2021</span>
                             </div>
