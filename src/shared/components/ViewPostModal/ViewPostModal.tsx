@@ -85,6 +85,13 @@ export default function ViewPostModal({userId, postId}: { userId: string; postId
     const {data: postInfo} = useGetPostByIdQuery({postId})
     const {data: user} = useGetProfileByUsedIdQuery({userId})
 
+    const formattedDate = postInfo?.createdAt
+        ? new Intl.DateTimeFormat('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+        }).format(new Date(postInfo.createdAt))
+        : ''
     return (
         <FlexContainer align={'center'} justify={'center'}>
             <div className={s.wrapper}>
@@ -170,7 +177,10 @@ export default function ViewPostModal({userId, postId}: { userId: string; postId
                             {/*todo добавить обработчики событий и пути иконок*/}
                             {data && <div className={s.postActions}>
                                 <div className={s.postActionsLeft}>
-                                    <IconHeartOutline/>
+                                    {postInfo?.isLiked
+                                            ? <div className={s.iconHeart}><IconHeart/></div>
+                                            : <div className={s.iconHeartOutline}><IconHeartOutline/></div>}
+
                                     <Image width={24} height={24} src={"/savedPost.svg"} alt={'Saved'}/>
                                 </div>
                                 <Image width={24} height={24} src={"/sendPost.svg"} alt={'Saved'}/>
@@ -184,7 +194,7 @@ export default function ViewPostModal({userId, postId}: { userId: string; postId
                                     </div>
                                     <span>{`${postInfo?.likeCount} "Like"`}</span>
                                 </div>
-                                <span className={s.date}>July 3, 2021</span>
+                                <span className={s.date}>{formattedDate}</span>
                             </div>
                             {data && <div className={s.addCommentContainer}>
                                 <input placeholder={'Add a Comment...'} className={s.inputComment}/>
