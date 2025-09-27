@@ -168,6 +168,7 @@ export default function ViewPostModal({userId, postId}: { userId: string; postId
                                     </div>
                                 ))}
                             </div>
+                            {/*todo добавить обработчики событий и пути иконок*/}
                             {data && <div className={s.postActions}>
                                 <div className={s.postActionsLeft}>
                                     <IconHeartOutline/>

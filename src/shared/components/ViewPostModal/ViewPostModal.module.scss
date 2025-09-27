@@ -87,7 +87,7 @@
 .postActions{
   display: flex;
   justify-content: space-between;
-  margin:12px 24px 20px;
+  margin:12px 24px 7px 24px;
   flex-wrap: nowrap;
   & .postActionsLeft{
   display: flex;
@@ -101,11 +101,11 @@
   gap: 5px;
 }
 .likesPostContainer{
+  margin-top: 12px;
 display: flex;
   gap: 12px;
 }
 .likeImagesContainer{
-
   & .likeImage:nth-child(1){
     z-index: 3;
   }
