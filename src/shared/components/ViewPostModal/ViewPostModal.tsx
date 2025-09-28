@@ -147,30 +147,13 @@ export default function ViewPostModal({userId, postId}: { userId: string; postId
                                     </Link>
                                 </div>
                                 <div className={s.publicationMenu}>
-                                    <PostMenuActions postId={postId} description={postInfo?.description || ''}/>
+                                    <PostMenuActions postId={postId} description={''}/>
                                 </div>
                             </div>
+                            <div className={s.postDescription}><p>{postInfo?.description}</p></div>
 
-                            {/*description поста*/}
+                            {/*блок комментариев*/}
                             <div className={s.publicationComments}>
-                                <div className={s.commentWrapper}>
-                                    <div className={s.avatar}>
-                                        <Image src={postInfo?.avatarOwner || '/github-svg.svg'} alt={'Avatar'}
-                                               width={36}
-                                               height={36}/>
-                                    </div>
-                                    <div className={s.commentText}>
-                                        <strong>{postInfo?.owner.firstName}</strong>
-                                        <p>{postInfo?.description}</p>
-                                        <div className={s.commentPanel}>
-                                            <span className={s.date}>{formattedDate}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                              {/*блок комментариев*/}
-                                <div className={s.publicationComments}>
                                     {comments.map((comment, index) => (
                                         <div key={index} className={s.commentWrapper}>
                                             <div className={s.avatar}>
