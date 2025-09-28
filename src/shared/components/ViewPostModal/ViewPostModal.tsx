@@ -147,63 +147,79 @@ export default function ViewPostModal({userId, postId}: { userId: string; postId
                                     </Link>
                                 </div>
                                 <div className={s.publicationMenu}>
-                                    <PostMenuActions postId={postId} description={''}/>
+                                    <PostMenuActions postId={postId} description={postInfo?.description||''}/>
                                 </div>
                             </div>
                             <div className={s.publicationComments}>
-                                {comments.map((comment, index) => (
-                                    <div key={index} className={s.commentWrapper}>
-                                        <div className={s.avatar}>
-                                            <Image src={comment.authorImage} alt={comment.userName} width={36}
-                                                   height={36}/>
-                                        </div>
-                                        <div className={s.commentText}>
-                                            <strong>{comment.userName}</strong>
-                                            <p>{comment.text}</p>
-                                            <div className={s.commentPanel}>
-                                                <span className={s.date}>{comment.date}</span>
-                                                {comment.likesCount > 0 &&
-                                                    <span className={s.like}>Like: {comment.likesCount}</span>}
-                                                {data && <span className={s.like}>Answer</span>}
-                                            </div>
-                                        </div>
-                                        {data && (comment.isChecked
-                                                ? <div className={s.iconHeart}><IconHeart/></div>
-                                                : <div className={s.iconHeartOutline}><IconHeartOutline/></div>
-                                        )}
+                                <div className={s.commentWrapper}>
+                                    <div className={s.avatar}>
+                                        <Image src={postInfo?.avatarOwner||'/github-svg.svg'} alt={'Avatar'} width={36}
+                                               height={36}/>
                                     </div>
-                                ))}
-                            </div>
-                            {/*todo добавить обработчики событий и пути иконок*/}
-                            {data && <div className={s.postActions}>
-                                <div className={s.postActionsLeft}>
-                                    {postInfo?.isLiked
+                                    <div className={s.commentText}>
+                                        <strong>{postInfo?.owner.firstName}</strong>
+                                        <p>{postInfo?.description}</p>
+                                        <div className={s.commentPanel}>
+                                            <span className={s.date}>{formattedDate}</span>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    {comments.map((comment, index) => (
+                                        <div key={index} className={s.commentWrapper}>
+                                            <div className={s.avatar}>
+                                                <Image src={comment.authorImage} alt={comment.userName} width={36}
+                                                       height={36}/>
+                                            </div>
+                                            <div className={s.commentText}>
+                                                <strong>{comment.userName}</strong>
+                                                <p>{comment.text}</p>
+                                                <div className={s.commentPanel}>
+                                                    <span className={s.date}>{comment.date}</span>
+                                                    {comment.likesCount > 0 &&
+                                                        <span className={s.like}>Like: {comment.likesCount}</span>}
+                                                    {data && <span className={s.like}>Answer</span>}
+                                                </div>
+                                            </div>
+                                            {data && (comment.isChecked
+                                                    ? <div className={s.iconHeart}><IconHeart/></div>
+                                                    : <div className={s.iconHeartOutline}><IconHeartOutline/></div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                                {/*todo добавить обработчики событий и пути иконок*/}
+                                {data && <div className={s.postActions}>
+                                    <div className={s.postActionsLeft}>
+                                        {postInfo?.isLiked
                                             ? <div className={s.iconHeart}><IconHeart/></div>
                                             : <div className={s.iconHeartOutline}><IconHeartOutline/></div>}
 
-                                    <Image width={24} height={24} src={"/savedPost.svg"} alt={'Saved'}/>
-                                </div>
-                                <Image width={24} height={24} src={"/sendPost.svg"} alt={'Saved'}/>
-                            </div>}
-                            <div className={s.postData}>
-                                <div className={s.likesPostContainer}>
-                                    <div className={s.likeImagesContainer}>
-                                        <Image className={s.likeImage} width={24} height={24} src={"/github-svg.svg"} alt={'Saved'}/>
-                                        <Image className={s.likeImage} width={24} height={24} src={"/github-svg.svg"} alt={'Saved'}/>
-                                        <Image className={s.likeImage} width={24} height={24} src={"/github-svg.svg"} alt={'Saved'}/>
+                                        <Image width={24} height={24} src={"/savedPost.svg"} alt={'Saved'}/>
                                     </div>
-                                    <span>{`${postInfo?.likeCount} "Like"`}</span>
+                                    <Image width={24} height={24} src={"/sendPost.svg"} alt={'Saved'}/>
+                                </div>}
+                                <div className={s.postData}>
+                                    <div className={s.likesPostContainer}>
+                                        <div className={s.likeImagesContainer}>
+                                            <Image className={s.likeImage} width={24} height={24}
+                                                   src={"/github-svg.svg"} alt={'Saved'}/>
+                                            <Image className={s.likeImage} width={24} height={24}
+                                                   src={"/github-svg.svg"} alt={'Saved'}/>
+                                            <Image className={s.likeImage} width={24} height={24}
+                                                   src={"/github-svg.svg"} alt={'Saved'}/>
+                                        </div>
+                                        <span>{`${postInfo?.likeCount} "Like"`}</span>
+                                    </div>
+                                    <span className={s.date}>{formattedDate}</span>
                                 </div>
-                                <span className={s.date}>{formattedDate}</span>
+                                {data && <div className={s.addCommentContainer}>
+                                    <input placeholder={'Add a Comment...'} className={s.inputComment}/>
+                                    <button className={s.buttonComment}>Publish</button>
+                                </div>}
                             </div>
-                            {data && <div className={s.addCommentContainer}>
-                                <input placeholder={'Add a Comment...'} className={s.inputComment}/>
-                                <button className={s.buttonComment}>Publish</button>
-                            </div>}
                         </div>
-                    </div>
                 </Modal>
             </div>
         </FlexContainer>
-    )
+)
 }
