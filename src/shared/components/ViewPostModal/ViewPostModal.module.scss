@@ -1,4 +1,5 @@
 @use '@/src/shared/styles/colors' as colors;
+@use '@/src/shared/styles/typography' as typography;
 
 .viewPostModal{
   width: 75vw;
@@ -16,6 +17,7 @@
 .publicationContent{
   flex: 0 0 50%;
   min-width: 0;
+  background-color: colors.color(dark,300);
 }
 .publicationHeadLine{
   display: flex;
@@ -30,7 +32,7 @@
   gap: 20px;
   padding: 11px 20px;
   border-bottom: 1px solid colors.color(dark, 100);
-  max-height: 300px;
+  max-height: 400px;
   overflow-y: scroll;
   .commentWrapper{
     display: flex;
@@ -80,5 +82,80 @@
   img{
     width: 100%;
     height: auto;
+  }
+}
+.postActions{
+  display: flex;
+  justify-content: space-between;
+  margin:12px 24px 7px 24px;
+  flex-wrap: nowrap;
+  & .postActionsLeft{
+  display: flex;
+  gap: 24px;
+  }
+}
+.postData{
+  margin-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.likesPostContainer{
+  margin-top: 12px;
+display: flex;
+  gap: 12px;
+}
+.likeImagesContainer{
+  & .likeImage:nth-child(1){
+    z-index: 3;
+  }
+  & .likeImage:nth-child(2){
+    z-index: 2;
+    margin-left: -8px;
+  }
+  & .likeImage:nth-child(3){
+    z-index: 1;
+    margin-left: -8px;
+  }
+}
+.date{
+  margin-bottom: 7px;
+  @include typography.small_text;
+  font-family: typography.$font-family;
+  color: colors.color(light,900);
+}
+.addCommentContainer{
+  border-top: 1px solid colors.color(dark, 100);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.inputComment{
+  margin: 0;
+  width: 100%;
+  padding: 18px 0 18px 24px;
+  border: none;
+  background: none;
+  &::placeholder{
+    @include typography.regular_text_14;
+    font-family: typography.$font-family;
+    color: colors.color(light,900);
+  }
+&:focus{
+  border: none;
+  outline: none;
+}
+}
+
+.buttonComment{
+  padding: 18px 24px;
+  border: none;
+  background: none;
+  color: colors.color('accent',500);
+  &:hover{
+    color: colors.color('accent',300);
+
   }
 }
