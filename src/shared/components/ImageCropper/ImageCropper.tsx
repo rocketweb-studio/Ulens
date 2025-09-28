@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Cropper, { Area } from 'react-easy-crop'
 import { Button } from '@/src/shared/components/Button/Button'
 import s from './ImageCropper.module.scss'
@@ -8,7 +8,6 @@ import { IconExpandOutline, IconMaximizeOutline } from '@rocketweb-studio/ulens-
 
 type Props = {
   image: string
-  onCropComplete: (croppedImage: string, areaPixels?: Area) => void
   initialAspectRatio?: AspectRatio
   onCropAreaChange?: (areaPixels: Area) => void
   isActiveSlide?: boolean
@@ -27,7 +26,6 @@ const ASPECT_RATIO_MAP: Record<AspectRatio, number> = {
 
 export const ImageCropper = ({
   image,
-  onCropComplete,
   initialAspectRatio = 'original',
   onCropAreaChange,
   isActiveSlide,
@@ -115,46 +113,39 @@ export const ImageCropper = ({
     }
   }, [isActiveSlide, image])
 
-  const onCropChange = useCallback((crop: { x: number; y: number }) => {
+  const onCropChange = (crop: { x: number; y: number }) => {
     setCrop(crop)
-  }, [])
+  }
 
-  const onZoomChange = useCallback((zoom: number) => {
+  const onZoomChange = (zoom: number) => {
     setZoom(zoom)
-  }, [])
-
-  const onRotationChange = useCallback((rotation: number) => {
-    setRotation(rotation)
-  }, [])
+  }
 
   const lastCroppedAreaRef = useRef<Area | null>(null)
 
-  const onCropAreaComplete = useCallback(
-    (croppedArea: Area, croppedAreaPixels: Area) => {
-      if (croppedAreaPixels.width <= 0 || croppedAreaPixels.height <= 0) {
-        return
-      }
+  const onCropAreaComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
+    if (croppedAreaPixels.width <= 0 || croppedAreaPixels.height <= 0) {
+      return
+    }
 
-      const lastArea = lastCroppedAreaRef.current
-      if (
-        lastArea &&
-        lastArea.x === croppedAreaPixels.x &&
-        lastArea.y === croppedAreaPixels.y &&
-        lastArea.width === croppedAreaPixels.width &&
-        lastArea.height === croppedAreaPixels.height
-      ) {
-        return
-      }
+    const lastArea = lastCroppedAreaRef.current
+    if (
+      lastArea &&
+      lastArea.x === croppedAreaPixels.x &&
+      lastArea.y === croppedAreaPixels.y &&
+      lastArea.width === croppedAreaPixels.width &&
+      lastArea.height === croppedAreaPixels.height
+    ) {
+      return
+    }
 
-      lastCroppedAreaRef.current = croppedAreaPixels
-      setCroppedAreaPixels(croppedAreaPixels)
+    lastCroppedAreaRef.current = croppedAreaPixels
+    setCroppedAreaPixels(croppedAreaPixels)
 
-      if (onCropAreaChange) {
-        onCropAreaChange(croppedAreaPixels)
-      }
-    },
-    [onCropAreaChange],
-  )
+    if (onCropAreaChange) {
+      onCropAreaChange(croppedAreaPixels)
+    }
+  }
 
   const handleAspectRatioChange = (ratio: AspectRatio) => {
     setCurrentAspectRatio(ratio)
@@ -163,11 +154,6 @@ export const ImageCropper = ({
     if (onAspectRatioChange) {
       onAspectRatioChange(ratio)
     }
-  }
-
-  const handleCropComplete = async () => {
-    const croppedImage = await getCroppedImg(image, croppedAreaPixels)
-    onCropComplete(croppedImage, croppedAreaPixels)
   }
 
   useEffect(() => {
@@ -196,7 +182,6 @@ export const ImageCropper = ({
           }
           onCropChange={onCropChange}
           onZoomChange={onZoomChange}
-          onRotationChange={onRotationChange}
           onCropComplete={onCropAreaComplete}
           classes={{
             containerClassName: s.cropContainer,

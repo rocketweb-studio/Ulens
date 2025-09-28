@@ -1,6 +1,6 @@
 import s from './PostCreateModal.module.scss'
 import { Modal } from '@/src/shared/components/Modal/Modal'
-import { MouseEvent, useCallback, useRef, useState } from 'react'
+import { MouseEvent, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Button } from '@/src/shared/components/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
@@ -35,13 +35,6 @@ export type UploadedFile = {
   aspectRatio?: 'original' | '1:1' | '4:5' | '16:9'
 }
 
-export type Filter = {
-  name: string
-  value: string
-  cssFilter: string
-  preview: string
-}
-
 export type FilteredImage = {
   file: File
   filter: string
@@ -59,7 +52,7 @@ const FILES_VALIDATE = {
 const publicationSchema = z.object({
   description: z
     .string()
-    .min(10, { message: 'Must be more than 10 characters' })
+    .min(1, { message: 'Must be filled' })
     .max(500, { message: 'Must be more than 500 characters' }),
 })
 
@@ -137,14 +130,11 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     }
   }
 
-  const handleAspectRatioChange = useCallback(
-    (aspectRatio: 'original' | '1:1' | '4:5' | '16:9', index?: number) => {
-      const targetIndex = index !== undefined ? index : currentImageIndex
+  const handleAspectRatioChange = (aspectRatio: 'original' | '1:1' | '4:5' | '16:9', index?: number) => {
+    const targetIndex = index !== undefined ? index : currentImageIndex
 
-      setUploadedFiles((prev) => prev.map((file, i) => (i === targetIndex ? { ...file, aspectRatio } : file)))
-    },
-    [currentImageIndex],
-  )
+    setUploadedFiles((prev) => prev.map((file, i) => (i === targetIndex ? { ...file, aspectRatio } : file)))
+  }
 
   const createCropSlides = (files: UploadedFile[]): TSlide[] =>
     files.map((file, index) => ({
@@ -153,7 +143,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         <div className={s.slideContent}>
           <ImageCropper
             image={file.preview}
-            onCropComplete={(croppedImage, areaPixels) => handleCropComplete(croppedImage, areaPixels, index)}
             onCropAreaChange={(areaPixels) => handleCropAreaChange(areaPixels, index)}
             onAspectRatioChange={(aspectRatio) => handleAspectRatioChange(aspectRatio, index)}
             initialAspectRatio={file.aspectRatio || 'original'}
@@ -204,22 +193,19 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     )
   }
 
-  const handleFilterApply = useCallback(
-    (filteredData: FilteredImage, indexActiveSlide: number) => {
-      setUploadedFiles((prev) =>
-        prev.map((file, index) =>
-          index === indexActiveSlide ?
-            {
-              ...file,
-              filteredImage: filteredData,
-              filter: `${filteredData.filter}-${filteredData.intensity}`,
-            }
-          : file,
-        ),
-      )
-    },
-    [currentImageIndex],
-  )
+  const handleFilterApply = (filteredData: FilteredImage, indexActiveSlide: number) => {
+    setUploadedFiles((prev) =>
+      prev.map((file, index) =>
+        index === indexActiveSlide ?
+          {
+            ...file,
+            filteredImage: filteredData,
+            filter: `${filteredData.filter}-${filteredData.intensity}`,
+          }
+        : file,
+      ),
+    )
+  }
 
   const changeNextStep = async () => {
     switch (step) {
@@ -230,7 +216,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         try {
           const cropPromises = uploadedFiles.map(async (file, index) => {
             if (file.croppedAreaPixels && file.croppedAreaPixels.width > 0 && file.croppedAreaPixels.height > 0) {
-              const croppedImage = await getCroppedImg(file.originalPreview, file.croppedAreaPixels) // Используем оригинал для обрезки
+              const croppedImage = await getCroppedImg(file.originalPreview, file.croppedAreaPixels)
               return {
                 ...file,
                 croppedImage,
