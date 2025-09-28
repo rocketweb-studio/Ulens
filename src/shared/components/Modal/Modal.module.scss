@@ -6,7 +6,7 @@
   background: rgba(colors.color(dark, 900), 0.8);
   position: fixed;
   inset: 0;
-  overflow: hidden;
+  overflow-y: scroll;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -73,7 +73,6 @@
   gap: 18px;
   padding: 30px 24px 36px;
   max-height: calc(90vh - 60px); // Вычитаем высоту header
-  overflow-y: auto;
 }
 
 .flexContainer.withoutPadding {
