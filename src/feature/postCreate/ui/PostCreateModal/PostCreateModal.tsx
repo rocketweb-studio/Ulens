@@ -52,7 +52,7 @@ export type FilteredImage = {
 
 const FILES_VALIDATE = {
   maxFiles: 10,
-  maxSize: 10 * 1024 * 1024,
+  maxSize: 20 * 1024 * 1024,
   formats: ['.jpeg', '.jpg', '.png'],
 } as const
 
