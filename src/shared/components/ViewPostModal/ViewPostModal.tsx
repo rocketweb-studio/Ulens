@@ -16,8 +16,6 @@ import {PostMenuActions} from '@/src/feature/Posts/ui/postMenuActions'
 import { IconHeart, IconHeartOutline} from '@rocketweb-studio/ulens-ui-kit'
 import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
 
-
-
 const comments = [
     {
         id: 1,

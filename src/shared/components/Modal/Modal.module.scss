@@ -19,8 +19,7 @@
   border-radius: 2px;
   background-color: colors.color(dark, 300);
   position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
+  //max-width: 90vw;
   width: auto;
   margin: auto;
 }
@@ -72,7 +71,7 @@
   flex-direction: column;
   gap: 18px;
   padding: 30px 24px 36px;
-  max-height: calc(90vh - 60px); // Вычитаем высоту header
+  //max-height: calc(90vh - 60px); // Вычитаем высоту header
 }
 
 .flexContainer.withoutPadding {
