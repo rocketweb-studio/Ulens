@@ -147,13 +147,16 @@ export default function ViewPostModal({userId, postId}: { userId: string; postId
                                     </Link>
                                 </div>
                                 <div className={s.publicationMenu}>
-                                    <PostMenuActions postId={postId} description={postInfo?.description||''}/>
+                                    <PostMenuActions postId={postId} description={postInfo?.description || ''}/>
                                 </div>
                             </div>
+
+                            {/*description поста*/}
                             <div className={s.publicationComments}>
                                 <div className={s.commentWrapper}>
                                     <div className={s.avatar}>
-                                        <Image src={postInfo?.avatarOwner||'/github-svg.svg'} alt={'Avatar'} width={36}
+                                        <Image src={postInfo?.avatarOwner || '/github-svg.svg'} alt={'Avatar'}
+                                               width={36}
                                                height={36}/>
                                     </div>
                                     <div className={s.commentText}>
@@ -163,7 +166,11 @@ export default function ViewPostModal({userId, postId}: { userId: string; postId
                                             <span className={s.date}>{formattedDate}</span>
                                         </div>
                                     </div>
-                                    </div>
+                                </div>
+                            </div>
+
+                              {/*блок комментариев*/}
+                                <div className={s.publicationComments}>
                                     {comments.map((comment, index) => (
                                         <div key={index} className={s.commentWrapper}>
                                             <div className={s.avatar}>
@@ -221,5 +228,5 @@ export default function ViewPostModal({userId, postId}: { userId: string; postId
                 </Modal>
             </div>
         </FlexContainer>
-)
+    )
 }
