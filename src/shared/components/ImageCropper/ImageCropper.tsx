@@ -204,6 +204,7 @@ export const ImageCropper = ({
           }}
           minZoom={0.1}
           maxZoom={3}
+          restrictPosition={false}
         />
         <div className={s.cropControlsBox}>
           <div className={s.aspectRatioSelector}>
