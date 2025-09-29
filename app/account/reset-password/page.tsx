@@ -10,7 +10,7 @@ export default async function ResetPasswordPage({
   let isValidCode: boolean = false
 
   try {
-    const res = await fetch(`https://ulens.org/api/v1/auth/check-recovery-code`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}auth/check-recovery-code`, {
       method: 'post',
       credentials: 'include',
       headers: {
