@@ -10,7 +10,7 @@ import Link from "next/link";
 import {timeAgo} from "@/src/shared/utils/timeAgo";
 
 type Props = {
-  data: GetPostByIdResponse[]
+  data: GetPostByIdResponse[] | undefined
 }
 
 export const PublicPage = ({data}: Props) => {
@@ -20,7 +20,7 @@ export const PublicPage = ({data}: Props) => {
 
   console.log(Posts)
 
-  data = Posts ? Posts.slice(0, 4) : data.slice(0, 4)
+  data = Posts ? Posts.slice(0, 4) : data?.slice(0, 4)
 
   return <div className={s.publicPageWrapper}>
 
@@ -38,7 +38,7 @@ export const PublicPage = ({data}: Props) => {
     <div className={s.postsContainer}>
 
 
-      {data.map((post) => (
+      {data?.map((post) => (
         <div key={post.id} className={s.postWrapper}>
 
           {post.images && (
@@ -73,8 +73,13 @@ export const PublicPage = ({data}: Props) => {
             </div>
           )}
           <div className={s.ownerWrapper}>
-            <Image className={s.avatar} src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${post.images.medium[0].url}`}
-                   alt={'avatar'} height={36} width={36}></Image>
+            {post.avatarOwner
+            ? <Image className={s.avatar} src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${post.avatarOwner}`}
+                     alt={'avatar'} height={36} width={36}></Image>
+            : <div className={s.avatar}>
+                {post.userName.slice(0,2).toUpperCase()}
+              </div>}
+
             <h3>{post.userName}</h3>
           </div>
 
