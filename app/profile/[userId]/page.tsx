@@ -1,7 +1,8 @@
 import { UserProfile } from '@/src/feature/userProfile/ui/UserProfile/UserProfile'
 import CreatePostModal from '@/src/shared/components/CreatePostModal/CreatePostModal'
 import PostModal from '@/src/shared/components/PostModal/PostModal'
-import ViewPostModal from "@/src/shared/components/ViewPostModal/ViewPostModal";
+import ViewPostModal from '@/src/shared/components/ViewPostModal/ViewPostModal'
+import { PostCreate } from '@/src/feature/postCreate/ui/PostCreate/PostCreate'
 
 export default async function UserPage({
   params,
@@ -20,8 +21,8 @@ export default async function UserPage({
   return (
     <div>
       <UserProfile userId={userId} />
-      {filters.postId && <ViewPostModal userId={userId} postId={filters.postId}  />}
-      {filters.action === 'create' && <CreatePostModal />}
+      {filters.postId && <ViewPostModal userId={userId} postId={filters.postId} />}
+      {filters.action === 'create' && <PostCreate />}
     </div>
   )
 }
