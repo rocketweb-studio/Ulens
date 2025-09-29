@@ -11,10 +11,9 @@ type Props = {
   postId: string
   description: string
   className?: string
-  onEdit?: () => void
 }
 
-export const PostMenuActions = ({ postId, description, className, onEdit }: Props) => {
+export const PostMenuActions = ({ postId, description, className }: Props) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
@@ -50,13 +49,7 @@ export const PostMenuActions = ({ postId, description, className, onEdit }: Prop
         <>
           {meData ?
             <div className={s.menu}>
-              <button
-                className={s.menuItem}
-                onClick={() => {
-                  setMenuOpen(false)
-                  onEdit?.()
-                }}
-              >
+              <button className={s.menuItem} onClick={() => setEditOpen(true)}>
                 <IconEdit2 width={16} height={16} />
                 Edit Post
               </button>
@@ -79,12 +72,12 @@ export const PostMenuActions = ({ postId, description, className, onEdit }: Prop
         </>
       )}
 
-      {/*<PostEditModal*/}
-      {/*  postId={postId}*/}
-      {/*  initialDescription={description}*/}
-      {/*  isOpen={editOpen}*/}
-      {/*  onClose={() => setEditOpen(false)}*/}
-      {/*/>*/}
+      <PostEditModal
+        postId={postId}
+        initialDescription={description}
+        isOpen={editOpen}
+        onClose={() => setEditOpen(false)}
+      />
       <PostDeleteModal postId={postId} isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} />
     </div>
   )

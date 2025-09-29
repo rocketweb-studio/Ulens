@@ -7,14 +7,14 @@ import { Path } from '@/src/shared/constants/Path'
 import s from './ViewPostModal.module.scss'
 import Image from 'next/image'
 import { Modal } from '@/src/shared/components/Modal/Modal'
-import { MouseEvent, useEffect, useRef, useState } from 'react'
-import { useGetPostByIdQuery, useUpdatePostMutation } from '@/src/feature/Posts/api/postsApi'
+import { MouseEvent } from 'react'
+import { useGetPostByIdQuery } from '@/src/feature/Posts/api/postsApi'
 import { CustomSwiper } from '@/src/shared/components/CustomSwiper'
 import { useGetProfileByUsedIdQuery } from '@/src/feature/userProfile/api/userProfileApi'
 import Link from 'next/link'
 import { PostMenuActions } from '@/src/feature/Posts/ui/postMenuActions'
 import { IconHeart, IconHeartOutline } from '@rocketweb-studio/ulens-ui-kit'
-import { toast } from 'react-toastify'
+import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
 
 const comments = [
   {
@@ -67,47 +67,30 @@ const comments = [
 export default function ViewPostModal({ userId, postId }: { userId: string; postId: string }) {
   const { isOpen, closeModal } = useModal(true)
   const { replace } = useRouter()
-  const { data: postInfo } = useGetPostByIdQuery({ postId })
-  const { data: user } = useGetProfileByUsedIdQuery({ userId })
-
-  const [isEditing, setIsEditing] = useState(false)
-  const [description, setDescription] = useState(postInfo?.description ?? '')
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
-  const [updatePost, { isLoading }] = useUpdatePostMutation()
-
-  useEffect(() => {
-    if (postInfo) {
-      setDescription(postInfo.description ?? '')
-    }
-  }, [postInfo])
-
-  useEffect(() => {
-    if (isEditing && textareaRef.current) {
-      textareaRef.current.focus()
-    }
-  }, [isEditing])
-
-  const handleSave = async () => {
-    try {
-      await updatePost({ postId, description }).unwrap()
-      setIsEditing(false)
-    } catch (err) {
-      toast.error('Update failed')
-    }
-  }
+  const { data } = useGetMeQuery()
 
   const onModalCloseHandler = () => {
     closeModal()
-    replace(Path.Profile)
+    replace(Path.Profile + `/${userId}`)
   }
 
   const onOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       closeModal()
-      replace(Path.Profile)
+      replace(Path.Profile + `/${userId}`)
     }
   }
+  const { data: postInfo } = useGetPostByIdQuery({ postId })
+  const { data: user } = useGetProfileByUsedIdQuery({ userId })
 
+  const formattedDate =
+    postInfo?.createdAt ?
+      new Intl.DateTimeFormat('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      }).format(new Date(postInfo.createdAt))
+    : ''
   return (
     <FlexContainer align={'center'} justify={'center'}>
       <div className={s.wrapper}>
@@ -163,57 +146,75 @@ export default function ViewPostModal({ userId, postId }: { userId: string; post
                   </Link>
                 </div>
                 <div className={s.publicationMenu}>
-                  <PostMenuActions
-                    postId={postId}
-                    description={postInfo?.description ?? ''}
-                    onEdit={() => setIsEditing(true)}
-                  />
+                  <PostMenuActions postId={postId} description={''} />
                 </div>
               </div>
-              {isEditing ?
-                <div className={s.editWrapper}>
-                  <textarea
-                    ref={textareaRef}
-                    className={s.textarea}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    maxLength={500}
-                    rows={5}
-                  />
-                  <div className={s.editButtons}>
-                    <button disabled={isLoading} onClick={handleSave}>
-                      Save
-                    </button>
-                    <button onClick={() => setIsEditing(false)}>Cancel</button>
-                  </div>
-                </div>
-              : <div className={s.publicationComments}>
-                  {comments.map((comment, index) => (
-                    <div key={index} className={s.commentWrapper}>
-                      <div className={s.avatar}>
-                        <Image src={comment.authorImage} alt={comment.userName} width={36} height={36} />
+              <div className={s.postDescription}>
+                <p>{postInfo?.description}</p>
+              </div>
+
+              {/*блок комментариев*/}
+              <div className={s.publicationComments}>
+                {comments.map((comment, index) => (
+                  <div key={index} className={s.commentWrapper}>
+                    <div className={s.avatar}>
+                      <Image src={comment.authorImage} alt={comment.userName} width={36} height={36} />
+                    </div>
+                    <div className={s.commentText}>
+                      <strong>{comment.userName}</strong>
+                      <p>{comment.text}</p>
+                      <div className={s.commentPanel}>
+                        <span className={s.date}>{comment.date}</span>
+                        {comment.likesCount > 0 && <span className={s.like}>Like: {comment.likesCount}</span>}
+                        {data && <span className={s.like}>Answer</span>}
                       </div>
-                      <div className={s.commentText}>
-                        <strong>{comment.userName}</strong>
-                        <p>{comment.text}</p>
-                        <div className={s.commentPanel}>
-                          <span className={s.date}>{comment.date}</span>
-                          {comment.likesCount > 0 && <span className={s.like}>Like: {comment.likesCount}</span>}
-                          <span className={s.like}>Answer</span>
-                        </div>
-                      </div>
-                      {comment.isChecked ?
+                    </div>
+                    {data &&
+                      (comment.isChecked ?
                         <div className={s.iconHeart}>
                           <IconHeart />
                         </div>
                       : <div className={s.iconHeartOutline}>
                           <IconHeartOutline />
-                        </div>
-                      }
-                    </div>
-                  ))}
+                        </div>)}
+                  </div>
+                ))}
+              </div>
+              {/*todo добавить обработчики событий и пути иконок*/}
+              {data && (
+                <div className={s.postActions}>
+                  <div className={s.postActionsLeft}>
+                    {postInfo?.isLiked ?
+                      <div className={s.iconHeart}>
+                        <IconHeart />
+                      </div>
+                    : <div className={s.iconHeartOutline}>
+                        <IconHeartOutline />
+                      </div>
+                    }
+
+                    <Image width={24} height={24} src={'/savedPost.svg'} alt={'Saved'} />
+                  </div>
+                  <Image width={24} height={24} src={'/sendPost.svg'} alt={'Saved'} />
                 </div>
-              }
+              )}
+              <div className={s.postData}>
+                <div className={s.likesPostContainer}>
+                  <div className={s.likeImagesContainer}>
+                    <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'Saved'} />
+                    <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'Saved'} />
+                    <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'Saved'} />
+                  </div>
+                  <span>{`${postInfo?.likeCount} "Like"`}</span>
+                </div>
+                <span className={s.date}>{formattedDate}</span>
+              </div>
+              {data && (
+                <div className={s.addCommentContainer}>
+                  <input placeholder={'Add a Comment...'} className={s.inputComment} />
+                  <button className={s.buttonComment}>Publish</button>
+                </div>
+              )}
             </div>
           </div>
         </Modal>
