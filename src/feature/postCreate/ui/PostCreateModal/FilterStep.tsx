@@ -4,7 +4,6 @@ import { Button } from '@/src/shared/components/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
 import { FilterPanel } from '@/src/shared/components/FilterPanel/FilterPanel'
 import { UploadedFile, FilteredImage } from '@/src/feature/postCreate/types/types'
-import s from './PostCreateModal.module.scss'
 
 type Props = {
   isModalOpen: boolean
