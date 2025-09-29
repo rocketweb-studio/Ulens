@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
 import Cropper, { Area } from 'react-easy-crop'
 import { Button } from '@/src/shared/components/Button/Button'
 import s from './ImageCropper.module.scss'
@@ -6,13 +8,12 @@ import { IconExpandOutline, IconMaximizeOutline } from '@rocketweb-studio/ulens-
 
 type Props = {
   image: string
-  onCropComplete: (croppedImage: string, areaPixels?: Area) => void
-  aspectRatio?: number
   initialAspectRatio?: AspectRatio
   onCropAreaChange?: (areaPixels: Area) => void
   isActiveSlide?: boolean
   onAspectRatioChange?: (aspectRatio: AspectRatio) => void
 }
+
 type AspectRatio = '1:1' | '4:5' | '16:9' | 'original'
 type MenuName = 'aspectRatio' | 'zoom' | null
 
@@ -23,85 +24,8 @@ const ASPECT_RATIO_MAP: Record<AspectRatio, number> = {
   original: 0,
 } as const
 
-export type FlipOptions = {
-  horizontal: boolean
-  vertical: boolean
-}
-
-export type PixelCrop = {
-  x: number
-  y: number
-  width: number
-  height: number
-}
-
-export type Size = {
-  width: number
-  height: number
-}
-
-export const createImage = (url: string): Promise<HTMLImageElement> =>
-  new Promise((resolve, reject) => {
-    const image = new Image()
-    image.addEventListener('load', () => resolve(image))
-    image.addEventListener('error', (error) => reject(error))
-    image.setAttribute('crossOrigin', 'anonymous')
-    image.src = url
-  })
-
-export const getRadianAngle = (degreeValue: number): number => (degreeValue * Math.PI) / 180
-
-export const rotateSize = (width: number, height: number, rotation: number): Size => {
-  const rotRad = getRadianAngle(rotation)
-
-  return {
-    width: Math.abs(Math.cos(rotRad) * width) + Math.abs(Math.sin(rotRad) * height),
-    height: Math.abs(Math.sin(rotRad) * width) + Math.abs(Math.cos(rotRad) * height),
-  }
-}
-
-export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<string> => {
-  // Проверяем валидность области кадрирования
-  if (!pixelCrop || pixelCrop.width <= 0 || pixelCrop.height <= 0) {
-    console.warn('Invalid crop area:', pixelCrop)
-    return imageSrc // Возвращаем оригинальное изображение если область невалидна
-  }
-
-  try {
-    const image = await createImage(imageSrc)
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-
-    if (!ctx) {
-      return imageSrc
-    }
-
-    // Устанавливаем размеры canvas на основе области кадрирования
-    canvas.width = Math.max(1, pixelCrop.width) // Минимальная ширина 1px
-    canvas.height = Math.max(1, pixelCrop.height) // Минимальная высота 1px
-
-    ctx.drawImage(
-      image,
-      pixelCrop.x,
-      pixelCrop.y,
-      pixelCrop.width,
-      pixelCrop.height,
-      0,
-      0,
-      pixelCrop.width,
-      pixelCrop.height,
-    )
-
-    return canvas.toDataURL('image/jpeg', 1)
-  } catch (error) {
-    console.error('Error cropping image:', error)
-    return imageSrc // Возвращаем оригинал в случае ошибки
-  }
-}
-
 export const ImageCropper = ({
   image,
-  onCropComplete,
   initialAspectRatio = 'original',
   onCropAreaChange,
   isActiveSlide,
@@ -117,72 +41,111 @@ export const ImageCropper = ({
   const containerRef = useRef<HTMLDivElement>(null)
   const isInitialized = useRef(false)
 
-  // Функция для получения размеров изображения и расчета начального zoom
-  const initializeImageSize = useCallback(async () => {
+  const initializeImageSizeRef = useRef(async () => {
     if (isInitialized.current) return
 
-    const img = await createImage(image)
-    setImageSize({ width: img.width, height: img.height })
+    try {
+      const img = await createImage(image)
 
-    // Инициализируем область кадрирования по умолчанию
-    const defaultCropArea = {
-      x: 0,
-      y: 0,
-      width: img.width,
-      height: img.height,
+      if (imageSize.width !== img.width || imageSize.height !== img.height) {
+        setImageSize({ width: img.width, height: img.height })
+      }
+
+      const defaultCropArea = {
+        x: 0,
+        y: 0,
+        width: img.width,
+        height: img.height,
+      }
+
+      if (
+        !croppedAreaPixels ||
+        croppedAreaPixels.width !== defaultCropArea.width ||
+        croppedAreaPixels.height !== defaultCropArea.height
+      ) {
+        setCroppedAreaPixels(defaultCropArea)
+        if (onCropAreaChange) {
+          onCropAreaChange(defaultCropArea)
+        }
+      }
+
+      if (crop.x !== 0 || crop.y !== 0) {
+        setCrop({ x: 0, y: 0 })
+      }
+
+      isInitialized.current = true
+    } catch (error) {
+      console.error('Error initializing image:', error)
     }
+  })
 
-    setCroppedAreaPixels(defaultCropArea)
-    if (onCropAreaChange) {
-      onCropAreaChange(defaultCropArea)
+  useEffect(() => {
+    initializeImageSizeRef.current = async () => {
+      if (isInitialized.current) return
+
+      try {
+        const img = await createImage(image)
+        setImageSize({ width: img.width, height: img.height })
+
+        const defaultCropArea = {
+          x: 0,
+          y: 0,
+          width: img.width,
+          height: img.height,
+        }
+
+        setCroppedAreaPixels(defaultCropArea)
+        if (onCropAreaChange) {
+          onCropAreaChange(defaultCropArea)
+        }
+
+        setCrop({ x: 0, y: 0 })
+        isInitialized.current = true
+      } catch (error) {
+        console.error('Error initializing image:', error)
+      }
     }
-
-    setCrop({ x: 0, y: 0 })
-    isInitialized.current = true
   }, [image, onCropAreaChange])
 
-  const onCropChange = useCallback((crop: { x: number; y: number }) => {
+  useEffect(() => {
+    if (isActiveSlide && image && !isInitialized.current) {
+      initializeImageSizeRef.current()
+    }
+  }, [isActiveSlide, image])
+
+  const onCropChange = (crop: { x: number; y: number }) => {
     setCrop(crop)
-  }, [])
+  }
 
-  const onZoomChange = useCallback((zoom: number) => {
+  const onZoomChange = (zoom: number) => {
     setZoom(zoom)
-  }, [])
+  }
 
-  const onRotationChange = useCallback((rotation: number) => {
-    setRotation(rotation)
-  }, [])
-
-  // Используем useRef для хранения последнего значения
   const lastCroppedAreaRef = useRef<Area | null>(null)
 
-  const onCropAreaComplete = useCallback(
-    (croppedArea: Area, croppedAreaPixels: Area) => {
-      // Проверяем валидность области кадрирования
-      if (croppedAreaPixels.width <= 0 || croppedAreaPixels.height <= 0) {
-        return
-      }
+  const onCropAreaComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
+    if (croppedAreaPixels.width <= 0 || croppedAreaPixels.height <= 0) {
+      return
+    }
 
-      const lastArea = lastCroppedAreaRef.current
-      if (
-        lastArea &&
-        lastArea.x === croppedAreaPixels.x &&
-        lastArea.y === croppedAreaPixels.y &&
-        lastArea.width === croppedAreaPixels.width &&
-        lastArea.height === croppedAreaPixels.height
-      ) {
-        return
-      }
+    const lastArea = lastCroppedAreaRef.current
+    if (
+      lastArea &&
+      lastArea.x === croppedAreaPixels.x &&
+      lastArea.y === croppedAreaPixels.y &&
+      lastArea.width === croppedAreaPixels.width &&
+      lastArea.height === croppedAreaPixels.height
+    ) {
+      return
+    }
 
-      lastCroppedAreaRef.current = croppedAreaPixels
-      setCroppedAreaPixels(croppedAreaPixels)
+    lastCroppedAreaRef.current = croppedAreaPixels
+    setCroppedAreaPixels(croppedAreaPixels)
 
-      if (onCropAreaChange) {
-        onCropAreaChange(croppedAreaPixels)
-      }
-    },
-    [onCropAreaChange],
-  )
+    if (onCropAreaChange) {
+      onCropAreaChange(croppedAreaPixels)
+    }
+  }
 
   const handleAspectRatioChange = (ratio: AspectRatio) => {
     setCurrentAspectRatio(ratio)
@@ -193,25 +156,12 @@ export const ImageCropper = ({
     }
   }
 
-  const handleCropComplete = async () => {
-    const croppedImage = await getCroppedImg(image, croppedAreaPixels)
-    onCropComplete(croppedImage, croppedAreaPixels)
-  }
-
-  useEffect(() => {
-    if (isActiveSlide && image && !isInitialized.current) {
-      initializeImageSize()
-    }
-  }, [isActiveSlide, image, initializeImageSize])
-
   useEffect(() => {
     if (!isActiveSlide) {
       setActiveMenu(null)
-      isInitialized.current = false // Сбрасываем флаг инициализации при смене слайда
     }
   }, [isActiveSlide])
 
-  // Сбрасываем флаг инициализации при смене изображения
   useEffect(() => {
     isInitialized.current = false
   }, [image])
@@ -232,15 +182,14 @@ export const ImageCropper = ({
           }
           onCropChange={onCropChange}
           onZoomChange={onZoomChange}
-          onRotationChange={onRotationChange}
           onCropComplete={onCropAreaComplete}
-          onCropAreaChange={onCropAreaComplete}
           classes={{
             containerClassName: s.cropContainer,
             cropAreaClassName: s.cropArea,
           }}
           minZoom={0.1}
           maxZoom={3}
+          restrictPosition={false}
         />
         <div className={s.cropControlsBox}>
           <div className={s.aspectRatioSelector}>
@@ -302,4 +251,49 @@ export const ImageCropper = ({
       </div>
     </div>
   )
+}
+
+export const createImage = (url: string): Promise<HTMLImageElement> =>
+  new Promise((resolve, reject) => {
+    const image = new Image()
+    image.addEventListener('load', () => resolve(image))
+    image.addEventListener('error', (error) => reject(error))
+    image.setAttribute('crossOrigin', 'anonymous')
+    image.src = url
+  })
+
+export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<string> => {
+  if (!pixelCrop || pixelCrop.width <= 0 || pixelCrop.height <= 0) {
+    return imageSrc
+  }
+
+  try {
+    const image = await createImage(imageSrc)
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+
+    if (!ctx) {
+      return imageSrc
+    }
+
+    canvas.width = Math.max(1, pixelCrop.width)
+    canvas.height = Math.max(1, pixelCrop.height)
+
+    ctx.drawImage(
+      image,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0,
+      0,
+      pixelCrop.width,
+      pixelCrop.height,
+    )
+
+    return canvas.toDataURL('image/jpeg', 1)
+  } catch (error) {
+    console.error('Error cropping image:', error)
+    return imageSrc
+  }
 }

@@ -96,8 +96,8 @@
   margin:12px 24px 7px 24px;
   flex-wrap: nowrap;
   & .postActionsLeft{
-    display: flex;
-    gap: 24px;
+  display: flex;
+  gap: 24px;
   }
 }
 .postData{
@@ -108,7 +108,7 @@
 }
 .likesPostContainer{
   margin-top: 12px;
-  display: flex;
+display: flex;
   gap: 12px;
 }
 .likeImagesContainer{
@@ -149,10 +149,10 @@
     font-family: typography.$font-family;
     color: colors.color(light,900);
   }
-  &:focus{
-    border: none;
-    outline: none;
-  }
+&:focus{
+  border: none;
+  outline: none;
+}
 }
 
 .buttonComment{

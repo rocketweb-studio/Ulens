@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 export default async function Verify({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
   const { token } = await searchParams
 
-  const response = await fetch('https://ulens.org/api/v1/auth/registration-confirmation', {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}registration-confirmation`, {
     method: 'post',
     credentials: 'include',
     headers: {
