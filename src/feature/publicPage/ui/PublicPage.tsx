@@ -8,6 +8,7 @@ import Image from "next/image";
 import {Path} from "@/src/shared/constants/Path";
 import Link from "next/link";
 import {timeAgo} from "@/src/shared/utils/timeAgo";
+import {UserAvatar} from "@/src/shared/components/UserAvatar";
 
 type Props = {
   data: GetPostByIdResponse[] | undefined
@@ -73,12 +74,13 @@ export const PublicPage = ({data}: Props) => {
             </div>
           )}
           <div className={s.ownerWrapper}>
-            {post.avatarOwner
-            ? <Image className={s.avatar} src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${post.avatarOwner}`}
-                     alt={'avatar'} height={36} width={36}></Image>
-            : <div className={s.avatar}>
-                {post.userName.slice(0,2).toUpperCase()}
-              </div>}
+            {/*{post.avatarOwner*/}
+            {/*? <Image className={s.avatar} src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${post.avatarOwner}`}*/}
+            {/*         alt={'avatar'} height={36} width={36}></Image>*/}
+            {/*: <div className={s.avatar}>*/}
+            {/*    {post.userName.slice(0,2).toUpperCase()}*/}
+            {/*  </div>}*/}
+            <UserAvatar userName={post.userName} width={36} height={36} avatarOwner={post.avatarOwner}/>
 
             <h3>{post.userName}</h3>
           </div>
