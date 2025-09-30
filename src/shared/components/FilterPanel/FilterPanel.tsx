@@ -1,4 +1,3 @@
-// FilterPanel.tsx
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState, useEffect } from 'react'
 import ImageNext from 'next/image'
 import s from './FilterPanel.module.scss'
@@ -57,7 +56,6 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
           ctx.filter = getCssFilterValue(filterValue, 100)
           ctx.drawImage(img, 0, 0)
 
-          // Возвращаем base64 строку вместо Blob
           const filteredBase64 = canvas.toDataURL('image/jpeg', 0.9)
           resolve(filteredBase64)
         } catch (error) {
