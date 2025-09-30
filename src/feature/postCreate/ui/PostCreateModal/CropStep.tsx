@@ -33,8 +33,6 @@ export const CropStep = ({
   setCurrentImageIndex,
   setUploadedFiles,
 }: Props) => {
-  const [isMounted, setIsMounted] = useState(false)
-
   const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onOverlayClick()
@@ -102,51 +100,43 @@ export const CropStep = ({
     setCurrentImageIndex(swiper.activeIndex)
   }
 
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  if (isMounted) {
-    return (
-      <Modal
-        className={`${s.modal} ${s.cropModal}`}
-        isOpen={isModalOpen}
-        onClose={onModalClose}
-        onOverlayClick={handleOverlayClick}
-        modalTitle={'Cropping'}
-        withoutPadding
-        hideCloseButton
-        hideDefaultButton
-        buttonRightInModalHeader={
-          <Button tagType={'button'} variant={'text'} withoutPadding onClick={handleNextStep}>
-            Next
-          </Button>
-        }
-        buttonLeftInModalHeader={
-          <Button tagType={'button'} variant={'text'} withoutPadding onClick={changePrevStep}>
-            <IconArrowIosBackOutline />
-          </Button>
-        }
-      >
-        <CustomSwiper
-          slides={cropSlides}
-          navigation={true}
-          pagination={true}
-          className={s.customSwiper}
-          allowTouchMove={false}
-          onSlideChange={handleSlideChange}
-          swiperProps={{
-            spaceBetween: 0,
-            slidesPerView: 1,
-            initialSlide: currentImageIndex,
-            noSwiping: true,
-            noSwipingClass: 'swiper-slide',
-            preventInteractionOnTransition: true,
-          }}
-        />
-      </Modal>
-    )
-  }
-
-  return <></>
+  return (
+    <Modal
+      className={`${s.modal} ${s.cropModal}`}
+      isOpen={isModalOpen}
+      onClose={onModalClose}
+      onOverlayClick={handleOverlayClick}
+      modalTitle={'Cropping'}
+      withoutPadding
+      hideCloseButton
+      hideDefaultButton
+      buttonRightInModalHeader={
+        <Button tagType={'button'} variant={'text'} withoutPadding onClick={handleNextStep}>
+          Next
+        </Button>
+      }
+      buttonLeftInModalHeader={
+        <Button tagType={'button'} variant={'text'} withoutPadding onClick={changePrevStep}>
+          <IconArrowIosBackOutline />
+        </Button>
+      }
+    >
+      <CustomSwiper
+        slides={cropSlides}
+        navigation={true}
+        pagination={true}
+        className={s.customSwiper}
+        allowTouchMove={false}
+        onSlideChange={handleSlideChange}
+        swiperProps={{
+          spaceBetween: 0,
+          slidesPerView: 1,
+          initialSlide: currentImageIndex,
+          noSwiping: true,
+          noSwipingClass: 'swiper-slide',
+          preventInteractionOnTransition: true,
+        }}
+      />
+    </Modal>
+  )
 }
