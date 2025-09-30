@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useCreatePostMutation, useUploadPostImagesMutation } from '@/src/feature/Posts/api/postsApi'
 import { getCroppedImg } from '@/src/shared/components/ImageCropper/ImageCropper'
@@ -9,7 +9,7 @@ import { useModal } from '@/src/shared/hooks/useModal'
 import { Steps, UploadedFile } from '@/src/feature/postCreate/types/types'
 import { FILES_VALIDATE } from '../../consts/consts'
 import { publicationSchema } from '../../model/schemas'
-import { base64ToFile, dropErrorSnackBar, fileToBase64 } from '../../utils' // Добавим утилиту
+import { base64ToFile, dropErrorSnackBar, fileToBase64, getImageDimensions } from '../../utils'
 import { AddStep } from './AddStep'
 import { CropStep } from './CropStep'
 import { FilterStep } from './FilterStep'
@@ -32,6 +32,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const [uploadImages] = useUploadPostImagesMutation()
   const { isOpen, openModal, closeModal } = useModal()
   const [dropError, setDropError] = useState<string | null>(null)
+  const [pendingStepChange, setPendingStepChange] = useState(false)
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -55,11 +56,19 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     const newFiles = await Promise.all(
       acceptedFiles.slice(0, 10 - uploadedFiles.length).map(async (file) => {
         const base64String = await fileToBase64(file)
+        const { width, height } = await getImageDimensions(base64String)
+
         return {
           file: base64String,
           originalPreview: base64String,
           preview: base64String,
           aspectRatio: 'original' as const,
+          croppedAreaPixels: {
+            x: 0,
+            y: 0,
+            width,
+            height,
+          },
         }
       }),
     )
@@ -71,7 +80,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     }
 
     if (acceptedFiles.length > 0) {
-      changeNextStep()
+      setPendingStepChange(true)
     }
   }
 
@@ -156,6 +165,14 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   }
 
   const currentImage = uploadedFiles[currentImageIndex]
+
+  useEffect(() => {
+    if (pendingStepChange && uploadedFiles.length > 0) {
+      debugger
+      setStep('crop')
+      setPendingStepChange(false)
+    }
+  }, [uploadedFiles, pendingStepChange])
 
   return (
     <div className={s.wrapper}>
