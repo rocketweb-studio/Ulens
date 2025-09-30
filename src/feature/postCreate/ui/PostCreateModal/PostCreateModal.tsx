@@ -130,15 +130,32 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     try {
       const res = await createPost(data).unwrap()
       const id = res.id
-      const images = uploadedFiles.map((item) => item?.filteredImage?.file || null).filter((item) => item != null)
-      await uploadImages({ postId: id, images }).unwrap()
+
+      const images = uploadedFiles
+        .map((item) => {
+          if (item?.filteredImage?.file) {
+            return item.filteredImage.file
+          } else if (item.croppedImage) {
+            return item.croppedImage
+          } else if (item.file) {
+            return item.file
+          }
+          return null
+        })
+        .filter((item): item is File => item != null)
+
+      if (images.length > 0) {
+        await uploadImages({ postId: id, images }).unwrap()
+      }
+
       onModalClose()
     } catch (error) {
-      console.log(error)
+      console.log('Error creating post:', error)
     }
   }
 
   const currentImage = uploadedFiles[currentImageIndex]
+  console.log(uploadedFiles)
 
   return (
     <div className={s.wrapper}>
