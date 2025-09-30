@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Cropper from 'react-easy-crop'
 import { Area } from 'react-easy-crop'
 import { Button } from '@/src/shared/components/Button/Button'
 import s from './ImageCropper.module.scss'
 import { IconExpandOutline, IconMaximizeOutline } from '@rocketweb-studio/ulens-ui-kit'
+import ImageNext from 'next/image'
 
 type Props = {
   image: string
@@ -29,61 +30,65 @@ export const ImageCropper = ({
   image,
   initialAspectRatio = 'original',
   onCropAreaChange,
-  isActiveSlide,
+  isActiveSlide = true,
   onAspectRatioChange,
 }: Props) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
   const [rotation, setRotation] = useState(0)
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({ x: 0, y: 0, width: 0, height: 0 })
   const [currentAspectRatio, setCurrentAspectRatio] = useState<AspectRatio>(initialAspectRatio)
   const [activeMenu, setActiveMenu] = useState<MenuName>(null)
   const [imageSize, setImageSize] = useState<{ width: number; height: number }>({ width: 0, height: 0 })
-  const containerRef = useRef<HTMLDivElement>(null)
-  const isInitialized = useRef(false)
 
-  const initializeImageSizeRef = useRef(async () => {
-    if (isInitialized.current) return
+  const onCropChange = (crop: { x: number; y: number }) => {
+    if (!isActiveSlide) return
+    setCrop(crop)
+  }
 
-    try {
-      const img = await createImage(image)
+  const onZoomChange = (zoom: number) => {
+    if (!isActiveSlide) return
+    setZoom(zoom)
+  }
 
-      if (imageSize.width !== img.width || imageSize.height !== img.height) {
-        setImageSize({ width: img.width, height: img.height })
-      }
-
-      const defaultCropArea = {
-        x: 0,
-        y: 0,
-        width: img.width,
-        height: img.height,
-      }
-
-      if (
-        !croppedAreaPixels ||
-        croppedAreaPixels.width !== defaultCropArea.width ||
-        croppedAreaPixels.height !== defaultCropArea.height
-      ) {
-        setCroppedAreaPixels(defaultCropArea)
-        if (onCropAreaChange) {
-          onCropAreaChange(defaultCropArea)
-        }
-      }
-
-      if (crop.x !== 0 || crop.y !== 0) {
-        setCrop({ x: 0, y: 0 })
-      }
-
-      isInitialized.current = true
-    } catch (error) {
-      console.error('Error initializing image:', error)
+  const onCropAreaComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
+    if (!isActiveSlide || croppedAreaPixels.width <= 0 || croppedAreaPixels.height <= 0) {
+      return
     }
-  })
+
+    if (onCropAreaChange) {
+      onCropAreaChange(croppedAreaPixels)
+    }
+  }
+
+  const handleAspectRatioChange = (ratio: AspectRatio) => {
+    if (!isActiveSlide) return
+
+    setCurrentAspectRatio(ratio)
+    setActiveMenu(null)
+
+    if (onAspectRatioChange) {
+      onAspectRatioChange(ratio)
+    }
+  }
+
+  if (!isActiveSlide) {
+    return (
+      <div className={s.imagePreview}>
+        <ImageNext src={image} alt='Preview' style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+      </div>
+    )
+  }
 
   useEffect(() => {
-    initializeImageSizeRef.current = async () => {
-      if (isInitialized.current) return
+    if (!isActiveSlide) {
+      setActiveMenu(null)
+    }
+  }, [isActiveSlide])
 
+  useEffect(() => {
+    if (!image || !isActiveSlide) return
+
+    const initializeImage = async () => {
       try {
         const img = await createImage(image)
         setImageSize({ width: img.width, height: img.height })
@@ -95,79 +100,24 @@ export const ImageCropper = ({
           height: img.height,
         }
 
-        setCroppedAreaPixels(defaultCropArea)
         if (onCropAreaChange) {
           onCropAreaChange(defaultCropArea)
         }
 
         setCrop({ x: 0, y: 0 })
-        isInitialized.current = true
+        setZoom(1)
+        setRotation(0)
       } catch (error) {
         console.error('Error initializing image:', error)
       }
     }
-  }, [image, onCropAreaChange])
 
-  useEffect(() => {
-    if (isActiveSlide && image && !isInitialized.current) {
-      initializeImageSizeRef.current()
-    }
-  }, [isActiveSlide, image])
+    initializeImage()
+  }, [image, isActiveSlide, onCropAreaChange])
 
-  const onCropChange = (crop: { x: number; y: number }) => {
-    setCrop(crop)
-  }
-
-  const onZoomChange = (zoom: number) => {
-    setZoom(zoom)
-  }
-
-  const lastCroppedAreaRef = useRef<Area | null>(null)
-
-  const onCropAreaComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
-    if (croppedAreaPixels.width <= 0 || croppedAreaPixels.height <= 0) {
-      return
-    }
-
-    const lastArea = lastCroppedAreaRef.current
-    if (
-      lastArea &&
-      lastArea.x === croppedAreaPixels.x &&
-      lastArea.y === croppedAreaPixels.y &&
-      lastArea.width === croppedAreaPixels.width &&
-      lastArea.height === croppedAreaPixels.height
-    ) {
-      return
-    }
-
-    lastCroppedAreaRef.current = croppedAreaPixels
-    setCroppedAreaPixels(croppedAreaPixels)
-
-    if (onCropAreaChange) {
-      onCropAreaChange(croppedAreaPixels)
-    }
-  }
-
-  const handleAspectRatioChange = (ratio: AspectRatio) => {
-    setCurrentAspectRatio(ratio)
-    setActiveMenu(null)
-
-    if (onAspectRatioChange) {
-      onAspectRatioChange(ratio)
-    }
-  }
-
-  useEffect(() => {
-    if (!isActiveSlide) {
-      setActiveMenu(null)
-    }
-  }, [isActiveSlide])
-
-  useEffect(() => {
-    isInitialized.current = false
-  }, [image])
+  console.log('rerender')
   return (
-    <div className={s.cropper} ref={containerRef}>
+    <div className={s.cropper}>
       <div className={s.cropContainer}>
         <Cropper
           image={image}
