@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import Cropper, { Area } from 'react-easy-crop'
+import Cropper from 'react-easy-crop'
+import { Area } from 'react-easy-crop'
 import { Button } from '@/src/shared/components/Button/Button'
 import s from './ImageCropper.module.scss'
 import { IconExpandOutline, IconMaximizeOutline } from '@rocketweb-studio/ulens-ui-kit'
