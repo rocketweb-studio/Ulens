@@ -166,7 +166,7 @@ export const ImageCropper = ({
   useEffect(() => {
     isInitialized.current = false
   }, [image])
-
+  debugger
   return (
     <div className={s.cropper} ref={containerRef}>
       <div className={s.cropContainer}>
