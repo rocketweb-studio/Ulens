@@ -168,7 +168,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
 
   useEffect(() => {
     if (pendingStepChange && uploadedFiles.length > 0) {
-      debugger
       setStep('crop')
       setPendingStepChange(false)
     }
