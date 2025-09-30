@@ -1,3 +1,4 @@
+// FilterStep.tsx
 import { MouseEvent, useRef } from 'react'
 import { Modal } from '@/src/shared/components/Modal/Modal'
 import { Button } from '@/src/shared/components/Button/Button'

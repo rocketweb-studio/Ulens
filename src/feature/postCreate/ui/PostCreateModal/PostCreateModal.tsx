@@ -9,7 +9,7 @@ import { useModal } from '@/src/shared/hooks/useModal'
 import { Steps, UploadedFile } from '@/src/feature/postCreate/types/types'
 import { FILES_VALIDATE } from '../../consts/consts'
 import { publicationSchema } from '../../model/schemas'
-import { dropErrorSnackBar } from '@/src/feature/postCreate/utils'
+import { base64ToFile, dropErrorSnackBar, fileToBase64 } from '../../utils' // Добавим утилиту
 import { AddStep } from './AddStep'
 import { CropStep } from './CropStep'
 import { FilterStep } from './FilterStep'
@@ -49,14 +49,21 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     defaultValues: { description: '' },
   })
 
-  function onDrop(acceptedFiles: File[], rejectedFiles: any[]) {
+  async function onDrop(acceptedFiles: File[], rejectedFiles: any[]) {
     setDropError(null)
-    const newFiles = acceptedFiles.slice(0, 10 - uploadedFiles.length).map((file) => ({
-      file,
-      originalPreview: URL.createObjectURL(file),
-      preview: URL.createObjectURL(file),
-      aspectRatio: 'original' as const,
-    }))
+
+    const newFiles = await Promise.all(
+      acceptedFiles.slice(0, 10 - uploadedFiles.length).map(async (file) => {
+        const base64String = await fileToBase64(file)
+        return {
+          file: base64String,
+          originalPreview: base64String,
+          preview: base64String,
+          aspectRatio: 'original' as const,
+        }
+      }),
+    )
+
     setUploadedFiles(newFiles)
 
     if (rejectedFiles.length > 0) {
@@ -131,21 +138,15 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       const res = await createPost(data).unwrap()
       const id = res.id
 
-      const images = uploadedFiles
-        .map((item) => {
-          if (item?.filteredImage?.file) {
-            return item.filteredImage.file
-          } else if (item.croppedImage) {
-            return item.croppedImage
-          } else if (item.file) {
-            return item.file
-          }
-          return null
-        })
-        .filter((item): item is File => item != null)
+      const imageFiles = await Promise.all(
+        uploadedFiles.map(async (item) => {
+          const imageData = item.filteredImage?.file || item.croppedImage || item.file
+          return await base64ToFile(imageData, `image-${Date.now()}.jpg`)
+        }),
+      )
 
-      if (images.length > 0) {
-        await uploadImages({ postId: id, images }).unwrap()
+      if (imageFiles.length > 0) {
+        await uploadImages({ postId: id, images: imageFiles }).unwrap()
       }
 
       onModalClose()
@@ -155,7 +156,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   }
 
   const currentImage = uploadedFiles[currentImageIndex]
-  console.log(uploadedFiles)
 
   return (
     <div className={s.wrapper}>

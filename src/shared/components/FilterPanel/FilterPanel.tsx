@@ -1,3 +1,4 @@
+// FilterPanel.tsx
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState, useEffect } from 'react'
 import ImageNext from 'next/image'
 import s from './FilterPanel.module.scss'
@@ -6,18 +7,13 @@ import { CustomSwiper } from '@/src/shared/components/CustomSwiper'
 import { FilteredImage, UploadedFile } from '@/src/feature/postCreate/types/types'
 import { FILTERS } from '@/src/shared/components/FilterPanel/consts'
 import { FilterPanelHandle, ImageFilters } from '@/src/shared/components/FilterPanel/types'
+import { createOriginalImageData } from '@/src/feature/postCreate/utils'
 
 type Props = {
   onFilterApply: (filteredData: FilteredImage, indexActiveSlide: number) => void
   currentFilter?: string
   slides?: TSlide[]
   uploadedFiles: UploadedFile[]
-}
-
-const createOriginalFile = async (imageUrl: string): Promise<File> => {
-  const response = await fetch(imageUrl)
-  const blob = await response.blob()
-  return new File([blob], `original-${Date.now()}.jpg`, { type: 'image/jpeg' })
 }
 
 export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
@@ -39,7 +35,7 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
 
     const selectedFilter = imageFilters[currentImageIndex] || currentFilter
 
-    const applyFilterToImage = useCallback(async (filterValue: string, imageForFilter: string): Promise<Blob> => {
+    const applyFilterToImage = useCallback(async (filterValue: string, imageForFilter: string): Promise<string> => {
       return new Promise(async (resolve, reject) => {
         try {
           const canvas = canvasRef.current || document.createElement('canvas')
@@ -61,17 +57,9 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
           ctx.filter = getCssFilterValue(filterValue, 100)
           ctx.drawImage(img, 0, 0)
 
-          canvas.toBlob(
-            (blob) => {
-              if (blob) {
-                resolve(blob)
-              } else {
-                reject(new Error('Failed to create blob'))
-              }
-            },
-            'image/jpeg',
-            0.9,
-          )
+          // Возвращаем base64 строку вместо Blob
+          const filteredBase64 = canvas.toDataURL('image/jpeg', 0.9)
+          resolve(filteredBase64)
         } catch (error) {
           reject(error)
         }
@@ -86,30 +74,26 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
 
       try {
         if (filterValue === 'original') {
-          const file = await createOriginalFile(image)
-          const preview = URL.createObjectURL(file)
+          const originalData = await createOriginalImageData(image)
 
           onFilterApply(
             {
-              file,
+              file: originalData,
               filter: 'original',
-              preview,
+              preview: originalData,
               intensity: 100,
               originalImage: image,
             },
             currentImageIndex,
           )
         } else {
-          const filteredBlob = await applyFilterToImage(filterValue, image)
-          const fileName = `filtered-${filterValue}-${Date.now()}.jpg`
-          const filteredFile = new File([filteredBlob], fileName, { type: 'image/jpeg' })
-          const preview = URL.createObjectURL(filteredFile)
+          const filteredBase64 = await applyFilterToImage(filterValue, image)
 
           onFilterApply(
             {
-              file: filteredFile,
+              file: filteredBase64,
               filter: filterValue,
-              preview,
+              preview: filteredBase64,
               intensity: 100,
               originalImage: image,
             },
@@ -188,14 +172,13 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
           for (let i = 0; i < uploadedFiles.length; i++) {
             const imageUrl = uploadedFiles[i].croppedImage || uploadedFiles[i].preview
             try {
-              const file = await createOriginalFile(imageUrl)
-              const preview = URL.createObjectURL(file)
+              const originalData = await createOriginalImageData(imageUrl)
 
               onFilterApply(
                 {
-                  file,
+                  file: originalData,
                   filter: 'original',
-                  preview,
+                  preview: originalData,
                   intensity: 100,
                   originalImage: imageUrl,
                 },
