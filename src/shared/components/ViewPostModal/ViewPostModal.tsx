@@ -145,7 +145,7 @@ export default function ViewPostModal({userId, postId}: { userId: string; postId
                                     </Link>
                                 </div>
                                 <div className={s.publicationMenu}>
-                                    <PostMenuActions postId={postId} description={''}/>
+                                    <PostMenuActions postOwnerId={postInfo?.ownerId || ''} postId={postId} description={''}/>
                                 </div>
                             </div>
                             <div className={s.postDescription}><p>{postInfo?.description}</p></div>
