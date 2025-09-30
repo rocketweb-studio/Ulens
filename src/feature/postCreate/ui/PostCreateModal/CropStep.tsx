@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react'
+import React, { MouseEvent, useEffect, useMemo, useCallback } from 'react'
 import { Modal } from '@/src/shared/components/Modal/Modal'
 import { Button } from '@/src/shared/components/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
@@ -53,7 +53,7 @@ export const CropStep = ({
     setUploadedFiles(updatedFiles)
   }
 
-  const handleNextStep = async () => {
+  const handleNextStep = useCallback(async () => {
     try {
       const cropPromises = uploadedFiles.map(async (file, index) => {
         if (file.croppedAreaPixels && file.croppedAreaPixels.width > 0 && file.croppedAreaPixels.height > 0) {
@@ -79,26 +79,38 @@ export const CropStep = ({
       console.error('Error cropping images:', error)
       changeNextStep()
     }
-  }
+  }, [uploadedFiles, setUploadedFiles, changeNextStep])
 
-  const cropSlides = uploadedFiles.map((file, index) => ({
-    id: index,
-    content: (
-      <div className={s.slideContent}>
-        <ImageCropper
-          image={file.preview}
-          onCropAreaChange={(areaPixels) => handleCropAreaChange(areaPixels, index)}
-          onAspectRatioChange={(aspectRatio) => handleAspectRatioChange(aspectRatio, index)}
-          initialAspectRatio={file.aspectRatio || 'original'}
-          isActiveSlide={index === currentImageIndex}
-        />
-      </div>
-    ),
-  }))
+  const cropSlides = useMemo(
+    () =>
+      uploadedFiles.map((file, index) => ({
+        id: index,
+        content: (
+          <div className={s.slideContent}>
+            {index === currentImageIndex ?
+              <MemoizedImageCropper
+                image={file.preview}
+                onCropAreaChange={(areaPixels) => handleCropAreaChange(areaPixels, index)}
+                onAspectRatioChange={(aspectRatio) => handleAspectRatioChange(aspectRatio, index)}
+                initialAspectRatio={file.aspectRatio || 'original'}
+                isActiveSlide={true}
+              />
+            : <div className={s.slidePlaceholder}>
+                <Image src={file.preview} alt={`Preview ${index + 1}`} fill style={{ objectFit: 'contain' }} />
+              </div>
+            }
+          </div>
+        ),
+      })),
+    [uploadedFiles, currentImageIndex, handleCropAreaChange, handleAspectRatioChange],
+  )
 
-  const handleSlideChange = (swiper: any) => {
-    setCurrentImageIndex(swiper.activeIndex)
-  }
+  const handleSlideChange = useCallback(
+    (swiper: any) => {
+      setCurrentImageIndex(swiper.activeIndex)
+    },
+    [setCurrentImageIndex],
+  )
 
   return (
     <Modal
@@ -140,3 +152,11 @@ export const CropStep = ({
     </Modal>
   )
 }
+
+const MemoizedImageCropper = React.memo(ImageCropper, (prevProps, nextProps) => {
+  return (
+    prevProps.image === nextProps.image &&
+    prevProps.initialAspectRatio === nextProps.initialAspectRatio &&
+    prevProps.isActiveSlide === nextProps.isActiveSlide
+  )
+})

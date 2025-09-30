@@ -1,8 +1,6 @@
-import { UserProfile } from '@/src/feature/userProfile/ui/UserProfile/UserProfile'
-import CreatePostModal from '@/src/shared/components/CreatePostModal/CreatePostModal'
-import PostModal from '@/src/shared/components/PostModal/PostModal'
+import {UserProfile} from '@/src/feature/userProfile/ui/UserProfile/UserProfile'
 import ViewPostModal from '@/src/shared/components/ViewPostModal/ViewPostModal'
-import { PostCreate } from '@/src/feature/postCreate/ui/PostCreate/PostCreate'
+import {PostCreate} from '@/src/feature/postCreate/ui/PostCreate/PostCreate'
 
 export default async function UserPage({
   params,

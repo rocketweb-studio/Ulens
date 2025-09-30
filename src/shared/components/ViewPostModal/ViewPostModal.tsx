@@ -145,7 +145,7 @@ export default function ViewPostModal({userId, postId}: { userId: string; postId
                                     </Link>
                                 </div>
                                 <div className={s.publicationMenu}>
-                                    <PostMenuActions postId={postId} description={''}/>
+                                    <PostMenuActions postOwnerId={postInfo?.ownerId || ''} postId={postId} description={''}/>
                                 </div>
                             </div>
                             <div className={s.postDescription}><p>{postInfo?.description}</p></div>
@@ -196,7 +196,7 @@ export default function ViewPostModal({userId, postId}: { userId: string; postId
                                             <Image className={s.likeImage} width={24} height={24}
                                                    src={"/github-svg.svg"} alt={'Saved'}/>
                                         </div>
-                                        <span>{`${postInfo?.likeCount} "Like"`}</span>
+                                        <span>{`${postInfo?.likeCount||""} "Like"`}</span>
                                     </div>
                                     <span className={s.date}>{formattedDate}</span>
                                 </div>

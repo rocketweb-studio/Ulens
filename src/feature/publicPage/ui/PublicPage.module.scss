@@ -90,6 +90,12 @@
 .avatar {
   border-radius: 50%;
   object-fit: cover;
+  background-color: colors.color(light, 900);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .userName {

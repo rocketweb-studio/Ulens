@@ -1,9 +1,10 @@
 import { Area } from 'react-easy-crop'
+import { Control, FieldErrors, UseFormHandleSubmit } from 'react-hook-form'
 
 export type Steps = 'add' | 'crop' | 'filter' | 'publication'
 
 export type UploadedFile = {
-  file: File
+  file: string
   originalPreview: string
   preview: string
   aspectRatio: 'original' | '1:1' | '4:5' | '16:9'
@@ -14,14 +15,12 @@ export type UploadedFile = {
 }
 
 export type FilteredImage = {
-  file: File
+  file: string
   filter: string
   preview: string
   intensity: number
   originalImage: string
 }
-
-import { Control, FieldErrors, UseFormHandleSubmit } from 'react-hook-form'
 
 export type PublicationFormData = {
   description: string
