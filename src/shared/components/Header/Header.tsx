@@ -9,9 +9,13 @@ import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
 import {IconOutlineBell} from '@rocketweb-studio/ulens-ui-kit';
 
 export const Header = () => {
-  const {data} = useGetMeQuery()
+  const { data, isSuccess  } = useGetMeQuery(undefined, {
+    pollingInterval: 5 * 60 * 1000,
+    refetchOnFocus: true,
+    refetchOnReconnect: true,
+  })
 
-  const isAuth = !!data?.id
+  const isAuth = !!data?.id && isSuccess
 
   return (
     <header className={s.header}>

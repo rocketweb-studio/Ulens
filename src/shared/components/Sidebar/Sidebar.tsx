@@ -23,11 +23,13 @@ import {
 import { Suspense } from 'react'
 
 function SidebarContent() {
-  const { data } = useGetMeQuery()
+  const { data, isSuccess  } = useGetMeQuery()
   const pathname = usePathname()
   const params = useSearchParams()
 
-  if (!data?.id) return null
+  if (!isSuccess) {
+    return null
+  }
 
   const sidebarLinks = [
     {
