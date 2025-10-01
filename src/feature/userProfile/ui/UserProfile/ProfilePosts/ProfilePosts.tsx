@@ -35,6 +35,7 @@ export const ProfilePosts = ({ userId }: Props) => {
         )
     }
 
+    
     return (
         <div className={s.profilePosts}>
             {posts?.items.map(post => (
