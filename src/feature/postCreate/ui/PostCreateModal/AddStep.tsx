@@ -1,3 +1,5 @@
+'use client'
+
 import { Modal } from '@/src/shared/components/Modal/Modal'
 import { Button } from '@/src/shared/components/Button/Button'
 import s from './PostCreateModal.module.scss'

@@ -1,3 +1,5 @@
+'use client'
+
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState, useEffect } from 'react'
 import ImageNext from 'next/image'
 import s from './FilterPanel.module.scss'

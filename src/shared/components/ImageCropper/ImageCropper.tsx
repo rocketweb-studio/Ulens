@@ -115,7 +115,6 @@ export const ImageCropper = ({
     initializeImage()
   }, [image, isActiveSlide, onCropAreaChange])
 
-  console.log('rerender')
   return (
     <div className={s.cropper}>
       <div className={s.cropContainer}>
