@@ -7,6 +7,7 @@ import { Button } from '@/src/shared/components/Button/Button'
 import s from './ImageCropper.module.scss'
 import { IconExpandOutline, IconMaximizeOutline } from '@rocketweb-studio/ulens-ui-kit'
 import ImageNext from 'next/image'
+import { createImage } from '@/src/shared/components/ImageCropper/model'
 
 type Props = {
   image: string
@@ -200,49 +201,4 @@ export const ImageCropper = ({
       </div>
     </div>
   )
-}
-
-export const createImage = (url: string): Promise<HTMLImageElement> =>
-  new Promise((resolve, reject) => {
-    const image = new Image()
-    image.addEventListener('load', () => resolve(image))
-    image.addEventListener('error', (error) => reject(error))
-    image.setAttribute('crossOrigin', 'anonymous')
-    image.src = url
-  })
-
-export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<string> => {
-  if (!pixelCrop || pixelCrop.width <= 0 || pixelCrop.height <= 0) {
-    return imageSrc
-  }
-
-  try {
-    const image = await createImage(imageSrc)
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-
-    if (!ctx) {
-      return imageSrc
-    }
-
-    canvas.width = Math.max(1, pixelCrop.width)
-    canvas.height = Math.max(1, pixelCrop.height)
-
-    ctx.drawImage(
-      image,
-      pixelCrop.x,
-      pixelCrop.y,
-      pixelCrop.width,
-      pixelCrop.height,
-      0,
-      0,
-      pixelCrop.width,
-      pixelCrop.height,
-    )
-
-    return canvas.toDataURL('image/jpeg', 1)
-  } catch (error) {
-    console.error('Error cropping image:', error)
-    return imageSrc
-  }
 }

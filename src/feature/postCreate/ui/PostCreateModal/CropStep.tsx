@@ -6,11 +6,11 @@ import { Button } from '@/src/shared/components/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
 import { CustomSwiper } from '@/src/shared/components/CustomSwiper'
 import { ImageCropper } from '@/src/shared/components/ImageCropper/ImageCropper'
-import { getCroppedImg } from '@/src/shared/components/ImageCropper/ImageCropper'
 import { UploadedFile } from '@/src/feature/postCreate/types/types'
 import { Area } from 'react-easy-crop'
 import Image from 'next/image'
 import s from './PostCreateModal.module.scss'
+import { getCroppedImg } from '@/src/shared/components/ImageCropper/model'
 
 type Props = {
   isModalOpen: boolean
@@ -55,7 +55,7 @@ export const CropStep = ({
     setUploadedFiles(updatedFiles)
   }
 
-  const handleNextStep = useCallback(async () => {
+  const handleNextStep = async () => {
     try {
       const cropPromises = uploadedFiles.map(async (file, index) => {
         if (file.croppedAreaPixels && file.croppedAreaPixels.width > 0 && file.croppedAreaPixels.height > 0) {
@@ -81,31 +81,27 @@ export const CropStep = ({
       console.error('Error cropping images:', error)
       changeNextStep()
     }
-  }, [uploadedFiles, setUploadedFiles, changeNextStep])
+  }
 
-  const cropSlides = useMemo(
-    () =>
-      uploadedFiles.map((file, index) => ({
-        id: index,
-        content: (
-          <div className={s.slideContent}>
-            {index === currentImageIndex ?
-              <MemoizedImageCropper
-                image={file.preview}
-                onCropAreaChange={(areaPixels) => handleCropAreaChange(areaPixels, index)}
-                onAspectRatioChange={(aspectRatio) => handleAspectRatioChange(aspectRatio, index)}
-                initialAspectRatio={file.aspectRatio || 'original'}
-                isActiveSlide={true}
-              />
-            : <div className={s.slidePlaceholder}>
-                <Image src={file.preview} alt={`Preview ${index + 1}`} fill style={{ objectFit: 'contain' }} />
-              </div>
-            }
+  const cropSlides = uploadedFiles.map((file, index) => ({
+    id: index,
+    content: (
+      <div className={s.slideContent}>
+        {index === currentImageIndex ?
+          <MemoizedImageCropper
+            image={file.preview}
+            onCropAreaChange={(areaPixels) => handleCropAreaChange(areaPixels, index)}
+            onAspectRatioChange={(aspectRatio) => handleAspectRatioChange(aspectRatio, index)}
+            initialAspectRatio={file.aspectRatio || 'original'}
+            isActiveSlide={true}
+          />
+        : <div className={s.slidePlaceholder}>
+            <Image src={file.preview} alt={`Preview ${index + 1}`} fill />
           </div>
-        ),
-      })),
-    [uploadedFiles, currentImageIndex, handleCropAreaChange, handleAspectRatioChange],
-  )
+        }
+      </div>
+    ),
+  }))
 
   const handleSlideChange = useCallback(
     (swiper: any) => {

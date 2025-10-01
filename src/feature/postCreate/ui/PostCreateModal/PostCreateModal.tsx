@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useCreatePostMutation, useUploadPostImagesMutation } from '@/src/feature/Posts/api/postsApi'
-import { getCroppedImg } from '@/src/shared/components/ImageCropper/ImageCropper'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -18,6 +17,7 @@ import { FilterStep } from './FilterStep'
 import { PublicationStep } from './PublicationStep'
 import { ConfirmCloseModal } from './ConfirmCloseModal'
 import s from './PostCreateModal.module.scss'
+import { getCroppedImg } from '@/src/shared/components/ImageCropper/model'
 
 type Props = {
   isModalOpen: boolean
