@@ -86,7 +86,7 @@ export const CropStep = ({
   const cropSlides = uploadedFiles.map((file, index) => ({
     id: index,
     content: (
-      <div className={s.slideContent}>
+      <div>
         {index === currentImageIndex ?
           <MemoizedImageCropper
             image={file.preview}
