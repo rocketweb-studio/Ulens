@@ -48,28 +48,28 @@ export const PostMenuActions = ({ postOwnerId, postId, description, className }:
 
       {menuOpen && (
         <>
-          {meData?.id === postOwnerId ?
-            <div className={s.menu}>
-              <button className={s.menuItem} onClick={() => setEditOpen(true)}>
-                <IconEdit2 width={16} height={16} />
-                Edit Post
-              </button>
-              <button
-                className={s.menuItem}
-                onClick={() => {
-                  setMenuOpen(false)
-                  setDeleteModalOpen(true)
-                }}
-              >
-                <IconTrash width={16} height={16} />
-                Delete Post
-              </button>
-            </div>
-          : <div className={s.menu}>
-              <button className={s.menuItem}>Follow/Unfollow</button>
-              <button className={s.menuItem}>CopyLink</button>
-            </div>
-          }
+          {/*{meData?.id === postOwnerId ?*/}
+          <div className={s.menu}>
+            <button className={s.menuItem} onClick={() => setEditOpen(true)}>
+              <IconEdit2 width={16} height={16} />
+              Edit Post
+            </button>
+            <button
+              className={s.menuItem}
+              onClick={() => {
+                setMenuOpen(false)
+                setDeleteModalOpen(true)
+              }}
+            >
+              <IconTrash width={16} height={16} />
+              Delete Post
+            </button>
+          </div>
+          {/*: <div className={s.menu}>*/}
+          {/*    <button className={s.menuItem}>Follow/Unfollow</button>*/}
+          {/*    <button className={s.menuItem}>CopyLink</button>*/}
+          {/*  </div>*/}
+          {/*}*/}
         </>
       )}
 

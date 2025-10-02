@@ -32,10 +32,10 @@ export const PostDeleteModal = ({ postId, isOpen, onClose }: Props) => {
     <Modal isOpen={isOpen} onClose={onClose} modalTitle={'Delete Post'} hideDefaultButton>
       <p>Are you sure you want to delete this post?</p>
       <div className={s.modalButtons}>
-        <button className={s.yesBtn} onClick={handleDelete} disabled={isLoading}>
+        <button type='button' className={s.yesBtn} onClick={handleDelete} disabled={isLoading}>
           Yes
         </button>
-        <button className={s.noBtn} onClick={onClose} disabled={isLoading}>
+        <button type='button' className={s.noBtn} onClick={onClose} disabled={isLoading}>
           No
         </button>
       </div>
