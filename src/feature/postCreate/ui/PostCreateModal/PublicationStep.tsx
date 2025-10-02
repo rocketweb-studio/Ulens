@@ -10,6 +10,11 @@ import { Controller, Control, FieldErrors, UseFormHandleSubmit } from 'react-hoo
 import { PublicationFormData, UploadedFile } from '@/src/feature/postCreate/types/types'
 import Image from 'next/image'
 import s from './PostCreateModal.module.scss'
+import { UserAvatar } from '@/src/shared/components/UserAvatar'
+import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
+import { useGetPostByIdQuery } from '@/src/feature/Posts/api/postsApi'
+import { useGetProfileByUsedIdQuery, userProfileApi } from '@/src/feature/userProfile/api/userProfileApi'
+import { useSelector } from 'react-redux'
 
 type Props = {
   isModalOpen: boolean
@@ -36,6 +41,9 @@ export const PublicationStep = ({
   handleSubmit,
   onFormSubmit,
 }: Props) => {
+  const { data: meData } = useGetMeQuery()
+  const userProfile = useSelector(userProfileApi.endpoints.getProfileByUsedId.select({ userId: meData?.id || '' }))
+
   const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onOverlayClick()
@@ -101,9 +109,14 @@ export const PublicationStep = ({
         <div className={s.publicationContent}>
           <div className={s.publicationProfile}>
             <div className={s.publicationProfileImage}>
-              <Image src={'/avatar/avatar_mini.png'} alt={'Avatar'} width={36} height={36} />
+              <UserAvatar
+                width={36}
+                height={36}
+                avatarOwner={userProfile.data?.avatars[0]?.url ? userProfile.data?.avatars[0]?.url : null}
+                userName={userProfile.data?.userName || ''}
+              />
             </div>
-            <p className={s.publicationProfileURL}> URLProfile</p>
+            <strong className={s.publicationProfileURL}>{userProfile.data?.userName}</strong>
           </div>
           <form onSubmit={handleSubmit(onFormSubmit)} className={s.form}>
             <Controller
