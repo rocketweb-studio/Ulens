@@ -47,21 +47,14 @@ export const authApi = baseApi.injectEndpoints({
         }
       },
     }),
-    // getUsers: build.query<UserType[], void>({
-    //     query: () => "auth/users",
-    //     providesTags: ['User']
-    // }),
   }),
 })
 
 export const {
-  //useGetUsersQuery,
   useLoginMutation,
   useLogoutMutation,
   usePasswordRecoveryMutation,
   useRegistrationMutation,
-  useConfirmRegistrationMutation,
-  useCheckRecoveryCodeMutation,
   useSetNewPasswordMutation,
   useGetMeQuery,
   useResendRegistrationEmailMutation,

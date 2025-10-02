@@ -1,12 +1,9 @@
 'use client'
 
-import {useGetLastPostsQuery} from "@/src/feature/publicPage/api/publicPageApi";
 import {GetPostByIdResponse} from "@/src/feature/Posts/api/postsApi.types";
 import {CustomSwiper} from "@/src/shared/components/CustomSwiper";
 import s from "./PublicPage.module.scss";
 import Image from "next/image";
-import {Path} from "@/src/shared/constants/Path";
-import Link from "next/link";
 import {timeAgo} from "@/src/shared/utils/timeAgo";
 import {UserAvatar} from "@/src/shared/components/UserAvatar";
 
@@ -15,13 +12,9 @@ type Props = {
 }
 
 export const PublicPage = ({data}: Props) => {
-  const {data: Posts} = useGetLastPostsQuery(undefined, {
-    pollingInterval: 20000,
-  })
 
-  console.log(Posts)
 
-  data = Posts ? Posts.slice(0, 4) : data?.slice(0, 4)
+  data = data?.slice(0, 4)
 
   return <div className={s.publicPageWrapper}>
 
@@ -44,7 +37,7 @@ export const PublicPage = ({data}: Props) => {
 
           {post.images && (
             <div key={post.id} className={s.swiperWrapper}>
-              {/*<Link href={Path.ViewPost(post.ownerId, post.id)}> </Link>*/}
+
               <CustomSwiper
                 slides={post.images.medium.map((image, index) => ({
                   id: index,
@@ -74,12 +67,7 @@ export const PublicPage = ({data}: Props) => {
             </div>
           )}
           <div className={s.ownerWrapper}>
-            {/*{post.avatarOwner*/}
-            {/*? <Image className={s.avatar} src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${post.avatarOwner}`}*/}
-            {/*         alt={'avatar'} height={36} width={36}></Image>*/}
-            {/*: <div className={s.avatar}>*/}
-            {/*    {post.userName.slice(0,2).toUpperCase()}*/}
-            {/*  </div>}*/}
+
             <UserAvatar userName={post.userName} width={36} height={36} avatarOwner={post.avatarOwner}/>
 
             <h3>{post.userName}</h3>

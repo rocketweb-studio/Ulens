@@ -10,7 +10,7 @@ import {IconOutlineBell} from '@rocketweb-studio/ulens-ui-kit';
 
 export const Header = () => {
   const { data, isSuccess  } = useGetMeQuery(undefined, {
-    pollingInterval: 5 * 60 * 1000,
+    // pollingInterval: 5 * 60 * 1000,
     refetchOnFocus: true,
     refetchOnReconnect: true,
   })
