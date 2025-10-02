@@ -87,26 +87,26 @@ export const CropStep = ({
     id: index,
     content: (
       <div>
-        {/*{index === currentImageIndex ?*/}
-        {/*  <MemoizedImageCropper*/}
-        {/*    image={file.preview}*/}
-        {/*    onCropAreaChange={(areaPixels) => handleCropAreaChange(areaPixels, index)}*/}
-        {/*    onAspectRatioChange={(aspectRatio) => handleAspectRatioChange(aspectRatio, index)}*/}
-        {/*    initialAspectRatio={file.aspectRatio || 'original'}*/}
-        {/*    isActiveSlide={true}*/}
-        {/*  />*/}
-        {/*: <div className={s.slidePlaceholder}>*/}
-        {/*    <Image src={file.preview} alt={`Preview ${index + 1}`} fill />*/}
-        {/*  </div>*/}
-        {/*}*/}
+        {index === currentImageIndex ?
+          <MemoizedImageCropper
+            image={file.preview}
+            onCropAreaChange={(areaPixels) => handleCropAreaChange(areaPixels, index)}
+            onAspectRatioChange={(aspectRatio) => handleAspectRatioChange(aspectRatio, index)}
+            initialAspectRatio={file.aspectRatio || 'original'}
+            isActiveSlide={true}
+          />
+        : <div className={s.slidePlaceholder}>
+            <Image src={file.preview} alt={`Preview ${index + 1}`} fill />
+          </div>
+        }
 
-        <MemoizedImageCropper
-          image={file.preview}
-          onCropAreaChange={(areaPixels) => handleCropAreaChange(areaPixels, index)}
-          onAspectRatioChange={(aspectRatio) => handleAspectRatioChange(aspectRatio, index)}
-          initialAspectRatio={file.aspectRatio || 'original'}
-          isActiveSlide={true}
-        />
+        {/*<MemoizedImageCropper*/}
+        {/*  image={file.preview}*/}
+        {/*  onCropAreaChange={(areaPixels) => handleCropAreaChange(areaPixels, index)}*/}
+        {/*  onAspectRatioChange={(aspectRatio) => handleAspectRatioChange(aspectRatio, index)}*/}
+        {/*  initialAspectRatio={file.aspectRatio || 'original'}*/}
+        {/*  isActiveSlide={true}*/}
+        {/*/>*/}
       </div>
     ),
   }))
