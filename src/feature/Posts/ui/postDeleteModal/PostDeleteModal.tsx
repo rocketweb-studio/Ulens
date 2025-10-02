@@ -42,3 +42,5 @@ export const PostDeleteModal = ({ postId, isOpen, onClose }: Props) => {
     </Modal>
   )
 }
+
+//TODO удалить из стора(удалить локально) поставить крутилку и задисеблить кнопку.

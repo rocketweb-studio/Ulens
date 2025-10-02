@@ -16,6 +16,7 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
   const [description, setDescription] = useState(initialDescription ?? '')
   const [showConfirmExit, setShowConfirmExit] = useState(false)
   const [updatePost, { isLoading }] = useUpdatePostMutation()
+  const { refetch } = useGetPostByIdQuery({ postId })
 
   const { data: postInfo } = useGetPostByIdQuery({ postId }, { skip: !isOpen })
 
@@ -35,6 +36,7 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
   const handleSave = async () => {
     try {
       await updatePost({ postId, description }).unwrap()
+      await refetch()
       onClose()
     } catch (error) {
       console.error('Update failed', error)

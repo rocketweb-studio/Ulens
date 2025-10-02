@@ -2,14 +2,14 @@
 
 import s from './Header.module.scss'
 import Link from 'next/link'
-import {FlexContainer} from '@/src/shared/components/FlexContainer'
-import {Path} from "@/src/shared/constants/Path";
-import {Button} from "@/src/shared/components/Button/Button";
-import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
-import {IconOutlineBell} from '@rocketweb-studio/ulens-ui-kit';
+import { FlexContainer } from '@/src/shared/components/FlexContainer'
+import { Path } from '@/src/shared/constants/Path'
+import { Button } from '@/src/shared/components/Button/Button'
+import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
+import { IconOutlineBell } from '@rocketweb-studio/ulens-ui-kit'
 
 export const Header = () => {
-  const {data} = useGetMeQuery()
+  const { data } = useGetMeQuery()
 
   const isAuth = !!data?.id
 
@@ -20,17 +20,17 @@ export const Header = () => {
           <Link href={Path.Main}>Ulens</Link>
         </div>
 
-          {isAuth ?
-
-            <IconOutlineBell/>
-            :
-            <FlexContainer gap={'25px'} >
-              <Button tagType={'link'} variant={'text'} path={Path.SignIn}>Log in</Button>
-              <Button tagType={'link'}  path={Path.SignUp}>Sing Up</Button>
-            </FlexContainer>
-          }
-
-
+        {isAuth ?
+          <IconOutlineBell />
+        : <FlexContainer gap={'25px'}>
+            <Button tagType={'link'} variant={'text'} path={Path.SignIn}>
+              Log in
+            </Button>
+            <Button tagType={'link'} path={Path.SignUp}>
+              Sing Up
+            </Button>
+          </FlexContainer>
+        }
       </FlexContainer>
     </header>
   )
