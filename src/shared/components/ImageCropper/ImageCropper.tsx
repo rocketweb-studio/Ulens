@@ -52,7 +52,6 @@ export const ImageCropper = ({
   }
 
   const onZoomChange = (zoom: number) => {
-    if (!isActiveSlide) return
     setZoom(zoom)
   }
 
@@ -152,12 +151,6 @@ export const ImageCropper = ({
       onCropAreaChange(croppedAreaPixels)
     }
   }, [currentAspectRatio, imageSize, isActiveSlide, onCropAreaChange])
-
-  useEffect(() => {
-    if (zoom !== 1) {
-      setZoom(1)
-    }
-  }, [image, isActiveSlide])
 
   console.log(zoom)
 
