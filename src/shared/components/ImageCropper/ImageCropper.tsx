@@ -121,6 +121,38 @@ export const ImageCropper = ({
     initializeImage()
   }, [image, isActiveSlide, onCropAreaChange])
 
+  useEffect(() => {
+    if (!isActiveSlide || !imageSize.width || !imageSize.height) return
+
+    let cropWidth, cropHeight
+
+    if (currentAspectRatio === 'original') {
+      cropWidth = imageSize.width
+      cropHeight = imageSize.height
+    } else {
+      const ratio = ASPECT_RATIO_MAP[currentAspectRatio]
+
+      if (imageSize.width / imageSize.height > ratio) {
+        cropHeight = imageSize.height
+        cropWidth = cropHeight * ratio
+      } else {
+        cropWidth = imageSize.width
+        cropHeight = cropWidth / ratio
+      }
+    }
+
+    const croppedAreaPixels = {
+      x: (imageSize.width - cropWidth) / 2,
+      y: (imageSize.height - cropHeight) / 2,
+      width: cropWidth,
+      height: cropHeight,
+    }
+
+    if (onCropAreaChange) {
+      onCropAreaChange(croppedAreaPixels)
+    }
+  }, [currentAspectRatio, imageSize, isActiveSlide, onCropAreaChange])
+
   return (
     <div className={s.cropper}>
       <div className={s.cropContainer}>
