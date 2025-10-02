@@ -153,6 +153,14 @@ export const ImageCropper = ({
     }
   }, [currentAspectRatio, imageSize, isActiveSlide, onCropAreaChange])
 
+  useEffect(() => {
+    if (zoom !== 1) {
+      setZoom(1)
+    }
+  }, [image, isActiveSlide])
+
+  console.log(zoom)
+
   return (
     <div className={s.cropper}>
       <div className={s.cropContainer}>
