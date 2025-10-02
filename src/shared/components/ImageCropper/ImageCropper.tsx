@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { ComponentType, useEffect, useState } from 'react'
 import { Area } from 'react-easy-crop'
 import { Button } from '@/src/shared/components/Button/Button'
 import s from './ImageCropper.module.scss'
@@ -9,10 +9,10 @@ import ImageNext from 'next/image'
 import { createImage } from '@/src/shared/components/ImageCropper/model'
 import dynamic from 'next/dynamic'
 
-const Cropper = dynamic(() => import('react-easy-crop'), {
+const Cropper = dynamic(() => import('react-easy-crop').then((mod) => mod.default), {
   ssr: false,
   loading: () => <div className={s.loading}>Loading cropper...</div>,
-})
+}) as ComponentType<any>
 
 type Props = {
   image: string
