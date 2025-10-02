@@ -1,13 +1,18 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Cropper from 'react-easy-crop'
 import { Area } from 'react-easy-crop'
 import { Button } from '@/src/shared/components/Button/Button'
 import s from './ImageCropper.module.scss'
 import { IconExpandOutline, IconMaximizeOutline } from '@rocketweb-studio/ulens-ui-kit'
 import ImageNext from 'next/image'
 import { createImage } from '@/src/shared/components/ImageCropper/model'
+import dynamic from 'next/dynamic'
+
+const Cropper = dynamic(() => import('react-easy-crop'), {
+  ssr: false,
+  loading: () => <div className={s.loading}>Loading cropper...</div>,
+})
 
 type Props = {
   image: string
