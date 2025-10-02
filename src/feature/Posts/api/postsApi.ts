@@ -31,12 +31,26 @@ export const postsApi = baseApi.injectEndpoints({
       invalidatesTags: ['getPostsByUsedId'],
     }),
 
-    deletePost: build.mutation<void, { postId: string }>({
+    deletePost: build.mutation<void, { postId: string; userId: string }>({
       query: ({ postId }) => ({
         method: 'DELETE',
         url: `posts/${postId}`,
       }),
-      invalidatesTags: ['getPostsByUsedId'],
+      async onQueryStarted({ postId, userId }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          postsApi.util.updateQueryData('getPostsByUsedId', { userId }, (draft) => {
+            if (draft?.items) {
+              draft.items = draft.items.filter((post) => post.id !== postId)
+            }
+          }),
+        )
+
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
+        }
+      },
     }),
 
     uploadPostImages: build.mutation<

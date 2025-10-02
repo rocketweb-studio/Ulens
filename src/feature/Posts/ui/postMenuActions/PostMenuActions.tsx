@@ -8,13 +8,15 @@ import { PostEditModal } from '@/src/feature/Posts/ui/postEditModal'
 import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
 
 type Props = {
-  postOwnerId: string
+  postOwnerId?: string
   postId: string
+  userId: string
   description: string
   className?: string
+  onPostDeleted?: () => void
 }
 
-export const PostMenuActions = ({ postOwnerId, postId, description, className }: Props) => {
+export const PostMenuActions = ({ postOwnerId, postId, userId, description, className, onPostDeleted }: Props) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
@@ -48,28 +50,28 @@ export const PostMenuActions = ({ postOwnerId, postId, description, className }:
 
       {menuOpen && (
         <>
-          {/*{meData?.id === postOwnerId ?*/}
-          <div className={s.menu}>
-            <button className={s.menuItem} onClick={() => setEditOpen(true)}>
-              <IconEdit2 width={16} height={16} />
-              Edit Post
-            </button>
-            <button
-              className={s.menuItem}
-              onClick={() => {
-                setMenuOpen(false)
-                setDeleteModalOpen(true)
-              }}
-            >
-              <IconTrash width={16} height={16} />
-              Delete Post
-            </button>
-          </div>
-          {/*: <div className={s.menu}>*/}
-          {/*    <button className={s.menuItem}>Follow/Unfollow</button>*/}
-          {/*    <button className={s.menuItem}>CopyLink</button>*/}
-          {/*  </div>*/}
-          {/*}*/}
+          {meData?.id === postOwnerId ?
+            <div className={s.menu}>
+              <button className={s.menuItem} onClick={() => setEditOpen(true)}>
+                <IconEdit2 width={16} height={16} />
+                Edit Post
+              </button>
+              <button
+                className={s.menuItem}
+                onClick={() => {
+                  setMenuOpen(false)
+                  setDeleteModalOpen(true)
+                }}
+              >
+                <IconTrash width={16} height={16} />
+                Delete Post
+              </button>
+            </div>
+          : <div className={s.menu}>
+              <button className={s.menuItem}>Follow/Unfollow</button>
+              <button className={s.menuItem}>CopyLink</button>
+            </div>
+          }
         </>
       )}
 
@@ -79,7 +81,15 @@ export const PostMenuActions = ({ postOwnerId, postId, description, className }:
         isOpen={editOpen}
         onClose={() => setEditOpen(false)}
       />
-      <PostDeleteModal postId={postId} isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} />
+      <PostDeleteModal
+        postId={postId}
+        userId={userId}
+        isOpen={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false)
+          if (onPostDeleted) onPostDeleted()
+        }}
+      />
     </div>
   )
 }

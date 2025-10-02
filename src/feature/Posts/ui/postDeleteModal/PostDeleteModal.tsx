@@ -1,27 +1,24 @@
 'use client'
 
 import { useDeletePostMutation } from '@/src/feature/Posts/api/postsApi'
-import { useRouter } from 'next/navigation'
-import { Path } from '@/src/shared/constants/Path'
 import { Modal } from '@/src/shared/components/Modal/Modal'
 import s from './postDeleteModal.module.scss'
 import { toast } from 'react-toastify'
 
 type Props = {
   postId: string
+  userId: string
   isOpen: boolean
   onClose: () => void
 }
 
-export const PostDeleteModal = ({ postId, isOpen, onClose }: Props) => {
+export const PostDeleteModal = ({ postId, isOpen, onClose, userId }: Props) => {
   const [deletePost, { isLoading }] = useDeletePostMutation()
-  const router = useRouter()
 
   const handleDelete = async () => {
     try {
-      await deletePost({ postId }).unwrap()
+      await deletePost({ postId, userId }).unwrap()
       onClose()
-      router.push(Path.Profile)
     } catch (error) {
       console.error('Error deleting the post', error)
       toast.error('Error deleting the post')
@@ -42,5 +39,3 @@ export const PostDeleteModal = ({ postId, isOpen, onClose }: Props) => {
     </Modal>
   )
 }
-
-//TODO удалить из стора(удалить локально) поставить крутилку и задисеблить кнопку.
