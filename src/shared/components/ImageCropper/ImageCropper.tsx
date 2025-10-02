@@ -22,10 +22,10 @@ type Props = {
   onAspectRatioChange?: (aspectRatio: AspectRatio) => void
 }
 
-type AspectRatio = '1:1' | '4:5' | '16:9' | 'original'
-type MenuName = 'aspectRatio' | 'zoom' | null
+export type AspectRatio = '1:1' | '4:5' | '16:9' | 'original'
+export type MenuName = 'aspectRatio' | 'zoom' | null
 
-const ASPECT_RATIO_MAP: Record<AspectRatio, number> = {
+export const ASPECT_RATIO_MAP: Record<AspectRatio, number> = {
   '1:1': 1,
   '4:5': 4 / 5,
   '16:9': 16 / 9,
@@ -144,7 +144,6 @@ export const ImageCropper = ({
           }}
           minZoom={0.1}
           maxZoom={3}
-          restrictPosition={false}
         />
         <div className={s.cropControlsBox}>
           <div className={s.aspectRatioSelector}>
