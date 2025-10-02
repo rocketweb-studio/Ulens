@@ -52,6 +52,8 @@ export const ImageCropper = ({
   }
 
   const onZoomChange = (zoom: number) => {
+    console.log(isActiveSlide)
+    console.log(zoom)
     setZoom(zoom)
   }
 
@@ -224,7 +226,7 @@ export const ImageCropper = ({
                       step='0.1'
                       value={zoom}
                       onChange={(e) => {
-                        setZoom(Number(e.target.value))
+                        onZoomChange(Number(e.target.value))
                       }}
                       className={s.slider}
                     />
