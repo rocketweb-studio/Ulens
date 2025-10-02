@@ -47,18 +47,6 @@ export const Modal = ({
     return () => document.removeEventListener('keydown', handleEscape)
   }, [isOpen, onClose, closeOnEsc])
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
-
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [isOpen])
-
   if (!isOpen) return null
 
   return createPortal(

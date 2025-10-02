@@ -18,8 +18,6 @@
 
 .form {
   width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
 }
 
 .container {
@@ -105,14 +103,26 @@
 
 .accessCloseModalButtons {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 20px;
   padding: 0 24px;
 }
 
 .slideContent {
+  position: relative;
+  width: 100%;
+  height: 661px;
+  overflow: hidden;
   img {
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     object-fit: contain;
-    object-position: top;
   }
 }
 

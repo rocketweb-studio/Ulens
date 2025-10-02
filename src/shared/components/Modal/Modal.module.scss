@@ -6,7 +6,7 @@
   background: rgba(colors.color(dark, 900), 0.8);
   position: fixed;
   inset: 0;
-  overflow-y: scroll;
+  //overflow-y: scroll;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,7 +20,7 @@
   background-color: colors.color(dark, 300);
   position: relative;
   //max-width: 90vw;
-  width: auto;
+  //width: auto;
   margin: auto;
 }
 

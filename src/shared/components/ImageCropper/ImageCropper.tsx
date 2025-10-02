@@ -1,12 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Cropper from 'react-easy-crop'
+import { ComponentType, useEffect, useState } from 'react'
 import { Area } from 'react-easy-crop'
 import { Button } from '@/src/shared/components/Button/Button'
 import s from './ImageCropper.module.scss'
 import { IconExpandOutline, IconMaximizeOutline } from '@rocketweb-studio/ulens-ui-kit'
 import ImageNext from 'next/image'
+import { createImage } from '@/src/shared/components/ImageCropper/model'
+import dynamic from 'next/dynamic'
+
+const Cropper = dynamic(() => import('react-easy-crop').then((mod) => mod.default), {
+  ssr: false,
+  loading: () => <div className={s.loading}>Loading cropper...</div>,
+}) as ComponentType<any>
 
 type Props = {
   image: string
@@ -16,10 +22,10 @@ type Props = {
   onAspectRatioChange?: (aspectRatio: AspectRatio) => void
 }
 
-type AspectRatio = '1:1' | '4:5' | '16:9' | 'original'
-type MenuName = 'aspectRatio' | 'zoom' | null
+export type AspectRatio = '1:1' | '4:5' | '16:9' | 'original'
+export type MenuName = 'aspectRatio' | 'zoom' | null
 
-const ASPECT_RATIO_MAP: Record<AspectRatio, number> = {
+export const ASPECT_RATIO_MAP: Record<AspectRatio, number> = {
   '1:1': 1,
   '4:5': 4 / 5,
   '16:9': 16 / 9,
@@ -46,7 +52,6 @@ export const ImageCropper = ({
   }
 
   const onZoomChange = (zoom: number) => {
-    if (!isActiveSlide) return
     setZoom(zoom)
   }
 
@@ -115,7 +120,40 @@ export const ImageCropper = ({
     initializeImage()
   }, [image, isActiveSlide, onCropAreaChange])
 
-  console.log('rerender')
+  useEffect(() => {
+    if (!isActiveSlide || !imageSize.width || !imageSize.height) return
+
+    let cropWidth, cropHeight
+
+    if (currentAspectRatio === 'original') {
+      cropWidth = imageSize.width
+      cropHeight = imageSize.height
+    } else {
+      const ratio = ASPECT_RATIO_MAP[currentAspectRatio]
+
+      if (imageSize.width / imageSize.height > ratio) {
+        cropHeight = imageSize.height
+        cropWidth = cropHeight * ratio
+      } else {
+        cropWidth = imageSize.width
+        cropHeight = cropWidth / ratio
+      }
+    }
+
+    const croppedAreaPixels = {
+      x: (imageSize.width - cropWidth) / 2,
+      y: (imageSize.height - cropHeight) / 2,
+      width: cropWidth,
+      height: cropHeight,
+    }
+
+    if (onCropAreaChange) {
+      onCropAreaChange(croppedAreaPixels)
+    }
+  }, [currentAspectRatio, imageSize, isActiveSlide, onCropAreaChange])
+
+  console.log(zoom)
+
   return (
     <div className={s.cropper}>
       <div className={s.cropContainer}>
@@ -139,7 +177,6 @@ export const ImageCropper = ({
           }}
           minZoom={0.1}
           maxZoom={3}
-          restrictPosition={false}
         />
         <div className={s.cropControlsBox}>
           <div className={s.aspectRatioSelector}>
@@ -187,7 +224,7 @@ export const ImageCropper = ({
                       step='0.1'
                       value={zoom}
                       onChange={(e) => {
-                        setZoom(Number(e.target.value))
+                        onZoomChange(Number(e.target.value))
                       }}
                       className={s.slider}
                     />
@@ -201,49 +238,4 @@ export const ImageCropper = ({
       </div>
     </div>
   )
-}
-
-export const createImage = (url: string): Promise<HTMLImageElement> =>
-  new Promise((resolve, reject) => {
-    const image = new Image()
-    image.addEventListener('load', () => resolve(image))
-    image.addEventListener('error', (error) => reject(error))
-    image.setAttribute('crossOrigin', 'anonymous')
-    image.src = url
-  })
-
-export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<string> => {
-  if (!pixelCrop || pixelCrop.width <= 0 || pixelCrop.height <= 0) {
-    return imageSrc
-  }
-
-  try {
-    const image = await createImage(imageSrc)
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-
-    if (!ctx) {
-      return imageSrc
-    }
-
-    canvas.width = Math.max(1, pixelCrop.width)
-    canvas.height = Math.max(1, pixelCrop.height)
-
-    ctx.drawImage(
-      image,
-      pixelCrop.x,
-      pixelCrop.y,
-      pixelCrop.width,
-      pixelCrop.height,
-      0,
-      0,
-      pixelCrop.width,
-      pixelCrop.height,
-    )
-
-    return canvas.toDataURL('image/jpeg', 1)
-  } catch (error) {
-    console.error('Error cropping image:', error)
-    return imageSrc
-  }
 }

@@ -5,7 +5,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
-  min-width: 80vw;
+  //min-width: 80vw;
   overflow: hidden;
 }
 
@@ -15,7 +15,26 @@
   justify-content: center;
   min-width: 0;
 }
-
+.viewPostModal{
+  width: 75vw;
+}
+.slideContent{
+  position: relative;
+  width: 100%;
+  height: 661px;
+  overflow: hidden;
+  img{
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    object-fit: contain;
+  }
+}
 .mainPreview {
   width: 100%;
   height: 100%;
