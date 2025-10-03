@@ -13,18 +13,16 @@ import {LoginRequestParams} from '@/src/feature/auth/api/authApi.types'
 import {useToast} from '@/src/shared/hooks/useToast'
 import {Path} from "@/src/shared/constants/Path";
 import Link from "next/link";
-import {useRouter} from "next/navigation";
-import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
+import {redirect} from "next/navigation";
 
 export const SignIn = () => {
 
   const {data: meData, isLoading} = useGetMeQuery()
-  const router = useRouter()
   const { showSuccess } = useToast()
   const [login] = useLoginMutation()
 
   if (!!meData) {
-    router.push(Path.UserProfile(meData.id))
+    redirect(Path.UserProfile(meData.id))
   }
 
   const {
