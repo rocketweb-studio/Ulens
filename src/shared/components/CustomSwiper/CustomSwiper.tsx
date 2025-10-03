@@ -72,20 +72,20 @@ export const CustomSwiper: React.FC<TCustomSwiperProps> = ({
       )}
 
       <Swiper ref={swiperRef} {...defaultSwiperProps} autoplay={autoplayConfig} className={styles.swiperWrapper}>
-          {slides.map((slide: TSlide) => {
-            return (
-                <SwiperSlide key={slide.id} {...slide.slideProps} className={styles.slide}>
-                  {slide.content}
-                </SwiperSlide>
-            )
-          })}
+        {slides.map((slide: TSlide) => {
+          return (
+            <SwiperSlide key={slide.id} {...slide.slideProps} className={styles.slide}>
+              {slide.content}
+            </SwiperSlide>
+          )
+        })}
       </Swiper>
 
-      {navigation && (
+      {navigation && slides.length > 1 && (
         <CustomNavigation onPrev={handlePrev} onNext={handleNext} isBeginning={isBeginning} isEnd={isEnd} />
       )}
 
-      {pagination && (
+      {pagination && slides.length > 1 && (
         <div className={styles.pagination}>
           {slides.map((_, index) => (
             <button
