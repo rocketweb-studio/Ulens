@@ -6,6 +6,8 @@ import s from "./PublicPage.module.scss";
 import Image from "next/image";
 import {timeAgo} from "@/src/shared/utils/timeAgo";
 import {UserAvatar} from "@/src/shared/components/UserAvatar";
+import Link from "next/link";
+import { Path } from "@/src/shared/constants/Path";
 
 type Props = {
   data: GetPostByIdResponse[] | undefined
@@ -68,9 +70,9 @@ export const PublicPage = ({data}: Props) => {
           )}
           <div className={s.ownerWrapper}>
 
-            <UserAvatar userName={post.userName} width={36} height={36} avatarOwner={post.avatarOwner}/>
+            <UserAvatar userName={post.userName} width={36} height={36} avatarOwner={post.avatarOwner} userId={post.ownerId}/>
 
-            <h3>{post.userName}</h3>
+            <Link href={Path.UserProfile(post.ownerId)} className={s.userName}>{post.userName}</Link>
           </div>
 
           <p className={s.dateText}>{timeAgo(post.createdAt)}</p>

@@ -36,7 +36,8 @@ a,
 button {
   cursor: pointer;
 }
-a:visited {
+
+a, a:visited {
   color: inherit;
 }
 

@@ -14,6 +14,7 @@ import {useToast} from '@/src/shared/hooks/useToast'
 import {Path} from "@/src/shared/constants/Path";
 import Link from "next/link";
 import {redirect} from "next/navigation";
+import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
 
 export const SignIn = () => {
 
