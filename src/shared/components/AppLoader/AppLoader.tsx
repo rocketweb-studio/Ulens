@@ -1,12 +1,13 @@
 'use client'
 
-import { useAppSelector } from '../../hooks/useAppSelector'
+
 import s from './AppLoader.module.scss'
-import { selectLoaderStatus } from '@/src/store/app-slice'
+// import { useAppSelector } from '../../hooks/useAppSelector'
+// import { selectLoaderStatus } from '@/src/store/app-slice'
 
 export const AppLoader = () => {
-  const loaderStatus = useAppSelector(selectLoaderStatus)
-  if (loaderStatus !== 'loading') return null
+  // const loaderStatus = useAppSelector(selectLoaderStatus)
+  // if (loaderStatus !== 'loading') return null
 
   return (
     <div className={s.appLoader} id='ct-loadding'>

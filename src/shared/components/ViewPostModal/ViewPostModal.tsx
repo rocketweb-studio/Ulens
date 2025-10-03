@@ -7,8 +7,8 @@ import { Path } from '@/src/shared/constants/Path'
 import s from './ViewPostModal.module.scss'
 import Image from 'next/image'
 import { Modal } from '@/src/shared/components/Modal/Modal'
-import { MouseEvent, useEffect } from 'react'
-import { useGetPostByIdQuery } from '@/src/feature/Posts/api/postsApi'
+import {MouseEvent, useEffect, useRef} from 'react'
+import {postsApi, useGetPostByIdQuery} from '@/src/feature/Posts/api/postsApi'
 import { CustomSwiper } from '@/src/shared/components/CustomSwiper'
 import { useGetProfileByUsedIdQuery } from '@/src/feature/userProfile/api/userProfileApi'
 import Link from 'next/link'
@@ -74,41 +74,57 @@ type Props = {
 }
 
 export default function ViewPostModal({ userId, postId, dataPostModal, dataUserInfo }: Props) {
+
   const { isOpen, closeModal } = useModal(true)
   const { replace } = useRouter()
-  const { data } = useGetMeQuery()
+  const { data: meData } = useGetMeQuery()
 
-  const { data: postInfo } = useGetPostByIdQuery({ postId }, {
-    skip: !postId || !!dataPostModal
-  })
+  let needHydrateStateRef = useRef(!postId || !!dataPostModal);
 
   const { data: userInfo } = useGetProfileByUsedIdQuery({ userId }, {
     skip: !userId || !!dataUserInfo
   })
 
-  const postsDataForRender = postInfo || dataPostModal
-  const userDataForRender = userInfo || dataUserInfo
+  const { data: postInfo } = useGetPostByIdQuery({ postId }, {
+    skip: needHydrateStateRef.current
+  })
+
+  // useEffect(() => {
+  //   if (needHydrateStateRef.current) {
+  //     needHydrateStateRef.current = false;
+  //     const thunk2 = postsApi.util.upsertQueryData('getPostById', )
+  //     const thunk = coursesApi.util.upsertQueryData('getCourses', 1, {
+  //       items: props.items!,
+  //       page: props.page!,
+  //       totalPages: props.totalPages!
+  //     })
+  //     dispatch(thunk);
+  //   }
+  // }, [])
+
+  const postsDataForRender = dataPostModal || postInfo
+  const userDataForRender = dataUserInfo || userInfo
 
   if (!postsDataForRender || !userDataForRender) {
     return null
   }
 
-  useEffect(() => {
-    if (isOpen && !postsDataForRender) {
-      closeModal()
-      replace(Path.Profile + `/${userId}`)
-    }
-  }, [postInfo, isOpen, closeModal, replace, userId])
+  // useEffect(() => {
+  //   if (isOpen && !postsDataForRender) {
+  //     closeModal()
+  //     replace(Path.Profile + `/${userId}`)
+  //   }
+  // }, [postInfo, isOpen, closeModal, replace, userId])
 
   const handleCloseModal = () => {
     closeModal()
-    replace(Path.Profile + `/${userId}`)
+    replace(Path.UserProfile(userId))
   }
 
   const onOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       closeModal()
-      replace(Path.Profile + `/${userId}`)
+      replace(Path.UserProfile(userId))
     }
   }
 
@@ -175,7 +191,7 @@ export default function ViewPostModal({ userId, postId, dataPostModal, dataUserI
                     {userDataForRender?.userName}
                   </Link>
                 </div>
-                {data?.id && (
+                {meData?.id && (
                   <div className={s.publicationMenu}>
                         <PostMenuActions
                             postOwnerId={postsDataForRender?.ownerId || ''}
@@ -204,10 +220,10 @@ export default function ViewPostModal({ userId, postId, dataPostModal, dataUserI
                       <div className={s.commentPanel}>
                         <span className={s.date}>{comment.date}</span>
                         {comment.likesCount > 0 && <span className={s.like}>Like: {comment.likesCount}</span>}
-                        {data && <span className={s.like}>Answer</span>}
+                        {meData && <span className={s.like}>Answer</span>}
                       </div>
                     </div>
-                    {data &&
+                    {meData &&
                       (comment.isChecked ?
                         <div className={s.iconHeart}>
                           <IconHeart />
@@ -219,7 +235,7 @@ export default function ViewPostModal({ userId, postId, dataPostModal, dataUserI
                 ))}
               </div>
               {/*todo добавить обработчики событий и пути иконок*/}
-              {data && (
+              {meData && (
                 <div className={s.postActions}>
                   <div className={s.postActionsLeft}>
                     {postsDataForRender?.isLiked ?
@@ -247,7 +263,7 @@ export default function ViewPostModal({ userId, postId, dataPostModal, dataUserI
                 </div>
                 <span className={s.date}>{formattedDate}</span>
               </div>
-              {data && (
+              {meData && (
                 <div className={s.addCommentContainer}>
                   <input placeholder={'Add a Comment...'} className={s.inputComment} />
                   <button className={s.buttonComment}>Publish</button>

@@ -74,22 +74,25 @@ export const PostMenuActions = ({ postOwnerId, postId, userId, description, clas
           }
         </>
       )}
-
-      <PostEditModal
-        postId={postId}
-        initialDescription={description}
-        isOpen={editOpen}
-        onClose={() => setEditOpen(false)}
-      />
-      <PostDeleteModal
-        postId={postId}
-        userId={userId}
-        isOpen={deleteModalOpen}
-        onClose={() => {
-          setDeleteModalOpen(false)
-          if (onPostDeleted) onPostDeleted()
-        }}
-      />
+      {editOpen &&
+        <PostEditModal
+          postId={postId}
+          initialDescription={description}
+          isOpen={editOpen}
+          onClose={() => setEditOpen(false)}
+        />
+      }
+      {deleteModalOpen &&
+          <PostDeleteModal
+            postId={postId}
+            userId={userId}
+            isOpen={deleteModalOpen}
+            onClose={() => {
+              setDeleteModalOpen(false)
+              if (onPostDeleted) onPostDeleted()
+            }}
+          />
+      }
     </div>
   )
 }

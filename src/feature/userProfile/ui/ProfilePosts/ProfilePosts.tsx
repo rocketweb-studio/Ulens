@@ -11,18 +11,18 @@ import {GetPostsByUserIdResponse} from "@/src/feature/Posts/api/postsApi.types";
 
 type Props = {
   userId: string
-  dataPosts: GetPostsByUserIdResponse
+  dataPosts?: GetPostsByUserIdResponse
 }
 
 export const ProfilePosts = ({ userId, dataPosts }: Props) => {
   const { data: meData } = useGetMeQuery()
   const { data: postsData } = useGetPostsByUsedIdQuery({ userId })
 
-  const postsDataForRender = postsData?.items || dataPosts.items
+  const postsDataForRender = postsData?.items || dataPosts?.items
 
   return (
     <div className={s.profilePosts}>
-      {postsDataForRender.map((post) => (
+      {postsDataForRender?.map((post) => (
         <div key={post.id} id={post.id} className={s.postItem} style={{position: 'relative'}}>
           {meData?.id && (
             <PostMenuActions

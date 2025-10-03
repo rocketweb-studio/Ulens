@@ -24,13 +24,10 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
 ) => {
   await mutex.waitForUnlock()
 
-
-
   try {
-    if (typeof args === 'object' && args.url?.includes('auth/')) {
-        api.dispatch(setLoaderStatus({ status: 'loading' }))
-    }
-
+    // if (typeof args === 'object' && args.url?.includes('auth/')) {
+    //     api.dispatch(setLoaderStatus({ status: 'loading' }))
+    // }
     let result = await baseQueryWithAccessToken(args, api, extraOptions)
 
     const isRefreshRequest = typeof args === 'object' && args.url === 'auth/refresh'
@@ -70,8 +67,8 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
 
     return result
   } finally {
-    if (typeof args === 'object' && args.url?.includes('auth/')) {
-      api.dispatch(setLoaderStatus({ status: 'idle' }))
-    }
+    // if (typeof args === 'object' && args.url?.includes('auth/')) {
+    //   api.dispatch(setLoaderStatus({ status: 'idle' }))
+    // }
   }
 }

@@ -13,7 +13,7 @@ import s from "@/src/feature/userProfile/ui/ProfileHeader/profileHeader.module.s
 
 type Props = {
     userId: string
-    dataUserInfo: GetProfileByUserIdResponse
+    dataUserInfo?: GetProfileByUserIdResponse
 }
 
 export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {

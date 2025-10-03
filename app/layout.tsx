@@ -1,12 +1,11 @@
-import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import type {Metadata} from 'next'
+import {Geist, Geist_Mono} from 'next/font/google'
 import '@/src/shared/styles/globals.scss'
-import { StoreWrapper } from '@/src/store/store-wrapper'
+import {StoreWrapper} from '@/src/store/store-wrapper'
 import React from 'react'
-import { AppLoader } from '@/src/shared/components/AppLoader/AppLoader'
 import 'react-toastify/ReactToastify.css'
-import { AlertSnackbar } from '@/src/shared/components/AlertSnackbar/AlertSnackbar'
-import { Header } from '@/src/shared/components/Header/Header'
+import {AlertSnackbar} from '@/src/shared/components/AlertSnackbar/AlertSnackbar'
+import {Header} from '@/src/shared/components/Header/Header'
 import '@rocketweb-studio/ulens-ui-kit/dist/index.css'
 import {Sidebar} from "@/src/shared/components/Sidebar";
 import {FlexContainer} from "@/src/shared/components/FlexContainer";
@@ -39,7 +38,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               {children}
             </main>
           </FlexContainer>
-          <AppLoader />
           <AlertSnackbar />
         </StoreWrapper>
       </body>

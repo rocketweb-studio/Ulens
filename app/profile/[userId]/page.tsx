@@ -17,16 +17,30 @@ export default async function UserPage({
 
   let dataPostModal: GetPostByIdResponse | undefined = undefined;
 
-  const responseUserInfo = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}profile/${userId}`)
-  const dataUserInfo = await responseUserInfo.json() as GetProfileByUserIdResponse;
+  // const responseUserInfo = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}profile/${userId}`)
+  // const dataUserInfo = await responseUserInfo.json() as GetProfileByUserIdResponse;
+  //
+  // const responsePosts = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/user/${userId}`)
+  // const dataPosts = await responsePosts.json() as GetPostsByUserIdResponse;
 
-  const responsePosts = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/user/${userId}`)
-  const dataPosts = await responsePosts.json() as GetPostsByUserIdResponse;
+  const [userInfoResponse, postsResponse] = await Promise.all([
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}profile/${userId}`, {
+      next: { revalidate: 60 } // Кэшируем на 60 секунд
+    }),
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/user/${userId}`, {
+      next: { revalidate: 30 } // Кэшируем на 30 секунд
+    })
+  ])
+
+  const [dataUserInfo, dataPosts] = await Promise.all([
+    userInfoResponse.json(),
+    postsResponse.json()
+  ])
 
   if (filters.postId) {
       try {
         const responsePost = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/${filters.postId}`)
-        if (responsePosts.ok) {
+        if (responsePost.ok) {
           dataPostModal = await responsePost.json() as GetPostByIdResponse;
         }
       } catch (error) {
