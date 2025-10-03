@@ -7,7 +7,7 @@ import Image from "next/image";
 import {timeAgo} from "@/src/shared/utils/timeAgo";
 import {UserAvatar} from "@/src/shared/components/UserAvatar";
 import Link from "next/link";
-import { Path } from "@/src/shared/constants/Path";
+import {Path} from "@/src/shared/constants/Path";
 
 type Props = {
   data: GetPostByIdResponse[] | undefined
@@ -38,39 +38,42 @@ export const PublicPage = ({data}: Props) => {
         <div key={post.id} className={s.postWrapper}>
 
           {post.images && (
-            <div key={post.id} className={s.swiperWrapper}>
+            <Link href={Path.ViewPost(post.ownerId, post.id)} key={post.id}>
+              <div className={s.swiperWrapper}>
 
-              <CustomSwiper
-                slides={post.images.medium.map((image, index) => ({
-                  id: index,
-                  content: (
-                    <div className={s.slideImageWrapper}>
-                      <Image
-                        src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
-                        alt={''}
-                        width={image.width}
-                        height={image.height}
-                      />
-                    </div>
-                  ),
-                }))}
-                className={s.customSwiper}
-                allowTouchMove={false}
-                swiperProps={{
-                  spaceBetween: 0,
-                  slidesPerView: 1,
-                  initialSlide: 0,
-                  noSwiping: true,
-                  noSwipingClass: 'swiper-slide',
-                  preventInteractionOnTransition: true,
-                }}
-              />
+                <CustomSwiper
+                  slides={post.images.medium.map((image, index) => ({
+                    id: index,
+                    content: (
+                      <div className={s.slideImageWrapper}>
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
+                          alt={''}
+                          width={image.width}
+                          height={image.height}
+                        />
+                      </div>
+                    ),
+                  }))}
+                  className={s.customSwiper}
+                  allowTouchMove={false}
+                  swiperProps={{
+                    spaceBetween: 0,
+                    slidesPerView: 1,
+                    initialSlide: 0,
+                    noSwiping: true,
+                    noSwipingClass: 'swiper-slide',
+                    preventInteractionOnTransition: true,
+                  }}
+                />
 
-            </div>
+              </div>
+            </Link>
           )}
           <div className={s.ownerWrapper}>
 
-            <UserAvatar userName={post.userName} width={36} height={36} avatarOwner={post.avatarOwner} userId={post.ownerId}/>
+            <UserAvatar userName={post.userName} width={36} height={36} avatarOwner={post.avatarOwner}
+                        userId={post.ownerId}/>
 
             <Link href={Path.UserProfile(post.ownerId)} className={s.userName}>{post.userName}</Link>
           </div>
