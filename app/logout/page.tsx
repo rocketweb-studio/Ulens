@@ -1,5 +1,3 @@
-'use client'
-
 import { Logout } from '@/src/feature/auth/ui/Logout'
 
 export default function LogoutPage() {
