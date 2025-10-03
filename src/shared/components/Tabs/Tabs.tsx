@@ -14,8 +14,8 @@ export const Tabs = () => {
 
   return (
       <FlexContainer wrap justify={'center'} >
-        {tabsName.map(({title, href, isActive}) => (
-          <Link className={`${s.link} ${isActive ? s.activeLink : ''}`} href={href}>{title}</Link>
+        {tabsName.map(({title, href, isActive}, index) => (
+          <Link className={`${s.link} ${isActive ? s.activeLink : ''}`} href={href} key={index}>{title}</Link>
         ))}
       </FlexContainer>
   );
