@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import {useLoginMutation} from '@/src/feature/auth/api/authApi'
+import {useGetMeQuery, useLoginMutation} from '@/src/feature/auth/api/authApi'
 import {SubmitHandler, useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
 import gitHubSvg from '@/public/github-svg.svg'
@@ -9,16 +9,24 @@ import {Input} from '@/src/shared/components/Input/Input'
 import {Button} from '@/src/shared/components/Button/Button'
 import {loginSchema} from '@/src/feature/auth/lib/schemas/loginSchema'
 import styles from './SignIn.module.scss'
-import {useRedirectIfAuthorized} from '@/src/shared/hooks/useRedirectIfAuthorized'
 import {LoginRequestParams} from '@/src/feature/auth/api/authApi.types'
 import {useToast} from '@/src/shared/hooks/useToast'
 import {Path} from "@/src/shared/constants/Path";
 import Link from "next/link";
+import {useRouter} from "next/navigation";
+import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
 
 export const SignIn = () => {
-  const isLoading = useRedirectIfAuthorized()
+
+  const {data: meData, isLoading} = useGetMeQuery()
+  const router = useRouter()
   const { showSuccess } = useToast()
   const [login] = useLoginMutation()
+
+  if (!!meData) {
+    router.push(Path.UserProfile(meData.id))
+  }
+
   const {
     register,
     handleSubmit,
@@ -42,6 +50,7 @@ export const SignIn = () => {
   }
 
   return (
+    !!meData ? <h2>ТУТ БУДЕТ APP LOADER</h2> :
     <article className={styles.authWrapper}>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.authForm}>
         <h2 className={styles.authForm__title}>Sign In</h2>

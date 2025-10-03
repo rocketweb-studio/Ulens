@@ -9,7 +9,7 @@ export const useRedirectIfAuthorized = () => {
 
   useEffect(() => {
     if (data && !error) {
-      router.push(`${Path.Profile}/${data.id}`)
+      router.push(Path.UserProfile(data.id))
     }
   }, [data, error])
 
