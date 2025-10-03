@@ -1,6 +1,6 @@
 'use client'
 
-import s from '@/src/feature/userProfile/ui/UserProfile/userProfile.module.scss'
+import s from '@/src/feature/userProfile/ui/ProfilePosts/profilePosts.module.scss'
 import {PostMenuActions} from '@/src/feature/Posts/ui/postMenuActions'
 import Link from 'next/link'
 import {Path} from '@/src/shared/constants/Path'
@@ -19,23 +19,6 @@ export const ProfilePosts = ({ userId, dataPosts }: Props) => {
   const { data: postsData } = useGetPostsByUsedIdQuery({ userId })
 
   const postsDataForRender = postsData?.items || dataPosts.items
-
-  // if (isLoading) {
-  //   return (
-  //     <div className={s.profilePosts}>
-  //       <Skeleton className={s.postItem} />
-  //       <Skeleton className={s.postItem} />
-  //       <Skeleton className={s.postItem} />
-  //       <Skeleton className={s.postItem} />
-  //       <Skeleton className={s.postItem} />
-  //       <Skeleton className={s.postItem} />
-  //       <Skeleton className={s.postItem} />
-  //       <Skeleton className={s.postItem} />
-  //       <Skeleton className={s.postItem} />
-  //       <Skeleton className={s.postItem} />
-  //     </div>
-  //   )
-  // }
 
   return (
     <div className={s.profilePosts}>

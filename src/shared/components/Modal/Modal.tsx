@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, MouseEvent, useEffect } from 'react'
+import React, {HTMLAttributes, MouseEvent, useEffect, useState} from 'react'
 import { createPortal } from 'react-dom'
 import s from './Modal.module.scss'
 import Image from 'next/image'
@@ -36,8 +36,15 @@ export const Modal = ({
   buttonRightInModalHeader,
   buttonLeftInModalHeader,
 }: Props) => {
+
+  const [isMounted, setIsMounted] = useState(false)
+
   useEffect(() => {
-    if (!isOpen || !closeOnEsc) return
+    setIsMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isOpen || !closeOnEsc || !isMounted) return
 
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -45,35 +52,40 @@ export const Modal = ({
 
     document.addEventListener('keydown', handleEscape)
     return () => document.removeEventListener('keydown', handleEscape)
-  }, [isOpen, onClose, closeOnEsc])
+  }, [isOpen, onClose, closeOnEsc, isMounted])
+
+  const modalContent = (
+      <div className={s.overlay} onClick={onOverlayClick}>
+        <div className={`${s.content} ${className}`}>
+          {modalTitle.length > 0 &&
+              <div className={s.header}>
+                {buttonLeftInModalHeader}
+                <h3 className={s.title}>{modalTitle}</h3>
+                {buttonRightInModalHeader}
+                {!hideCloseButton && (
+                    <button className={s.closeButton} onClick={onClose}>
+                      <Image src={closeIcon} alt={'closeIcon'} />
+                    </button>
+                )}
+              </div>
+          }
+          <div className={`${s.flexContainer} ${withoutPadding ? s.withoutPadding : ''}`}>
+            {children}
+            {!hideDefaultButton && (
+                <Button className={s.button} onClick={onClose}>
+                  ОК
+                </Button>
+            )}
+          </div>
+        </div>
+      </div>
+  )
 
   if (!isOpen) return null
 
-  return createPortal(
-    <div className={s.overlay} onClick={onOverlayClick}>
-      <div className={`${s.content} ${className}`}>
-        {modalTitle.length > 0 &&
-          <div className={s.header}>
-            {buttonLeftInModalHeader}
-            <h3 className={s.title}>{modalTitle}</h3>
-            {buttonRightInModalHeader}
-            {!hideCloseButton && (
-              <button className={s.closeButton} onClick={onClose}>
-                <Image src={closeIcon} alt={'closeIcon'} />
-              </button>
-            )}
-          </div>
-        }
-        <div className={`${s.flexContainer} ${withoutPadding ? s.withoutPadding : ''}`}>
-          {children}
-          {!hideDefaultButton && (
-            <Button className={s.button} onClick={onClose}>
-              ОК
-            </Button>
-          )}
-        </div>
-      </div>
-    </div>,
-    document.body,
-  )
+  if (!isMounted) {
+    return modalContent
+  }
+
+  return createPortal(modalContent, document.body)
 }

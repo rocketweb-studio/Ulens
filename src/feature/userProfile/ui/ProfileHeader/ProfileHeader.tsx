@@ -1,6 +1,5 @@
 'use client'
 
-import s from "@/src/feature/userProfile/ui/UserProfile/userProfile.module.scss";
 import Image from "next/image";
 import avatar from "@/src/assets/avatarTmp/avatar.jpg";
 import {useGetProfileByUsedIdQuery} from "@/src/feature/userProfile/api/userProfileApi";
@@ -10,6 +9,7 @@ import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
 import Link from "next/link";
 import {Path} from "@/src/shared/constants/Path";
 import {GetProfileByUserIdResponse} from "@/src/feature/userProfile/api/userProfile.types";
+import s from "@/src/feature/userProfile/ui/ProfileHeader/profileHeader.module.scss";
 
 type Props = {
     userId: string
@@ -21,7 +21,7 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
     const {data: meData} = useGetMeQuery()
     const {data: userData} = useGetProfileByUsedIdQuery({userId})
 
-    const userDataForRender = userData || dataUserInfo
+    const userDataForRender = dataUserInfo || userData
 
     const handleFollow = () => {
         console.log('handleFollow')
@@ -30,41 +30,6 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
     const handleSendMessage = () => {
         console.log('handleSendMessage')
     }
-
-    // if( isLoading ) {
-    //     return (
-    //         <div className={s.profileHeader}>
-    //             <div className={s.profileAvatar}>
-    //                 <Skeleton height={'auto'} width={'100%'} radius={'50%'}/>
-    //             </div>
-    //             <div className={s.profileInfo}>
-    //                 <div className={s.nameAndFollowRow}>
-    //                     <Skeleton height={'36px'} width={'210px'} radius={'20px'} border={'3px solid #0d0d0d'}/>
-    //                     <Skeleton height={'39px'} width={'200px'} radius={'4px'}/>
-    //                 </div>
-    //                 <div className={s.statisticRow}>
-    //                     <div className={s.statisticItem}>
-    //                         <Skeleton height={'20px'} width={'50px'} radius={'10px'} border={'2px solid #0d0d0d'}/>
-    //                         <Skeleton height={'20px'} width={'80px'} radius={'10px'} border={'2px solid #0d0d0d'}/>
-    //                     </div>
-    //                     <div className={s.statisticItem}>
-    //                         <Skeleton height={'20px'} width={'50px'} radius={'10px'} border={'2px solid #0d0d0d'}/>
-    //                         <Skeleton height={'20px'} width={'80px'} radius={'10px'} border={'2px solid #0d0d0d'}/>
-    //                     </div>
-    //                     <div className={s.statisticItem}>
-    //                         <Skeleton height={'20px'} width={'50px'} radius={'10px'} border={'2px solid #0d0d0d'}/>
-    //                         <Skeleton height={'20px'} width={'80px'} radius={'10px'} border={'2px solid #0d0d0d'}/>
-    //                     </div>
-    //                 </div>
-    //                 <div className={`${s.aboutUser} ${s.aboutUserSkeleton}`}>
-    //                     <Skeleton height={'21px'} width={'100%'} radius={'10px'} border={'2px solid #0d0d0d'}/>
-    //                     <Skeleton height={'21px'} width={'85%'} radius={'10px'} border={'2px solid #0d0d0d'}/>
-    //                     <Skeleton height={'21px'} width={'50%'} radius={'10px'} border={'2px solid #0d0d0d'}/>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     )
-    // }
 
     return (
         <div className={s.profileHeader}>

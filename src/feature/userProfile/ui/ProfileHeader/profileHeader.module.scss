@@ -1,0 +1,75 @@
+.profileWrapper{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 50px;
+}
+.profileHeader{
+  display: grid;
+  gap: 25px;
+  grid-template-columns: 260px 4fr;
+  margin-bottom: 50px;
+  .profileAvatar{
+    flex: 0 0 calc(20% - 25px);
+    position: relative;
+    overflow: hidden;
+    img{
+      border-radius: 50%;
+      width: 100%;
+      height: auto;
+    }
+  }
+  .profileInfo{
+    flex: 0 0 calc(80% - 25px);
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 35px;
+  }
+  .aboutUser{
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: 100;
+  }
+  .aboutUserSkeleton{
+    height: 90px; //for 3 row, 150 for 5 row
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+  }
+  .statisticRow{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 30px;
+    .statisticItem{
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 5px;
+      width: 200px;
+      @media (max-width: 1250px){
+        width: 100px;
+      }
+    }
+    @media (max-width: 850px){
+      justify-content: space-between;
+    }
+  }
+  @media (max-width: 850px) {grid-template-columns: 1fr;}
+}
+
+.nameAndFollowRow{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  h1{
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 36px;
+    vertical-align: middle;
+  }
+}

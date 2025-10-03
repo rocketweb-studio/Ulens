@@ -15,6 +15,8 @@ import Link from 'next/link'
 import { PostMenuActions } from '@/src/feature/Posts/ui/postMenuActions'
 import { IconHeart, IconHeartOutline } from '@rocketweb-studio/ulens-ui-kit'
 import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
+import {GetPostByIdResponse} from "@/src/feature/Posts/api/postsApi.types";
+import {GetProfileByUserIdResponse} from "@/src/feature/userProfile/api/userProfile.types";
 
 const comments = [
   {
@@ -64,26 +66,41 @@ const comments = [
   },
 ]
 
-export default function ViewPostModal({ userId, postId }: { userId: string; postId: string }) {
+type Props = {
+  userId: string
+  postId: string
+  dataPostModal?: GetPostByIdResponse
+  dataUserInfo?: GetProfileByUserIdResponse
+}
+
+export default function ViewPostModal({ userId, postId, dataPostModal, dataUserInfo }: Props) {
   const { isOpen, closeModal } = useModal(true)
   const { replace } = useRouter()
   const { data } = useGetMeQuery()
-  const { data: postInfo } = useGetPostByIdQuery({ postId })
-  const { data: user } = useGetProfileByUsedIdQuery({ userId })
+
+  const { data: postInfo } = useGetPostByIdQuery({ postId }, {
+    skip: !postId || !!dataPostModal
+  })
+
+  const { data: userInfo } = useGetProfileByUsedIdQuery({ userId }, {
+    skip: !userId || !!dataUserInfo
+  })
+
+  const postsDataForRender = postInfo || dataPostModal
+  const userDataForRender = userInfo || dataUserInfo
+
+  if (!postsDataForRender || !userDataForRender) {
+    return null
+  }
 
   useEffect(() => {
-    if (isOpen && !postInfo) {
+    if (isOpen && !postsDataForRender) {
       closeModal()
       replace(Path.Profile + `/${userId}`)
     }
   }, [postInfo, isOpen, closeModal, replace, userId])
 
-  const handlePostDeleted = () => {
-    closeModal()
-    replace(Path.Profile + `/${userId}`)
-  }
-
-  const onModalCloseHandler = () => {
+  const handleCloseModal = () => {
     closeModal()
     replace(Path.Profile + `/${userId}`)
   }
@@ -96,20 +113,21 @@ export default function ViewPostModal({ userId, postId }: { userId: string; post
   }
 
   const formattedDate =
-    postInfo?.createdAt ?
+      postsDataForRender?.createdAt ?
       new Intl.DateTimeFormat('en-US', {
         month: 'long',
         day: 'numeric',
         year: 'numeric',
-      }).format(new Date(postInfo.createdAt))
+      }).format(new Date(postsDataForRender.createdAt))
     : ''
+
   return (
     <FlexContainer align={'center'} justify={'center'}>
       <div className={s.wrapper}>
         <Modal
           className={`${s.modal} ${s.viewPostModal}`}
           isOpen={isOpen}
-          onClose={onModalCloseHandler}
+          onClose={handleCloseModal}
           onOverlayClick={onOverlayClick}
           modalTitle={''}
           withoutPadding
@@ -118,9 +136,9 @@ export default function ViewPostModal({ userId, postId }: { userId: string; post
         >
           <div className={s.publication}>
             <div className={s.publicationImg}>
-              {postInfo?.images && (
+              {postsDataForRender?.images && (
                 <CustomSwiper
-                  slides={postInfo?.images.medium.map((image, index) => ({
+                  slides={postsDataForRender?.images.medium.map((image, index) => ({
                     id: index,
                     content: (
                       <div className={s.slideImageWrapper}>
@@ -154,21 +172,23 @@ export default function ViewPostModal({ userId, postId }: { userId: string; post
                 <div className={s.publicationProfileImage}>
                   <Image src={'/avatar/avatar_mini.png'} alt={'Avatar'} width={36} height={36} />
                   <Link href={Path.UserProfile(userId)} className={s.publicationProfileURL}>
-                    {user?.userName}
+                    {userDataForRender?.userName}
                   </Link>
                 </div>
-                <div className={s.publicationMenu}>
-                  <PostMenuActions
-                    postOwnerId={postInfo?.ownerId || ''}
-                    postId={postId}
-                    userId={userId}
-                    description={''}
-                    onPostDeleted={handlePostDeleted}
-                  />
-                </div>
+                {data?.id && (
+                  <div className={s.publicationMenu}>
+                        <PostMenuActions
+                            postOwnerId={postsDataForRender?.ownerId || ''}
+                            postId={postId}
+                            userId={userId}
+                            description={''}
+                            onPostDeleted={handleCloseModal}
+                        />
+                  </div>
+                )}
               </div>
               <div className={s.postDescription}>
-                <p>{postInfo?.description}</p>
+                <p>{postsDataForRender?.description}</p>
               </div>
 
               {/*блок комментариев*/}
@@ -202,7 +222,7 @@ export default function ViewPostModal({ userId, postId }: { userId: string; post
               {data && (
                 <div className={s.postActions}>
                   <div className={s.postActionsLeft}>
-                    {postInfo?.isLiked ?
+                    {postsDataForRender?.isLiked ?
                       <div className={s.iconHeart}>
                         <IconHeart />
                       </div>
@@ -223,7 +243,7 @@ export default function ViewPostModal({ userId, postId }: { userId: string; post
                     <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'Saved'} />
                     <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'Saved'} />
                   </div>
-                  <span>{`${postInfo?.likeCount || ''} "Like"`}</span>
+                  <span>{`${postsDataForRender?.likeCount || ''} "Like"`}</span>
                 </div>
                 <span className={s.date}>{formattedDate}</span>
               </div>
