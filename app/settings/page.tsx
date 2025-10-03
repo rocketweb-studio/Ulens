@@ -10,7 +10,7 @@ export default async function SettingsPage({
 }) {
   const filters = await searchParams
   if (!filters.part || !allowedParts.includes(filters.part)) {
-    redirect(Path.Settings)
+    redirect(Path.Settings('info'))
   }
 
   return <div>Текущий раздел: {filters.part}</div>

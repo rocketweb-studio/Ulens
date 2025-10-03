@@ -1,45 +1,49 @@
 'use client'
 
 import s from '@/src/feature/userProfile/ui/UserProfile/userProfile.module.scss'
-import { PostMenuActions } from '@/src/feature/Posts/ui/postMenuActions'
+import {PostMenuActions} from '@/src/feature/Posts/ui/postMenuActions'
 import Link from 'next/link'
-import { Path } from '@/src/shared/constants/Path'
+import {Path} from '@/src/shared/constants/Path'
 import Image from 'next/image'
-import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
-import { useGetPostsByUsedIdQuery } from '@/src/feature/Posts/api/postsApi'
-import { Skeleton } from '@/src/shared/components/Skeleton/Skeleton'
+import {useGetMeQuery} from '@/src/feature/auth/api/authApi'
+import {useGetPostsByUsedIdQuery} from '@/src/feature/Posts/api/postsApi'
+import {GetPostsByUserIdResponse} from "@/src/feature/Posts/api/postsApi.types";
 
 type Props = {
   userId: string
+  dataPosts: GetPostsByUserIdResponse
 }
 
-export const ProfilePosts = ({ userId }: Props) => {
+export const ProfilePosts = ({ userId, dataPosts }: Props) => {
   const { data: meData } = useGetMeQuery()
-  const { data: posts, isLoading } = useGetPostsByUsedIdQuery({ userId })
+  const { data: postsData } = useGetPostsByUsedIdQuery({ userId })
 
-  if (isLoading) {
-    return (
-      <div className={s.profilePosts}>
-        <Skeleton className={s.postItem} />
-        <Skeleton className={s.postItem} />
-        <Skeleton className={s.postItem} />
-        <Skeleton className={s.postItem} />
-        <Skeleton className={s.postItem} />
-        <Skeleton className={s.postItem} />
-        <Skeleton className={s.postItem} />
-        <Skeleton className={s.postItem} />
-        <Skeleton className={s.postItem} />
-        <Skeleton className={s.postItem} />
-      </div>
-    )
-  }
+  const postsDataForRender = postsData?.items || dataPosts.items
+
+  // if (isLoading) {
+  //   return (
+  //     <div className={s.profilePosts}>
+  //       <Skeleton className={s.postItem} />
+  //       <Skeleton className={s.postItem} />
+  //       <Skeleton className={s.postItem} />
+  //       <Skeleton className={s.postItem} />
+  //       <Skeleton className={s.postItem} />
+  //       <Skeleton className={s.postItem} />
+  //       <Skeleton className={s.postItem} />
+  //       <Skeleton className={s.postItem} />
+  //       <Skeleton className={s.postItem} />
+  //       <Skeleton className={s.postItem} />
+  //     </div>
+  //   )
+  // }
 
   return (
     <div className={s.profilePosts}>
-      {posts?.items.map((post) => (
-        <div key={post.id} id={post.id} className={s.postItem}>
-          {post.ownerId === meData?.id && (
+      {postsDataForRender.map((post) => (
+        <div key={post.id} id={post.id} className={s.postItem} style={{position: 'relative'}}>
+          {meData?.id && (
             <PostMenuActions
+              postOwnerId={post.ownerId}
               postId={post.id}
               userId={userId}
               description={''}
@@ -51,8 +55,11 @@ export const ProfilePosts = ({ userId }: Props) => {
               <Image
                 src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${post.images.small[0].url}`}
                 alt={post.description}
+                // width={post.images.small[0].width}
+                // height={post.images.small[0].height}
                 fill
                 style={{ objectFit: 'cover' }}
+                quality={100}
               />
             )}
           </Link>
