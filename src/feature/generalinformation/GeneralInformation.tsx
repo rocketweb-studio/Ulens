@@ -27,7 +27,7 @@ export const GeneralInformation = () => {
                 <Input type="text" label={"Username"} required  />
                 <Input type="text" label={"First Name"} required />
                 <Input type="text" label={"Last Name"} required />
-                <Input type="date" label={"Date of birth"}/>
+                <Input type="date" label={"Date of birth"} className={s.date}/>
                 <div className={s.selects}>
                     <Input type="text" label={"select"}/>
                     <Input type="text" label={"select"}/>
