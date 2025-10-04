@@ -10,13 +10,15 @@ import { Modal } from '@/src/shared/components/Modal/Modal'
 import {MouseEvent, useEffect, useRef} from 'react'
 import {postsApi, useGetPostByIdQuery} from '@/src/feature/Posts/api/postsApi'
 import { CustomSwiper } from '@/src/shared/components/CustomSwiper'
-import { useGetProfileByUsedIdQuery } from '@/src/feature/userProfile/api/userProfileApi'
+import {useGetProfileByUsedIdQuery, userProfileApi} from '@/src/feature/userProfile/api/userProfileApi'
 import Link from 'next/link'
 import { PostMenuActions } from '@/src/feature/Posts/ui/postMenuActions'
 import { IconHeart, IconHeartOutline } from '@rocketweb-studio/ulens-ui-kit'
 import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
 import {GetPostByIdResponse} from "@/src/feature/Posts/api/postsApi.types";
 import {GetProfileByUserIdResponse} from "@/src/feature/userProfile/api/userProfile.types";
+import {useAppSelector} from "@/src/shared/hooks/useAppSelector";
+import {useAppDispatch} from "@/src/shared/hooks/useAppDispatch";
 
 const comments = [
   {
@@ -75,32 +77,40 @@ type Props = {
 
 export default function ViewPostModal({ userId, postId, dataPostModal, dataUserInfo }: Props) {
 
+  const userDataFromCache = useAppSelector((state) =>
+      userProfileApi.endpoints.getProfileByUsedId
+          .select({userId})(state).data
+  )
+
+  const postDataFromCache = useAppSelector((state) =>
+      postsApi.endpoints.getPostById
+          .select({postId})(state).data
+  )
+
   const { isOpen, closeModal } = useModal(true)
   const { replace } = useRouter()
   const { data: meData } = useGetMeQuery()
 
-  let needHydrateStateRef = useRef(!postId || !!dataPostModal);
+  const dispatch = useAppDispatch()
+
+  let needHydrateUserInfoRef = useRef(!!dataUserInfo && !userDataFromCache);
+  let needHydratePostInfoRef = useRef(!!dataPostModal && !postDataFromCache);
 
   const { data: userInfo } = useGetProfileByUsedIdQuery({ userId }, {
-    skip: !userId || !!dataUserInfo
+    skip: needHydrateUserInfoRef.current
   })
 
   const { data: postInfo } = useGetPostByIdQuery({ postId }, {
-    skip: needHydrateStateRef.current
+    skip: needHydratePostInfoRef.current
   })
 
-  // useEffect(() => {
-  //   if (needHydrateStateRef.current) {
-  //     needHydrateStateRef.current = false;
-  //     const thunk2 = postsApi.util.upsertQueryData('getPostById', )
-  //     const thunk = coursesApi.util.upsertQueryData('getCourses', 1, {
-  //       items: props.items!,
-  //       page: props.page!,
-  //       totalPages: props.totalPages!
-  //     })
-  //     dispatch(thunk);
-  //   }
-  // }, [])
+  useEffect(() => {
+    if(needHydrateUserInfoRef.current){
+      needHydrateUserInfoRef.current = false;
+      const thunk = userProfileApi.util.upsertQueryData('getProfileByUsedId', {userId}, dataUserInfo!)
+      dispatch(thunk)
+    }
+  }, []);
 
   const postsDataForRender = dataPostModal || postInfo
   const userDataForRender = dataUserInfo || userInfo
@@ -108,13 +118,6 @@ export default function ViewPostModal({ userId, postId, dataPostModal, dataUserI
   if (!postsDataForRender || !userDataForRender) {
     return null
   }
-
-  // useEffect(() => {
-  //   if (isOpen && !postsDataForRender) {
-  //     closeModal()
-  //     replace(Path.Profile + `/${userId}`)
-  //   }
-  // }, [postInfo, isOpen, closeModal, replace, userId])
 
   const handleCloseModal = () => {
     closeModal()
@@ -191,17 +194,15 @@ export default function ViewPostModal({ userId, postId, dataPostModal, dataUserI
                     {userDataForRender?.userName}
                   </Link>
                 </div>
-                {meData?.id && (
-                  <div className={s.publicationMenu}>
-                        <PostMenuActions
-                            postOwnerId={postsDataForRender?.ownerId || ''}
-                            postId={postId}
-                            userId={userId}
-                            description={''}
-                            onPostDeleted={handleCloseModal}
-                        />
-                  </div>
-                )}
+                <div className={s.publicationMenu}>
+                  <PostMenuActions
+                      postOwnerId={postsDataForRender?.ownerId || ''}
+                      postId={postId}
+                      userId={userId}
+                      description={''}
+                      onPostDeleted={handleCloseModal}
+                  />
+                </div>
               </div>
               <div className={s.postDescription}>
                 <p>{postsDataForRender?.description}</p>

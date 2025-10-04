@@ -21,7 +21,7 @@ import {
   IconTrendingUpOutline,
 } from '@rocketweb-studio/ulens-ui-kit'
 import { Suspense, useState } from 'react'
-import { ConfirmLogout } from '@/src/feature/auth/ui/Logout/ConfirmLogout'
+import {Logout} from "@/src/feature/auth/ui/Logout";
 
 function SidebarContent() {
   const { data, isSuccess } = useGetMeQuery()
@@ -72,12 +72,13 @@ function SidebarContent() {
         </FlexContainer>
       ))}
       <FlexContainer className={s.linkWrapper} gap={'13px'}>
-        <button onClick={() => setIsModalOpen(!isModalOpen)} className={s.logoutBtn}>
+        <button onClick={() => setIsModalOpen(true)} className={s.logoutBtn}>
           <IconLogOutOutline className={s.icon} />
           Log Out
         </button>
       </FlexContainer>
-      <ConfirmLogout isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={data?.email ?? ''} />
+      {/*<ConfirmLogout isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={data?.email ?? ''} />*/}
+      {isModalOpen && <Logout isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={data?.email ?? ''}/>}
     </div>
   )
 }

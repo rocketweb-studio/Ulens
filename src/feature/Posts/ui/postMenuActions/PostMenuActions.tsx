@@ -23,8 +23,8 @@ export const PostMenuActions = ({ postOwnerId, postId, userId, description, clas
 
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const { data: meData } = useGetMeQuery()
-
+  const { data: meData, isSuccess } = useGetMeQuery()
+  const isAuth = !!meData?.id && isSuccess
   useEffect(() => {
     if (!menuOpen) return
 
@@ -50,7 +50,7 @@ export const PostMenuActions = ({ postOwnerId, postId, userId, description, clas
 
       {menuOpen && (
         <>
-          {meData?.id === postOwnerId ?
+          {isAuth && meData?.id === postOwnerId ?
             <div className={s.menu}>
               <button className={s.menuItem} onClick={() => setEditOpen(true)}>
                 <IconEdit2 width={16} height={16} />

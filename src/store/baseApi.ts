@@ -5,5 +5,5 @@ export const baseApi = createApi({
   reducerPath: 'Ulens',
   baseQuery: baseQueryWithReauth,
   endpoints: () => ({}),
-  tagTypes: ['Auth', 'User', 'getPostsByUsedId', 'getProfileByUsedId'],
+  tagTypes: ['Auth', 'GetPostsByUsedId', 'GetProfileByUsedId'],
 })

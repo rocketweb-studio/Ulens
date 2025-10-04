@@ -15,16 +15,16 @@ type Props = {
 }
 
 export const ProfilePosts = ({ userId, dataPosts }: Props) => {
-  const { data: meData } = useGetMeQuery()
+  const { data: meData, isSuccess } = useGetMeQuery()
   const { data: postsData } = useGetPostsByUsedIdQuery({ userId })
-
+  const isAuth = !!meData?.id && isSuccess
   const postsDataForRender = postsData?.items || dataPosts?.items
 
   return (
     <div className={s.profilePosts}>
       {postsDataForRender?.map((post) => (
         <div key={post.id} id={post.id} className={s.postItem} style={{position: 'relative'}}>
-          {meData?.id && (
+          {isAuth && (
             <PostMenuActions
               postOwnerId={post.ownerId}
               postId={post.id}

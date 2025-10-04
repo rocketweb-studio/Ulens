@@ -18,8 +18,9 @@ type Props = {
 
 export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
 
-    const {data: meData} = useGetMeQuery()
+    const {data: meData, isSuccess} = useGetMeQuery()
     const {data: userData} = useGetProfileByUsedIdQuery({userId})
+    const isAuth = !!meData?.id && isSuccess
 
     const userDataForRender = dataUserInfo || userData
 
@@ -42,7 +43,7 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
             <div className={s.profileInfo}>
                 <div className={s.nameAndFollowRow}>
                     <h1>{userDataForRender?.userName}</h1>
-                        {userDataForRender?.id === meData?.id
+                        {isAuth && userDataForRender?.id === meData?.id
                             ? <Link href={Path.Settings('info')}><Button size={"medium"} variant={'secondary'} onClick={handleFollow}>Profile Settings</Button></Link>
                             : <FlexContainer gap={'15px'}>
                                 <Button size={"medium"} variant={'primary'} onClick={handleFollow}>Follow</Button>

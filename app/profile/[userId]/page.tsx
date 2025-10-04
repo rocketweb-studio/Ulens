@@ -4,6 +4,7 @@ import {GetPostByIdResponse, GetPostsByUserIdResponse} from "@/src/feature/Posts
 import {ProfileHeader} from "@/src/feature/userProfile/ui/ProfileHeader/ProfileHeader";
 import {ProfilePosts} from "@/src/feature/userProfile/ui/ProfilePosts/ProfilePosts";
 import {GetProfileByUserIdResponse} from "@/src/feature/userProfile/api/userProfile.types";
+import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
 
 export default async function UserPage({
   params,
@@ -39,7 +40,9 @@ export default async function UserPage({
 
   if (filters.postId) {
       try {
-        const responsePost = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/${filters.postId}`)
+        const responsePost = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/${filters.postId}`, {
+          next: { revalidate: 60 }
+        })
         if (responsePost.ok) {
           dataPostModal = await responsePost.json() as GetPostByIdResponse;
         }
