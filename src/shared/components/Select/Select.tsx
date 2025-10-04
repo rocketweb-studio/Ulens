@@ -37,8 +37,7 @@ export const Select = ({options,title, onSelect, placeholder = "Выбрать",
                 </button>
 
                 {isOpen && (
-
-                    <div className={s.options} onMouseLeave={() => setIsOpen(false)}>
+                    <div className={s.options}>
                         {options.map((option, index) => (
                             <div
                                 key={index}
