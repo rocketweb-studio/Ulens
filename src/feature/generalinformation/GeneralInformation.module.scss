@@ -1,0 +1,45 @@
+@use '@/src/shared/styles/typography' as typography;
+@use '@/src/shared/styles/colors' as colors;
+
+$primary-color: colors.color(accent, 500) !default;
+$secondary-color: colors.color(dark, 500) !default;
+
+.general{
+  display: flex;
+  flex-direction: row;
+  border: 1px solid red;
+}
+.addPhotoContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap:24px;
+  margin: 24px;
+  border: 1px solid red;
+
+}
+.photo{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  height: 192px;
+  width: 192px;
+  border-radius: 50%;
+  background-color: $secondary-color;
+}
+.btn{
+  color: $primary-color;
+  border:1px solid  $primary-color ;
+  background-color: inherit;
+  height: 35px;
+  width: 200px;
+}
+.inputsContainer{
+  width: 100%;
+}
+.selects{
+  display: flex;
+  gap:24px;
+}

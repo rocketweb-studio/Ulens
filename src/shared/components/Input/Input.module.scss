@@ -1,6 +1,7 @@
 @use '../../styles/colors' as colors;
 @use '../../styles/typography' as typography;
 
+
 .inputContainer {
   display: flex;
   flex-direction: column;
@@ -21,7 +22,13 @@
   font-weight: 400;
   color: colors.color(light, 900);
 }
-
+.required.label:after {
+  content: '*';
+ color: colors.color(danger, 500);
+}
+.textarea{
+  resize: none;
+}
 .input {
   padding: 6px 12px;
   border: 1px solid colors.color(light, 900);

@@ -249,15 +249,15 @@ export default function ViewPostModal({ userId, postId, dataPostModal, dataUserI
 
                     <Image width={24} height={24} src={'/savedPost.svg'} alt={'Saved'} />
                   </div>
-                  <Image width={24} height={24} src={'/sendPost.svg'} alt={'Saved'} />
+                  <Image width={24} height={24} src={'/sendPost.svg'} alt={'Send'} />
                 </div>
               )}
               <div className={s.postData}>
                 <div className={s.likesPostContainer}>
                   <div className={s.likeImagesContainer}>
-                    <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'Saved'} />
-                    <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'Saved'} />
-                    <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'Saved'} />
+                    <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
+                    <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
+                    <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
                   </div>
                   <span>{`${postsDataForRender?.likeCount || ''} "Like"`}</span>
                 </div>
