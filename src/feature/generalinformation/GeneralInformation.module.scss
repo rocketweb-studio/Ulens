@@ -2,12 +2,12 @@
 @use '@/src/shared/styles/colors' as colors;
 
 $primary-color: colors.color(accent, 500) !default;
+$border-color: colors.color(accent, 100) !default;
 $secondary-color: colors.color(dark, 500) !default;
 
 .general{
   display: flex;
   flex-direction: row;
-  border: 1px solid red;
 }
 .addPhotoContainer{
   display: flex;
@@ -16,8 +16,6 @@ $secondary-color: colors.color(dark, 500) !default;
   align-items: center;
   gap:24px;
   margin: 24px;
-  border: 1px solid red;
-
 }
 .photo{
   display: flex;
@@ -31,7 +29,7 @@ $secondary-color: colors.color(dark, 500) !default;
 }
 .btn{
   color: $primary-color;
-  border:1px solid  $primary-color ;
+  border:1px solid  $border-color ;
   background-color: inherit;
   height: 35px;
   width: 200px;
@@ -42,5 +40,7 @@ $secondary-color: colors.color(dark, 500) !default;
 
 .selects{
   display: flex;
+  flex-direction: row;
   gap:24px;
+  padding-bottom: 24px;
 }

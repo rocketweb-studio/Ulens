@@ -3,6 +3,8 @@ import {Button} from "@rocketweb-studio/ulens-ui-kit";
 import s from './GeneralInformation.module.scss'
 import { Input } from "@/src/shared/components/Input/Input";
 import {DatePicker} from "@/src/shared/components/DataPicker/DatePicker";
+import React from "react";
+import {Select} from "@/src/shared/components/Select/Select";
 
 export const GeneralInformation = () => {
 //todo пока не знаю откуда urlPhoto брать
@@ -30,11 +32,19 @@ export const GeneralInformation = () => {
                 <DatePicker  label={"Date of birth"} labelMobile={"Date of birthday"} dateString={"2023-11-25T15:30:00.000Z"}  onClick={()=>{}}/>
 
                 <div className={s.selects}>
-                    <Input type="text" label={"select"}/>
-                    <Input type="text" label={"select"}/>
+                        <Select
+                            options={['Belarus','Russia','USA','Germany']}
+                            onSelect={()=>{}}
+                            placeholder="Country"
+                            title={"Select your country"}
+                        />   <Select
+                            options={['Minsk','Moscow','New York','Saint-Peterburg','Berlin','Keln',"NoName"]}
+                            onSelect={()=>{}}
+                            placeholder="City"
+                            title={"Select your city"}
+                        />
                 </div>
                 <Input type="textarea" label={"About me"} rows={4}/>
-
             </div>
         </div>
     );

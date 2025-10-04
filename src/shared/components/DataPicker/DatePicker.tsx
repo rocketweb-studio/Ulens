@@ -36,7 +36,7 @@ export const DatePicker = ({dateString,labelMobile,label,onClick}:Props) => {
     return (
         <div className={s.dateContainer} onClick={onClick}>
             <span className={s.span}>{date}</span>
-            <Input type={"text"}  label={isMobile?labelMobile:label}/>
+            <Input type={"text"} value={""}  label={isMobile && labelMobile ? labelMobile : label}/>
                 <div className={s.calendar}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
