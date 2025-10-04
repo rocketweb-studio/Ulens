@@ -59,12 +59,6 @@ function SidebarContent() {
     { icon: IconSearch, title: 'Search', href: Path.InDevelopment },
     { icon: IconTrendingUpOutline, title: 'Statistics', href: Path.InDevelopment },
     { icon: IconBookmarkOutline, title: 'Favorites', href: Path.InDevelopment },
-    // {
-    //   icon: pathname === Path.Logout ? IconLogOut : IconLogOutOutline,
-    //   title: 'Log Out',
-    //   href: Path.Logout,
-    //   isActive: pathname === Path.Logout,
-    // },
   ]
 
   return (
