@@ -10,7 +10,6 @@ import {
   IconBookmarkOutline,
   IconHome,
   IconHomeOutline,
-  IconLogOut,
   IconLogOutOutline,
   IconMessageCircleOutline,
   IconPerson,

@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { baseApi } from '@/src/store/baseApi'
 import s from './confirmLogout.module.scss'
 import { Path } from '@/src/shared/constants/Path'
+import { AppLoader } from '@/src/shared/components/AppLoader/AppLoader'
 
 type Props = {
   isOpen: boolean
@@ -17,7 +18,7 @@ type Props = {
 
 export const ConfirmLogout = ({ isOpen, onClose, email }: Props) => {
   const router = useRouter()
-  const [logout] = useLogoutMutation()
+  const [logout, { isLoading }] = useLogoutMutation()
   const dispatch = useDispatch()
 
   const handleYes = async () => {
@@ -30,12 +31,17 @@ export const ConfirmLogout = ({ isOpen, onClose, email }: Props) => {
       onClose()
       router.push(Path.SignIn)
     } catch (e) {
+      console.error(e)
       toast.error('Something went wrong during Logout')
     }
   }
 
   const handleNo = () => {
     onClose()
+  }
+
+  if (isLoading) {
+    return <AppLoader />
   }
 
   return (
