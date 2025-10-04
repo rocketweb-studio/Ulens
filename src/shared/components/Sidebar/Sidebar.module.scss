@@ -53,5 +53,16 @@
   margin-right: 12px;
   display: inline-block;
   vertical-align: -5px;
+}
 
+.logoutBtn {
+  @extend .link;
+  border: none;
+  background: transparent;
+  text-align: left;
+  width: 100%;
+
+  &:hover {
+    color: colors.color(accent, 500);
+  }
 }

@@ -8,8 +8,6 @@ import { useDispatch } from 'react-redux'
 import { baseApi } from '@/src/store/baseApi'
 import s from './confirmLogout.module.scss'
 import { Path } from '@/src/shared/constants/Path'
-import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
-import React from "react";
 
 type Props = {
   isOpen: boolean
@@ -19,7 +17,7 @@ type Props = {
 
 export const ConfirmLogout = ({ isOpen, onClose, email }: Props) => {
   const router = useRouter()
-  const [logout, {isLoading}] = useLogoutMutation()
+  const [logout] = useLogoutMutation()
   const dispatch = useDispatch()
 
   const handleYes = async () => {
@@ -37,12 +35,7 @@ export const ConfirmLogout = ({ isOpen, onClose, email }: Props) => {
   }
 
   const handleNo = () => {
-    toast.error(`User with this email doesn't exist`)
     onClose()
-  }
-
-  if( isLoading ) {
-    return <AppLoader />
   }
 
   return (

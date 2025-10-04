@@ -20,12 +20,14 @@ import {
   IconSearch,
   IconTrendingUpOutline,
 } from '@rocketweb-studio/ulens-ui-kit'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
+import { ConfirmLogout } from '@/src/feature/auth/ui/Logout/ConfirmLogout'
 
 function SidebarContent() {
-  const { data, isSuccess  } = useGetMeQuery()
+  const { data, isSuccess } = useGetMeQuery()
   const pathname = usePathname()
   const params = useSearchParams()
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   if (!isSuccess) {
     return null
@@ -57,12 +59,12 @@ function SidebarContent() {
     { icon: IconSearch, title: 'Search', href: Path.InDevelopment },
     { icon: IconTrendingUpOutline, title: 'Statistics', href: Path.InDevelopment },
     { icon: IconBookmarkOutline, title: 'Favorites', href: Path.InDevelopment },
-    {
-      icon: pathname === Path.Logout ? IconLogOut : IconLogOutOutline,
-      title: 'Log Out',
-      href: Path.Logout,
-      isActive: pathname === Path.Logout,
-    },
+    // {
+    //   icon: pathname === Path.Logout ? IconLogOut : IconLogOutOutline,
+    //   title: 'Log Out',
+    //   href: Path.Logout,
+    //   isActive: pathname === Path.Logout,
+    // },
   ]
 
   return (
@@ -75,6 +77,13 @@ function SidebarContent() {
           </Link>
         </FlexContainer>
       ))}
+      <FlexContainer className={s.linkWrapper} gap={'13px'}>
+        <button onClick={() => setIsModalOpen(!isModalOpen)} className={s.logoutBtn}>
+          <IconLogOutOutline className={s.icon} />
+          Log Out
+        </button>
+      </FlexContainer>
+      <ConfirmLogout isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={data?.email ?? ''} />
     </div>
   )
 }
