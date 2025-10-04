@@ -9,7 +9,7 @@ export const postsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getPostsByUsedId: build.query<GetPostsByUserIdResponse, { userId: string }>({
       query: ({ userId }) => `posts/user/${userId}`,
-      providesTags: ['getPostsByUsedId'],
+      providesTags: ['GetPostsByUsedId'],
     }),
     getPostById: build.query<GetPostByIdResponse, { postId: string }>({
       query: ({ postId }) => `posts/${postId}`,
@@ -28,7 +28,7 @@ export const postsApi = baseApi.injectEndpoints({
         url: `posts/${postId}`,
         body,
       }),
-      invalidatesTags: ['getPostsByUsedId'],
+      invalidatesTags: ['GetPostsByUsedId'],
     }),
 
     deletePost: build.mutation<void, { postId: string; userId: string }>({
@@ -68,7 +68,7 @@ export const postsApi = baseApi.injectEndpoints({
           body: formData,
         }
       },
-      invalidatesTags: ['getPostsByUsedId'],
+      invalidatesTags: ['GetPostsByUsedId'],
     }),
   }),
 })

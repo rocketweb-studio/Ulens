@@ -9,10 +9,10 @@ const allowedParts = ['info', 'devices', 'subscriptions', 'payments']
 
 export default function SettingsPage() {
   const params = useSearchParams()
-  const {data: meData} = useGetMeQuery()
+  const {isError} = useGetMeQuery()
   const part = params.get('part')
 
-  if (!meData) {
+  if (isError) {
     redirect(Path.SignIn)
   }
 

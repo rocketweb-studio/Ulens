@@ -5,10 +5,8 @@ import { FlexContainer } from '@/src/shared/components/FlexContainer'
 
 export default function SingUpPage() {
   return (
-    <div>
-      <FlexContainer justify={'center'} align={'center'} style={{ minHeight: '100VH' }}>
-        <SignUp />
+      <FlexContainer justify={'center'} align={'center'} style={{ minHeight: 'calc(100vh - 60px)' }}>
+          <SignUp />
       </FlexContainer>
-    </div>
   )
 }

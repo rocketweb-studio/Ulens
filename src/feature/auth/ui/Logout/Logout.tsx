@@ -1,47 +1,55 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { ConfirmLogout } from '@/src/feature/auth/ui/Logout/ConfirmLogout'
-import styles from '@/src/feature/auth/ui/SignIn/SignIn.module.scss'
-import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
-import { useRouter } from 'next/navigation'
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
-import { SerializedError } from '@reduxjs/toolkit'
-import { Path } from '@/src/shared/constants/Path'
+import {useLogoutMutation} from '@/src/feature/auth/api/authApi'
+import {useRouter} from 'next/navigation'
+import {Path} from '@/src/shared/constants/Path'
+import {useAppDispatch} from "@/src/shared/hooks/useAppDispatch";
+import {baseApi} from "@/src/store/baseApi";
+import {toast} from "react-toastify";
+import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
+import {Modal} from "@/src/shared/components/Modal/Modal";
+import s from "@/src/feature/auth/ui/Logout/confirmLogout.module.scss";
 
-export const Logout = () => {
-  const [isModalOpen, setIsModalOpen] = useState(true)
-  const { data, isLoading, isError, error } = useGetMeQuery()
-  const email = data?.email ?? ''
+type Props = {
+  isOpen: boolean
+  onClose: () => void
+  email: string
+}
+
+export const Logout = ({ isOpen, onClose, email }: Props) => {
   const router = useRouter()
+  const [logout, {isLoading, isSuccess}] = useLogoutMutation()
 
-  const handleServerError = (error: FetchBaseQueryError | SerializedError | undefined) => {
-    if (!error) return
+  const dispatch = useAppDispatch()
 
-    if ('status' in error) {
-      if (error.status === 401) {
-        router.push(Path.SignIn)
-      }
+  const handleYes = async () => {
+    try {
+      await logout().unwrap()
+      dispatch(baseApi.util.resetApiState())
+      router.push(Path.SignIn)
+    } catch (e) {
+      toast.error('Something went wrong during Logout')
+    } finally {
+      onClose()
     }
-  }
-
-  useEffect(() => {
-    if (isError) {
-      handleServerError(error)
-    }
-  }, [isError, error])
-
-  if (isLoading) {
-    return (
-      <button disabled className={styles.submitBtn}>
-        Loading...
-      </button>
-    )
   }
 
   return (
     <>
-      <ConfirmLogout isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={email} />
+      {(isLoading || isSuccess) && <AppLoader />}
+      <Modal isOpen={isOpen} onClose={() => onClose()} modalTitle='Log Out' hideDefaultButton>
+        <p>
+          Are you really want to log out of your account <b>{email}</b>?
+        </p>
+        <div className={s.button}>
+          <button className={s.yesBtn} onClick={handleYes}>
+            Yes
+          </button>
+          <button className={s.noBtn} onClick={() => onClose()}>
+            No
+          </button>
+        </div>
+      </Modal>
     </>
   )
 }

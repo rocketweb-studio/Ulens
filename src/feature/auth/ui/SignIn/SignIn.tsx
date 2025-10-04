@@ -17,12 +17,13 @@ import {redirect} from "next/navigation";
 import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
 
 export const SignIn = () => {
+  const {data: meData, isSuccess} = useGetMeQuery()
+  const [login, {isLoading, isSuccess: isSuccessLogin}] = useLoginMutation()
+  const isAuth = !!meData?.id && isSuccess
 
-  const {data: meData, isLoading} = useGetMeQuery()
-  const { showSuccess } = useToast()
-  const [login] = useLoginMutation()
+  //const { showSuccess } = useToast()
 
-  if (!!meData) {
+  if (isAuth) {
     redirect(Path.UserProfile(meData.id))
   }
 
@@ -42,57 +43,60 @@ export const SignIn = () => {
   const onSubmit: SubmitHandler<LoginRequestParams> = async (data) => {
     try {
       const res = await login(data).unwrap()
-      localStorage.setItem('accessToken', res.accessToken)
-      showSuccess('Success login')
       reset()
+      localStorage.setItem('accessToken', res.accessToken)
+      //showSuccess('Success login')
     } catch (error) {}
   }
 
   return (
-    !!meData ? <h2>ТУТ БУДЕТ APP LOADER</h2> :
-    <article className={styles.authWrapper}>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.authForm}>
-        <h2 className={styles.authForm__title}>Sign In</h2>
-        <div className={styles.oAuth}>
-          <a href='https://ulens.org/api/v1/auth/google-login'>
-            <Image src={googleSvg} alt={'Google'} />
-          </a>
-          <a href='https://ulens.org/api/v1/auth/github-login'>
-            <Image src={gitHubSvg} alt={'GitHub'} />
-          </a>
-        </div>
+      <>
+        {(isLoading || isSuccessLogin || isSuccess) ? <AppLoader /> :
+        <article className={styles.authWrapper}>
+          <form onSubmit={handleSubmit(onSubmit)} className={styles.authForm}>
+            <h2 className={styles.authForm__title}>Sign In</h2>
+            <div className={styles.oAuth}>
+              <a href='https://ulens.org/api/v1/auth/google-login'>
+                <Image src={googleSvg} alt={'Google'} />
+              </a>
+              <a href='https://ulens.org/api/v1/auth/github-login'>
+                <Image src={gitHubSvg} alt={'GitHub'} />
+              </a>
+            </div>
 
-        <div className={styles.inputContainer}>
-          <Input
-            register={register}
-            name={'email'}
-            error={errors.email?.message}
-            placeholder={'Ulens@ulens.com'}
-            label={'Email'}
-          />
+            <div className={styles.inputContainer}>
+              <Input
+                  register={register}
+                  name={'email'}
+                  error={errors.email?.message}
+                  placeholder={'Ulens@ulens.com'}
+                  label={'Email'}
+              />
 
-          <Input
-            register={register}
-            name={'password'}
-            error={errors.password?.message}
-            label={'Password'}
-            type={'password'}
-            showPasswordToggle
-          />
-          <Link href={Path.PasswordRecovery} className={styles.forgotPassword}>
-            Forgot Password
-          </Link>
-        </div>
-        <Button disabled={isLoading} variant={'primary'} fullWidth className={styles.submitBtn}>
-          Sign In
-        </Button>
+              <Input
+                  register={register}
+                  name={'password'}
+                  error={errors.password?.message}
+                  label={'Password'}
+                  type={'password'}
+                  showPasswordToggle
+              />
+              <Link href={Path.PasswordRecovery} className={styles.forgotPassword}>
+                Forgot Password
+              </Link>
+            </div>
+            <Button disabled={isLoading} variant={'primary'} fullWidth className={styles.submitBtn}>
+              Sign In
+            </Button>
 
-        <span>Don’t have an account?</span>
-        <Link className={styles.signUpLink} href={Path.SignUp}>
-          Sign Up
-        </Link>
-      </form>
-    </article>
+            <span>Don’t have an account?</span>
+            <Link className={styles.signUpLink} href={Path.SignUp}>
+              Sign Up
+            </Link>
+          </form>
+        </article>
+        }
+      </>
   )
 }
 
