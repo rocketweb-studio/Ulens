@@ -38,37 +38,39 @@ export const PublicPage = ({data}: Props) => {
         <div key={post.id} className={s.postWrapper}>
 
           {post.images && (
-            <Link href={Path.ViewPost(post.ownerId, post.id)} key={post.id}>
-              <div className={s.swiperWrapper}>
 
-                <CustomSwiper
-                  slides={post.images.medium.map((image, index) => ({
-                    id: index,
-                    content: (
-                      <div className={s.slideImageWrapper}>
+            <div className={s.swiperWrapper}>
+
+              <CustomSwiper
+                slides={post.images.medium.map((image, index) => ({
+                  id: index,
+                  content: (
+                    <div className={s.slideImageWrapper}>
+                      <Link href={Path.ViewPost(post.ownerId, post.id)} key={post.id}>
                         <Image
                           src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
                           alt={''}
                           width={image.width}
                           height={image.height}
                         />
-                      </div>
-                    ),
-                  }))}
-                  className={s.customSwiper}
-                  allowTouchMove={false}
-                  swiperProps={{
-                    spaceBetween: 0,
-                    slidesPerView: 1,
-                    initialSlide: 0,
-                    noSwiping: true,
-                    noSwipingClass: 'swiper-slide',
-                    preventInteractionOnTransition: true,
-                  }}
-                />
+                      </Link>
+                    </div>
+                  ),
+                }))}
+                className={s.customSwiper}
+                allowTouchMove={false}
+                swiperProps={{
+                  spaceBetween: 0,
+                  slidesPerView: 1,
+                  initialSlide: 0,
+                  noSwiping: true,
+                  noSwipingClass: 'swiper-slide',
+                  preventInteractionOnTransition: true,
+                }}
+              />
 
-              </div>
-            </Link>
+            </div>
+
           )}
           <div className={s.ownerWrapper}>
 
