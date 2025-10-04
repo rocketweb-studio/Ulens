@@ -1,0 +1,19 @@
+.dateContainer {
+position: relative;
+}
+.span {
+position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 12px;
+  z-index: 4;
+}
+
+.calendar {
+position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 12px;
+  z-index: 4;
+
+}

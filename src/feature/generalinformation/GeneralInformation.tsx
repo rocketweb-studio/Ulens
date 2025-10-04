@@ -1,6 +1,8 @@
+'use client'
 import {Button} from "@rocketweb-studio/ulens-ui-kit";
 import s from './GeneralInformation.module.scss'
 import { Input } from "@/src/shared/components/Input/Input";
+import {DatePicker} from "@/src/shared/components/DataPicker/DatePicker";
 
 export const GeneralInformation = () => {
 //todo пока не знаю откуда urlPhoto брать
@@ -27,7 +29,8 @@ export const GeneralInformation = () => {
                 <Input type="text" label={"Username"} required  />
                 <Input type="text" label={"First Name"} required />
                 <Input type="text" label={"Last Name"} required />
-                <Input type="date" label={"Date of birth"} className={s.date}/>
+                <DatePicker label={"Date of birth"} dateString={"2023-11-25T15:30:00.000Z"} onClick={()=>{}}/>
+
                 <div className={s.selects}>
                     <Input type="text" label={"select"}/>
                     <Input type="text" label={"select"}/>
