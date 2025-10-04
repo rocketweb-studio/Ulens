@@ -37,13 +37,12 @@ export const Select = ({options,title, onSelect, placeholder = "Выбрать",
                 </button>
 
                 {isOpen && (
-                    <div className={s.options}>
+                    <div className={s.options} onMouseLeave={() => setIsOpen(false)}>
                         {options.map((option, index) => (
                             <div
                                 key={index}
                                 className={s.option}
                                 onClick={() => handleSelect(option)}
-                                onMouseLeave={() => setIsOpen(false)}
                             >
                                 {option}
                             </div>
