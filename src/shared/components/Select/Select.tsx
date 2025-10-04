@@ -43,6 +43,7 @@ export const Select = ({options,title, onSelect, placeholder = "Выбрать",
                                 key={index}
                                 className={s.option}
                                 onClick={() => handleSelect(option)}
+                                onMouseLeave={() => setIsOpen(false)}
                             >
                                 {option}
                             </div>
