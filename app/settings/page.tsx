@@ -4,6 +4,7 @@ import {redirect, useSearchParams} from 'next/navigation'
 import {Path} from "@/src/shared/constants/Path";
 import {Tabs} from "@/src/shared/components/Tabs";
 import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
+import {GeneralInformation} from "@/src/feature/generalinformation/GeneralInformation";
 
 const allowedParts = ['info', 'devices', 'subscriptions', 'payments']
 
@@ -23,7 +24,7 @@ export default function SettingsPage() {
   return (
     <div>
       <Tabs/>
-      {part === 'info' && <p>Текущий раздел: {part}</p>}
+      {part === 'info' && <GeneralInformation/>}
       {part === 'devices' && <p>Текущий раздел: {part}</p>}
       {part === 'subscriptions' && <p>Текущий раздел: {part}</p>}
       {part === 'payments' && <p>Текущий раздел: {part}</p>}

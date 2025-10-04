@@ -1,3 +1,5 @@
+import {UserProfile} from "@/src/feature/userProfile/model/schemas";
+
 export type GetProfileByUserIdResponse = {
   userName: string,
   id: string,
@@ -21,3 +23,7 @@ export type GetProfileByUserIdResponse = {
   followers: number,
   following: number
 }
+
+export type UserProfileResponse = UserProfile & {
+  id: string;
+};
