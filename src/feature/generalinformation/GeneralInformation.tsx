@@ -7,8 +7,6 @@ import {DatePicker} from "@/src/shared/components/DataPicker/DatePicker";
 export const GeneralInformation = () => {
 //todo пока не знаю откуда urlPhoto брать
    const urlPhoto='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgVfHORQFLyUf_rNove-xUmxIskDeMJ63REz_YIMQ6S0vCyQdkBvJos4igKspvCgpqnpy8h0xM--1uckzZIxDgyoHy37-MowkF-YzvVx8'
-
-
     return (
         <div className={s.general}>
             <div className={s.addPhotoContainer}>
@@ -29,7 +27,7 @@ export const GeneralInformation = () => {
                 <Input type="text" label={"Username"} required  />
                 <Input type="text" label={"First Name"} required />
                 <Input type="text" label={"Last Name"} required />
-                <DatePicker label={"Date of birth"} dateString={"2023-11-25T15:30:00.000Z"} onClick={()=>{}}/>
+                <DatePicker  label={"Date of birth"} labelMobile={"Date of birthday"} dateString={"2023-11-25T15:30:00.000Z"}  onClick={()=>{}}/>
 
                 <div className={s.selects}>
                     <Input type="text" label={"select"}/>
