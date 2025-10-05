@@ -77,7 +77,6 @@ function SidebarContent() {
           Log Out
         </button>
       </FlexContainer>
-      {/*<ConfirmLogout isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={data?.email ?? ''} />*/}
       {isModalOpen && <Logout isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={data?.email ?? ''}/>}
     </div>
   )

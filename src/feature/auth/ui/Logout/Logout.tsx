@@ -6,9 +6,9 @@ import {Path} from '@/src/shared/constants/Path'
 import {useAppDispatch} from "@/src/shared/hooks/useAppDispatch";
 import {baseApi} from "@/src/store/baseApi";
 import {toast} from "react-toastify";
-import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
 import {Modal} from "@/src/shared/components/Modal/Modal";
 import s from "@/src/feature/auth/ui/Logout/confirmLogout.module.scss";
+import {setLoaderStatus} from "@/src/store/app-slice";
 
 type Props = {
   isOpen: boolean
@@ -18,12 +18,13 @@ type Props = {
 
 export const Logout = ({ isOpen, onClose, email }: Props) => {
   const router = useRouter()
-  const [logout, {isLoading, isSuccess}] = useLogoutMutation()
+  const [logout] = useLogoutMutation()
 
   const dispatch = useAppDispatch()
 
   const handleYes = async () => {
     try {
+      dispatch(setLoaderStatus({ status: 'loading' }))
       await logout().unwrap()
       dispatch(baseApi.util.resetApiState())
       router.push(Path.SignIn)
@@ -36,7 +37,6 @@ export const Logout = ({ isOpen, onClose, email }: Props) => {
 
   return (
     <>
-      {(isLoading || isSuccess) && <AppLoader />}
       <Modal isOpen={isOpen} onClose={() => onClose()} modalTitle='Log Out' hideDefaultButton>
         <p>
           Are you really want to log out of your account <b>{email}</b>?
