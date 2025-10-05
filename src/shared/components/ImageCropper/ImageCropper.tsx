@@ -17,7 +17,9 @@ const Cropper = dynamic(() => import('react-easy-crop').then((mod) => mod.defaul
 type Props = {
   image: string
   initialAspectRatio?: AspectRatio
+  initialZoom?: number
   onCropAreaChange?: (areaPixels: Area) => void
+  onZoomChange?: (zoom: number) => void
   isActiveSlide?: boolean
   onAspectRatioChange?: (aspectRatio: AspectRatio) => void
 }
@@ -35,60 +37,18 @@ export const ASPECT_RATIO_MAP: Record<AspectRatio, number> = {
 export const ImageCropper = ({
   image,
   initialAspectRatio = 'original',
+  initialZoom = 1,
   onCropAreaChange,
+  onZoomChange,
   isActiveSlide = true,
   onAspectRatioChange,
 }: Props) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [zoom, setZoom] = useState(1)
+  const [zoom, setZoom] = useState(initialZoom)
   const [rotation, setRotation] = useState(0)
   const [currentAspectRatio, setCurrentAspectRatio] = useState<AspectRatio>(initialAspectRatio)
   const [activeMenu, setActiveMenu] = useState<MenuName>(null)
   const [imageSize, setImageSize] = useState<{ width: number; height: number }>({ width: 0, height: 0 })
-
-  const onCropChange = (crop: { x: number; y: number }) => {
-    if (!isActiveSlide) return
-    setCrop(crop)
-  }
-
-  const onZoomChange = (zoom: number) => {
-    setZoom(zoom)
-  }
-
-  const onCropAreaComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
-    if (!isActiveSlide || croppedAreaPixels.width <= 0 || croppedAreaPixels.height <= 0) {
-      return
-    }
-
-    if (onCropAreaChange) {
-      onCropAreaChange(croppedAreaPixels)
-    }
-  }
-
-  const handleAspectRatioChange = (ratio: AspectRatio) => {
-    if (!isActiveSlide) return
-
-    setCurrentAspectRatio(ratio)
-    setActiveMenu(null)
-
-    if (onAspectRatioChange) {
-      onAspectRatioChange(ratio)
-    }
-  }
-
-  if (!isActiveSlide) {
-    return (
-      <div className={s.imagePreview}>
-        <ImageNext src={image} alt='Preview' style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-      </div>
-    )
-  }
-
-  useEffect(() => {
-    if (!isActiveSlide) {
-      setActiveMenu(null)
-    }
-  }, [isActiveSlide])
 
   useEffect(() => {
     if (!image || !isActiveSlide) return
@@ -108,17 +68,13 @@ export const ImageCropper = ({
         if (onCropAreaChange) {
           onCropAreaChange(defaultCropArea)
         }
-
-        setCrop({ x: 0, y: 0 })
-        setZoom(1)
-        setRotation(0)
       } catch (error) {
         console.error('Error initializing image:', error)
       }
     }
 
     initializeImage()
-  }, [image, isActiveSlide, onCropAreaChange])
+  }, [image, isActiveSlide])
 
   useEffect(() => {
     if (!isActiveSlide || !imageSize.width || !imageSize.height) return
@@ -150,9 +106,48 @@ export const ImageCropper = ({
     if (onCropAreaChange) {
       onCropAreaChange(croppedAreaPixels)
     }
-  }, [currentAspectRatio, imageSize, isActiveSlide, onCropAreaChange])
+  }, [currentAspectRatio, imageSize, isActiveSlide])
 
-  console.log(zoom)
+  const onCropChange = (crop: { x: number; y: number }) => {
+    if (!isActiveSlide) return
+    setCrop(crop)
+  }
+
+  const onZoomChangeInternal = (newZoom: number) => {
+    setZoom(newZoom)
+    if (onZoomChange) {
+      onZoomChange(newZoom)
+    }
+  }
+
+  const onCropAreaComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
+    if (!isActiveSlide || croppedAreaPixels.width <= 0 || croppedAreaPixels.height <= 0) {
+      return
+    }
+
+    if (onCropAreaChange) {
+      onCropAreaChange(croppedAreaPixels)
+    }
+  }
+
+  const handleAspectRatioChange = (ratio: AspectRatio) => {
+    if (!isActiveSlide) return
+
+    setCurrentAspectRatio(ratio)
+    setActiveMenu(null)
+
+    if (onAspectRatioChange) {
+      onAspectRatioChange(ratio)
+    }
+  }
+
+  if (!isActiveSlide) {
+    return (
+      <div className={s.imagePreview}>
+        <ImageNext src={image} alt='Preview' style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+      </div>
+    )
+  }
 
   return (
     <div className={s.cropper}>
@@ -169,7 +164,7 @@ export const ImageCropper = ({
             : ASPECT_RATIO_MAP[currentAspectRatio]
           }
           onCropChange={onCropChange}
-          onZoomChange={onZoomChange}
+          onZoomChange={onZoomChangeInternal}
           onCropComplete={onCropAreaComplete}
           classes={{
             containerClassName: s.cropContainer,
@@ -224,7 +219,7 @@ export const ImageCropper = ({
                       step='0.1'
                       value={zoom}
                       onChange={(e) => {
-                        onZoomChange(Number(e.target.value))
+                        onZoomChangeInternal(Number(e.target.value))
                       }}
                       className={s.slider}
                     />

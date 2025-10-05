@@ -12,6 +12,7 @@ export type UploadedFile = {
   croppedImage?: string
   filteredImage?: FilteredImage
   filter?: string
+  zoom?: number
 }
 
 export type FilteredImage = {
