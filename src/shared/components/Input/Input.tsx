@@ -14,7 +14,7 @@ type Props<T extends FieldValues = RegistrationInputs> = {
   id?: string
   value?: string
   checked?: boolean
-  onChange?: (e: ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => void
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void
   placeholder?: string
   label?: string | ReactNode
   error?: string
@@ -23,7 +23,6 @@ type Props<T extends FieldValues = RegistrationInputs> = {
   register?: UseFormRegister<T>
   showPasswordToggle?: boolean
   required?: boolean
-  rows?:number
 }
 
 export const Input = <T extends FieldValues = RegistrationInputs>({
@@ -40,7 +39,6 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
   className = '',
   register,
   required,
-  rows,
   showPasswordToggle = false,
 }: Props<T>) => {
   const [showPassword, setShowPassword] = useState(false)
@@ -96,27 +94,6 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
       </div>
     )
   }
- if(type==="textarea"){ return (
-      <div className={`${styles.inputContainer} ${className}`}>
-        {label && (
-            <label htmlFor={id} className={`${styles.label} ${required?styles.required:""}`}>
-              {label}
-            </label>
-        )}
-        <div className={styles.inputWrapper}>
-          <textarea
-              value={value}
-              onChange={onChange}
-              rows={rows||2}
-              placeholder={placeholder}
-              disabled={disabled}
-              className={`${styles.input} ${styles.textarea} ${error ? styles.errorInput : ''}`}
-              id={id}
-          />
-        </div>
-
-      </div>
-  )}
   return (
     <div className={`${styles.inputContainer} ${className}`}>
       {label && (

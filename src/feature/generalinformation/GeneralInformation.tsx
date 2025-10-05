@@ -1,6 +1,6 @@
 'use client'
 
-import {Button} from "@rocketweb-studio/ulens-ui-kit";
+
 import s from './GeneralInformation.module.scss'
 import {Input} from "@/src/shared/components/Input/Input";
 import {DatePicker} from "@/src/shared/components/DataPicker/DatePicker";
@@ -10,6 +10,8 @@ import {useGetProfileByUsedIdQuery, useUpdateProfileMutation} from "@/src/featur
 import React from "react";
 import {Select} from "@/src/shared/components/Select/Select";
 import {UserProfile, profileSchema} from "@/src/feature/userProfile/model/schemas";
+import { Button } from '@/src/shared/components/Button/Button';
+import {TextArea} from "@/src/shared/components/TextArea/TextArea";
 
 
 export const GeneralInformation = () => {
@@ -69,14 +71,14 @@ export const GeneralInformation = () => {
             </svg>
           }
         </div>
-        <Button onClick={TestHandler} variant={'outlined'} title={'Select Profile Photo'} className={s.btn}/>
+        <Button variant={'outline'} className={s.btn}>Select Profile Photo</Button>
       </div>
-      <div className={s.inputsContainer}>
+      <form className={s.inputsContainer}>
 
                 <Input type="text" label={"Username"} required  />
                 <Input type="text" label={"First Name"} required />
                 <Input type="text" label={"Last Name"} required />
-                <DatePicker  label={"Date of birth"} labelMobile={"Date of birthday"} dateString={"2023-11-25T15:30:00.000Z"}  onClick={()=>{}}/>
+                <DatePicker label={"Date of birth"} labelMobile={"Date of birthday"} dateString={"2023-11-25T15:30:00.000Z"}  onClick={()=>{}}/>
 
                 <div className={s.selects}>
                         <Select
@@ -91,8 +93,10 @@ export const GeneralInformation = () => {
                             title={"Select your city"}
                         />
                 </div>
-                <Input type="textarea" label={"About me"} rows={4}/>
-            </div>
+                {/*<Input type="textarea" label={"About me"} rows={4}/>*/}
+                <TextArea label={"About me"} rows={4} />
+                <Button onClick={TestHandler} variant={'primary'} >Save Changes</Button>
+            </form>
         </div>
     );
 };
