@@ -1,9 +1,11 @@
 'use client'
 
+import {Tabs} from "@/src/shared/components/Tabs";
+import {GeneralInformation} from "@/src/feature/generalinformation/GeneralInformation";
 import { redirect, useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import { Path } from '@/src/shared/constants/Path'
-import { Tabs } from '@/src/shared/components/Tabs'
+
 import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
 
 const allowedParts = ['info', 'devices', 'subscriptions', 'payments']
@@ -32,8 +34,8 @@ function SettingsPageContent() {
 
   return (
     <div>
-      <Tabs />
-      {part === 'info' && <p>Текущий раздел: {part}</p>}
+      <Tabs/>
+      {part === 'info' && <GeneralInformation/>}
       {part === 'devices' && <p>Текущий раздел: {part}</p>}
       {part === 'subscriptions' && <p>Текущий раздел: {part}</p>}
       {part === 'payments' && <p>Текущий раздел: {part}</p>}
