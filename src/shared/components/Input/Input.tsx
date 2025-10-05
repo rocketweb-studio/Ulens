@@ -14,7 +14,7 @@ type Props<T extends FieldValues = RegistrationInputs> = {
   id?: string
   value?: string
   checked?: boolean
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void
+  onChange?: (e: ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => void
   placeholder?: string
   label?: string | ReactNode
   error?: string
@@ -106,6 +106,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
         <div className={styles.inputWrapper}>
           <textarea
               value={value}
+              onChange={onChange}
               rows={rows||2}
               placeholder={placeholder}
               disabled={disabled}
