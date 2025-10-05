@@ -10,11 +10,9 @@ import {Button} from '@/src/shared/components/Button/Button'
 import {loginSchema} from '@/src/feature/auth/lib/schemas/loginSchema'
 import styles from './SignIn.module.scss'
 import {LoginRequestParams} from '@/src/feature/auth/api/authApi.types'
-import {useToast} from '@/src/shared/hooks/useToast'
 import {Path} from "@/src/shared/constants/Path";
 import Link from "next/link";
 import {redirect} from "next/navigation";
-import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
 import {useAppDispatch} from "@/src/shared/hooks/useAppDispatch";
 import {setLoaderStatus} from "@/src/store/app-slice";
 import {useEffect} from "react";

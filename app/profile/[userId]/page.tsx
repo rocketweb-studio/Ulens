@@ -10,7 +10,7 @@ export default async function UserPage({
   searchParams,
 }: {
   params: Promise<{ userId: string }>
-  searchParams: Promise<{ [key: string]: string | undefined }>
+  searchParams: Promise<{ [_key: string]: string | undefined }>
 }) {
   const { userId } = await params
   const filters = await searchParams
