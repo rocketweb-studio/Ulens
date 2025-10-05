@@ -1,0 +1,79 @@
+@use '@/src/shared/styles/colors' as colors;
+
+.container {
+  position: relative;
+  display: inline-block;
+  z-index: 9;
+  color:#fff;
+}
+
+.dotsButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: auto;
+  height: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+
+  span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: colors.color(light, 100);
+    display: block;
+    transition: background-color 0.3s ease;
+  }
+
+  &:hover span {
+    background-color: colors.color(accent, 300);
+  }
+}
+
+.menu {
+  position: absolute;
+  top: 24px;
+  right: 0;
+  background: colors.color(dark, 900);
+  color: colors.color(light, 100);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  min-width: 150px;
+  z-index: 20;
+  padding: 4px 0;
+  opacity: 0;
+  transform: translateX(-5px);
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 14px;
+
+  &:hover {
+    background: colors.color(dark, 500);
+  }
+}

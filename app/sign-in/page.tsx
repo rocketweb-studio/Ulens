@@ -1,4 +1,4 @@
-import { SignIn } from '@/src/features/auth/ui/SignIn'
+import { SignIn } from '@/src/features/auth/signIn/ui/SignIn'
 
 export default function SignInPage() {
   return (

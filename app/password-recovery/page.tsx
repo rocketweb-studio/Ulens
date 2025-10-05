@@ -1,4 +1,4 @@
-import { PasswordRecovery } from '@/src/features/auth/ui/PasswordRecovery'
+import { PasswordRecovery } from '@/src/features/auth/passwordRecovery'
 
 export default function PasswordRecoveryPage() {
   return (

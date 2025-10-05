@@ -1,4 +1,4 @@
-import {Path} from "@/src/shared/constants/Path";
+import { Path } from '@/src/shared/router/Path'
 
 export const getTabsSettings = (params: URLSearchParams) => {
   return [

@@ -1,0 +1,16 @@
+@use '../../shared/styles/colors';
+@use '../../shared/styles/typography' as typography;
+
+.header {
+  padding: 12px 60px;
+  height: 60px;
+  border-bottom: 1px solid colors.color(dark, 300);
+
+  //display: flex;
+  //justify-content: space-between;
+  //align-items: center;
+}
+
+.logotype {
+ @include typography.large
+}

@@ -1,0 +1,49 @@
+.profileWrapper{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 50px;
+}
+.profilePosts{
+  display: grid;
+  gap: 15px;
+  .postItem{
+    position: relative;
+    background: #181818;
+    box-sizing: border-box;
+    border-radius: 4px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    img{
+      transition: transform 0.1s ease-out;
+    }
+    &:hover img{
+      cursor: pointer;
+      transform: scale(1.1)
+    }
+  }
+  &:has(> :nth-child(1)) {
+    grid-template-columns: repeat(auto-fit, minmax(269px, 0fr));
+  }
+  @media (max-width: 800px) {
+    &:has(> :nth-child(1)) {grid-template-columns: repeat(auto-fit, minmax(269px, 1fr));}
+  }
+  @media (min-width: 801px) and (max-width: 1000px){
+    &:has(> :nth-child(2)) {grid-template-columns: repeat(auto-fit, minmax(269px, 1fr));}
+  }
+  @media (min-width: 1001px) and (max-width: 1200px){
+    &:has(> :nth-child(3)) {grid-template-columns: repeat(auto-fit, minmax(269px, 1fr));}
+  }
+  @media (min-width: 1201px) and (max-width: 1500px){
+    &:has(> :nth-child(4)) {grid-template-columns: repeat(auto-fit, minmax(269px, 1fr));}
+  }
+  @media (min-width: 1501px) {
+    &:has(> :nth-child(5)) {grid-template-columns: repeat(auto-fit, minmax(234px, 1fr));}
+  }
+}
+
+.postMenuActions {
+  position: absolute !important;
+  top: 10px;
+  right: 15px;
+}

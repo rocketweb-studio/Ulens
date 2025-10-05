@@ -1,15 +1,16 @@
-import type {Metadata} from 'next'
-import {Geist, Geist_Mono} from 'next/font/google'
+import type { Metadata } from 'next'
+import { Geist, Geist_Mono } from 'next/font/google'
 import '@/src/shared/styles/globals.scss'
-import {StoreWrapper} from '@/src/store/store-wrapper'
+import { StoreWrapper } from '@/src/store/store-wrapper'
 import React from 'react'
 import 'react-toastify/ReactToastify.css'
-import {AlertSnackbar} from '@/src/shared/components/AlertSnackbar/AlertSnackbar'
-import {Header} from '@/src/shared/components/Header/Header'
+
+import { Header } from '@/src/widgets/Header/Header'
 import '@rocketweb-studio/ulens-ui-kit/dist/index.css'
-import {Sidebar} from "@/src/shared/components/Sidebar";
-import {FlexContainer} from "@/src/shared/components/FlexContainer";
-import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
+import { Sidebar } from 'src/widgets/sidebar'
+import { FlexContainer } from 'src/shared/ui/FlexContainer'
+import { AppLoader } from '@/src/shared/ui/AppLoader/AppLoader'
+import { AlertSnackbar } from '@/src/shared/ui/AlertSnackbar/AlertSnackbar'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -34,10 +35,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <StoreWrapper>
           <Header />
           <FlexContainer>
-            <Sidebar/>
-            <main style={{flexGrow: 1, padding: '25px', maxWidth: '1454px', margin: '0 auto'}}>
-              {children}
-            </main>
+            <Sidebar />
+            <main style={{ flexGrow: 1, padding: '25px', maxWidth: '1454px', margin: '0 auto' }}>{children}</main>
           </FlexContainer>
           <AppLoader />
           <AlertSnackbar />

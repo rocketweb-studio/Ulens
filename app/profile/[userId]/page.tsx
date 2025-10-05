@@ -1,9 +1,9 @@
-import ViewPostModal from '@/src/shared/components/ViewPostModal/ViewPostModal'
-import { ProfileHeader } from '@/src/features/userProfile/ui/ProfileHeader/ProfileHeader'
-import { ProfilePosts } from '@/src/features/userProfile/ui/ProfilePosts/ProfilePosts'
-import { GetProfileByUserIdResponse } from '@/src/features/userProfile/api/userProfile.types'
+import { ProfileHeader } from '@/src/widgets/profileHeader/ui/ProfileHeader'
+import { ProfilePosts } from '@/src/widgets/profilePosts/ui/ProfilePosts'
+import { GetProfileByUserIdResponse } from '@/src/entities/userProfile/api/userProfile.types'
 import { GetPostByIdResponse, GetPostsByUserIdResponse } from '@/src/entities/post/api/postsApi.types'
 import { PostCreate } from '@/src/features/post/postCreate/ui/PostCreate/PostCreate'
+import { ViewPostModal } from '@/src/widgets/ViewPostModal'
 
 export default async function UserPage({
   params,

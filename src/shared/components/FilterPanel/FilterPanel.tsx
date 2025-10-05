@@ -3,12 +3,12 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import ImageNext from 'next/image'
 import s from './FilterPanel.module.scss'
-import { TSlide } from '@/src/shared/components/CustomSwiper/types'
-import { CustomSwiper } from '@/src/shared/components/CustomSwiper'
 import { FILTERS } from '@/src/shared/components/FilterPanel/consts'
 import { FilterPanelHandle, ImageFilters } from '@/src/shared/components/FilterPanel/types'
-import { FilteredImage, UploadedFile } from '@/src/features/post/postCreate/types/types'
+import { FilteredImage, UploadedFile } from '@/src/features/post/postCreate/model/types'
 import { createOriginalImageData } from '@/src/features/post/postCreate/utils'
+import { TSlide } from '@/src/shared/ui/CustomSwiper/types'
+import { CustomSwiper } from '@/src/shared/ui/CustomSwiper'
 
 type Props = {
   onFilterApply: (filteredData: FilteredImage, indexActiveSlide: number) => void
