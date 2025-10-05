@@ -17,7 +17,7 @@ type Props = {
   onModalClose: () => void
   onOverlayClick: () => void
   changeNextStep: () => void
-  changePrevStep: () => void // Этот колбэк теперь будет вызывать сброс состояния
+  changePrevStep: () => void
   uploadedFiles: UploadedFile[]
   currentImageIndex: number
   setCurrentImageIndex: (index: number) => void
@@ -57,6 +57,11 @@ export const CropStep = ({
 
   const handleZoomChange = (zoom: number, index: number) => {
     const updatedFiles = uploadedFiles.map((file, i) => (i === index ? { ...file, zoom } : file))
+    setUploadedFiles(updatedFiles)
+  }
+
+  const handleCropChange = (crop: { x: number; y: number }, index: number) => {
+    const updatedFiles = uploadedFiles.map((file, i) => (i === index ? { ...file, cropPosition: crop } : file))
     setUploadedFiles(updatedFiles)
   }
 
@@ -113,13 +118,15 @@ export const CropStep = ({
       <div>
         {index === currentImageIndex ?
           <ImageCropper
-            key={`cropper-${index}`}
+            key={`cropper-${index}-${file.originalPreview}`} // Уникальный ключ с изображением
             image={file.originalPreview}
             onCropAreaChange={(areaPixels) => handleCropAreaChange(areaPixels, index)}
             onAspectRatioChange={(aspectRatio) => handleAspectRatioChange(aspectRatio, index)}
             onZoomChange={(zoom) => handleZoomChange(zoom, index)}
+            onCropChange={(crop) => handleCropChange(crop, index)}
             initialAspectRatio={file.aspectRatio || 'original'}
             initialZoom={file.zoom || 1}
+            initialCrop={file.cropPosition || { x: 0, y: 0 }}
             isActiveSlide={true}
           />
         : <div className={s.slidePlaceholder}>
