@@ -38,8 +38,6 @@ export const ProfilePosts = ({ userId, dataPosts }: Props) => {
               <Image
                 src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${post.images.small[0].url}`}
                 alt={post.description}
-                // width={post.images.small[0].width}
-                // height={post.images.small[0].height}
                 fill
                 style={{ objectFit: 'cover' }}
                 quality={100}

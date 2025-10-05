@@ -1,6 +1,7 @@
 import { baseApi } from '@/src/store/baseApi'
-import { LoginRequestParams, LoginResponse, getMeResponse, UserType } from '@/src/feature/auth/api/authApi.types'
+import { LoginRequestParams, LoginResponse, getMeResponse } from '@/src/feature/auth/api/authApi.types'
 import { RegistrationRequest, RegistrationResponce } from '@/src/feature/auth/types'
+import {setLoaderStatus} from "@/src/store/app-slice";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -11,11 +12,11 @@ export const authApi = baseApi.injectEndpoints({
 
     registration: build.mutation<RegistrationResponce, RegistrationRequest>({
       query: (body) => ({ method: 'post', url: 'auth/registration', body }),
-      invalidatesTags: ['Auth'],
+      //invalidatesTags: ['Auth'],
     }),
     confirmRegistration: build.mutation<any, { code: string }>({
       query: (body) => ({ method: 'post', url: 'auth/registration-confirmation', body }),
-      invalidatesTags: ['Auth'],
+      //invalidatesTags: ['Auth'],
     }),
     resendRegistrationEmail: build.mutation<any, { email: string; recaptchaToken: string }>({
       query: (body) => ({ method: 'post', url: 'auth/registration-email-resending', body }),
@@ -33,16 +34,17 @@ export const authApi = baseApi.injectEndpoints({
     }),
     setNewPassword: build.mutation<any, { newPassword: string; recoveryCode: string }>({
       query: (body) => ({ method: 'post', url: 'auth/new-password', body }),
-      invalidatesTags: ['Auth'],
+      //invalidatesTags: ['Auth'],
     }),
     logout: build.mutation<void, void>({
       query: () => ({ method: 'post', url: 'auth/logout' }),
       invalidatesTags: ['Auth'],
-      async onQueryStarted(_arg, { queryFulfilled }) {
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled
           localStorage.removeItem('accessToken')
         } catch (error) {
+          dispatch(setLoaderStatus({ status: 'idle' }))
           console.error('Logout error:', error)
         }
       },

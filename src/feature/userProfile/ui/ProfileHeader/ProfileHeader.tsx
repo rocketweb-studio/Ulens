@@ -10,6 +10,10 @@ import Link from "next/link";
 import {Path} from "@/src/shared/constants/Path";
 import {GetProfileByUserIdResponse} from "@/src/feature/userProfile/api/userProfile.types";
 import s from "@/src/feature/userProfile/ui/ProfileHeader/profileHeader.module.scss";
+import {useAppDispatch} from "@/src/shared/hooks/useAppDispatch";
+import {setLoaderStatus} from "@/src/store/app-slice";
+import {useEffect} from "react";
+import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
 
 type Props = {
     userId: string
@@ -17,12 +21,18 @@ type Props = {
 }
 
 export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
-
     const {data: meData, isSuccess} = useGetMeQuery()
     const {data: userData} = useGetProfileByUsedIdQuery({userId})
     const isAuth = !!meData?.id && isSuccess
+    const dispatch = useAppDispatch()
 
-    const userDataForRender = dataUserInfo || userData
+    useEffect(() => {
+        if (document.readyState === 'complete') {
+            dispatch(setLoaderStatus({ status: 'idle' }))
+        }
+    }, [])
+
+    const userDataForRender = userData || dataUserInfo
 
     const handleFollow = () => {
         console.log('handleFollow')
@@ -35,6 +45,7 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
     return (
         <div className={s.profileHeader}>
             <div className={s.profileAvatar}>
+                <AppLoader forceMode={true} bg={'unset'}/>
                 {userDataForRender && userDataForRender?.avatars?.length > 0
                     ? <Image src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${userDataForRender?.avatars[0].url}`} alt={'avatar'}/>
                     : <Image src={avatar} alt={'avatar'}/>

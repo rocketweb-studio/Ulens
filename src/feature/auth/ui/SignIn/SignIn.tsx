@@ -10,18 +10,24 @@ import {Button} from '@/src/shared/components/Button/Button'
 import {loginSchema} from '@/src/feature/auth/lib/schemas/loginSchema'
 import styles from './SignIn.module.scss'
 import {LoginRequestParams} from '@/src/feature/auth/api/authApi.types'
-import {useToast} from '@/src/shared/hooks/useToast'
 import {Path} from "@/src/shared/constants/Path";
 import Link from "next/link";
 import {redirect} from "next/navigation";
-import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
+import {useAppDispatch} from "@/src/shared/hooks/useAppDispatch";
+import {setLoaderStatus} from "@/src/store/app-slice";
+import {useEffect} from "react";
 
 export const SignIn = () => {
   const {data: meData, isSuccess} = useGetMeQuery()
-  const [login, {isLoading, isSuccess: isSuccessLogin}] = useLoginMutation()
+  const [login, {isLoading}] = useLoginMutation()
   const isAuth = !!meData?.id && isSuccess
+  const dispatch = useAppDispatch()
 
-  //const { showSuccess } = useToast()
+  useEffect(() => {
+    if (document.readyState === 'complete') {
+      dispatch(setLoaderStatus({ status: 'idle' }))
+    }
+  }, [])
 
   if (isAuth) {
     redirect(Path.UserProfile(meData.id))
@@ -42,16 +48,15 @@ export const SignIn = () => {
 
   const onSubmit: SubmitHandler<LoginRequestParams> = async (data) => {
     try {
+      dispatch(setLoaderStatus({ status: 'loading' }))
       const res = await login(data).unwrap()
       reset()
       localStorage.setItem('accessToken', res.accessToken)
-      //showSuccess('Success login')
     } catch (error) {}
   }
 
   return (
       <>
-        {(isLoading || isSuccessLogin || isSuccess) ? <AppLoader /> :
         <article className={styles.authWrapper}>
           <form onSubmit={handleSubmit(onSubmit)} className={styles.authForm}>
             <h2 className={styles.authForm__title}>Sign In</h2>
@@ -95,7 +100,6 @@ export const SignIn = () => {
             </Link>
           </form>
         </article>
-        }
       </>
   )
 }

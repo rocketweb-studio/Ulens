@@ -6,14 +6,13 @@ import { Button } from '@/src/shared/components/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
 import { CustomSwiper } from '@/src/shared/components/CustomSwiper'
 import { TextArea } from '@/src/shared/components/TextArea/TextArea'
-import { Controller, Control, FieldErrors, UseFormHandleSubmit } from 'react-hook-form'
+import { Control, Controller, FieldErrors, UseFormHandleSubmit } from 'react-hook-form'
 import { PublicationFormData, UploadedFile } from '@/src/feature/postCreate/types/types'
 import Image from 'next/image'
 import s from './PostCreateModal.module.scss'
 import { UserAvatar } from '@/src/shared/components/UserAvatar'
 import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
-import { useGetPostByIdQuery } from '@/src/feature/Posts/api/postsApi'
-import { useGetProfileByUsedIdQuery, userProfileApi } from '@/src/feature/userProfile/api/userProfileApi'
+import { userProfileApi } from '@/src/feature/userProfile/api/userProfileApi'
 import { useSelector } from 'react-redux'
 
 type Props = {
@@ -27,6 +26,7 @@ type Props = {
   errors: FieldErrors<PublicationFormData>
   handleSubmit: UseFormHandleSubmit<PublicationFormData>
   onFormSubmit: (data: PublicationFormData) => void
+  isLoadingStatus: boolean
 }
 
 export const PublicationStep = ({
@@ -40,6 +40,7 @@ export const PublicationStep = ({
   errors,
   handleSubmit,
   onFormSubmit,
+  isLoadingStatus,
 }: Props) => {
   const { data: meData } = useGetMeQuery()
   const userProfile = useSelector(userProfileApi.endpoints.getProfileByUsedId.select({ userId: meData?.id || '' }))
@@ -80,8 +81,14 @@ export const PublicationStep = ({
         </Button>
       }
       buttonRightInModalHeader={
-        <Button tagType={'button'} variant={'text'} withoutPadding onClick={handleSubmit(onFormSubmit)}>
-          Publish
+        <Button
+          tagType={'button'}
+          variant={'text'}
+          withoutPadding
+          onClick={handleSubmit(onFormSubmit)}
+          disabled={isLoadingStatus}
+        >
+          {isLoadingStatus ? 'Publishing' : 'Publish'}
         </Button>
       }
     >
@@ -114,6 +121,7 @@ export const PublicationStep = ({
                 height={36}
                 avatarOwner={userProfile.data?.avatars[0]?.url ? userProfile.data?.avatars[0]?.url : null}
                 userName={userProfile.data?.userName || ''}
+                userId={meData?.id || ''}
               />
             </div>
             <strong className={s.publicationProfileURL}>{userProfile.data?.userName}</strong>

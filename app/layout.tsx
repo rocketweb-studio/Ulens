@@ -9,6 +9,7 @@ import {Header} from '@/src/shared/components/Header/Header'
 import '@rocketweb-studio/ulens-ui-kit/dist/index.css'
 import {Sidebar} from "@/src/shared/components/Sidebar";
 import {FlexContainer} from "@/src/shared/components/FlexContainer";
+import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               {children}
             </main>
           </FlexContainer>
+          <AppLoader />
           <AlertSnackbar />
         </StoreWrapper>
       </body>

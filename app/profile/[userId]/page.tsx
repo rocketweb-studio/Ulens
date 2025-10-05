@@ -4,53 +4,48 @@ import {GetPostByIdResponse, GetPostsByUserIdResponse} from "@/src/feature/Posts
 import {ProfileHeader} from "@/src/feature/userProfile/ui/ProfileHeader/ProfileHeader";
 import {ProfilePosts} from "@/src/feature/userProfile/ui/ProfilePosts/ProfilePosts";
 import {GetProfileByUserIdResponse} from "@/src/feature/userProfile/api/userProfile.types";
-import {AppLoader} from "@/src/shared/components/AppLoader/AppLoader";
 
 export default async function UserPage({
   params,
   searchParams,
 }: {
   params: Promise<{ userId: string }>
-  searchParams: Promise<{ [key: string]: string | undefined }>
+  searchParams: Promise<{ [_key: string]: string | undefined }>
 }) {
   const { userId } = await params
   const filters = await searchParams
 
   let dataPostModal: GetPostByIdResponse | undefined = undefined;
+  let dataUserInfo: GetProfileByUserIdResponse | undefined = undefined;
+  let dataPosts: GetPostsByUserIdResponse | undefined = undefined;
 
-  // const responseUserInfo = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}profile/${userId}`)
-  // const dataUserInfo = await responseUserInfo.json() as GetProfileByUserIdResponse;
-  //
-  // const responsePosts = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/user/${userId}`)
-  // const dataPosts = await responsePosts.json() as GetPostsByUserIdResponse;
+  if(filters.action !== 'create'){
 
-  const [userInfoResponse, postsResponse] = await Promise.all([
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}profile/${userId}`, {
-      next: { revalidate: 60 } // Кэшируем на 60 секунд
-    }),
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/user/${userId}`, {
-      next: { revalidate: 30 } // Кэшируем на 30 секунд
-    })
-  ])
+    // const [userInfoResponse, postsResponse] = await Promise.all([
+    //   fetch(`${process.env.NEXT_PUBLIC_BASE_URL}profile/${userId}`, {
+    //     next: { revalidate: 60 } // Кэшируем на 60 секунд
+    //   }),
+    //   fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/user/${userId}`, {
+    //     next: { revalidate: 30 } // Кэшируем на 30 секунд
+    //   })
+    // ])
+    //
+    // const [dataUserInfo, dataPosts] = await Promise.all([
+    //   userInfoResponse.json(),
+    //   postsResponse.json()
+    // ])
 
-  const [dataUserInfo, dataPosts] = await Promise.all([
-    userInfoResponse.json(),
-    postsResponse.json()
-  ])
+    const responseUserInfo = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}profile/${userId}`, {next: { revalidate: 60 }})
+    dataUserInfo = await responseUserInfo.json() as GetProfileByUserIdResponse;
 
-  if (filters.postId) {
-      try {
-        const responsePost = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/${filters.postId}`, {
-          next: { revalidate: 60 }
-        })
-        if (responsePost.ok) {
-          dataPostModal = await responsePost.json() as GetPostByIdResponse;
-        }
-      } catch (error) {
-        console.error('Error fetching post:', error)
-      }
+    const responsePosts = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/user/${userId}`, {next: { revalidate: 30 }})
+    dataPosts = await responsePosts.json() as GetPostsByUserIdResponse;
+
+    if (filters.postId) {
+      const responsePost = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/${filters.postId}`, {next: { revalidate: 60 }})
+      dataPostModal = await responsePost.json() as GetPostByIdResponse;
+    }
   }
-
   return (
     <>
       <ProfileHeader userId={userId} dataUserInfo={dataUserInfo}/>

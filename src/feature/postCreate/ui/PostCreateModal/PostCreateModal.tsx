@@ -30,11 +30,12 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const [step, setStep] = useState<Steps>('add')
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [createPost] = useCreatePostMutation()
-  const [uploadImages] = useUploadPostImagesMutation()
+  const [createPost, { isLoading: isLoadingCreatePost }] = useCreatePostMutation()
+  const [uploadImages, { isLoading: isLoadingUploadImages }] = useUploadPostImagesMutation()
   const { isOpen, openModal, closeModal } = useModal()
   const [dropError, setDropError] = useState<string | null>(null)
   const [pendingStepChange, setPendingStepChange] = useState(false)
+  const [isLoadingStatus, setIsLoadingStatus] = useState<boolean>(false)
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -47,6 +48,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     control,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<PublicationFormData>({
     resolver: zodResolver(publicationSchema),
     defaultValues: { description: '' },
@@ -71,11 +73,12 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
             width,
             height,
           },
+          zoom: 1,
         }
       }),
     )
 
-    setUploadedFiles(newFiles)
+    setUploadedFiles((prev) => [...prev, ...newFiles])
 
     if (rejectedFiles.length > 0) {
       setDropError(dropErrorSnackBar(rejectedFiles))
@@ -139,13 +142,22 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         setStep('crop')
         break
       case 'crop':
+        resetState()
         setStep('add')
         break
     }
   }
 
+  const resetState = () => {
+    setUploadedFiles([])
+    setCurrentImageIndex(0)
+    setDropError(null)
+    reset({ description: '' })
+  }
+
   const onFormSubmit = async (data: PublicationFormData) => {
     try {
+      setIsLoadingStatus(true)
       const res = await createPost(data).unwrap()
       const id = res.id
 
@@ -157,11 +169,16 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       )
 
       if (imageFiles.length > 0) {
+        console.log(imageFiles)
         await uploadImages({ postId: id, images: imageFiles }).unwrap()
       }
 
+      resetState()
       onModalClose()
+      setIsLoadingStatus(false)
     } catch (error) {
+      setIsLoadingStatus(false)
+
       console.log('Error creating post:', error)
     }
   }
@@ -174,6 +191,15 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       setPendingStepChange(false)
     }
   }, [uploadedFiles, pendingStepChange])
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      const timer = setTimeout(() => {
+        resetState()
+      }, 300)
+      return () => clearTimeout(timer)
+    }
+  }, [isModalOpen])
 
   return (
     <div className={s.wrapper}>
@@ -227,6 +253,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
           errors={errors}
           handleSubmit={handleSubmit}
           onFormSubmit={onFormSubmit}
+          isLoadingStatus={isLoadingStatus}
         />
       )}
 
@@ -235,6 +262,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         onClose={closeModal}
         onConfirm={() => {
           closeModal()
+          resetState()
           onModalClose()
         }}
       />

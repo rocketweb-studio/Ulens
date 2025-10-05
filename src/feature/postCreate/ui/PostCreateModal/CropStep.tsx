@@ -1,6 +1,6 @@
 'use client'
 
-import React, { MouseEvent, useEffect, useMemo, useCallback } from 'react'
+import React, { MouseEvent, useState } from 'react'
 import { Modal } from '@/src/shared/components/Modal/Modal'
 import { Button } from '@/src/shared/components/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
@@ -35,52 +35,81 @@ export const CropStep = ({
   setCurrentImageIndex,
   setUploadedFiles,
 }: Props) => {
+  const [isProcessing, setIsProcessing] = useState(false)
+
   const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onOverlayClick()
     }
   }
 
-  const handleAspectRatioChange = (aspectRatio: 'original' | '1:1' | '4:5' | '16:9', index?: number) => {
-    const targetIndex = index !== undefined ? index : currentImageIndex
-    const updatedFiles = uploadedFiles.map((file, i) => (i === targetIndex ? { ...file, aspectRatio } : file))
+  const handleAspectRatioChange = (aspectRatio: 'original' | '1:1' | '4:5' | '16:9', index: number) => {
+    const updatedFiles = uploadedFiles.map((file, i) => (i === index ? { ...file, aspectRatio } : file))
     setUploadedFiles(updatedFiles)
   }
 
-  const handleCropAreaChange = (areaPixels: Area, index?: number) => {
-    const targetIndex = index !== undefined ? index : currentImageIndex
+  const handleCropAreaChange = (areaPixels: Area, index: number) => {
     const updatedFiles = uploadedFiles.map((file, i) =>
-      i === targetIndex ? { ...file, croppedAreaPixels: areaPixels } : file,
+      i === index ? { ...file, croppedAreaPixels: areaPixels } : file,
     )
     setUploadedFiles(updatedFiles)
   }
 
-  const handleNextStep = async () => {
-    try {
-      const cropPromises = uploadedFiles.map(async (file, index) => {
-        if (file.croppedAreaPixels && file.croppedAreaPixels.width > 0 && file.croppedAreaPixels.height > 0) {
-          const croppedImage = await getCroppedImg(file.originalPreview, file.croppedAreaPixels)
-          return {
-            ...file,
-            croppedImage,
-            preview: croppedImage,
-          }
-        } else {
-          return {
-            ...file,
-            croppedImage: file.originalPreview,
-            preview: file.originalPreview,
-          }
-        }
-      })
+  const handleZoomChange = (zoom: number, index: number) => {
+    const updatedFiles = uploadedFiles.map((file, i) => (i === index ? { ...file, zoom } : file))
+    setUploadedFiles(updatedFiles)
+  }
 
-      const croppedFiles = await Promise.all(cropPromises)
-      setUploadedFiles(croppedFiles)
+  const handleCropChange = (crop: { x: number; y: number }, index: number) => {
+    const updatedFiles = uploadedFiles.map((file, i) => (i === index ? { ...file, cropPosition: crop } : file))
+    setUploadedFiles(updatedFiles)
+  }
+
+  const handleNextStep = async () => {
+    if (isProcessing) return
+
+    setIsProcessing(true)
+    try {
+      const updatedFiles = await Promise.all(
+        uploadedFiles.map(async (file, index) => {
+          if (file.croppedAreaPixels && file.croppedAreaPixels.width > 0 && file.croppedAreaPixels.height > 0) {
+            try {
+              const croppedImage = await getCroppedImg(file.originalPreview, file.croppedAreaPixels)
+              return {
+                ...file,
+                croppedImage,
+                preview: croppedImage,
+              }
+            } catch (error) {
+              console.error(`Error cropping image ${index}:`, error)
+              return {
+                ...file,
+                croppedImage: file.originalPreview,
+                preview: file.originalPreview,
+              }
+            }
+          } else {
+            return {
+              ...file,
+              croppedImage: file.originalPreview,
+              preview: file.originalPreview,
+            }
+          }
+        }),
+      )
+
+      setUploadedFiles(updatedFiles)
       changeNextStep()
     } catch (error) {
-      console.error('Error cropping images:', error)
+      console.error('Error in crop step:', error)
       changeNextStep()
+    } finally {
+      setIsProcessing(false)
     }
+  }
+
+  const handleSlideChange = (swiper: any) => {
+    setCurrentImageIndex(swiper.activeIndex)
   }
 
   const cropSlides = uploadedFiles.map((file, index) => ({
@@ -88,35 +117,25 @@ export const CropStep = ({
     content: (
       <div>
         {index === currentImageIndex ?
-          <MemoizedImageCropper
-            image={file.preview}
+          <ImageCropper
+            key={`cropper-${index}-${file.originalPreview}`} // Уникальный ключ с изображением
+            image={file.originalPreview}
             onCropAreaChange={(areaPixels) => handleCropAreaChange(areaPixels, index)}
             onAspectRatioChange={(aspectRatio) => handleAspectRatioChange(aspectRatio, index)}
+            onZoomChange={(zoom) => handleZoomChange(zoom, index)}
+            onCropChange={(crop) => handleCropChange(crop, index)}
             initialAspectRatio={file.aspectRatio || 'original'}
+            initialZoom={file.zoom || 1}
+            initialCrop={file.cropPosition || { x: 0, y: 0 }}
             isActiveSlide={true}
           />
         : <div className={s.slidePlaceholder}>
             <Image src={file.preview} alt={`Preview ${index + 1}`} fill />
           </div>
         }
-
-        {/*<MemoizedImageCropper*/}
-        {/*  image={file.preview}*/}
-        {/*  onCropAreaChange={(areaPixels) => handleCropAreaChange(areaPixels, index)}*/}
-        {/*  onAspectRatioChange={(aspectRatio) => handleAspectRatioChange(aspectRatio, index)}*/}
-        {/*  initialAspectRatio={file.aspectRatio || 'original'}*/}
-        {/*  isActiveSlide={true}*/}
-        {/*/>*/}
       </div>
     ),
   }))
-
-  const handleSlideChange = useCallback(
-    (swiper: any) => {
-      setCurrentImageIndex(swiper.activeIndex)
-    },
-    [setCurrentImageIndex],
-  )
 
   return (
     <Modal
@@ -129,8 +148,8 @@ export const CropStep = ({
       hideCloseButton
       hideDefaultButton
       buttonRightInModalHeader={
-        <Button tagType={'button'} variant={'text'} withoutPadding onClick={handleNextStep}>
-          Next
+        <Button tagType={'button'} variant={'text'} withoutPadding onClick={handleNextStep} disabled={isProcessing}>
+          {isProcessing ? 'Processing...' : 'Next'}
         </Button>
       }
       buttonLeftInModalHeader={
@@ -158,11 +177,3 @@ export const CropStep = ({
     </Modal>
   )
 }
-
-const MemoizedImageCropper = React.memo(ImageCropper, (prevProps, nextProps) => {
-  return (
-    prevProps.image === nextProps.image &&
-    prevProps.initialAspectRatio === nextProps.initialAspectRatio &&
-    prevProps.isActiveSlide === nextProps.isActiveSlide
-  )
-})
