@@ -1,20 +1,30 @@
 'use client'
 
-import {redirect, useSearchParams} from 'next/navigation'
-import {Path} from "@/src/shared/constants/Path";
-import {Tabs} from "@/src/shared/components/Tabs";
-import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
+import { redirect, useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
+import { Path } from '@/src/shared/constants/Path'
+import { Tabs } from '@/src/shared/components/Tabs'
+import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
 
 const allowedParts = ['info', 'devices', 'subscriptions', 'payments']
 
-export default function SettingsPage() {
-  const params = useSearchParams()
-  const {isError} = useGetMeQuery()
-  const part = params.get('part')
+function SettingsContent() {
+  const { isError } = useGetMeQuery()
 
   if (isError) {
     redirect(Path.SignIn)
   }
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SettingsPageContent />
+    </Suspense>
+  )
+}
+
+function SettingsPageContent() {
+  const params = useSearchParams()
+  const part = params.get('part')
 
   if (!part || !allowedParts.includes(part)) {
     redirect(Path.Settings('info'))
@@ -22,7 +32,7 @@ export default function SettingsPage() {
 
   return (
     <div>
-      <Tabs/>
+      <Tabs />
       {part === 'info' && <p>Текущий раздел: {part}</p>}
       {part === 'devices' && <p>Текущий раздел: {part}</p>}
       {part === 'subscriptions' && <p>Текущий раздел: {part}</p>}
@@ -30,3 +40,5 @@ export default function SettingsPage() {
     </div>
   )
 }
+
+export default SettingsContent
