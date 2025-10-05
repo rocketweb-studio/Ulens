@@ -1,5 +1,5 @@
 import s from './page.module.css'
-import {PublicPage} from '@/src/feature/publicPage/ui/PublicPage'
+import {PublicPage} from '@/src/features/publicPage/ui/PublicPage'
 
 export default async function Home() {
 

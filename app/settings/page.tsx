@@ -1,12 +1,12 @@
 'use client'
 
 import {Tabs} from "@/src/shared/components/Tabs";
-import {GeneralInformation} from "@/src/feature/generalinformation/GeneralInformation";
+import {GeneralInformation} from "@/src/features/generalinformation/GeneralInformation";
 import { redirect, useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import { Path } from '@/src/shared/constants/Path'
 
-import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
+import { useGetMeQuery } from '@/src/features/auth/api/authApi'
 
 const allowedParts = ['info', 'devices', 'subscriptions', 'payments']
 

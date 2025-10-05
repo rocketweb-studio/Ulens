@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
+import { useGetMeQuery } from '@/src/features/auth/api/authApi'
 import {Path} from "@/src/shared/constants/Path";
 
 export const useRedirectIfAuthorized = () => {

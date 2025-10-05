@@ -4,7 +4,7 @@ import s from './Sidebar.module.scss'
 import Link from 'next/link'
 import { Path } from '@/src/shared/constants/Path'
 import { FlexContainer } from '@/src/shared/components/FlexContainer'
-import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
+import { useGetMeQuery } from '@/src/features/auth/api/authApi'
 import { usePathname, useSearchParams } from 'next/navigation'
 import {
   IconBookmarkOutline,
@@ -20,7 +20,7 @@ import {
   IconTrendingUpOutline,
 } from '@rocketweb-studio/ulens-ui-kit'
 import { Suspense, useState } from 'react'
-import {Logout} from "@/src/feature/auth/ui/Logout";
+import {Logout} from "@/src/features/auth/ui/Logout";
 
 function SidebarContent() {
   const { data, isSuccess } = useGetMeQuery()

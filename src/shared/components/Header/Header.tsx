@@ -5,7 +5,7 @@ import Link from 'next/link'
 import {FlexContainer} from '@/src/shared/components/FlexContainer'
 import {Path} from "@/src/shared/constants/Path";
 import {Button} from "@/src/shared/components/Button/Button";
-import {useGetMeQuery} from "@/src/feature/auth/api/authApi";
+import {useGetMeQuery} from "@/src/features/auth/api/authApi";
 import {IconOutlineBell} from '@rocketweb-studio/ulens-ui-kit';
 
 export const Header = () => {

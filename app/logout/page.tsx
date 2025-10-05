@@ -1,4 +1,4 @@
-import { Logout } from '@/src/feature/auth/ui/Logout'
+import { Logout } from '@/src/features/auth/ui/Logout'
 
 export default function LogoutPage() {
   return (

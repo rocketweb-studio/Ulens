@@ -7,18 +7,18 @@ import { Path } from '@/src/shared/constants/Path'
 import s from './ViewPostModal.module.scss'
 import Image from 'next/image'
 import { Modal } from '@/src/shared/components/Modal/Modal'
-import {MouseEvent, useEffect, useRef} from 'react'
-import {postsApi, useGetPostByIdQuery} from '@/src/feature/Posts/api/postsApi'
+import { MouseEvent, useEffect, useRef } from 'react'
 import { CustomSwiper } from '@/src/shared/components/CustomSwiper'
-import {useGetProfileByUsedIdQuery, userProfileApi} from '@/src/feature/userProfile/api/userProfileApi'
+import { useGetProfileByUsedIdQuery, userProfileApi } from '@/src/features/userProfile/api/userProfileApi'
 import Link from 'next/link'
-import { PostMenuActions } from '@/src/feature/Posts/ui/postMenuActions'
 import { IconHeart, IconHeartOutline } from '@rocketweb-studio/ulens-ui-kit'
-import { useGetMeQuery } from '@/src/feature/auth/api/authApi'
-import {GetPostByIdResponse} from "@/src/feature/Posts/api/postsApi.types";
-import {GetProfileByUserIdResponse} from "@/src/feature/userProfile/api/userProfile.types";
-import {useAppSelector} from "@/src/shared/hooks/useAppSelector";
-import {useAppDispatch} from "@/src/shared/hooks/useAppDispatch";
+import { useGetMeQuery } from '@/src/features/auth/api/authApi'
+import { GetProfileByUserIdResponse } from '@/src/features/userProfile/api/userProfile.types'
+import { useAppSelector } from '@/src/shared/hooks/useAppSelector'
+import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
+import { GetPostByIdResponse } from '@/src/entities/post/api/postsApi.types'
+import { postsApi, useGetPostByIdQuery } from '@/src/entities/post/api/postsApi'
+import { PostMenuActions } from '@/src/features/post/postMenuActions'
 
 const comments = [
   {
@@ -76,16 +76,11 @@ type Props = {
 }
 
 export default function ViewPostModal({ userId, postId, dataPostModal, dataUserInfo }: Props) {
-
-  const userDataFromCache = useAppSelector((state) =>
-      userProfileApi.endpoints.getProfileByUsedId
-          .select({userId})(state).data
+  const userDataFromCache = useAppSelector(
+    (state) => userProfileApi.endpoints.getProfileByUsedId.select({ userId })(state).data,
   )
 
-  const postDataFromCache = useAppSelector((state) =>
-      postsApi.endpoints.getPostById
-          .select({postId})(state).data
-  )
+  const postDataFromCache = useAppSelector((state) => postsApi.endpoints.getPostById.select({ postId })(state).data)
 
   const { isOpen, closeModal } = useModal(true)
   const { replace } = useRouter()
@@ -93,24 +88,30 @@ export default function ViewPostModal({ userId, postId, dataPostModal, dataUserI
 
   const dispatch = useAppDispatch()
 
-  let needHydrateUserInfoRef = useRef(!!dataUserInfo && !userDataFromCache);
-  let needHydratePostInfoRef = useRef(!!dataPostModal && !postDataFromCache);
+  let needHydrateUserInfoRef = useRef(!!dataUserInfo && !userDataFromCache)
+  let needHydratePostInfoRef = useRef(!!dataPostModal && !postDataFromCache)
 
-  const { data: userInfo } = useGetProfileByUsedIdQuery({ userId }, {
-    skip: needHydrateUserInfoRef.current
-  })
+  const { data: userInfo } = useGetProfileByUsedIdQuery(
+    { userId },
+    {
+      skip: needHydrateUserInfoRef.current,
+    },
+  )
 
-  const { data: postInfo } = useGetPostByIdQuery({ postId }, {
-    skip: needHydratePostInfoRef.current
-  })
+  const { data: postInfo } = useGetPostByIdQuery(
+    { postId },
+    {
+      skip: needHydratePostInfoRef.current,
+    },
+  )
 
   useEffect(() => {
-    if(needHydrateUserInfoRef.current){
-      needHydrateUserInfoRef.current = false;
-      const thunk = userProfileApi.util.upsertQueryData('getProfileByUsedId', {userId}, dataUserInfo!)
+    if (needHydrateUserInfoRef.current) {
+      needHydrateUserInfoRef.current = false
+      const thunk = userProfileApi.util.upsertQueryData('getProfileByUsedId', { userId }, dataUserInfo!)
       dispatch(thunk)
     }
-  }, []);
+  }, [])
 
   const postsDataForRender = dataPostModal || postInfo
   const userDataForRender = dataUserInfo || userInfo
@@ -132,7 +133,7 @@ export default function ViewPostModal({ userId, postId, dataPostModal, dataUserI
   }
 
   const formattedDate =
-      postsDataForRender?.createdAt ?
+    postsDataForRender?.createdAt ?
       new Intl.DateTimeFormat('en-US', {
         month: 'long',
         day: 'numeric',
@@ -196,11 +197,11 @@ export default function ViewPostModal({ userId, postId, dataPostModal, dataUserI
                 </div>
                 <div className={s.publicationMenu}>
                   <PostMenuActions
-                      postOwnerId={postsDataForRender?.ownerId || ''}
-                      postId={postId}
-                      userId={userId}
-                      description={''}
-                      onPostDeleted={handleCloseModal}
+                    postOwnerId={postsDataForRender?.ownerId || ''}
+                    postId={postId}
+                    userId={userId}
+                    description={''}
+                    onPostDeleted={handleCloseModal}
                   />
                 </div>
               </div>

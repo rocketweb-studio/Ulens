@@ -1,7 +1,7 @@
 'use client'
 
 import { FlexContainer } from '@/src/shared/components/FlexContainer'
-import { PrivacyPolicy } from '@/src/feature/auth/ui/SignUp/PrivacyPolicy'
+import { PrivacyPolicy } from '@/src/features/auth/ui/SignUp/PrivacyPolicy'
 
 export default function PrivacyPolicyPage() {
   return (

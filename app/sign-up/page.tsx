@@ -1,6 +1,6 @@
 'use client'
 
-import { SignUp } from '@/src/feature/auth/ui/SignUp'
+import { SignUp } from '@/src/features/auth/ui/SignUp'
 import { FlexContainer } from '@/src/shared/components/FlexContainer'
 
 export default function SingUpPage() {

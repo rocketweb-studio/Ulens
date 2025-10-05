@@ -3,7 +3,7 @@
 import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react'
 import styles from '@/src/shared/components/Input/Input.module.scss'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
-import { RegistrationInputs } from '@/src/feature/auth/lib/schemas'
+import { RegistrationInputs } from '@/src/features/auth/lib/schemas'
 import Image from 'next/image'
 import eyeOnSvg from '@/public/eye-outline.svg'
 import eyeOffSvg from '@/public/eye-off-outline.svg'

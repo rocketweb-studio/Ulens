@@ -3,7 +3,7 @@
 import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react'
 import styles from '@/src/shared/components/TextArea/TextArea.module.scss'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
-import { RegistrationInputs } from '@/src/feature/auth/lib/schemas'
+import { RegistrationInputs } from '@/src/features/auth/lib/schemas'
 
 type Props<T extends FieldValues = RegistrationInputs> = {
   name?: Path<T>
