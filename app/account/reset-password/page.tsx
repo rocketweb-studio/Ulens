@@ -1,4 +1,4 @@
-import { ResetPassword } from '@/src/feature/auth/ui/PasswordRecovery/ResetPassword'
+import { ResetPassword } from 'src/features/auth/passwordRecovery/ui/ResetPassword'
 
 export default async function ResetPasswordPage({
   searchParams,

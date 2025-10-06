@@ -36,7 +36,8 @@ a,
 button {
   cursor: pointer;
 }
-a:visited {
+
+a, a:visited {
   color: inherit;
 }
 
@@ -45,7 +46,6 @@ body {
   font-weight: typography.$font-weight-regular;
   background-color: colors.color(dark, 700);
   color: colors.color(light, 100);
-  padding: 12px 60px;
   height: 100%;
 }
 .swiper{

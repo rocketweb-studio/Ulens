@@ -1,7 +1,7 @@
 'use client'
 
-import { FlexContainer } from '@/src/shared/components/FlexContainer'
-import { TermsOfService } from '@/src/feature/auth/ui/SignUp/TermsOfService'
+import { FlexContainer } from 'src/shared/ui/FlexContainer'
+import { TermsOfService } from '@/src/pages/termsOfService'
 
 export default function TermOfService() {
   return (

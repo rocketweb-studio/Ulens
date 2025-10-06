@@ -1,7 +1,6 @@
-import { Mutex } from 'async-mutex'
-import { BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
-import { setLoaderStatus } from '@/src/store/app-slice'
-import { handleError } from '@/src/shared/utils/handleError'
+import {Mutex} from 'async-mutex'
+import {BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError} from '@reduxjs/toolkit/query/react'
+import {handleError} from '@/src/shared/utils/handleError'
 
 const mutex = new Mutex()
 
@@ -22,15 +21,14 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
   api,
   extraOptions,
 ) => {
-  await mutex.waitForUnlock()
 
+  const isLogoutRequest = typeof args === 'object' && args.url === 'auth/logout'
 
+  if (!isLogoutRequest) {
+    await mutex.waitForUnlock()
+  }
 
   try {
-    if (typeof args === 'object' && args.url?.includes('auth/')) {
-        api.dispatch(setLoaderStatus({ status: 'loading' }))
-    }
-
     let result = await baseQueryWithAccessToken(args, api, extraOptions)
 
     const isRefreshRequest = typeof args === 'object' && args.url === 'auth/refresh'
@@ -69,9 +67,5 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
     await handleError(api, result)
 
     return result
-  } finally {
-    if (typeof args === 'object' && args.url?.includes('auth/')) {
-      api.dispatch(setLoaderStatus({ status: 'idle' }))
-    }
-  }
+  } finally {}
 }
