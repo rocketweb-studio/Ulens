@@ -26,6 +26,7 @@ export const Select = ({options,title="", onSelectAction, placeholder = "Выб�
             <div className={`${s.dropdown} ${disabled ? s.disabled : ""}`} ref={dropdownRef} style={style}>
                 <label className={s.title}>{title}</label>
                 <button
+                    type={"button"}
                     className={s.trigger}
                     onClick={() => setIsOpen(!isOpen)}
                     disabled={disabled}

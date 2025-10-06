@@ -92,7 +92,7 @@ export const GeneralInformation = () => {
         <TextArea label={'About me'} rows={4}/>
         <div className={s.line}></div>
         <div className={s.btnSaved}>
-        <Button onClick={TestHandler} variant={'primary'}>
+        <Button onClick={TestHandler} variant={'primary'} type={'submit'}>
           Save Changes
         </Button>
         </div>
