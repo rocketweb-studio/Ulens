@@ -4,7 +4,7 @@ import { MouseEvent, useRef } from 'react'
 import { Modal } from '@/src/shared/ui/Modal/Modal'
 import { Button } from '@/src/shared/ui/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
-import { FilterPanel } from '@/src/shared/components/FilterPanel/FilterPanel'
+import { FilterPanel } from '@/src/features/post/postCreate/ui/FilterPanel/FilterPanel'
 import s from '@/src/widgets/ViewPostModal/ui/ViewPostModal.module.scss'
 import { FilteredImage, UploadedFile } from '@/src/features/post/postCreate/model/types'
 

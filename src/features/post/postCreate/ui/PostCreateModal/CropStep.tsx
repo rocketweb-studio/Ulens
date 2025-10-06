@@ -4,13 +4,13 @@ import React, { MouseEvent, useState } from 'react'
 import { Modal } from '@/src/shared/ui/Modal/Modal'
 import { Button } from '@/src/shared/ui/Button/Button'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
-import { ImageCropper } from '@/src/shared/components/ImageCropper/ImageCropper'
+import { ImageCropper } from '@/src/features/post/postCreate/lib/ImageCropper/ImageCropper'
 import { Area } from 'react-easy-crop'
 import Image from 'next/image'
 import s from './PostCreateModal.module.scss'
-import { getCroppedImg } from '@/src/shared/components/ImageCropper/model'
 import { UploadedFile } from '@/src/features/post/postCreate/model/types'
 import { CustomSwiper } from '@/src/shared/ui/CustomSwiper'
+import { getCroppedImg } from '@/src/features/post/postCreate/utils/getCroppedImage'
 
 type Props = {
   isModalOpen: boolean

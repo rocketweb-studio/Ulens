@@ -26,7 +26,7 @@ function SettingsContent() {
 
 function SettingsPageContent() {
   const params = useSearchParams()
-  const part = params.get('part')
+  const part = params?.get('part')
 
   if (!part || !allowedParts.includes(part)) {
     redirect(Path.Settings('info'))

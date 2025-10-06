@@ -1,5 +1,5 @@
 import { Area } from 'react-easy-crop'
-import { createImage } from '@/src/shared/components/ImageCropper/model/createImage'
+import { createImage } from '@/src/features/post/postCreate/utils/createImage'
 
 export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<string> => {
   if (!pixelCrop || pixelCrop.width <= 0 || pixelCrop.height <= 0) {
