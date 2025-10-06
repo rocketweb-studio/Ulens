@@ -68,10 +68,11 @@ export const GeneralInformation = () => {
         <Input type='text' label={'First Name'} required />
         <Input type='text' label={'Last Name'} required />
         <DatePicker
+            onSelect={()=>{}}
+            selected={"2021-01-01T00:00:00.000Z"}
           label={'Date of birth'}
           labelMobile={'Date of birthday'}
-          dateString={'2023-11-25T15:30:00.000Z'}
-          onClick={() => {}}
+
         />
 
         <div className={s.selects}>
