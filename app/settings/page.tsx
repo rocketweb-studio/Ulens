@@ -7,6 +7,7 @@ import { Path } from '@/src/shared/router/Path'
 
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 import { GeneralInformation } from '@/src/pages/generalInformation'
+import { AccountManagement } from '@/src/pages/accountManagement'
 
 const allowedParts = ['info', 'devices', 'subscriptions', 'payments']
 
@@ -37,7 +38,7 @@ function SettingsPageContent() {
       <Tabs />
       {part === 'info' && <GeneralInformation />}
       {part === 'devices' && <p>Текущий раздел: {part}</p>}
-      {part === 'subscriptions' && <p>Текущий раздел: {part}</p>}
+      {part === 'subscriptions' && <AccountManagement />}
       {part === 'payments' && <p>Текущий раздел: {part}</p>}
     </div>
   )
