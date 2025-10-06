@@ -9,7 +9,7 @@ import { getTabsSettings } from '@/src/shared/utils/getTabsSettings'
 export const Tabs = () => {
   const params = useSearchParams()
 
-  const tabsName = getTabsSettings(params)
+  const tabsName = getTabsSettings(params!)
 
   return (
     <FlexContainer wrap justify={'center'}>

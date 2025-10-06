@@ -14,10 +14,10 @@ import { FilterStep } from './FilterStep'
 import { PublicationStep } from './PublicationStep'
 import { ConfirmCloseModal } from './ConfirmCloseModal'
 import s from './PostCreateModal.module.scss'
-import { getCroppedImg } from '@/src/shared/components/ImageCropper/model'
 import { useForm } from 'react-hook-form'
 import { Steps, UploadedFile } from '@/src/features/post/postCreate/model/types'
 import { useCreatePostMutation, useUploadPostImagesMutation } from '@/src/entities/post/api/postsApi'
+import { getCroppedImg } from '@/src/features/post/postCreate/utils/getCroppedImage'
 
 type Props = {
   isModalOpen: boolean

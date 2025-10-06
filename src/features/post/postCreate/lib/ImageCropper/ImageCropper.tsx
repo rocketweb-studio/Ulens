@@ -6,8 +6,8 @@ import { Button } from '@/src/shared/ui/Button/Button'
 import s from './ImageCropper.module.scss'
 import { IconExpandOutline, IconMaximizeOutline } from '@rocketweb-studio/ulens-ui-kit'
 import ImageNext from 'next/image'
-import { createImage } from '@/src/shared/components/ImageCropper/model'
 import dynamic from 'next/dynamic'
+import { createImage } from '@/src/features/post/postCreate/utils/createImage'
 
 const Cropper = dynamic(() => import('react-easy-crop').then((mod) => mod.default), {
   ssr: false,

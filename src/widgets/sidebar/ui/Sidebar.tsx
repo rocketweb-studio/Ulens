@@ -41,18 +41,18 @@ function SidebarContent() {
     },
     {
       icon:
-        pathname === Path.UserProfile(data?.id) && params.get('action') === 'create' ?
+        pathname === Path.UserProfile(data?.id) && params?.get('action') === 'create' ?
           IconPlusSquare
         : IconPlusSquareOutline,
       title: 'Create',
       href: Path.UserCreate(data?.id),
-      isActive: pathname === Path.UserProfile(data?.id) && params.get('action') === 'create',
+      isActive: pathname === Path.UserProfile(data?.id) && params?.get('action') === 'create',
     },
     {
-      icon: pathname === Path.UserProfile(data?.id) && params.size === 0 ? IconPerson : IconPersonOutline,
+      icon: pathname === Path.UserProfile(data?.id) && params?.size === 0 ? IconPerson : IconPersonOutline,
       title: 'My Profile',
       href: Path.UserProfile(data?.id),
-      isActive: pathname === Path.UserProfile(data?.id) && params.size === 0,
+      isActive: pathname === Path.UserProfile(data?.id) && params?.size === 0,
     },
     { icon: IconMessageCircleOutline, title: 'Messenger', href: Path.InDevelopment },
     { icon: IconSearch, title: 'Search', href: Path.InDevelopment },

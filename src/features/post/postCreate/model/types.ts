@@ -28,27 +28,17 @@ export type PublicationFormData = {
   description: string
 }
 
-export type StepProps = {
-  isModalOpen: boolean
-  onModalClose: () => void
-  onOverlayClick?: () => void
+export type FilterPanelHandle = {
+  applyFilter: () => void
 }
 
-export type CropStepProps = StepProps & {
-  changeNextStep: () => void
-  changePrevStep: () => void
-  uploadedFiles: UploadedFile[]
-  currentImageIndex: number
-  setCurrentImageIndex: (index: number) => void
-  setUploadedFiles: (files: UploadedFile[]) => void
+export type Filter = {
+  name: string
+  value: string
+  cssFilter: string
+  preview: string
 }
 
-export type PublicationStepProps = StepProps & {
-  changePrevStep: () => void
-  uploadedFiles: UploadedFile[]
-  currentImageIndex: number
-  control: Control<PublicationFormData>
-  errors: FieldErrors<PublicationFormData>
-  handleSubmit: UseFormHandleSubmit<PublicationFormData>
-  onFormSubmit: (data: PublicationFormData) => void
+export type ImageFilters = {
+  [imageIndex: number]: string
 }
