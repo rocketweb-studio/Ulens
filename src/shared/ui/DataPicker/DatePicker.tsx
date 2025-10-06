@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect,FocusEvent } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { Input } from '../Input/Input';
@@ -10,7 +10,6 @@ type Props = {
     label?: string;
     labelMobile?: string;
 }
-
 function formatterDate(dateString?: string | Date, isMobile?: boolean): string {
     if (!dateString) return '00.00.0000';
 
@@ -57,7 +56,7 @@ export function DatePicker({
         };
     }, []);
 
-    const handleBlur = (e: React.FocusEvent) => {
+    const handleBlur = (e: FocusEvent) => {
         if (!e.currentTarget.contains(e.relatedTarget as Node)) {
             setIsOpen(false);
         }
@@ -70,7 +69,6 @@ export function DatePicker({
 
     // Преобразуем строку ISO в Date для DayPicker
     const selectedDate =  selected ? new Date(selected) : undefined;
-
     const displayDate = formatterDate(selected, isMobile);
     const displayLabel = isMobile && labelMobile ? labelMobile : label;
 
