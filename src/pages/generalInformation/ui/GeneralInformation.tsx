@@ -68,7 +68,7 @@ export const GeneralInformation = () => {
         <Input type='text' label={'First Name'} required />
         <Input type='text' label={'Last Name'} required />
         <DatePicker
-            onSelect={()=>{}}
+            onSelectAction={()=>{}}
             selected={"2021-01-01T00:00:00.000Z"}
           label={'Date of birth'}
           labelMobile={'Date of birthday'}
@@ -78,13 +78,13 @@ export const GeneralInformation = () => {
         <div className={s.selects}>
           <Select
             options={['Belarus', 'Russia', 'USA', 'Germany']}
-            onSelect={() => {}}
+            onSelectAction={() => {}}
             placeholder='Country'
             title={'Select your country'}
           />{' '}
           <Select
             options={['Minsk', 'Moscow', 'New York', 'Saint-Peterburg', 'Berlin', 'Keln', 'NoName']}
-            onSelect={() => {}}
+            onSelectAction={() => {}}
             placeholder='City'
             title={'Select your city'}
           />

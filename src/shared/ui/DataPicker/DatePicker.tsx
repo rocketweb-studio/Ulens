@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect,FocusEvent } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
@@ -6,7 +8,7 @@ import s from './DatePicker.module.scss';
 
 type Props = {
     selected?: string; // строка в формате ISO (пр. "2021-01-01T00:00:00.000Z")
-    onSelect: (dateString: string | undefined) => void; // строка формата "27.09.2024"
+    onSelectAction: (dateString: string | undefined) => void; // строка формата "27.09.2024"
     label?: string;
     labelMobile?: string;
 }
@@ -37,7 +39,7 @@ function formatterDate(dateString?: string | Date, isMobile?: boolean): string {
 
 export function DatePicker({
                                selected,
-                               onSelect,
+                               onSelectAction,
                                label,
                                labelMobile,
                            }: Props) {
@@ -63,7 +65,7 @@ export function DatePicker({
     };
 
     const handleDaySelect = (date: Date | undefined) => {
-        onSelect(formatterDate(date,false));
+        onSelectAction(formatterDate(date,false));
         setIsOpen(false);
     };
 
