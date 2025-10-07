@@ -64,13 +64,13 @@ export function DatePicker ({
 
   const handleBlur = (e: FocusEvent) => {
     if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-      setIsOpen(false);
+      // setIsOpen(false);
     }
   };
 
   const handleDaySelect = (date: Date | undefined) => {
     onChange?.({ target: { value: formatterDate(date, false) } } as React.ChangeEvent<HTMLInputElement>);
-    setIsOpen(false);
+    // setIsOpen(false);
   };
 
   // Преобразуем строку ISO в Date для DayPicker
@@ -83,6 +83,7 @@ export function DatePicker ({
       <div className={s.dateContainer} onClick={() => {
         setIsOpen(!isOpen);
       }}>
+        <span className={s.span}>{displayDate}</span>
         <Input
           type={'text'}
           label={displayLabel}
@@ -109,16 +110,34 @@ export function DatePicker ({
       </div>
 
             {isOpen && (
-                <div className={s.datePickerPopup}>
-                    <DayPicker
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={handleDaySelect}
-                        endMonth={new Date()}
-                        weekStartsOn={1}
-                        fixedWeeks
-                        className={s.customDayPicker}
-                    />
+                 <div className={s.datePickerPopup}>
+                   <DayPicker
+                       mode="single"
+                       selected={selectedDate}
+                       onSelect={handleDaySelect}
+                       weekStartsOn={1}
+                       fixedWeeks
+                       captionLayout="dropdown"
+                       endMonth={new Date()}
+                       className={s.customDayPicker}
+                       modifiers={{
+                         weekend: (date) => [0, 6].includes(date.getDay()),
+                       }}
+                       modifiersStyles={{
+                         selected: {
+                           backgroundColor: '#234e99',
+                           color: 'white',
+                           borderRadius: '50%',
+                         },
+                         day_button:{
+                           border:"none",
+                           outline:"none"},
+                         today:{ },
+                         weekend: {
+                           color: '#cc1439',
+                         },
+                       }}
+                   />
                 </div>
             )}
         </div>

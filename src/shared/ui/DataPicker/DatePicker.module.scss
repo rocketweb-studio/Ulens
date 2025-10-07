@@ -2,7 +2,6 @@
 
 .dateContainer {
 position: relative;
-
 }
 .span {
 position: absolute;
@@ -26,4 +25,26 @@ position: absolute;
   background-color: colors.color(dark, 500);
   border-radius: 2px;
   padding: 16px 24px;
+svg{
+  fill: white;
+  background-color:  colors.color(dark, 100);
+  border-radius: 50%;
+  padding: 4px;
+}
+  & select {
+    display: inline-block;
+    font-size: 10px;
+ max-width: 100%;
+
+  }
+& :global(.rdp-day_button) {
+  border: none !important;
+}
+& :global(.rdp-months_dropdown) {
+  margin-right: 4px;
+}
+& :global(.rdp-caption_label){
+display: flex;
+  gap: 5px;
+}
 }
