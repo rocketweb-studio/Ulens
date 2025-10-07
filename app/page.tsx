@@ -5,7 +5,7 @@ export default async function Home() {
   let data = undefined
 
   try {
-    data = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/last`, {
+    data = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/latest`, {
       next: { revalidate: 60 },
     }).then((res) => res.json())
   } catch (e) {

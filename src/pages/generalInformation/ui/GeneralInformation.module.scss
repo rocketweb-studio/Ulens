@@ -22,14 +22,15 @@ $light-color: colors.color(light, 900) !default;
   padding-bottom: 24px;
 }
 
-.line{
+.line {
   width: 100%;
   height: 1px;
-  background-color: $light-color;
+  background-color: colors.color(light, 900);
+  margin-top: 10px;
 }
 .btnSaved{
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top:  24px;
   margin-bottom:  24px;
 }
