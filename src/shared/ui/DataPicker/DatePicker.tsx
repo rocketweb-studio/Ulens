@@ -5,11 +5,12 @@ import {DayPicker} from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import {Input} from '../Input/Input';
 import s from './DatePicker.module.scss';
-import {FieldValues, UseFormRegister} from "react-hook-form";
+import {FieldValues, Path, UseFormRegister} from "react-hook-form";
 import {RegistrationInputs} from "@/src/entities/auth/model/schemas/registrationSchema";
 
 type Props<T extends FieldValues = RegistrationInputs> = {
   register?: UseFormRegister<T>
+  name?: Path<T>
   error?: string
   selected?: string; // строка в формате ISO (пр. "2021-01-01T00:00:00.000Z")
   onSelectAction: (dateString: string | undefined) => void; // строка формата "27.09.2024"
@@ -48,7 +49,7 @@ export function DatePicker <T extends FieldValues = RegistrationInputs>({
                                                                          label,
                                                                          labelMobile,
                                                                          error,
-                                                                         register
+                                                                         register, name
                                                                        }: Props<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -74,9 +75,8 @@ export function DatePicker <T extends FieldValues = RegistrationInputs>({
 
   const handleDaySelect = (date: Date | undefined) => {
     onSelectAction(formatterDate(date, false));
-
     setIsOpen(false);
-    console.log('date',formatterDate(date, false))
+    setValue(formatterDate(date, false))
   };
 
   // Преобразуем строку ISO в Date для DayPicker
@@ -89,15 +89,14 @@ export function DatePicker <T extends FieldValues = RegistrationInputs>({
       <div className={s.dateContainer} onClick={() => {
         setIsOpen(!isOpen);
       }}>
-        {/*<span className={s.span}>{displayDate} asdasd</span>*/}
-        {/*<span className={s.span}>{selected}</span>*/}
         <Input
           register={register}
+          name={name}
           type={'text'}
-
           label={displayLabel}
-
           error={error}
+          readOnly
+          value={value}
         />
         <div className={s.calendar}>
           <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>

@@ -27,7 +27,7 @@ export const GeneralInformation = () => {
     aboutMe: 'aboutMe',
   }
 
-  console.log('dataProfile', dataProfile)
+  // console.log('dataProfile', dataProfile)
   // console.log('updateProfileData',result)
 
   const TestHandler = () => {
@@ -85,6 +85,8 @@ export const GeneralInformation = () => {
           label={'Date of birth'}
           labelMobile={'Date of birthday'}
           error={errors.dateOfBirth?.message}
+          register={register}
+          name={'dateOfBirth'}
         />
 
         <div className={s.selects}>
@@ -93,7 +95,7 @@ export const GeneralInformation = () => {
             onSelectAction={() => {  setValue('country','Russia')           }}
             placeholder='Country'
             title={'Select your country'}
-          />{' '}
+          />
           <Select
             options={['Minsk', 'Moscow', 'New York', 'Saint-Peterburg', 'Berlin', 'Keln', 'NoName']}
             onSelectAction={() => {
