@@ -89,7 +89,7 @@ export function DatePicker <T extends FieldValues = RegistrationInputs>({
       <div className={s.dateContainer} onClick={() => {
         setIsOpen(!isOpen);
       }}>
-        {/*<span className={s.span}>{displayDate} asdasd</span>*/}
+        <span className={s.span}>{displayDate}</span>
         {/*<span className={s.span}>{selected}</span>*/}
         <Input
           register={register}
