@@ -5,15 +5,12 @@ import {DayPicker} from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import {Input} from '../Input/Input';
 import s from './DatePicker.module.scss';
-import {FieldValues, Path, UseFormRegister} from "react-hook-form";
-import {RegistrationInputs} from "@/src/entities/auth/model/schemas/registrationSchema";
 
-type Props<T extends FieldValues = RegistrationInputs> = {
-  register?: UseFormRegister<T>
-  name?: Path<T>
+type Props = {
   error?: string
   selected?: string; // строка в формате ISO (пр. "2021-01-01T00:00:00.000Z")
-  onSelectAction: (dateString: string | undefined) => void; // строка формата "27.09.2024"
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string | null
   label?: string;
   labelMobile?: string;
 }
@@ -43,17 +40,15 @@ function formatterDate(dateString?: string | Date, isMobile?: boolean): string {
   return `${day}.${month}.${year}`;
 }
 
-export function DatePicker <T extends FieldValues = RegistrationInputs>({
+export function DatePicker ({
                                                                          selected,
-                                                                         onSelectAction,
                                                                          label,
                                                                          labelMobile,
                                                                          error,
-                                                                         register, name
-                                                                       }: Props<T>) {
+                                                                         value, onChange
+                                                                       }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [value, setValue] = useState<string | undefined>('');
 
   //юзеффект для ui мобилки
   useEffect(() => {
@@ -74,9 +69,8 @@ export function DatePicker <T extends FieldValues = RegistrationInputs>({
   };
 
   const handleDaySelect = (date: Date | undefined) => {
-    onSelectAction(formatterDate(date, false));
+    onChange?.({ target: { value: formatterDate(date, false) } } as React.ChangeEvent<HTMLInputElement>);
     setIsOpen(false);
-    setValue(formatterDate(date, false))
   };
 
   // Преобразуем строку ISO в Date для DayPicker
@@ -90,13 +84,11 @@ export function DatePicker <T extends FieldValues = RegistrationInputs>({
         setIsOpen(!isOpen);
       }}>
         <Input
-          register={register}
-          name={name}
           type={'text'}
           label={displayLabel}
           error={error}
+          value={value!}
           readOnly
-          value={value}
         />
         <div className={s.calendar}>
           <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>

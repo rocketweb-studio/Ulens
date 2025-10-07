@@ -2,7 +2,7 @@
 
 import s from './GeneralInformation.module.scss'
 import {Input} from '@/src/shared/ui/Input/Input'
-import {SubmitHandler, useForm} from 'react-hook-form'
+import {Controller, SubmitHandler, useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
 import {useGetProfileByUsedIdQuery, useUpdateProfileMutation} from '@/src/entities/userProfile/api/userProfileApi'
 import React, {useEffect} from 'react'
@@ -11,6 +11,8 @@ import {TextArea} from '@/src/shared/ui/TextArea/TextArea'
 import {DatePicker} from '@/src/shared/ui/DataPicker/DatePicker'
 import {Button} from '@/src/shared/ui'
 import {profileSchema, UserProfile} from '@/src/entities/userProfile/model/profileSchema'
+import Link from "next/link";
+import { Path } from '@/src/shared/router/Path'
 
 export const GeneralInformation = () => {
   const {data: dataProfile} = useGetProfileByUsedIdQuery({userId: '45d09b76-8237-417e-b744-702a2eb29913'})
@@ -39,6 +41,7 @@ export const GeneralInformation = () => {
     handleSubmit,
     reset,
     setValue,
+    control,
     formState: {errors},
   } = useForm<UserProfile>({
     resolver: zodResolver(profileSchema),
@@ -62,8 +65,8 @@ export const GeneralInformation = () => {
 
   const onSubmit: SubmitHandler<UserProfile> = async (data) => {
     console.log('submitData', data)
-    console.log('submitErrors', errors)
-
+    // console.log('submitErrors', errors)
+        updateProfile(data)
     // try {
     // } catch (e) {
     // }
@@ -77,16 +80,18 @@ export const GeneralInformation = () => {
         <Input type='text' label={'Username'} name={'userName'} required register={register} error={errors.userName?.message}/>
         <Input type='text' label={'First Name'} name={'firstName'} required register={register} error={errors.firstName?.message}/>
         <Input type='text' label={'Last Name'} name={'lastName'} required register={register} error={errors.lastName?.message}/>
-        <DatePicker
-          onSelectAction={() => {
+        <Controller
+          name="dateOfBirth"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => {
+            return ( <DatePicker
+              label={'Date of birth'}
+              labelMobile={'Date of birthday'}
+              error={errors.dateOfBirth?.message}
+              {...field}
+            />)
           }}
-          // selected={"2021-01-01T00:00:00.000Z"}
-          selected={dataProfile?.dateOfBirth}
-          label={'Date of birth'}
-          labelMobile={'Date of birthday'}
-          error={errors.dateOfBirth?.message}
-          register={register}
-          name={'dateOfBirth'}
         />
 
         <div className={s.selects}>
@@ -108,7 +113,6 @@ export const GeneralInformation = () => {
         <div className={s.line}></div>
         <div className={s.btnSaved}>
           <Button type={'submit'}>Save Changes</Button>
-          {/*<button type="submit">Save Changes</button>*/}
         </div>
       </form>
     </div>
