@@ -16,7 +16,7 @@ import { Path } from '@/src/shared/router/Path'
 
 export const GeneralInformation = () => {
   const {data: dataProfile} = useGetProfileByUsedIdQuery({userId: '45d09b76-8237-417e-b744-702a2eb29913'})
-  const [updateProfile] = useUpdateProfileMutation()
+  const [updateProfile, {isLoading}] = useUpdateProfileMutation()
 
   const {
     register,
@@ -108,7 +108,7 @@ export const GeneralInformation = () => {
         <TextArea label={'About me'} name={'aboutMe'} rows={4} register={register} error={errors.aboutMe?.message}/>
         <div className={s.line}></div>
         <div className={s.btnSaved}>
-          <Button type={'submit'}>Save Changes</Button>
+          <Button type={'submit'} disabled={isLoading}>Save Changes</Button>
         </div>
       </form>
     </div>
