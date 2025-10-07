@@ -1,10 +1,16 @@
 import s from './CurrentSubscription.module.scss'
 import {Card, FlexContainer, Input} from "@/src/shared/ui";
+import {useGetMySubscriptionQuery, useToggleAutoRenewalMutation} from "@/src/entities/payments";
 
 export const CurrentSubscription = () => {
+// const {data: subscriptionData} = useGetMySubscriptionQuery()
+const data = useGetMySubscriptionQuery()
+const [toggleAutoRenewal,{data: data2}] = useToggleAutoRenewalMutation()
 
   const onChangeHandler = () => {
-    console.log('check ✔')
+    console.log('subscriptionData', data2)
+    toggleAutoRenewal({isAutoRenewal: true})
+
   }
 
   return (
