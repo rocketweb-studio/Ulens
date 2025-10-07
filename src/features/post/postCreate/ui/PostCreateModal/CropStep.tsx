@@ -2,7 +2,7 @@
 
 import React, { MouseEvent, useState } from 'react'
 import { Modal } from '@/src/shared/ui/Modal/Modal'
-import { Button } from '@/src/shared/ui/Button/Button'
+import { Button } from '@/src/shared/ui'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
 import { ImageCropper } from '@/src/features/post/postCreate/lib/ImageCropper/ImageCropper'
 import { Area } from 'react-easy-crop'

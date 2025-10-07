@@ -2,10 +2,10 @@
 
 import style from './ResendVerification.module.scss'
 import { FlexContainer } from 'src/shared/ui/FlexContainer'
-import { Button } from '@/src/shared/ui/Button/Button'
+import { Button } from '@/src/shared/ui'
 import Image from 'next/image'
 import resendVerificationImage from '@/public/sign-up/resend-verification-link.svg'
-import { Input } from '@/src/shared/ui/Input/Input'
+import { Input } from '@/src/shared/ui'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { emailConfirmationSchema, EmailInput } from '@/src/entities/auth/model/schemas/emailConfirmationSchema'

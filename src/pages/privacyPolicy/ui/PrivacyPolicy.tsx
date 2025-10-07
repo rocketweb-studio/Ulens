@@ -6,7 +6,7 @@ import React from 'react'
 import { useRouter } from 'next/navigation'
 import styles from './PrivacyPolicy.module.scss'
 import arrow from '@/public/icons/arrow-left.svg'
-import { Button } from '@/src/shared/ui/Button/Button'
+import { Button } from '@/src/shared/ui'
 import Image from 'next/image'
 
 export const PrivacyPolicy = () => {

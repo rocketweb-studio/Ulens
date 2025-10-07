@@ -3,7 +3,7 @@
 import s from './Sidebar.module.scss'
 import Link from 'next/link'
 import { Path } from '@/src/shared/router/Path'
-import { FlexContainer } from '@/src/shared/ui/FlexContainer'
+import { FlexContainer } from '@/src/shared/ui'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 import { usePathname, useSearchParams } from 'next/navigation'
 import {

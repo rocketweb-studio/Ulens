@@ -2,7 +2,7 @@
 
 import { MouseEvent } from 'react'
 import { Modal } from '@/src/shared/ui/Modal/Modal'
-import { Button } from '@/src/shared/ui/Button/Button'
+import { Button } from '@/src/shared/ui'
 import { IconArrowIosBackOutline } from '@rocketweb-studio/ulens-ui-kit'
 
 import { TextArea } from '@/src/shared/ui/TextArea/TextArea'

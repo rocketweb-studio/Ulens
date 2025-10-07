@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import s from './Modal.module.scss'
 import Image from 'next/image'
 import closeIcon from '@/public/close.svg'
-import { Button } from '@/src/shared/ui/Button/Button'
+import { Button } from '@/src/shared/ui'
 
 export type Props = {
   isOpen: boolean
