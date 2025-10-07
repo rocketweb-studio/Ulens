@@ -117,15 +117,19 @@ export function DatePicker <T extends FieldValues = RegistrationInputs>({
         </div>
       </div>
 
-      {isOpen && (
-        <div className={s.datePickerPopup}>
-          <DayPicker
-            mode="single"
-            selected={selectedDate}
-            onSelect={handleDaySelect}
-          />
+            {isOpen && (
+                <div className={s.datePickerPopup}>
+                    <DayPicker
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={handleDaySelect}
+                        endMonth={new Date()}
+                        weekStartsOn={1}
+                        fixedWeeks
+                        className={s.customDayPicker}
+                    />
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 }
