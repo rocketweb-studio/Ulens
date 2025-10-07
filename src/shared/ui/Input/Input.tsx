@@ -23,6 +23,7 @@ type Props<T extends FieldValues = RegistrationInputs> = {
   register?: UseFormRegister<T>
   showPasswordToggle?: boolean
   required?: boolean
+  readOnly?: boolean
 }
 
 export const Input = <T extends FieldValues = RegistrationInputs>({
@@ -39,6 +40,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
   className = '',
   register,
   required,
+    readOnly=false,
   showPasswordToggle = false,
 }: Props<T>) => {
   const [showPassword, setShowPassword] = useState(false)
@@ -103,6 +105,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
       )}
       <div className={styles.inputWrapper}>
         <input
+          readOnly={readOnly}
           type={inputType}
           value={value}
           placeholder={placeholder}

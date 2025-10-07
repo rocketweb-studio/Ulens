@@ -1,30 +1,32 @@
+'use client'
 import React, {useRef, useState} from 'react';
 import s from './Select.module.scss';
 
 type DropdownProps ={
     options: string[];
-    onSelect: (option: string) => void;
+    onSelectAction: (option: string) => void;
     placeholder?: string;
     disabled?: boolean;
     title?: string;
     style?:object;
 }
 
-export const Select = ({options,title, onSelect, placeholder = "Выбрать", disabled,style}:DropdownProps) => {
+export const Select = ({options,title="", onSelectAction, placeholder = "Выбрать", disabled,style}:DropdownProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [selected, setSelected] = useState<string>('');
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const handleSelect = (option: string) => {
         setSelected(option);
-        onSelect?.(option);
+        onSelectAction?.(option);
         setIsOpen(false);
     };
 
     return (
             <div className={`${s.dropdown} ${disabled ? s.disabled : ""}`} ref={dropdownRef} style={style}>
-                <label className={s.title}>{title||""}</label>
+                <label className={s.title}>{title}</label>
                 <button
+                    type={"button"}
                     className={s.trigger}
                     onClick={() => setIsOpen(!isOpen)}
                     disabled={disabled}
