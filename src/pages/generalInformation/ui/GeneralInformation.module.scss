@@ -1,16 +1,9 @@
-@use '@/src/shared/styles/typography' as typography;
 @use '@/src/shared/styles/colors' as colors;
-
-$primary-color: colors.color(accent, 500) !default;
-$border-color: colors.color(accent, 100) !default;
-$secondary-color: colors.color(dark, 500) !default;
-$light-color: colors.color(light, 900) !default;
 
 .general{
   display: flex;
   flex-direction: row;
 }
-
 
 .inputsContainer{
   width: 100%;

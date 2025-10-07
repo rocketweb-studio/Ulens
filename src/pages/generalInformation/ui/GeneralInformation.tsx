@@ -108,7 +108,7 @@ export const GeneralInformation = () => {
         <div className={s.line}></div>
         <div className={s.btnSaved}>
           <Button type={'submit'}>Save Changes</Button>
-          <button type="submit">Save Changes</button>
+          {/*<button type="submit">Save Changes</button>*/}
         </div>
       </form>
     </div>
