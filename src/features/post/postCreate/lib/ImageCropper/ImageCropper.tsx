@@ -2,7 +2,7 @@
 
 import { ComponentType, useEffect, useRef, useState } from 'react'
 import { Area } from 'react-easy-crop'
-import { Button } from '@/src/shared/ui/Button/Button'
+import { Button } from '@/src/shared/ui'
 import s from './ImageCropper.module.scss'
 import { IconExpandOutline, IconMaximizeOutline } from '@rocketweb-studio/ulens-ui-kit'
 import ImageNext from 'next/image'

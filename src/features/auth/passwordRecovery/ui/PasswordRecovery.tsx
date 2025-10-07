@@ -1,8 +1,8 @@
 'use client'
 
-import { Input } from '@/src/shared/ui/Input/Input'
+import { Input } from '@/src/shared/ui'
 import s from './PasswordRecovery.module.scss'
-import { Button } from '@/src/shared/ui/Button/Button'
+import { Button } from '@/src/shared/ui'
 import { Modal } from '@/src/shared/ui/Modal/Modal'
 import { usePasswordRecoveryMutation } from '@/src/entities/auth/api/authApi'
 import { SubmitHandler, useForm } from 'react-hook-form'

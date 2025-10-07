@@ -11,3 +11,17 @@
   @include typography.h3
 }
 
+div.card {
+  padding: 12px 25px;
+}
+
+.dateTitle {
+  @include typography.regular_text_14;
+  color: colors.color(light, 900);
+}
+
+.date {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 171%;
+}

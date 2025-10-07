@@ -1,7 +1,7 @@
 'use client'
 
 import s from './GeneralInformation.module.scss'
-import {Input} from '@/src/shared/ui/Input/Input'
+import {Input} from '@/src/shared/ui'
 import {Controller, SubmitHandler, useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
 import {useGetProfileByUsedIdQuery, useUpdateProfileMutation} from '@/src/entities/userProfile/api/userProfileApi'

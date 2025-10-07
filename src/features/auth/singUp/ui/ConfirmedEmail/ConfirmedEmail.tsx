@@ -1,6 +1,6 @@
 import styles from './ConfirmedEmail.module.scss'
 import { FlexContainer } from 'src/shared/ui/FlexContainer'
-import { Button } from '@/src/shared/ui/Button/Button'
+import { Button } from '@/src/shared/ui'
 import Image from 'next/image'
 import confirmedEmailImage from '@/public/sign-up/confirmed-email.svg'
 import { useRouter } from 'next/navigation'

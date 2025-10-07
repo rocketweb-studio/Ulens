@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import s from './Tabs.module.scss'
-import { FlexContainer } from '@/src/shared/ui/FlexContainer'
+import { FlexContainer } from '@/src/shared/ui'
 import { useSearchParams } from 'next/navigation'
 import { getTabsSettings } from '@/src/shared/utils/getTabsSettings'
 
