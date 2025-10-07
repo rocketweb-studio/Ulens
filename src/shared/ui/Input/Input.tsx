@@ -24,6 +24,7 @@ type Props<T extends FieldValues = RegistrationInputs> = {
   showPasswordToggle?: boolean
   required?: boolean
   readOnly?: boolean
+  errorLink?: ReactNode;
 }
 
 export const Input = <T extends FieldValues = RegistrationInputs>({
@@ -40,6 +41,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
   className = '',
   register,
   required,
+  errorLink,
     readOnly=false,
   showPasswordToggle = false,
 }: Props<T>) => {
@@ -133,7 +135,7 @@ export const Input = <T extends FieldValues = RegistrationInputs>({
       {error && (
         <div ref={errorRef} className={styles.errorText}>
           <span ref={errorTextRef} className={`${styles.errorTextContent} ${isOverflowing ? styles.animated : ''}`}>
-            {error}
+            {error} <span className={styles.errorLink}>{errorLink}</span>
           </span>
         </div>
       )}

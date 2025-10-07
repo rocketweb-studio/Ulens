@@ -200,6 +200,11 @@
   display: inline-block;
 }
 
+.errorLink {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 @keyframes scrollError {
   0% {
     transform: translateX(0);

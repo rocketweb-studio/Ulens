@@ -1,6 +1,7 @@
 'use-client'
-import { Path } from '@/src/shared/router/Path'
 
+import {useGetMeQuery} from "@/src/entities/auth/api/authApi";
+import { Path } from '@/src/shared/router/Path'
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import styles from './PrivacyPolicy.module.scss'
@@ -10,10 +11,12 @@ import Image from 'next/image'
 
 export const PrivacyPolicy = () => {
   const { push } = useRouter()
+  const {isSuccess} = useGetMeQuery()
 
   return (
     <section>
-      <Button
+      {!isSuccess &&
+        <Button
         tagType={'link'}
         path={Path.SignUp}
         variant={'text-white'}
@@ -28,7 +31,7 @@ export const PrivacyPolicy = () => {
         }
       >
         Back to Sign Up
-      </Button>
+      </Button>}
       <h1 className={styles.title}>Privacy Policy</h1>
       <div className={styles.content}>
         <p className={styles.text}>
