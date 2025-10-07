@@ -13,6 +13,7 @@ type Props = {
   value?: string | null
   label?: string;
   labelMobile?: string;
+  errorLink?: React.ReactNode;
 }
 
 function formatterDate(dateString?: string | Date, isMobile?: boolean): string {
@@ -40,13 +41,13 @@ function formatterDate(dateString?: string | Date, isMobile?: boolean): string {
   return `${day}.${month}.${year}`;
 }
 
-export function DatePicker ({
-                                                                         selected,
-                                                                         label,
-                                                                         labelMobile,
-                                                                         error,
-                                                                         value, onChange
-                                                                       }: Props) {
+export function DatePicker({
+                             selected,
+                             label,
+                             labelMobile,
+                             error,
+                             value, onChange, errorLink
+                           }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -64,13 +65,13 @@ export function DatePicker ({
 
   const handleBlur = (e: FocusEvent) => {
     if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-      // setIsOpen(false);
+      setIsOpen(false);
     }
   };
 
   const handleDaySelect = (date: Date | undefined) => {
-    onChange?.({ target: { value: formatterDate(date, false) } } as React.ChangeEvent<HTMLInputElement>);
-    // setIsOpen(false);
+    onChange?.({target: {value: formatterDate(date, false)}} as React.ChangeEvent<HTMLInputElement>);
+    setIsOpen(false);
   };
 
   // Преобразуем строку ISO в Date для DayPicker
@@ -83,13 +84,13 @@ export function DatePicker ({
       <div className={s.dateContainer} onClick={() => {
         setIsOpen(!isOpen);
       }}>
-        <span className={s.span}>{displayDate}</span>
         <Input
           type={'text'}
           label={displayLabel}
           error={error}
           value={value!}
           readOnly
+          errorLink={errorLink}
         />
         <div className={s.calendar}>
           <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>

@@ -1,0 +1,10 @@
+@use "src/shared/styles/colors" as colors;
+
+.cardContainer {
+  border: 1px solid colors.color(dark, 300);
+  border-radius: 2px;
+  background-color: colors.color(dark, 500);
+  width: 100%;
+  height: 100%;
+  padding: 25px;
+}

@@ -16,31 +16,12 @@ import { Path } from '@/src/shared/router/Path'
 
 export const GeneralInformation = () => {
   const {data: dataProfile} = useGetProfileByUsedIdQuery({userId: '45d09b76-8237-417e-b744-702a2eb29913'})
-  const [updateProfile, result] = useUpdateProfileMutation()
-
-  const body = {
-    userName: 'valeratirs',
-    firstName: 'Val',
-    lastName: 'Ras',
-    city: 'Russia',
-    country: 'Moscow',
-    region: 'Moscow',
-    dateOfBirth: '01.01.2000',
-    aboutMe: 'aboutMe',
-  }
-
-  // console.log('dataProfile', dataProfile)
-  // console.log('updateProfileData',result)
-
-  const TestHandler = () => {
-    updateProfile(body)
-  }
+  const [updateProfile] = useUpdateProfileMutation()
 
   const {
     register,
     handleSubmit,
     reset,
-    setValue,
     control,
     formState: {errors},
   } = useForm<UserProfile>({
@@ -65,48 +46,63 @@ export const GeneralInformation = () => {
 
   const onSubmit: SubmitHandler<UserProfile> = async (data) => {
     console.log('submitData', data)
-    // console.log('submitErrors', errors)
-        updateProfile(data)
-    // try {
-    // } catch (e) {
-    // }
-    // reset()
+    updateProfile(data)
+    try {
+      await updateProfile(data).unwrap()
+    } catch (e) {
+    }
   }
+
 
   return (
     <div className={s.general}>
 
       <form onSubmit={handleSubmit(onSubmit)} className={s.inputsContainer}>
-        <Input type='text' label={'Username'} name={'userName'} required register={register} error={errors.userName?.message}/>
-        <Input type='text' label={'First Name'} name={'firstName'} required register={register} error={errors.firstName?.message}/>
-        <Input type='text' label={'Last Name'} name={'lastName'} required register={register} error={errors.lastName?.message}/>
+        <Input type='text' label={'Username'} name={'userName'} required register={register}
+               error={errors.userName?.message}/>
+        <Input type='text' label={'First Name'} name={'firstName'} required register={register}
+               error={errors.firstName?.message}/>
+        <Input type='text' label={'Last Name'} name={'lastName'} required register={register}
+               error={errors.lastName?.message}/>
         <Controller
           name="dateOfBirth"
           control={control}
-          rules={{ required: true }}
-          render={({ field }) => {
-            return ( <DatePicker
+          rules={{required: true}}
+          render={({field}) => {
+            return (<DatePicker
               label={'Date of birth'}
               labelMobile={'Date of birthday'}
               error={errors.dateOfBirth?.message}
+              errorLink={<Link href={Path.PrivacyPolicy}>PrivacyPolicy</Link>}
               {...field}
             />)
           }}
         />
 
         <div className={s.selects}>
-          <Select
-            options={['Belarus', 'Russia', 'USA', 'Germany']}
-            onSelectAction={() => {  setValue('country','Russia')           }}
-            placeholder='Country'
-            title={'Select your country'}
-          />
-          <Select
-            options={['Minsk', 'Moscow', 'New York', 'Saint-Peterburg', 'Berlin', 'Keln', 'NoName']}
-            onSelectAction={() => {
+          <Controller
+            name="country"
+            control={control}
+            render={({field}) => {
+              return (<Select
+                options={['Belarus', 'Russia', 'USA', 'Germany']}
+                placeholder='Country'
+                title={'Select your country'}
+                {...field}
+              />)
             }}
-            placeholder='City'
-            title={'Select your city'}
+          />
+          <Controller
+            name="city"
+            control={control}
+            render={({field}) => {
+              return (<Select
+                options={['Minsk', 'Moscow', 'New York', 'Saint-Peterburg', 'Berlin', 'Keln', 'NoName']}
+                placeholder='City'
+                title={'Select your city'}
+                {...field}
+              />)
+            }}
           />
         </div>
         <TextArea label={'About me'} name={'aboutMe'} rows={4} register={register} error={errors.aboutMe?.message}/>

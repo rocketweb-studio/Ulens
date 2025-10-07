@@ -55,7 +55,7 @@ export const profileSchema = z.object({
         age < 13 || (age === 13 && (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())));
 
       return !isUnder13;
-    }, { message: 'A user under 13 cannot create a profile. <u>Privacy Policy</u>' })
+    }, { message: 'A user under 13 cannot create a profile.' })
     .nullable(),
 
   aboutMe: z
