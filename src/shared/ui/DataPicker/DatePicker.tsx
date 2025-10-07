@@ -127,13 +127,12 @@ export function DatePicker({
                        modifiersStyles={{
                          selected: {
                            backgroundColor: '#234e99',
-                           color: 'white',
                            borderRadius: '50%',
                          },
                          day_button:{
                            border:"none",
                            outline:"none"},
-                         today:{ },
+                         today:{},
                          weekend: {
                            color: '#cc1439',
                          },

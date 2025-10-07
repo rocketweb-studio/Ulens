@@ -34,12 +34,11 @@ svg{
   & select {
     display: inline-block;
     font-size: 10px;
- max-width: 100%;
-
+    width: 100%;
   }
-& :global(.rdp-day_button) {
-  border: none !important;
-}
+//& :global(.rdp-day_button) {
+//  border: none !important;
+//}
 & :global(.rdp-months_dropdown) {
   margin-right: 4px;
 }
