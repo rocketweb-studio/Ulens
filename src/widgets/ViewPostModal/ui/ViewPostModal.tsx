@@ -76,49 +76,18 @@ type Props = {
 }
 
 export const ViewPostModal = ({ userId, postId, dataPostModal, dataUserInfo }: Props) => {
-  const userDataFromCache = useAppSelector(
-    (state) => userProfileApi.endpoints.getProfileByUsedId.select({ userId })(state).data,
-  )
-
-  const postDataFromCache = useAppSelector((state) => postsApi.endpoints.getPostById.select({ postId })(state).data)
 
   const { isOpen, closeModal } = useModal(true)
   const { replace } = useRouter()
   const { data: meData } = useGetMeQuery()
 
-  const dispatch = useAppDispatch()
-
-  let needHydrateUserInfoRef = useRef(!!dataUserInfo && !userDataFromCache)
-  let needHydratePostInfoRef = useRef(!!dataPostModal && !postDataFromCache)
-
-  const { data: userInfo } = useGetProfileByUsedIdQuery(
-    { userId },
-    {
-      skip: needHydrateUserInfoRef.current,
-    },
-  )
-
   const { data: postInfo } = useGetPostByIdQuery(
-    { postId },
-    {
-      skip: needHydratePostInfoRef.current,
-    },
+    { postId }
   )
-
-  useEffect(() => {
-    if (needHydrateUserInfoRef.current) {
-      needHydrateUserInfoRef.current = false
-      const thunk = userProfileApi.util.upsertQueryData('getProfileByUsedId', { userId }, dataUserInfo!)
-      dispatch(thunk)
-    }
-  }, [])
 
   const postsDataForRender = dataPostModal || postInfo
-  const userDataForRender = dataUserInfo || userInfo
+  const userDataForRender = dataUserInfo?.userName || postInfo?.userName
 
-  if (!postsDataForRender || !userDataForRender) {
-    return null
-  }
 
   const handleCloseModal = () => {
     closeModal()
@@ -192,7 +161,7 @@ export const ViewPostModal = ({ userId, postId, dataPostModal, dataUserInfo }: P
                 <div className={s.publicationProfileImage}>
                   <Image src={'/avatar/avatar_mini.png'} alt={'Avatar'} width={36} height={36} />
                   <Link href={Path.UserProfile(userId)} className={s.publicationProfileURL}>
-                    {userDataForRender?.userName}
+                    {userDataForRender}
                   </Link>
                 </div>
                 <div className={s.publicationMenu}>
