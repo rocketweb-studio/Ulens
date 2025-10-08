@@ -1,8 +1,7 @@
 @use '@/src/shared/styles/colors' as colors;
 
 .card {
-  padding: 12px 18px;
-  color: colors.color(dark, 500);
   border-radius: 2px;
   border: 1px solid colors.color(dark, 300);
+  background-color: colors.color(dark, 500);
 }

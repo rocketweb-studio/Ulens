@@ -16,7 +16,7 @@ const [toggleAutoRenewal,{data: data2}] = useToggleAutoRenewalMutation()
   return (
     <section className={s.sectionContainer}>
       <h3 className={s.sectionTitle}>Current Subscription:</h3>
-      <Card className={s.card}>
+      <Card contentClass={s.card}>
         <FlexContainer gap={45}>
           <FlexContainer gap={12} direction={'column'}>
             <span className={s.dateTitle}>Expire at</span>

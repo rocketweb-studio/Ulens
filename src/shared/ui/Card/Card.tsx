@@ -8,7 +8,7 @@ type Props = {
 export const Card = ({ children, contentClass }: Props) => {
     return (
         <div className={s.card}>
-            <div className={`${s.content} ${contentClass ? contentClass : ''}`}>{children}</div>
+            <div className={contentClass}>{children}</div>
         </div>
     )
 }
