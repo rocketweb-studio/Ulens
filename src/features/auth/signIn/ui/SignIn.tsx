@@ -52,7 +52,9 @@ export const SignIn = () => {
       const res = await login(data).unwrap()
       reset()
       localStorage.setItem('accessToken', res.accessToken)
-    } catch (error) {}
+    } catch (error) {
+      dispatch(setLoaderStatus({ status: 'idle' }))
+    }
   }
 
   return (
@@ -70,22 +72,9 @@ export const SignIn = () => {
           </div>
 
           <div className={styles.inputContainer}>
-            <Input
-              register={register}
-              name={'email'}
-              error={errors.email?.message}
-              placeholder={'Ulens@ulens.com'}
-              label={'Email'}
-            />
+            <Input register={register} name={'email'} error={errors.email?.message} placeholder={'Ulens@ulens.com'} label={'Email'} />
 
-            <Input
-              register={register}
-              name={'password'}
-              error={errors.password?.message}
-              label={'Password'}
-              type={'password'}
-              showPasswordToggle
-            />
+            <Input register={register} name={'password'} error={errors.password?.message} label={'Password'} type={'password'} showPasswordToggle />
             <Link href={Path.PasswordRecovery} className={styles.forgotPassword}>
               Forgot Password
             </Link>

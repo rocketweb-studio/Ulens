@@ -4,64 +4,67 @@ import { GetProfileByUserIdResponse } from '@/src/entities/userProfile/api/userP
 import { GetPostByIdResponse, GetPostsByUserIdResponse } from '@/src/entities/post/api/postsApi.types'
 import { PostCreate } from '@/src/features/post/postCreate/ui/PostCreate/PostCreate'
 import { ViewPostModal } from '@/src/widgets/ViewPostModal'
+import { Suspense } from 'react'
+import { AppLoader } from '@/src/shared/ui/AppLoader/AppLoader'
 
-export default async function UserPage({
-  params,
-  searchParams,
-}: {
+type Props = {
   params: Promise<{ userId: string }>
   searchParams: Promise<{ [_key: string]: string | undefined }>
-}) {
-  const { userId } = await params
-  const filters = await searchParams
+}
 
-  let dataPostModal: GetPostByIdResponse | undefined = undefined
-  let dataUserInfo: GetProfileByUserIdResponse | undefined = undefined
-  let dataPosts: GetPostsByUserIdResponse | undefined = undefined
+export default async function UserPage({ params, searchParams }: Props) {
+  const [{ userId }, filters] = await Promise.all([params, searchParams])
 
-  if (filters.action !== 'create') {
-    // const [userInfoResponse, postsResponse] = await Promise.all([
-    //   fetch(`${process.env.NEXT_PUBLIC_BASE_URL}profile/${userId}`, {
-    //     next: { revalidate: 60 } // Кэшируем на 60 секунд
-    //   }),
-    //   fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/user/${userId}`, {
-    //     next: { revalidate: 30 } // Кэшируем на 30 секунд
-    //   })
-    // ])
-    //
-    // const [dataUserInfo, dataPosts] = await Promise.all([
-    //   userInfoResponse.json(),
-    //   postsResponse.json()
-    // ])
+  // let dataPostModal: GetPostByIdResponse | undefined = undefined
+  // let dataUserInfo: GetProfileByUserIdResponse | undefined = undefined
+  // let dataPosts: GetPostsByUserIdResponse | undefined = undefined
 
-    const responseUserInfo = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}profile/${userId}`, {
+  const [userData, postsData, modalData] = await Promise.all([
+    // Основные данные профиля
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}profile/${userId}`, {
       next: { revalidate: 60 },
-    })
-    dataUserInfo = (await responseUserInfo.json()) as GetProfileByUserIdResponse
+    }).then((res) => res.json()),
 
-    const responsePosts = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/user/${userId}`, {
+    // Посты пользователя
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/user/${userId}`, {
       next: { revalidate: 30 },
-    })
-    dataPosts = (await responsePosts.json()) as GetPostsByUserIdResponse
+    }).then((res) => res.json()),
 
-    if (filters.postId) {
-      const responsePost = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/${filters.postId}`, {
+    // Данные для модалки только если нужны
+    filters.postId ?
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/${filters.postId}`, {
         next: { revalidate: 60 },
-      })
-      dataPostModal = (await responsePost.json()) as GetPostByIdResponse
-    }
-  }
+      }).then((res) => res.json())
+    : null,
+  ])
+
+  //if (filters.action !== 'create') {
+  // const responseUserInfo = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}profile/${userId}`, {
+  //   next: { revalidate: 60 },
+  // })
+  // dataUserInfo = (await responseUserInfo.json()) as GetProfileByUserIdResponse
+  //
+  // const responsePosts = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/user/${userId}`, {
+  //   next: { revalidate: 30 },
+  // })
+  // dataPosts = (await responsePosts.json()) as GetPostsByUserIdResponse
+  //
+  // if (filters.postId) {
+  //   const responsePost = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/${filters.postId}`, {
+  //     next: { revalidate: 60 },
+  //   })
+  //   dataPostModal = (await responsePost.json()) as GetPostByIdResponse
+  // }
+  //}
+
   return (
     <>
-      <ProfileHeader userId={userId} dataUserInfo={dataUserInfo} />
-      <ProfilePosts userId={userId} dataPosts={dataPosts} />
+      <ProfileHeader userId={userId} dataUserInfo={userData} />
+      <ProfilePosts userId={userId} dataPosts={postsData} />
       {filters.postId && (
-        <ViewPostModal
-          userId={userId}
-          postId={filters.postId}
-          dataPostModal={dataPostModal}
-          dataUserInfo={dataUserInfo}
-        />
+        <Suspense fallback={<AppLoader />}>
+          <ViewPostModal userId={userId} postId={filters.postId} dataPostModal={modalData} dataUserInfo={userData} />
+        </Suspense>
       )}
       {filters.action === 'create' && <PostCreate />}
     </>
