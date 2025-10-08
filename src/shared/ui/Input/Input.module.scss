@@ -106,8 +106,9 @@
 
 .checkboxContainer {
   display: flex;
+  align-items: center;
   cursor: pointer;
-  gap: 8px;
+  gap: 10px;
 }
 
 .checkboxInput {
@@ -133,11 +134,26 @@
     content: '';
     position: absolute;
     display: none;
-    width: 5px;
-    height: 10px;
+    width: 8px;
+    height: 12px;
     border: solid colors.color(dark, 900);
     border-width: 0 2px 2px 0;
     transform: rotate(45deg) translate(-1px, -1px);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    z-index: -1;
+  }
+
+  &:hover::before {
+    background-color: colors.color(dark, 300);
   }
 }
 
@@ -165,11 +181,7 @@
 }
 
 .checkboxLabel {
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 400;
-  color: colors.color(light, 100);
-  cursor: pointer;
+  @include typography.regular_text_14;
 }
 
 .checkboxInput:disabled ~ .checkboxLabel {
@@ -198,6 +210,11 @@
 
 .errorTextContent {
   display: inline-block;
+}
+
+.errorLink {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 @keyframes scrollError {

@@ -1,8 +1,8 @@
 'use client'
 
-import { Input } from '@/src/shared/ui/Input/Input'
+import { Input } from '@/src/shared/ui'
 import styles from './SignUp.module.scss'
-import { Button } from '@/src/shared/ui/Button/Button'
+import { Button } from '@/src/shared/ui'
 import Image from 'next/image'
 import googleSvg from '@/public/google-svg.svg'
 import gitHubSvg from '@/public/github-svg.svg'

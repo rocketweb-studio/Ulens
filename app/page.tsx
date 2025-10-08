@@ -3,9 +3,13 @@ import { PublicPage } from '@/src/pages/publicPage/ui/PublicPage'
 
 export default async function Home() {
   let data = undefined
-
+  let userCountDate = undefined
   try {
-    data = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/last`, {
+    data = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/latest`, {
+      next: { revalidate: 60 },
+    }).then((res) => res.json())
+
+    userCountDate = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}auth/users-count`, {
       next: { revalidate: 60 },
     }).then((res) => res.json())
   } catch (e) {
@@ -14,7 +18,7 @@ export default async function Home() {
 
   return (
     <div className={s.page}>
-      <PublicPage data={data} />
+      <PublicPage dataPosts={data} totalUsers={userCountDate?.count}/>
     </div>
   )
 }

@@ -2,33 +2,26 @@
 
 import s from './PublicPage.module.scss'
 import Image from 'next/image'
-import { timeAgo } from '@/src/shared/utils/timeAgo'
-import { UserAvatar } from '@/src/entities/userProfile'
+import {timeAgo} from '@/src/shared/utils/timeAgo'
+import {UserAvatar} from '@/src/entities/userProfile'
 import Link from 'next/link'
-import { Path } from '@/src/shared/router/Path'
-import { GetPostByIdResponse } from '@/src/entities/post/api/postsApi.types'
-import { CustomSwiper } from '@/src/shared/ui/CustomSwiper'
+import {Path} from '@/src/shared/router/Path'
+import {GetPostByIdResponse} from '@/src/entities/post/api/postsApi.types'
+import {CustomSwiper} from '@/src/shared/ui/CustomSwiper'
+import {UserCount} from "@/src/widgets/userCount";
 
 type Props = {
-  data: GetPostByIdResponse[] | undefined
+  dataPosts: GetPostByIdResponse[] | undefined
+  totalUsers: number
 }
 
-export const PublicPage = ({ data }: Props) => {
-  data = data?.slice(0, 4)
+export const PublicPage = ({dataPosts, totalUsers}: Props) => {
+  const data = dataPosts?.slice(0, 4)
+
 
   return (
     <div className={s.publicPageWrapper}>
-      <div className={s.boxModel}>
-        <h2 className={s.registeredUser}>Registered users:</h2>
-        <div className={s.countWrapper}>
-          <h2 className={s.countText}>0</h2>
-          <h2 className={s.countText}>0</h2>
-          <h2 className={s.countText}>9</h2>
-          <h2 className={s.countText}>2</h2>
-          <h2 className={s.countText}>1</h2>
-          <h2 className={s.countText}>3</h2>
-        </div>
-      </div>
+      <UserCount totalUsers={totalUsers}/>
       <div className={s.postsContainer}>
         {data?.map((post) => (
           <div key={post.id} className={s.postWrapper}>

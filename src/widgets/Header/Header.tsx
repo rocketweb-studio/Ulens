@@ -2,11 +2,11 @@
 
 import s from './Header.module.scss'
 import Link from 'next/link'
-import { FlexContainer } from '@/src/shared/ui/FlexContainer'
+import { FlexContainer } from '@/src/shared/ui'
 import { Path } from '@/src/shared/router/Path'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 import { IconOutlineBell } from '@rocketweb-studio/ulens-ui-kit'
-import { Button } from '@/src/shared/ui/Button/Button'
+import { Button } from '@/src/shared/ui'
 
 export const Header = () => {
   const { data, isSuccess } = useGetMeQuery(undefined, {
