@@ -23,6 +23,7 @@ export const handleError = async (
       case 'PARSING_ERROR':
         error = 'Ошибка парсинга. Свяжетесь с тех поддержкой'
         break
+      case 400:
       case 401:
         if (isErrorWithMessage(result.error.data)) {
           error = result.error.data.message
@@ -33,7 +34,11 @@ export const handleError = async (
       case 403:
         error = '403 Forbidden Error. Check API-KEY'
         break
-      case 400:
+      case 404:
+        if (isErrorWithMessage(result.error.data)) {
+          if (result.error.data.message === "Subscription not found") return
+        }
+        break
       case 500:
         if (isErrorWithMessage(result.error.data)) {
           error = result.error.data.message
