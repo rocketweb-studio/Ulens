@@ -14,6 +14,7 @@ import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 import { GetPostByIdResponse } from '@/src/entities/post/api/postsApi.types'
 import { PostMenuActions } from '@/src/widgets/postMenuActions'
 import { CustomSwiper } from '@/src/shared/ui/CustomSwiper'
+import { formatDate } from '@/src/shared/utils/dateFormatter'
 
 const comments = [
   {
@@ -82,149 +83,135 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
     if (e.target === e.currentTarget) handleCloseModal()
   }
 
-  const formattedDate =
-    dataPostModal.createdAt ?
-      new Intl.DateTimeFormat('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      }).format(new Date(dataPostModal.createdAt))
-    : ''
-
   return (
-    <FlexContainer align={'center'} justify={'center'}>
-      <div className={s.wrapper}>
-        <Modal
-          className={`${s.modal} ${s.viewPostModal}`}
-          isOpen={isOpen}
-          onClose={handleCloseModal}
-          onOverlayClick={onOverlayClick}
-          modalTitle={''}
-          withoutPadding
-          hideCloseButton
-          hideDefaultButton
-        >
-          <div className={s.publication}>
-            <div className={s.publicationImg}>
-              {dataPostModal.images && (
-                <CustomSwiper
-                  slides={dataPostModal.images.medium.map((image, index) => ({
-                    id: index,
-                    content: (
-                      <div className={s.slideImageWrapper}>
-                        <Image
-                          className={s.zaebalaimg}
-                          src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
-                          alt={''}
-                          width={image.width}
-                          height={image.height}
-                        />
-                      </div>
-                    ),
-                  }))}
-                  navigation={true}
-                  pagination={true}
-                  className={s.customSwiper}
-                  allowTouchMove={false}
-                  swiperProps={{
-                    spaceBetween: 0,
-                    slidesPerView: 1,
-                    initialSlide: 0,
-                    noSwiping: true,
-                    noSwipingClass: 'swiper-slide',
-                    preventInteractionOnTransition: true,
-                  }}
-                />
-              )}
+    <Modal
+      className={`${s.modal} ${s.viewPostModal}`}
+      isOpen={isOpen}
+      onClose={handleCloseModal}
+      onOverlayClick={onOverlayClick}
+      modalTitle={''}
+      withoutPadding
+      hideCloseButton
+      hideDefaultButton
+    >
+      <div className={s.publication}>
+        <div className={s.publicationImg}>
+          {dataPostModal.images && (
+            <CustomSwiper
+              slides={dataPostModal.images.medium.map((image, index) => ({
+                id: index,
+                content: (
+                  <div className={s.slideImageWrapper}>
+                    <Image
+                      className={s.zaebalaimg}
+                      src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
+                      alt={''}
+                      width={image.width}
+                      height={image.height}
+                    />
+                  </div>
+                ),
+              }))}
+              navigation={true}
+              pagination={true}
+              className={s.customSwiper}
+              allowTouchMove={false}
+              swiperProps={{
+                spaceBetween: 0,
+                slidesPerView: 1,
+                initialSlide: 0,
+                noSwiping: true,
+                noSwipingClass: 'swiper-slide',
+                preventInteractionOnTransition: true,
+              }}
+            />
+          )}
+        </div>
+        <div className={s.publicationContent}>
+          <div className={s.publicationHeadLine}>
+            <div className={s.publicationProfileImage}>
+              <Image src={'/avatar/avatar_mini.png'} alt={'Avatar'} width={36} height={36} />
+              <Link href={Path.UserProfile(dataPostModal.ownerId)} className={s.publicationProfileURL}>
+                {dataPostModal.userName}
+              </Link>
             </div>
-            <div className={s.publicationContent}>
-              <div className={s.publicationHeadLine}>
-                <div className={s.publicationProfileImage}>
-                  <Image src={'/avatar/avatar_mini.png'} alt={'Avatar'} width={36} height={36} />
-                  <Link href={Path.UserProfile(dataPostModal.ownerId)} className={s.publicationProfileURL}>
-                    {dataPostModal.userName}
-                  </Link>
-                </div>
-                <div className={s.publicationMenu}>
-                  <PostMenuActions
-                    postOwnerId={dataPostModal.ownerId || ''}
-                    postId={dataPostModal.id}
-                    userId={dataPostModal.ownerId}
-                    description={''}
-                    onPostDeleted={handleCloseModal}
-                  />
-                </div>
-              </div>
-              <div className={s.postDescription}>
-                <p>{dataPostModal.description}</p>
-              </div>
-
-              {/*блок комментариев*/}
-              <div className={s.publicationComments}>
-                {comments.map((comment, index) => (
-                  <div key={index} className={s.commentWrapper}>
-                    <div className={s.avatar}>
-                      <Image src={comment.authorImage} alt={comment.userName} width={36} height={36} />
-                    </div>
-                    <div className={s.commentText}>
-                      <strong>{comment.userName}</strong>
-                      <p>{comment.text}</p>
-                      <div className={s.commentPanel}>
-                        <span className={s.date}>{comment.date}</span>
-                        {comment.likesCount > 0 && <span className={s.like}>Like: {comment.likesCount}</span>}
-                        {meData && <span className={s.like}>Answer</span>}
-                      </div>
-                    </div>
-                    {meData &&
-                      (comment.isChecked ?
-                        <div className={s.iconHeart}>
-                          <IconHeart />
-                        </div>
-                      : <div className={s.iconHeartOutline}>
-                          <IconHeartOutline />
-                        </div>)}
-                  </div>
-                ))}
-              </div>
-              {/*todo добавить обработчики событий и пути иконок*/}
-              {meData && (
-                <div className={s.postActions}>
-                  <div className={s.postActionsLeft}>
-                    {dataPostModal.isLiked ?
-                      <div className={s.iconHeart}>
-                        <IconHeart />
-                      </div>
-                    : <div className={s.iconHeartOutline}>
-                        <IconHeartOutline />
-                      </div>
-                    }
-
-                    <Image width={24} height={24} src={'/savedPost.svg'} alt={'Saved'} />
-                  </div>
-                  <Image width={24} height={24} src={'/sendPost.svg'} alt={'Send'} />
-                </div>
-              )}
-              <div className={s.postData}>
-                <div className={s.likesPostContainer}>
-                  <div className={s.likeImagesContainer}>
-                    <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
-                    <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
-                    <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
-                  </div>
-                  <span>{`${dataPostModal.likeCount || ''} "Like"`}</span>
-                </div>
-                <span className={s.date}>{formattedDate}</span>
-              </div>
-              {meData && (
-                <div className={s.addCommentContainer}>
-                  <input placeholder={'Add a Comment...'} className={s.inputComment} />
-                  <button className={s.buttonComment}>Publish</button>
-                </div>
-              )}
+            <div className={s.publicationMenu}>
+              <PostMenuActions
+                postOwnerId={dataPostModal.ownerId || ''}
+                postId={dataPostModal.id}
+                userId={dataPostModal.ownerId}
+                description={''}
+                onPostDeleted={handleCloseModal}
+              />
             </div>
           </div>
-        </Modal>
+          <div className={s.postDescription}>
+            <p>{dataPostModal.description}</p>
+          </div>
+
+          {/*блок комментариев*/}
+          <div className={s.publicationComments}>
+            {comments.map((comment, index) => (
+              <div key={index} className={s.commentWrapper}>
+                <div className={s.avatar}>
+                  <Image src={comment.authorImage} alt={comment.userName} width={36} height={36} />
+                </div>
+                <div className={s.commentText}>
+                  <strong>{comment.userName}</strong>
+                  <p>{comment.text}</p>
+                  <div className={s.commentPanel}>
+                    <span className={s.date}>{comment.date}</span>
+                    {comment.likesCount > 0 && <span className={s.like}>Like: {comment.likesCount}</span>}
+                    {meData && <span className={s.like}>Answer</span>}
+                  </div>
+                </div>
+                {meData &&
+                  (comment.isChecked ?
+                    <div className={s.iconHeart}>
+                      <IconHeart />
+                    </div>
+                  : <div className={s.iconHeartOutline}>
+                      <IconHeartOutline />
+                    </div>)}
+              </div>
+            ))}
+          </div>
+          {/*todo добавить обработчики событий и пути иконок*/}
+          {meData && (
+            <div className={s.postActions}>
+              <div className={s.postActionsLeft}>
+                {dataPostModal.isLiked ?
+                  <div className={s.iconHeart}>
+                    <IconHeart />
+                  </div>
+                : <div className={s.iconHeartOutline}>
+                    <IconHeartOutline />
+                  </div>
+                }
+                <Image width={24} height={24} src={'/savedPost.svg'} alt={'Saved'} />
+              </div>
+              <Image width={24} height={24} src={'/sendPost.svg'} alt={'Send'} />
+            </div>
+          )}
+          <div className={s.postData}>
+            <div className={s.likesPostContainer}>
+              <div className={s.likeImagesContainer}>
+                <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
+                <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
+                <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
+              </div>
+              <span>{`${dataPostModal.likeCount || ''} "Like"`}</span>
+            </div>
+            <span className={s.date}>{formatDate(dataPostModal.createdAt)}</span>
+          </div>
+          {meData && (
+            <div className={s.addCommentContainer}>
+              <input placeholder={'Add a Comment...'} className={s.inputComment} />
+              <button className={s.buttonComment}>Publish</button>
+            </div>
+          )}
+        </div>
       </div>
-    </FlexContainer>
+    </Modal>
   )
 }

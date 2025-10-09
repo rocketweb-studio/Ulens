@@ -13,7 +13,6 @@ import s from './profileHeader.module.scss'
 import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
 import { setLoaderStatus } from '@/src/store/app-slice'
 import { useEffect } from 'react'
-import { AppLoader } from '@/src/shared/ui/AppLoader/AppLoader'
 
 type Props = {
   userId: string
@@ -26,6 +25,7 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
   const isAuth = !!meData?.id && isSuccess
   const dispatch = useAppDispatch()
 
+  // отключаем лодер при полной загрузке профиля, после логина
   useEffect(() => {
     if (document.readyState === 'complete') {
       dispatch(setLoaderStatus({ status: 'idle' }))
@@ -34,13 +34,8 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
 
   const userDataForRender = userData || dataUserInfo
 
-  const handleFollow = () => {
-    console.log('handleFollow')
-  }
-
-  const handleSendMessage = () => {
-    console.log('handleSendMessage')
-  }
+  const handleFollow = () => {}
+  const handleSendMessage = () => {}
 
   return (
     <div className={s.profileHeader}>
