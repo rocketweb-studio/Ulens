@@ -18,60 +18,56 @@ export const userProfileApi = baseApi.injectEndpoints({
       query: (body) => ({ method: "put", url: "profile", body }),
       invalidatesTags: ["GetProfileByUsedId"],
     }),
-    uploadAvatar: build.mutation<GetProfileByUserIdResponse, { file: File }>({
+    uploadAvatar: build.mutation<
+      GetProfileByUserIdResponse["avatars"],
+      { file: File; userId: string }
+    >({
       query: ({ file }) => {
         const formData = new FormData();
         formData.append("avatar", file);
-
         return {
-          url: `/profile/avatar`,
+          url: `profile/avatar`,
           method: "POST",
           body: formData,
         };
       },
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ userId }, { dispatch, queryFulfilled }) {
         try {
-          const { data } = await queryFulfilled;
+          const { data: avatars } = await queryFulfilled;
           dispatch(
             userProfileApi.util.updateQueryData(
               "getProfileByUsedId",
-              { userId: data.id },
+              { userId },
               (draft) => {
-                Object.assign(draft, data);
+                draft.avatars = avatars;
               },
             ),
           );
-        } catch {}
+        } catch (e) {
+          console.error("Error update cash", e);
+        }
       },
     }),
-    deleteAvatar: build.mutation<void, void>({
+    deleteAvatar: build.mutation<void, { userId: string }>({
       query: () => ({
-        url: `/profile/avatar`,
+        url: `profile/avatar`,
         method: "DELETE",
       }),
-      async onQueryStarted(_, { dispatch, getState, queryFulfilled }) {
+      async onQueryStarted({ userId }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          userProfileApi.util.updateQueryData(
+            "getProfileByUsedId",
+            { userId },
+            (draft) => {
+              draft.avatars = [];
+            },
+          ),
+        );
         try {
           await queryFulfilled;
-          // получаем userId из уже закешированного профиля
-          const state: any = getState();
-          const cached = Object.keys(state.userProfileApi.queries).find((key) =>
-            key.startsWith("getProfileByUsedId"),
-          );
-          if (!cached) return;
-
-          const args = JSON.parse(cached.split("(")[1].split(")")[0]) as {
-            userId: string;
-          };
-          dispatch(
-            userProfileApi.util.updateQueryData(
-              "getProfileByUsedId",
-              args,
-              (draft) => {
-                draft.avatars = [];
-              },
-            ),
-          );
-        } catch {}
+        } catch {
+          patchResult.undo();
+        }
       },
     }),
   }),
