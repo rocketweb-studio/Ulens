@@ -44,7 +44,7 @@ export const PurchaseSubscriptionBlock = () => {
             ></RadioButtonsGroup>
           </Card>
           <FlexContainer className={s.paymentsButtonsGroup} justify={'end'}>
-            <MakePayment></MakePayment>
+            <MakePayment planId={Number(subscriptionVariant)}></MakePayment>
           </FlexContainer>
         </section>
       )}

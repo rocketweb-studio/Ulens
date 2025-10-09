@@ -1,7 +1,17 @@
 @use '@/src/shared/styles/colors' as colors;
 @use '@/src/shared/styles/typography' as typography;
 
+.modalAccessAutoRenewal {
+  max-width: 378px;
+}
 
+.accessAutoRenevalInput {
+  padding: 0;
+}
+
+.buttonModalOk {
+  padding: 6px 24px;
+}
 
 .icon {
   width: 94px;
