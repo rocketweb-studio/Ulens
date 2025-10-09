@@ -7,11 +7,16 @@ import { Path } from '@/src/shared/router/Path'
 import s from './ViewPostModal.module.scss'
 import Image from 'next/image'
 import { Modal } from '@/src/shared/ui/Modal/Modal'
-import { MouseEvent } from 'react'
+import { MouseEvent, useEffect, useRef } from 'react'
+import { useGetProfileByUsedIdQuery, userProfileApi } from '@/src/entities/userProfile/api/userProfileApi'
 import Link from 'next/link'
 import { IconHeart, IconHeartOutline } from '@rocketweb-studio/ulens-ui-kit'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
+import { GetProfileByUserIdResponse } from '@/src/entities/userProfile/api/userProfile.types'
+import { useAppSelector } from '@/src/shared/hooks/useAppSelector'
+import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
 import { GetPostByIdResponse } from '@/src/entities/post/api/postsApi.types'
+import { postsApi, useGetPostByIdQuery } from '@/src/entities/post/api/postsApi'
 import { PostMenuActions } from '@/src/widgets/postMenuActions'
 import { CustomSwiper } from '@/src/shared/ui/CustomSwiper'
 
@@ -64,31 +69,76 @@ const comments = [
 ]
 
 type Props = {
-  hardLoad?: boolean
-  dataPostModal: GetPostByIdResponse
+  userId: string
+  postId: string
+  dataPostModal?: GetPostByIdResponse
+  dataUserInfo?: GetProfileByUserIdResponse
 }
 
-export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
+export const ViewPostModal = ({ userId, postId, dataPostModal, dataUserInfo }: Props) => {
+  const userDataFromCache = useAppSelector(
+    (state) => userProfileApi.endpoints.getProfileByUsedId.select({ userId })(state).data,
+  )
+
+  const postDataFromCache = useAppSelector((state) => postsApi.endpoints.getPostById.select({ postId })(state).data)
+
   const { isOpen, closeModal } = useModal(true)
-  const { back, replace } = useRouter()
+  const { replace } = useRouter()
   const { data: meData } = useGetMeQuery()
+
+  const dispatch = useAppDispatch()
+
+  let needHydrateUserInfoRef = useRef(!!dataUserInfo && !userDataFromCache)
+  let needHydratePostInfoRef = useRef(!!dataPostModal && !postDataFromCache)
+
+  const { data: userInfo } = useGetProfileByUsedIdQuery(
+    { userId },
+    {
+      skip: needHydrateUserInfoRef.current,
+    },
+  )
+
+  const { data: postInfo } = useGetPostByIdQuery(
+    { postId },
+    {
+      skip: needHydratePostInfoRef.current,
+    },
+  )
+
+  useEffect(() => {
+    if (needHydrateUserInfoRef.current) {
+      needHydrateUserInfoRef.current = false
+      const thunk = userProfileApi.util.upsertQueryData('getProfileByUsedId', { userId }, dataUserInfo!)
+      dispatch(thunk)
+    }
+  }, [])
+
+  const postsDataForRender = dataPostModal || postInfo
+  const userDataForRender = dataUserInfo || userInfo
+
+  if (!postsDataForRender || !userDataForRender) {
+    return null
+  }
 
   const handleCloseModal = () => {
     closeModal()
-    !hardLoad ? replace(`/profile/${dataPostModal.ownerId}`) : back()
+    replace(Path.UserProfile(userId))
   }
 
   const onOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) handleCloseModal()
+    if (e.target === e.currentTarget) {
+      closeModal()
+      replace(Path.UserProfile(userId))
+    }
   }
 
   const formattedDate =
-    dataPostModal.createdAt ?
+    postsDataForRender?.createdAt ?
       new Intl.DateTimeFormat('en-US', {
         month: 'long',
         day: 'numeric',
         year: 'numeric',
-      }).format(new Date(dataPostModal.createdAt))
+      }).format(new Date(postsDataForRender.createdAt))
     : ''
 
   return (
@@ -106,9 +156,9 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
         >
           <div className={s.publication}>
             <div className={s.publicationImg}>
-              {dataPostModal.images && (
+              {postsDataForRender?.images && (
                 <CustomSwiper
-                  slides={dataPostModal.images.medium.map((image, index) => ({
+                  slides={postsDataForRender?.images.medium.map((image, index) => ({
                     id: index,
                     content: (
                       <div className={s.slideImageWrapper}>
@@ -141,22 +191,22 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
               <div className={s.publicationHeadLine}>
                 <div className={s.publicationProfileImage}>
                   <Image src={'/avatar/avatar_mini.png'} alt={'Avatar'} width={36} height={36} />
-                  <Link href={Path.UserProfile(dataPostModal.ownerId)} className={s.publicationProfileURL}>
-                    {dataPostModal.userName}
+                  <Link href={Path.UserProfile(userId)} className={s.publicationProfileURL}>
+                    {userDataForRender?.userName}
                   </Link>
                 </div>
                 <div className={s.publicationMenu}>
                   <PostMenuActions
-                    postOwnerId={dataPostModal.ownerId || ''}
-                    postId={dataPostModal.id}
-                    userId={dataPostModal.ownerId}
+                    postOwnerId={postsDataForRender?.ownerId || ''}
+                    postId={postId}
+                    userId={userId}
                     description={''}
                     onPostDeleted={handleCloseModal}
                   />
                 </div>
               </div>
               <div className={s.postDescription}>
-                <p>{dataPostModal.description}</p>
+                <p>{postsDataForRender?.description}</p>
               </div>
 
               {/*блок комментариев*/}
@@ -190,7 +240,7 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
               {meData && (
                 <div className={s.postActions}>
                   <div className={s.postActionsLeft}>
-                    {dataPostModal.isLiked ?
+                    {postsDataForRender?.isLiked ?
                       <div className={s.iconHeart}>
                         <IconHeart />
                       </div>
@@ -211,7 +261,7 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
                     <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
                     <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
                   </div>
-                  <span>{`${dataPostModal.likeCount || ''} "Like"`}</span>
+                  <span>{`${postsDataForRender?.likeCount || ''} "Like"`}</span>
                 </div>
                 <span className={s.date}>{formattedDate}</span>
               </div>

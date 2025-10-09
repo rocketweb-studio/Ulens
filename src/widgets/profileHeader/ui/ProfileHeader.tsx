@@ -45,7 +45,6 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
   return (
     <div className={s.profileHeader}>
       <div className={s.profileAvatar}>
-        <AppLoader forceMode={true} bg={'unset'} />
         {userDataForRender && userDataForRender?.avatars?.length > 0 ?
           <Image src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${userDataForRender?.avatars[0].url}`} alt={'avatar'} />
         : <Image src={avatar} alt={'avatar'} />}

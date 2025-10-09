@@ -33,7 +33,7 @@ export const ProfilePosts = ({ userId, dataPosts }: Props) => {
               className={s.postMenuActions}
             ></PostMenuActions>
           )}
-          <Link href={Path.ViewPost(userId, post.id)}>
+          <Link href={Path.ViewPost(userId, post.id)} scroll={false}>
             {post.images.small.length > 0 && (
               <Image
                 src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${post.images.small[0].url}`}
