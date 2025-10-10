@@ -1,7 +1,6 @@
 'use client'
 
 import { useModal } from '@/src/shared/hooks/useModal'
-import { FlexContainer } from '@/src/shared/ui'
 import { useRouter } from 'next/navigation'
 import { Path } from '@/src/shared/router/Path'
 import s from './ViewPostModal.module.scss'
@@ -93,6 +92,7 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
       withoutPadding
       hideCloseButton
       hideDefaultButton
+      animationMode={false}
     >
       <div className={s.publication}>
         <div className={s.publicationImg}>

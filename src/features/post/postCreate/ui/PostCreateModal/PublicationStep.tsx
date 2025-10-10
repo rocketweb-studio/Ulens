@@ -76,6 +76,7 @@ export const PublicationStep = ({
       withoutPadding
       hideCloseButton
       hideDefaultButton
+      animationMode={false}
       buttonLeftInModalHeader={
         <Button tagType={'button'} variant={'text'} withoutPadding onClick={changePrevStep}>
           <IconArrowIosBackOutline />

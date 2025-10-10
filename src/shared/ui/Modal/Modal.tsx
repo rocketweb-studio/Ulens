@@ -4,6 +4,7 @@ import s from './Modal.module.scss'
 import Image from 'next/image'
 import closeIcon from '@/public/close.svg'
 import { Button } from '@/src/shared/ui'
+import { AnimatePresence, motion } from 'framer-motion'
 
 export type Props = {
   isOpen: boolean
@@ -19,6 +20,7 @@ export type Props = {
   hideCloseButton?: boolean
   buttonRightInModalHeader?: React.ReactNode
   buttonLeftInModalHeader?: React.ReactNode
+  animationMode?: boolean
 } & HTMLAttributes<HTMLDivElement>
 
 export const Modal = ({
@@ -28,13 +30,13 @@ export const Modal = ({
   children,
   modalTitle,
   className = '',
-  // closeOnOverlayClick = true,
   closeOnEsc = true,
   withoutPadding = false,
   hideDefaultButton = false,
   hideCloseButton = false,
   buttonRightInModalHeader,
   buttonLeftInModalHeader,
+  animationMode = true,
 }: Props) => {
   const [isMounted, setIsMounted] = useState(false)
 
@@ -53,38 +55,63 @@ export const Modal = ({
     return () => document.removeEventListener('keydown', handleEscape)
   }, [isOpen, onClose, closeOnEsc, isMounted])
 
-  const modalContent = (
-    <div className={s.overlay} onClick={onOverlayClick}>
-      <div className={`${s.content} ${className}`}>
-        {modalTitle.length > 0 && (
-          <div className={s.header}>
-            {buttonLeftInModalHeader}
-            <h3 className={s.title}>{modalTitle}</h3>
-            {buttonRightInModalHeader}
-            {!hideCloseButton && (
-              <button className={s.closeButton} onClick={onClose}>
-                <Image src={closeIcon} alt={'closeIcon'} />
-              </button>
+  const renderModalContent = (isAnimated: boolean) => {
+    const Overlay = isAnimated ? motion.div : 'div'
+    const Content = isAnimated ? motion.div : 'div'
+
+    const overlayProps =
+      isAnimated ?
+        {
+          initial: { opacity: 0 },
+          animate: { opacity: 1 },
+          exit: { opacity: 0 },
+        }
+      : {}
+
+    const contentProps =
+      isAnimated ?
+        {
+          initial: { transform: 'translateY(-100px)', opacity: 0 },
+          animate: { transform: 'translateY(0)', opacity: 1 },
+          exit: { transform: 'translateY(-100px)', opacity: 0 },
+        }
+      : {}
+
+    const content = (
+      <Overlay {...overlayProps} className={s.overlay} onClick={onOverlayClick}>
+        <Content {...contentProps} className={`${s.content} ${className}`}>
+          {modalTitle.length > 0 && (
+            <div className={s.header}>
+              {buttonLeftInModalHeader}
+              <h3 className={s.title}>{modalTitle}</h3>
+              {buttonRightInModalHeader}
+              {!hideCloseButton && (
+                <button className={s.closeButton} onClick={onClose}>
+                  <Image src={closeIcon} alt={'closeIcon'} />
+                </button>
+              )}
+            </div>
+          )}
+          <div className={`${s.flexContainer} ${withoutPadding ? s.withoutPadding : ''}`}>
+            {children}
+            {!hideDefaultButton && (
+              <Button className={s.button} onClick={onClose}>
+                ОК
+              </Button>
             )}
           </div>
-        )}
-        <div className={`${s.flexContainer} ${withoutPadding ? s.withoutPadding : ''}`}>
-          {children}
-          {!hideDefaultButton && (
-            <Button className={s.button} onClick={onClose}>
-              ОК
-            </Button>
-          )}
-        </div>
-      </div>
-    </div>
-  )
+        </Content>
+      </Overlay>
+    )
+
+    return isAnimated ? <AnimatePresence>{content}</AnimatePresence> : content
+  }
 
   if (!isOpen) return null
 
   if (!isMounted) {
-    return modalContent
+    return renderModalContent(false)
   }
 
-  return createPortal(modalContent, document.body)
+  return createPortal(renderModalContent(animationMode), document.body)
 }

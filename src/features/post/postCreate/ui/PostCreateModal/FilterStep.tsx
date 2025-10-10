@@ -67,6 +67,7 @@ export const FilterStep = ({
       hideCloseButton
       hideDefaultButton
       withoutPadding
+      animationMode={false}
       buttonRightInModalHeader={
         <Button tagType={'button'} variant={'text'} withoutPadding onClick={handleNextStep}>
           Next
