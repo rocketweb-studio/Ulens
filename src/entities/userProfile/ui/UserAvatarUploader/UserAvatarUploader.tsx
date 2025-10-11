@@ -46,7 +46,7 @@ export const AvatarUploader = ({ avatars }: Props) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
 
-    const isValidFormat = ["image/jpeg", "image/png", "image/webp"].includes(
+    const isValidFormat = ["image/jpeg", "image/png"].includes(
       selectedFile.type,
     );
     const isValidSize = selectedFile.size <= 10 * 1024 * 1024; // 10MB
@@ -105,8 +105,8 @@ export const AvatarUploader = ({ avatars }: Props) => {
                   : `${process.env.NEXT_PUBLIC_BASE_URL}${preview}`
               }
               alt="Avatar preview"
-              width={120}
-              height={120}
+              width={192}
+              height={192}
               className={s.avatar}
             />
             <button
@@ -126,7 +126,7 @@ export const AvatarUploader = ({ avatars }: Props) => {
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/jpeg,image/png,image/webp"
+        accept="image/jpeg,image/png"
         hidden
         onChange={handleFileChange}
       />
