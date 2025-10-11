@@ -1,0 +1,81 @@
+.avatarUploader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  .previewContainer {
+    position: relative;
+    margin-bottom: 12px;
+  }
+
+  .avatar {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+  }
+
+  .deleteBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: red;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+  }
+
+  .photoModal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    background-color: #2b2b2b;
+    border-radius: 12px;
+    padding: 32px;
+    color: white;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .modalContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .imageWrapper {
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .roundImage {
+    object-fit: cover;
+  }
+
+  .modalActions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 8px;
+  }
+}

@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 
 import s from "./UserAvatarUploader.module.scss";
 import { useGetMeQuery } from "@/src/entities/auth/api/authApi";
+import { Modal } from "@/src/shared/ui/Modal/Modal";
 
 interface Props {
   avatars?: {
@@ -37,6 +38,7 @@ export const AvatarUploader = ({ avatars }: Props) => {
   const [preview, setPreview] = useState<string | null>(avatarUrl);
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 🔹 Открыть окно выбора файла
   const handleSelect = () => fileInputRef.current?.click();
@@ -60,6 +62,7 @@ export const AvatarUploader = ({ avatars }: Props) => {
 
     setFile(selectedFile);
     setPreview(URL.createObjectURL(selectedFile));
+    setIsModalOpen(true);
   };
 
   // 🔹 Загрузка файла
@@ -69,6 +72,7 @@ export const AvatarUploader = ({ avatars }: Props) => {
     try {
       await uploadAvatar({ file, userId }).unwrap();
       toast.success("Photo uploaded successfully!");
+      setIsModalOpen(false);
       setFile(null);
     } catch {
       toast.error("Upload failed");
@@ -135,13 +139,41 @@ export const AvatarUploader = ({ avatars }: Props) => {
         <Button type="button" onClick={handleSelect} disabled={isUploading}>
           Select from Computer
         </Button>
-
-        {file && (
-          <Button type="button" onClick={handleUpload} disabled={isUploading}>
-            Save
-          </Button>
-        )}
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        modalTitle="Add a Profile Photo"
+        className={s.photoModal}
+        hideDefaultButton
+      >
+        <div className={s.modalContent}>
+          {preview && (
+            <div className={s.imageWrapper}>
+              <Image
+                src={preview}
+                alt="Avatar preview"
+                width={300}
+                height={300}
+                className={s.roundImage}
+              />
+            </div>
+          )}
+
+          <div className={s.modalActions}>
+            {file && (
+              <Button
+                type="button"
+                onClick={handleUpload}
+                disabled={isUploading}
+              >
+                Save
+              </Button>
+            )}
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
