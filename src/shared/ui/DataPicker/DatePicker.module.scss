@@ -32,6 +32,7 @@ svg{
   padding: 4px;
 }
   & select {
+    background-color: colors.color(dark, 500);
     display: inline-block;
     font-size: 10px;
     width: 100%;
