@@ -78,7 +78,7 @@ export function DatePicker({
   const selectedDate = selected ? new Date(selected) : undefined;
   const displayDate = formatterDate(selected, isMobile);
   const displayLabel = isMobile && labelMobile ? labelMobile : label;
-
+  const date13YearsAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 13));
   return (
     <div className={s.datePicker} onBlur={handleBlur} tabIndex={-1}>
       <div className={s.dateContainer} onClick={() => {setIsOpen(!isOpen)}}>
@@ -90,6 +90,7 @@ export function DatePicker({
             value={value!}
             readOnly
             errorLink={errorLink}
+
         />
         <div className={s.calendar}>
           <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -118,7 +119,7 @@ export function DatePicker({
                        weekStartsOn={1}
                        fixedWeeks
                        captionLayout="dropdown"
-                       endMonth={new Date()}
+                       endMonth={date13YearsAgo}
                        className={s.customDayPicker}
                        modifiers={{
                          weekend: (date) => [0, 6].includes(date.getDay()),
