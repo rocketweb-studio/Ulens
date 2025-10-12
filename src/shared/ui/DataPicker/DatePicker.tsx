@@ -129,6 +129,9 @@ export function DatePicker({
                            backgroundColor: '#234e99',
                            borderRadius: '50%',
                          },
+                         // months_dropdowns:{
+                         //   border:"none",outline:"none"
+                         // },
                          day_button:{
                            border:"none",
                            outline:"none"},
