@@ -14,7 +14,7 @@ let postsData: GetPostsByUserIdResponse | undefined = undefined
 
 export default async function UserPage({ params, searchParams }: Props) {
   const [{ userId }, filters] = await Promise.all([params, searchParams])
-
+  try {
   if (filters.action !== 'create') {
     userData = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}profile/${userId}`, {
       next: { revalidate: 60 },
@@ -23,6 +23,9 @@ export default async function UserPage({ params, searchParams }: Props) {
     postsData = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/user/${userId}`, {
       next: { revalidate: 30 },
     }).then((res) => res.json())
+  }
+  }catch (err){
+    console.log('Error', err)
   }
 
   return (
