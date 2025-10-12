@@ -1,23 +1,18 @@
 @use '@/src/shared/styles/colors' as colors;
 
 .dateContainer {
-position: relative;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
-.span {
-position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 12px;
-  z-index: 4;
+.input{
+  padding-bottom: 0;
+  margin-bottom: 24px;
 }
-
 .calendar {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
   right: 12px;
   z-index: 4;
-
 }
 .datePickerPopup{
   position: absolute;
