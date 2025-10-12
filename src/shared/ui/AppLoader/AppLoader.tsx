@@ -9,12 +9,12 @@ type Props = {
   bg?: string | 'unset'
 }
 
-export const AppLoader = ({forceMode = false, bg}: Props) => {
+export const AppLoader = ({ forceMode = false, bg = '' }: Props) => {
   const loaderStatus = useAppSelector(selectLoaderStatus)
   if (loaderStatus !== 'loading' && !forceMode) return null
 
   return (
-    <div className={s.appLoader} id='ct-loadding' style={{backgroundColor: bg || ''}}>
+    <div className={s.appLoader} id='ct-loadding' style={{ backgroundColor: bg, zIndex: forceMode ? 99 : 999999 }}>
       <div className={s.loadingInfinity}>
         <div>
           <span></span>

@@ -4,7 +4,7 @@ export const Path = {
   Main: '/',
   UserProfile: (userId: string | number) => `/profile/${userId}`,
   UserCreate: (userId: string | number) => `/profile/${userId}?action=create`,
-  ViewPost: (userId: string, postId: string) => `/profile/${userId}?postId=${postId}`,
+  ViewPost: (userId: string, postId: string) => `/profile/${userId}/post/${postId}`,
   Settings: (part: Settings) => `/settings?part=${part}`,
   SignIn: '/sign-in',
   SignUp: '/sign-up',
@@ -15,5 +15,4 @@ export const Path = {
   PasswordRecovery: '/password-recovery',
   ResetPassword: '/account/reset-password',
   InDevelopment: '/in-development',
-
 } as const

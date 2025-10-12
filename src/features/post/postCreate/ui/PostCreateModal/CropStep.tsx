@@ -147,6 +147,7 @@ export const CropStep = ({
       withoutPadding
       hideCloseButton
       hideDefaultButton
+      animationMode={false}
       buttonRightInModalHeader={
         <Button tagType={'button'} variant={'text'} withoutPadding onClick={handleNextStep} disabled={isProcessing}>
           {isProcessing ? 'Processing...' : 'Next'}

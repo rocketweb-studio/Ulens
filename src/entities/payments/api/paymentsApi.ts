@@ -1,5 +1,9 @@
-import {baseApi} from '@/src/store/baseApi'
-import {MySubscriptionResponse} from "@/src/entities/payments/api/paymentsApi.types";
+import { baseApi } from '@/src/store/baseApi'
+import {
+  MakePaymentResponse,
+  MySubscriptionResponse,
+  PaymentPlans,
+} from '@/src/entities/payments/api/paymentsApi.types'
 
 export const paymentsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -8,15 +12,20 @@ export const paymentsApi = baseApi.injectEndpoints({
       providesTags: ['MySubscription'],
     }),
 
-    toggleAutoRenewal: build.mutation<void, {isAutoRenewal: boolean}>({
+    toggleAutoRenewal: build.mutation<void, { isAutoRenewal: boolean }>({
       query: (body) => ({ method: 'post', url: 'payments/auto-renewal', body }),
       invalidatesTags: ['MySubscription'],
     }),
 
+    makePayment: build.mutation<MakePaymentResponse, { planId: number; provider: PaymentPlans }>({
+      query: (body) => ({
+        method: 'post',
+        url: 'payments/make-payment',
+        body,
+      }),
+      invalidatesTags: ['MySubscription'],
+    }),
   }),
 })
 
-export const {
-useGetMySubscriptionQuery,
-useToggleAutoRenewalMutation,
-} = paymentsApi
+export const { useGetMySubscriptionQuery, useToggleAutoRenewalMutation, useMakePaymentMutation } = paymentsApi
