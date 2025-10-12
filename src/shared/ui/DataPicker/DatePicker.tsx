@@ -90,6 +90,7 @@ export function DatePicker({
             value={value!}
             readOnly
             errorLink={errorLink}
+            className={s.input}
 
         />
         <div className={s.calendar}>
