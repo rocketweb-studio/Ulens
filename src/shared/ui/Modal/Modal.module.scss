@@ -16,7 +16,7 @@
 .content {
   z-index: 1001;
   border: 1px solid colors.color(dark, 100);
-  border-radius: 2px;
+  border-radius: 4px;
   background-color: colors.color(dark, 300);
   position: relative;
   //max-width: 90vw;
@@ -71,7 +71,8 @@
   flex-direction: column;
   gap: 18px;
   padding: 30px 24px 36px;
-  //max-height: calc(90vh - 60px); // Вычитаем высоту header
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .flexContainer.withoutPadding {

@@ -78,7 +78,7 @@ export const Modal = ({
       : {}
 
     const content = (
-      <Overlay {...overlayProps} className={s.overlay} onClick={onOverlayClick}>
+      <Overlay className={s.overlay} onClick={onOverlayClick}>
         <Content {...contentProps} className={`${s.content} ${className}`}>
           {modalTitle.length > 0 && (
             <div className={s.header}>
