@@ -13,6 +13,7 @@ import {Button} from '@/src/shared/ui'
 import {profileSchema, UserProfile} from '@/src/entities/userProfile/model/profileSchema'
 import Link from "next/link";
 import { Path } from '@/src/shared/router/Path'
+import {useGetMeQuery} from "@/src/entities/auth/api/authApi";
 
 const countriesCities: Record<string, string[]> = {
   "Belarus": ["Minsk", "Brest", "Grodno", "Gomel", "Mogilev", "Vitebsk"],
@@ -26,7 +27,11 @@ const countriesCities: Record<string, string[]> = {
 };
 
 export const GeneralInformation = () => {
-  const {data: dataProfile} = useGetProfileByUsedIdQuery({userId: '45d09b76-8237-417e-b744-702a2eb29913'})
+  const {data: meData} = useGetMeQuery()
+  const { data: dataProfile} = useGetProfileByUsedIdQuery(
+    { userId: meData?.id! },
+    { skip: !meData?.id }
+  );
   const [updateProfile, {isLoading}] = useUpdateProfileMutation()
 
   const {
