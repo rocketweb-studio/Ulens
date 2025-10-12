@@ -24,7 +24,7 @@ interface Props {
   }[];
 }
 
-export const AvatarUploader = ({ avatars }: Props) => {
+export const UserAvatarUploader = ({ avatars }: Props) => {
   // 🔹 Получаем текущего пользователя
   const { data: me } = useGetMeQuery();
   const userId = me?.id ?? ""; // безопасно, если пользователь ещё не подгрузился
