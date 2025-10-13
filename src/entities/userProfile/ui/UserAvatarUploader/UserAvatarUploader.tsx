@@ -33,6 +33,7 @@ export const UserAvatarUploader = ({ avatars }: Props) => {
   const [file, setFile] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const handleSelect = () => fileInputRef.current?.click()
 
@@ -68,13 +69,13 @@ export const UserAvatarUploader = ({ avatars }: Props) => {
 
   const handleDelete = async () => {
     if (!userId) return
-    if (!confirm('Do you really want to delete your profile photo?')) return
 
     try {
       await deleteAvatar({ userId }).unwrap()
       setPreview(null)
       setFile(null)
       toast.success('Photo deleted')
+      setIsDeleteModalOpen(false)
     } catch {
       toast.error('Delete failed')
     }
@@ -94,7 +95,12 @@ export const UserAvatarUploader = ({ avatars }: Props) => {
               height={192}
               className={s.avatar}
             />
-            <button type='button' onClick={handleDelete} className={s.deleteBtn} disabled={isDeleting}>
+            <button
+              type='button'
+              onClick={() => setIsDeleteModalOpen(true)}
+              className={s.deleteBtn}
+              disabled={isDeleting}
+            >
               ×
             </button>
           </>
@@ -130,6 +136,23 @@ export const UserAvatarUploader = ({ avatars }: Props) => {
               </Button>
             )}
           </div>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        modalTitle='Delete Photo'
+        hideDefaultButton
+      >
+        <p className={s.deleteText}>Are you sure you want to delete the photo?</p>
+
+        <div className={s.modalButtons}>
+          <button type='button' className={s.yesBtn} onClick={handleDelete} disabled={isDeleting}>
+            Yes
+          </button>
+          <button type='button' className={s.noBtn} onClick={() => setIsDeleteModalOpen(false)} disabled={isDeleting}>
+            No
+          </button>
         </div>
       </Modal>
     </div>
