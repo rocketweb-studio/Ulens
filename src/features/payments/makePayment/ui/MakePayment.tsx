@@ -14,7 +14,7 @@ type Props = {
 } & HTMLAttributes<HTMLDivElement>
 
 export const MakePayment = ({ planId }: Props) => {
-  const [makePayment, { data: payment }] = useMakePaymentMutation()
+  const [makePayment] = useMakePaymentMutation()
   const { isOpen, closeModal, openModal } = useModal()
   const [accessAutoRenevalCheckbox, setAccessAutoRenevalCheckbox] = useState<boolean>(false)
   const [currentPayment, setCurrentPayment] = useState<PaymentPlans | null>(null)
