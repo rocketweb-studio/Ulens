@@ -7,7 +7,7 @@ import { Path } from '@/src/shared/router/Path'
 
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 import { GeneralInformation } from '@/src/pages/generalInformation'
-import {AccountManagementPage} from "@/src/pages/accountManagementPage";
+import { AccountManagementPage } from '@/src/pages/accountManagementPage'
 
 const allowedParts = ['info', 'devices', 'subscriptions', 'payments']
 
@@ -28,7 +28,6 @@ function SettingsContent() {
 function SettingsPageContent() {
   const params = useSearchParams()
   const part = params?.get('part')
-
   if (!part || !allowedParts.includes(part)) {
     redirect(Path.Settings('info'))
   }
@@ -38,7 +37,7 @@ function SettingsPageContent() {
       <Tabs />
       {part === 'info' && <GeneralInformation />}
       {part === 'devices' && <p>Текущий раздел: {part}</p>}
-      {part === 'subscriptions' && <AccountManagementPage/>}
+      {part === 'subscriptions' && <AccountManagementPage />}
       {part === 'payments' && <p>Текущий раздел: {part}</p>}
     </div>
   )
