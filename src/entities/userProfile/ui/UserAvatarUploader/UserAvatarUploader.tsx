@@ -104,7 +104,7 @@ export const UserAvatarUploader = ({ avatars }: Props) => {
       <input ref={fileInputRef} type='file' accept='image/jpeg,image/png' hidden onChange={handleFileChange} />
 
       <div className={s.buttons}>
-        <Button type='button' onClick={handleSelect} disabled={isUploading}>
+        <Button type='button' onClick={handleSelect} disabled={isUploading} className={s.selectButton}>
           Select from Computer
         </Button>
       </div>

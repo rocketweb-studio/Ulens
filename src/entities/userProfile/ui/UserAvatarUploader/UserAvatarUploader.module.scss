@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  margin: 20px;
 
   .previewContainer {
     position: relative;
@@ -15,8 +16,8 @@
   }
 
   .placeholder {
-    width: 120px;
-    height: 120px;
+    width: 192px;
+    height: 192px;
     border-radius: 50%;
     background: #eee;
     display: flex;
@@ -70,12 +71,35 @@
 
   .modalActions {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     width: 100%;
+    margin-top: 16px;
   }
 
   .buttons {
     display: flex;
     gap: 8px;
+  }
+
+  .selectButton {
+    background-color: transparent;
+    border: 1px solid #3b82f6; /* ярко-синий */
+    color: #3b82f6;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: rgba(59, 130, 246, 0.1);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
 }
