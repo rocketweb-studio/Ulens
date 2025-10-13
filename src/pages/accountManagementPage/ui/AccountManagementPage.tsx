@@ -5,8 +5,8 @@ import { PurchaseSubscriptionBlock } from '@/src/widgets/purchaseSubscriptionBlo
 export const AccountManagementPage = () => {
   return (
     <main className={s.pageContainer}>
-      <PurchaseSubscriptionBlock />
       <CurrentSubscription />
+      <PurchaseSubscriptionBlock />
     </main>
   )
 }

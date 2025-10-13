@@ -1,4 +1,5 @@
 'use client'
+import { useGetPlansQuery } from '@/src/entities/payments'
 import s from './purchaseSubscriptionBlock.module.scss'
 import { MakePayment } from '@/src/features/payments/makePayment'
 import { Card, FlexContainer } from '@/src/shared/ui'
@@ -11,6 +12,8 @@ type SubscriptionVariant = '1' | '2' | '3'
 export const PurchaseSubscriptionBlock = () => {
   const [accountType, setAccountType] = useState<AccountType>('personal')
   const [subscriptionVariant, setSubscriptionVariant] = useState<SubscriptionVariant>('1')
+  const { data: plans } = useGetPlansQuery()
+  const plansRadioButtons = plans ? plans.map((plan) => ({ value: plan.id.toString(), label: plan.title })) : []
 
   return (
     <FlexContainer direction={'column'} gap={'30px'}>
@@ -36,11 +39,7 @@ export const PurchaseSubscriptionBlock = () => {
               name={'subscription-variant'}
               value={subscriptionVariant}
               onChange={(e) => setSubscriptionVariant(e as SubscriptionVariant)}
-              options={[
-                { value: '1', label: '$10 per 1 Day' },
-                { value: '2', label: '$50 per 7 Day' },
-                { value: '3', label: '$100 per month' },
-              ]}
+              options={plansRadioButtons}
             ></RadioButtonsGroup>
           </Card>
           <FlexContainer className={s.paymentsButtonsGroup} justify={'end'}>

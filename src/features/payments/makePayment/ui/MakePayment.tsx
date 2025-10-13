@@ -9,6 +9,8 @@ import s from './MakePayment.module.scss'
 import { PaymentPlans } from '@/src/features/payments/makePayment/model/types'
 import { redirectToExternalLink } from '@/src/shared/utils/redirectToExternalLink'
 import { IconPaypal, IconStripe } from '@rocketweb-studio/ulens-ui-kit'
+import { useToast } from '@/src/shared/hooks/useToast'
+import { isFetchBaseQueryError } from '@/src/shared/utils'
 
 type Props = {
   planId: number
@@ -19,6 +21,7 @@ export const MakePayment = ({ planId }: Props) => {
   const { isOpen, closeModal, openModal } = useModal()
   const [accessAutoRenevalCheckbox, setAccessAutoRenevalCheckbox] = useState<boolean>(false)
   const [currentPayment, setCurrentPayment] = useState<PaymentPlans | null>(null)
+  const { showError } = useToast()
 
   const onCloseModalHandler = () => {
     closeModal()
@@ -37,7 +40,11 @@ export const MakePayment = ({ planId }: Props) => {
         onCloseModalHandler()
         redirectToExternalLink(paymentResponce.url)
       }
-    } catch (err) {}
+    } catch (error) {
+      if (isFetchBaseQueryError(error)) {
+        showError((error.data as any)?.errorsMessages?.[0]?.message)
+      }
+    }
   }
 
   return (
