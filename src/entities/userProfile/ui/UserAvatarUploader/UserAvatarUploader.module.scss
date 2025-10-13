@@ -10,6 +10,12 @@
   .previewContainer {
     position: relative;
     margin-bottom: 12px;
+
+    &:hover .deleteBtn {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+    }
   }
 
   .avatar {
@@ -30,15 +36,23 @@
 
   .deleteBtn {
     position: absolute;
-    top: 0;
-    right: 0;
-    background: red;
+    top: 15px;
+    right: 15px;
+    background: rgba(0, 0, 0, 0.6);
     color: #fff;
     border: none;
     border-radius: 50%;
     width: 24px;
     height: 24px;
     cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.8);
+
+    &:hover {
+      background: rgba(255, 0, 0, 0.8);
+    }
   }
 
   .photoModal {
