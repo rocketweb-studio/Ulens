@@ -1,7 +1,8 @@
 import s from './CurrentSubscription.module.scss'
-import {Card, FlexContainer, Input} from "@/src/shared/ui";
-import {useGetMySubscriptionQuery, useToggleAutoRenewalMutation} from "@/src/entities/payments";
+import {Card, FlexContainer} from "@/src/shared/ui";
+import {useGetMySubscriptionQuery} from "@/src/entities/payments";
 import {AutoRenewal} from "@/src/features/payments/autoRenewal";
+import {formatDateDDMMYYYY} from "@/src/shared/utils/formatDateDDMMYYYY";
 
 export const CurrentSubscription = () => {
   const {data: subscriptionData, isSuccess} = useGetMySubscriptionQuery()
@@ -14,11 +15,11 @@ export const CurrentSubscription = () => {
             <FlexContainer gap={45}>
                 <FlexContainer gap={12} direction={'column'}>
                     <span className={s.dateTitle}>Expire at</span>
-                    <span className={s.date}>12.02.2022</span>
+                    <span className={s.date}>{formatDateDDMMYYYY(subscriptionData.createdAt)}</span>
                 </FlexContainer>
                 <FlexContainer gap={12} direction={'column'}>
                     <span className={s.dateTitle}>Next payment</span>
-                    <span className={s.date}>12.02.2022</span>
+                    <span className={s.date}>{formatDateDDMMYYYY(subscriptionData.expiresAt)}</span>
                 </FlexContainer>
             </FlexContainer>
         </Card>
