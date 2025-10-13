@@ -8,13 +8,14 @@ import { useModal } from '@/src/shared/hooks/useModal'
 import s from './MakePayment.module.scss'
 import { PaymentPlans } from '@/src/features/payments/makePayment/model/types'
 import { redirectToExternalLink } from '@/src/shared/utils/redirectToExternalLink'
+import { IconPaypal, IconStripe } from '@rocketweb-studio/ulens-ui-kit'
 
 type Props = {
   planId: number
 } & HTMLAttributes<HTMLDivElement>
 
 export const MakePayment = ({ planId }: Props) => {
-  const [makePayment, { data: payment }] = useMakePaymentMutation()
+  const [makePayment] = useMakePaymentMutation()
   const { isOpen, closeModal, openModal } = useModal()
   const [accessAutoRenevalCheckbox, setAccessAutoRenevalCheckbox] = useState<boolean>(false)
   const [currentPayment, setCurrentPayment] = useState<PaymentPlans | null>(null)
@@ -41,15 +42,19 @@ export const MakePayment = ({ planId }: Props) => {
 
   return (
     <FlexContainer align={'center'} gap={'54px'} wrap>
-      <Button onClick={() => onButtonPaymentClick({ payment: 'PAYPAL' })}>
-        Paypal
-        {/*<IconPaypal className={s.icon} />*/}
-      </Button>
+      <Button
+        variant={'darken'}
+        className={s.paymentButton}
+        onClick={() => onButtonPaymentClick({ payment: 'PAYPAL' })}
+        centredIcon={<IconPaypal />}
+      />
       <span>or</span>
-      <Button onClick={() => onButtonPaymentClick({ payment: 'STRIPE' })}>
-        Stripe
-        {/*<IconStripe className={s.icon} />*/}
-      </Button>
+      <Button
+        variant={'darken'}
+        className={s.paymentButton}
+        centredIcon={<IconStripe />}
+        onClick={() => onButtonPaymentClick({ payment: 'STRIPE' })}
+      />
       <Modal
         className={s.modalAccessAutoRenewal}
         isOpen={isOpen}

@@ -16,5 +16,10 @@
 .icon {
   width: 94px;
   height: 64px;
-  color: color(dark, 500);
+}
+
+.paymentButton {
+  border: 1px solid colors.color(dark, 300);
+  width: 96px;
+  height: 64px;
 }

@@ -92,7 +92,6 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
       withoutPadding
       hideCloseButton
       hideDefaultButton
-      animationMode={false}
     >
       <div className={s.publication}>
         <div className={s.publicationImg}>
