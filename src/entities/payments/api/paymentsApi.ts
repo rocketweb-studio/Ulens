@@ -1,5 +1,6 @@
 import { baseApi } from '@/src/store/baseApi'
 import {
+  GetPlansResponce,
   MakePaymentResponse,
   MySubscriptionResponse,
   PaymentPlans,
@@ -17,6 +18,11 @@ export const paymentsApi = baseApi.injectEndpoints({
       invalidatesTags: ['MySubscription'],
     }),
 
+    getPlans: build.query<GetPlansResponce, void>({
+      query: () => 'payments/plans',
+      providesTags: ['MySubscription'],
+    }),
+
     makePayment: build.mutation<MakePaymentResponse, { planId: number; provider: PaymentPlans }>({
       query: (body) => ({
         method: 'post',
@@ -28,4 +34,5 @@ export const paymentsApi = baseApi.injectEndpoints({
   }),
 })
 
-export const { useGetMySubscriptionQuery, useToggleAutoRenewalMutation, useMakePaymentMutation } = paymentsApi
+export const { useGetMySubscriptionQuery, useToggleAutoRenewalMutation, useMakePaymentMutation, useGetPlansQuery } =
+  paymentsApi
