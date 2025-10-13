@@ -1,30 +1,26 @@
-import { UserProfile } from "@/src/entities/userProfile/model/profileSchema";
+import { UserProfile } from '@/src/entities/userProfile/model/profileSchema'
+import { ImageSizeType } from '@/src/entities/post/api/postsApi.types'
 
 export type GetProfileByUserIdResponse = {
-  userName: string;
-  id: string;
-  firstName: string;
-  lastName: string;
-  city: string;
-  country: string;
-  region: string;
-  dateOfBirth: string;
-  aboutMe: string;
-  createdAt: string;
+  userName: string
+  id: string
+  firstName: string
+  lastName: string
+  city: string
+  country: string
+  region: string
+  dateOfBirth: string
+  aboutMe: string
+  createdAt: string
   avatars: {
-    url: string;
-    width: number;
-    height: number;
-    fileSize: number;
-    size: string;
-    createdAt: string;
-    uploadId: string;
-  }[];
-  publicationsCount: number;
-  followers: number;
-  following: number;
-};
+    small: Omit<ImageSizeType, 'uploadId'>
+    medium: Omit<ImageSizeType, 'uploadId'>
+  }
+  publicationsCount: number
+  followers: number
+  following: number
+}
 
 export type UserProfileResponse = UserProfile & {
-  id: string;
-};
+  id: string
+}
