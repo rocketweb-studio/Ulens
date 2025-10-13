@@ -5,10 +5,9 @@ import Image from 'next/image'
 import { useUploadAvatarMutation, useDeleteAvatarMutation } from '@/src/entities/userProfile/api/userProfileApi'
 import { Button } from '@/src/shared/ui/Button/Button'
 import { toast } from 'react-toastify'
-
+import { Modal } from '@/src/shared/ui/Modal/Modal'
 import s from './UserAvatarUploader.module.scss'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
-import { Modal } from '@/src/shared/ui/Modal/Modal'
 
 interface Props {
   avatars?: {
