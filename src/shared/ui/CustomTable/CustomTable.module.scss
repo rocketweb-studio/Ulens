@@ -9,6 +9,7 @@
 
 .header {
   @include typography.bold_text_14;
+  font-weight: 600;
   background-color: colors.color(dark, 500);
   color: colors.color(light, 100);
 }
