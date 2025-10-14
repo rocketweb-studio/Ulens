@@ -2,11 +2,11 @@
 
 import { Modal } from '@/src/shared/ui/Modal/Modal'
 import { useModal } from '@/src/shared/hooks/useModal'
-import { updateSearchParams } from '@/src/shared/utils'
 import { useRouter } from 'next/navigation'
+import { updateSearchParams } from '@/src/shared/utils'
 import { Button } from '@/src/shared/ui'
 
-export const ModalSuccesfullPayment = () => {
+export const ModalFailedPayment = () => {
   const { isOpen, closeModal } = useModal(true)
   const router = useRouter()
 
@@ -15,10 +15,10 @@ export const ModalSuccesfullPayment = () => {
     closeModal()
   }
   return (
-    <Modal modalTitle={'Success'} onClose={onCloseModalHandler} isOpen={isOpen} hideDefaultButton>
-      <p>Payment was successful!</p>
+    <Modal modalTitle={'Error'} onClose={onCloseModalHandler} isOpen={isOpen} hideDefaultButton>
+      <p>Transaction failed. Please, write to support</p>
       <Button variant={'primary'} onClick={onCloseModalHandler} fullWidth>
-        OK
+        Back to payment
       </Button>
     </Modal>
   )
