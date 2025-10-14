@@ -203,21 +203,7 @@ export const FilterPanel = forwardRef<FilterPanelHandle, Props>(
         <canvas ref={canvasRef} style={{ display: 'none' }} />
         <div className={s.preview}>
           <div className={s.mainPreview}>
-            <CustomSwiper
-              slides={slides || []}
-              navigation={true}
-              pagination={true}
-              className={s.customSwiper}
-              allowTouchMove={false}
-              onSlideChange={handleSlideChange}
-              swiperProps={{
-                spaceBetween: 0,
-                slidesPerView: 1,
-                noSwiping: true,
-                noSwipingClass: 'swiper-slide',
-                preventInteractionOnTransition: true,
-              }}
-            />
+            <CustomSwiper slides={slides || []} className={s.customSwiper} onSlideChange={handleSlideChange} />
           </div>
         </div>
 
