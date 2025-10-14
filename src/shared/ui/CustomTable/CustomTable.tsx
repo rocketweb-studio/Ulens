@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import s from './CustomTable.module.scss'
 import { CustomTableProps, TableCellProps } from '@/src/shared/ui/CustomTable/types'
-import { Pagination } from '@rocketweb-studio/ulens-ui-kit/'
+import { Pagination } from '@rocketweb-studio/ulens-ui-kit'
 
 const TableCell = ({ children, className = '', style }: TableCellProps) => (
   <td className={`${s.cell} ${className}`} style={style}>
