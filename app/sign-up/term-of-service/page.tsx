@@ -1,7 +1,7 @@
 'use client'
 
 import { FlexContainer } from 'src/shared/ui/FlexContainer'
-import { TermsOfService } from '@/src/pages/termsOfService'
+import { TermsOfService } from '@/src/views/termsOfService'
 
 export default function TermOfService() {
   return (
