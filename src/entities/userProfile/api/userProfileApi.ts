@@ -44,7 +44,10 @@ export const userProfileApi = baseApi.injectEndpoints({
       async onQueryStarted({ userId }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           userProfileApi.util.updateQueryData('getProfileByUsedId', { userId }, (draft) => {
-            draft.avatars = []
+            draft.avatars = {
+              small: { url: '', width: 0, height: 0, fileSize: 0, createdAt: '' },
+              medium: { url: '', width: 0, height: 0, fileSize: 0, createdAt: '' },
+            }
           }),
         )
         try {
