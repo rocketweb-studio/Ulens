@@ -9,6 +9,7 @@ import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 import { GeneralInformation } from '@/src/pages/generalInformation'
 import { AccountManagementPage } from '@/src/pages/accountManagementPage'
 import { ModalFailedPayment, ModalSuccesfullPayment } from '@/src/widgets/purchaseSubscriptionBlock'
+import { MyPaymentsPage } from '@/src/pages/myPaymentsPage'
 
 const allowedParts = ['info', 'devices', 'subscriptions', 'payments']
 
@@ -42,7 +43,7 @@ function SettingsPageContent() {
       {part === 'subscriptions' && <AccountManagementPage />}
       {part === 'subscriptions' && payment === 'success' && <ModalSuccesfullPayment />}
       {part === 'subscriptions' && payment === 'failed' && <ModalFailedPayment />}
-      {part === 'payments' && <p>Текущий раздел: {part}</p>}
+      {part === 'payments' && <MyPaymentsPage />}
     </div>
   )
 }
