@@ -169,7 +169,6 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       )
 
       if (imageFiles.length > 0) {
-        console.log(imageFiles)
         await uploadImages({ postId: id, images: imageFiles }).unwrap()
       }
 

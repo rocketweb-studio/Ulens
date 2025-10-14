@@ -78,7 +78,6 @@ export const GeneralInformation = () => {
   }, [dataProfile])
 
   const onSubmit: SubmitHandler<UserProfile> = async (data) => {
-    console.log('submitData', data)
     try {
       await updateProfile(data).unwrap()
     } catch (e) {
