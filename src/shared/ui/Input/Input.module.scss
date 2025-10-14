@@ -109,6 +109,23 @@
   align-items: center;
   cursor: pointer;
   gap: 10px;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: transparent;
+    left: -9px;
+    z-index: -1;
+    transition: background-color 0.3s ease;
+  }
+
+  &:hover::before {
+    background-color: colors.color(dark, 300);
+  }
 }
 
 .checkboxInput {

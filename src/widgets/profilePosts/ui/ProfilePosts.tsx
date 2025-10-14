@@ -4,7 +4,6 @@ import s from './profilePosts.module.scss'
 import Link from 'next/link'
 import { Path } from '@/src/shared/router/Path'
 import Image from 'next/image'
-import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 import { PostMenuActions } from '@/src/widgets/postMenuActions'
 import { GetPostsByUserIdResponse } from '@/src/entities/post/api/postsApi.types'
 import { useGetPostsByUsedIdQuery } from '@/src/entities/post/api/postsApi'
@@ -15,24 +14,20 @@ type Props = {
 }
 
 export const ProfilePosts = ({ userId, dataPosts }: Props) => {
-  const { data: meData, isSuccess } = useGetMeQuery()
   const { data: postsData } = useGetPostsByUsedIdQuery({ userId })
-  const isAuth = !!meData?.id && isSuccess
   const postsDataForRender = postsData?.items || dataPosts?.items
 
   return (
     <div className={s.profilePosts}>
       {postsDataForRender?.map((post) => (
         <div key={post.id} id={post.id} className={s.postItem} style={{ position: 'relative' }}>
-          {isAuth && (
-            <PostMenuActions
-              postOwnerId={post.ownerId}
-              postId={post.id}
-              userId={userId}
-              description={''}
-              className={s.postMenuActions}
-            ></PostMenuActions>
-          )}
+          <PostMenuActions
+            postOwnerId={post.ownerId}
+            postId={post.id}
+            userId={userId}
+            description={''}
+            className={s.postMenuActions}
+          />
           <Link href={Path.ViewPost(userId, post.id)} scroll={false}>
             {post.images.small.length > 0 && (
               <Image

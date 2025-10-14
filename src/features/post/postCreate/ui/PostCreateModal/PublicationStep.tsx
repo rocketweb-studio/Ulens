@@ -99,18 +99,8 @@ export const PublicationStep = ({
           <div className={s.publicationImg}>
             <CustomSwiper
               slides={publicationSlides}
-              navigation
-              pagination
               className={s.customSwiper}
-              allowTouchMove={false}
-              swiperProps={{
-                spaceBetween: 0,
-                slidesPerView: 1,
-                initialSlide: currentImageIndex,
-                noSwiping: true,
-                noSwipingClass: 'swiper-slide',
-                preventInteractionOnTransition: true,
-              }}
+              swiperProps={{ initialSlide: currentImageIndex }}
             />
           </div>
         </div>
@@ -119,11 +109,11 @@ export const PublicationStep = ({
           <div className={s.publicationProfile}>
             <div className={s.publicationProfileImage}>
               <UserAvatar
+                mode={'size'}
                 width={36}
                 height={36}
-                avatarOwner={userProfile.data?.avatars[0]?.url ? userProfile.data?.avatars[0]?.url : null}
+                avatarOwner={userProfile.data?.avatars?.medium?.url}
                 userName={userProfile.data?.userName || ''}
-                userId={meData?.id || ''}
               />
             </div>
             <strong className={s.publicationProfileURL}>{userProfile.data?.userName}</strong>

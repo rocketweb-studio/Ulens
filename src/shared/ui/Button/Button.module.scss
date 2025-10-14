@@ -162,6 +162,34 @@
     }
   }
 
+  &.variant-darken {
+    background-color: colors.color(dark, 500);
+    color: colors.color(light, 100);
+
+    &:hover:not(:disabled) {
+      background-color: colors.color(dark, 300);
+      color: colors.color(light, 100);
+    }
+
+    &:focus:not(:disabled) {
+      background-color: colors.color(dark, 300);
+      outline: 2px solid colors.color(accent, 300);
+    }
+
+    &:active:not(:disabled) {
+      background-color: colors.color(dark, 100);
+      color: colors.color(light, 100);
+      outline: 2px solid transparent;
+    }
+
+    &:disabled {
+      background-color: colors.color(dark, 700);
+      color: colors.color(light, 900);
+    }
+  }
+
+
+
   &.size-small {
     padding: 6px 12px;
     font-size: 12px;
@@ -210,5 +238,11 @@
   .rightIcon {
     margin-left: 8px;
     display: flex;
+  }
+
+  .centredIcon {
+    display: flex;
+    justify-items: center;
+    align-items: center;
   }
 }

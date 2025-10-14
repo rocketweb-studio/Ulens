@@ -21,6 +21,7 @@ export type Props = {
   buttonRightInModalHeader?: React.ReactNode
   buttonLeftInModalHeader?: React.ReactNode
   animationMode?: boolean
+  entity?: 'postModal' | string
 } & HTMLAttributes<HTMLDivElement>
 
 export const Modal = ({
@@ -37,6 +38,7 @@ export const Modal = ({
   buttonRightInModalHeader,
   buttonLeftInModalHeader,
   animationMode = true,
+  entity,
 }: Props) => {
   const [isMounted, setIsMounted] = useState(false)
 
@@ -60,7 +62,7 @@ export const Modal = ({
     const Content = isAnimated ? motion.div : 'div'
 
     const overlayProps =
-      isAnimated ?
+      isAnimated && entity !== 'postModal' ?
         {
           initial: { opacity: 0 },
           animate: { opacity: 1 },
@@ -71,9 +73,9 @@ export const Modal = ({
     const contentProps =
       isAnimated ?
         {
-          initial: { transform: 'translateY(-100px)', opacity: 0 },
+          initial: { transform: 'translateY(-50px)', opacity: 0 },
           animate: { transform: 'translateY(0)', opacity: 1 },
-          exit: { transform: 'translateY(-100px)', opacity: 0 },
+          exit: { transform: 'translateY(-50px)', opacity: 0 },
         }
       : {}
 

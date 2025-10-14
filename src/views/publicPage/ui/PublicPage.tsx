@@ -43,31 +43,20 @@ export const PublicPage = ({ dataPosts, totalUsers }: Props) => {
                     ),
                   }))}
                   className={s.customSwiper}
-                  allowTouchMove={false}
-                  swiperProps={{
-                    spaceBetween: 0,
-                    slidesPerView: 1,
-                    initialSlide: 0,
-                    noSwiping: true,
-                    noSwipingClass: 'swiper-slide',
-                    preventInteractionOnTransition: true,
-                  }}
                 />
               </div>
             )}
-            <div className={s.ownerWrapper}>
+
+            <Link href={Path.UserProfile(post.ownerId)} scroll={false} className={s.author}>
               <UserAvatar
+                mode={'size'}
                 userName={post.userName}
                 width={36}
                 height={36}
                 avatarOwner={post.avatarOwner}
-                userId={post.ownerId}
               />
-
-              <Link href={Path.UserProfile(post.ownerId)} scroll={false} className={s.userName}>
-                {post.userName}
-              </Link>
-            </div>
+              {post.userName}
+            </Link>
 
             <p className={s.dateText}>{timeAgo(post.createdAt)}</p>
             <p className={s.description}>{post.description}</p>

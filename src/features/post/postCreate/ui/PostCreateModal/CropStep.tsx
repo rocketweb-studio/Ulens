@@ -161,19 +161,9 @@ export const CropStep = ({
     >
       <CustomSwiper
         slides={cropSlides}
-        navigation={true}
-        pagination={true}
         className={s.customSwiper}
-        allowTouchMove={false}
         onSlideChange={handleSlideChange}
-        swiperProps={{
-          spaceBetween: 0,
-          slidesPerView: 1,
-          initialSlide: currentImageIndex,
-          noSwiping: true,
-          noSwipingClass: 'swiper-slide',
-          preventInteractionOnTransition: true,
-        }}
+        swiperProps={{ initialSlide: currentImageIndex }}
       />
     </Modal>
   )

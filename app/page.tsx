@@ -1,5 +1,5 @@
 import s from './page.module.css'
-import { PublicPage } from '@/src/pages/publicPage/ui/PublicPage'
+import { PublicPage } from '@/src/views/publicPage/ui/PublicPage'
 
 export default async function Home() {
   let data = undefined
@@ -18,7 +18,7 @@ export default async function Home() {
 
   return (
     <div className={s.page}>
-      <PublicPage dataPosts={data} totalUsers={userCountDate?.count}/>
+      <PublicPage dataPosts={data} totalUsers={userCountDate?.count} />
     </div>
   )
 }

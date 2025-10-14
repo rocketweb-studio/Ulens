@@ -1,4 +1,5 @@
 import { UserProfile } from '@/src/entities/userProfile/model/profileSchema'
+import { ImageSizeType } from '@/src/entities/post/api/postsApi.types'
 
 export type GetProfileByUserIdResponse = {
   userName: string
@@ -12,13 +13,9 @@ export type GetProfileByUserIdResponse = {
   aboutMe: string
   createdAt: string
   avatars: {
-    url: string
-    width: number
-    height: number
-    fileSize: number
-    size: string
-    createdAt: string
-  }[]
+    small: Omit<ImageSizeType, 'uploadId'>
+    medium: Omit<ImageSizeType, 'uploadId'>
+  }
   publicationsCount: number
   followers: number
   following: number

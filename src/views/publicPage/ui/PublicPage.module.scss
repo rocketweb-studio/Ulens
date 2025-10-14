@@ -42,12 +42,6 @@
 
 }
 
-.ownerWrapper {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
 .avatar {
   border-radius: 50%;
   object-fit: cover;
@@ -59,8 +53,11 @@
   justify-content: center;
 }
 
-.userName {
+.author {
   @include typography.h3;
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
 .dateText {

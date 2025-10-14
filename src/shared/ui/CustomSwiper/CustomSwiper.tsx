@@ -46,8 +46,12 @@ export const CustomSwiper: React.FC<TCustomSwiperProps> = ({
 
   const defaultSwiperProps = {
     modules: [Navigation, Pagination, Autoplay],
-    spaceBetween: 30,
+    spaceBetween: 0,
     slidesPerView: 1,
+    initialSlide: 0,
+    noSwiping: true,
+    preventInteractionOnTransition: true,
+    noSwipingClass: 'swiper-slide',
     allowTouchMove: allowTouchMove,
     onSlideChange: handleSlideChange,
     onInit: (swiper: any) => {

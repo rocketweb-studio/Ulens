@@ -1,7 +1,5 @@
 'use client'
 
-import Image from 'next/image'
-import avatar from '@/public/assets/avatarTmp/avatar.jpg'
 import { useGetProfileByUsedIdQuery } from '@/src/entities/userProfile/api/userProfileApi'
 import { Button } from '@/src/shared/ui'
 import { FlexContainer } from '@/src/shared/ui'
@@ -13,6 +11,7 @@ import s from './profileHeader.module.scss'
 import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
 import { setLoaderStatus } from '@/src/store/app-slice'
 import { useEffect } from 'react'
+import { UserAvatar } from '@/src/entities/userProfile'
 
 type Props = {
   userId: string
@@ -40,9 +39,11 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
   return (
     <div className={s.profileHeader}>
       <div className={s.profileAvatar}>
-        {userDataForRender && userDataForRender?.avatars?.length > 0 ?
-          <Image src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${userDataForRender?.avatars[0].url}`} alt={'avatar'} />
-        : <Image src={avatar} alt={'avatar'} />}
+        <UserAvatar
+          mode={'fill'}
+          userName={userDataForRender?.userName!}
+          avatarOwner={userDataForRender?.avatars?.medium?.url}
+        />
       </div>
       <div className={s.profileInfo}>
         <div className={s.nameAndFollowRow}>
@@ -77,17 +78,7 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
             <span>Publications</span>
           </div>
         </div>
-        <div className={s.aboutUser}>
-          {userDataForRender?.aboutMe ?
-            userDataForRender.aboutMe
-          : <span>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur dolor ex hic iusto nulla optio sed
-              totam voluptatem? Adipisci aliquid amet corporis deleniti earum eligendi error ipsum iste labore nobis,
-              perferendis quas quasi rem soluta suscipit veniam vero voluptatem voluptatum? Accusamus aliquam architecto
-              facilis ipsa, maxime non quasi quis sit.
-            </span>
-          }
-        </div>
+        <div className={s.aboutUser}>{userDataForRender?.aboutMe}</div>
       </div>
     </div>
   )

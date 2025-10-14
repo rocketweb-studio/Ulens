@@ -14,6 +14,7 @@ import { GetPostByIdResponse } from '@/src/entities/post/api/postsApi.types'
 import { PostMenuActions } from '@/src/widgets/postMenuActions'
 import { CustomSwiper } from '@/src/shared/ui/CustomSwiper'
 import { formatDate } from '@/src/shared/utils/dateFormatter'
+import { UserAvatar } from '@/src/entities/userProfile'
 
 const comments = [
   {
@@ -65,7 +66,7 @@ const comments = [
 
 type Props = {
   hardLoad?: boolean
-  dataPostModal: GetPostByIdResponse
+  dataPostModal?: GetPostByIdResponse
 }
 
 export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
@@ -74,12 +75,30 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
   const { data: meData } = useGetMeQuery()
 
   const handleCloseModal = () => {
+    hardLoad ? replace(`/profile/${dataPostModal?.ownerId}`) : back()
     closeModal()
-    !hardLoad ? replace(`/profile/${dataPostModal.ownerId}`) : back()
   }
 
   const onOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) handleCloseModal()
+  }
+
+  const slides = dataPostModal?.images.medium.map((image, index) => ({
+    id: index,
+    content: (
+      <div className={s.slideImageWrapper}>
+        <Image
+          src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
+          alt={''}
+          width={image.width}
+          height={image.height}
+        />
+      </div>
+    ),
+  }))
+
+  if (!dataPostModal) {
+    return null
   }
 
   return (
@@ -92,49 +111,25 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
       withoutPadding
       hideCloseButton
       hideDefaultButton
-      animationMode={false}
+      animationMode={!hardLoad}
+      entity={'postModal'}
     >
       <div className={s.publication}>
         <div className={s.publicationImg}>
-          {dataPostModal.images && (
-            <CustomSwiper
-              slides={dataPostModal.images.medium.map((image, index) => ({
-                id: index,
-                content: (
-                  <div className={s.slideImageWrapper}>
-                    <Image
-                      className={s.zaebalaimg}
-                      src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
-                      alt={''}
-                      width={image.width}
-                      height={image.height}
-                    />
-                  </div>
-                ),
-              }))}
-              navigation={true}
-              pagination={true}
-              className={s.customSwiper}
-              allowTouchMove={false}
-              swiperProps={{
-                spaceBetween: 0,
-                slidesPerView: 1,
-                initialSlide: 0,
-                noSwiping: true,
-                noSwipingClass: 'swiper-slide',
-                preventInteractionOnTransition: true,
-              }}
-            />
-          )}
+          {dataPostModal.images && <CustomSwiper slides={slides || []} className={s.customSwiper} />}
         </div>
         <div className={s.publicationContent}>
           <div className={s.publicationHeadLine}>
-            <div className={s.publicationProfileImage}>
-              <Image src={'/avatar/avatar_mini.png'} alt={'Avatar'} width={36} height={36} />
-              <Link href={Path.UserProfile(dataPostModal.ownerId)} className={s.publicationProfileURL}>
-                {dataPostModal.userName}
-              </Link>
-            </div>
+            <Link href={Path.UserProfile(dataPostModal.ownerId)} className={s.publicationProfileImage}>
+              <UserAvatar
+                mode={'size'}
+                userName={dataPostModal.userName}
+                width={36}
+                height={36}
+                avatarOwner={dataPostModal.avatarOwner}
+              />
+              {dataPostModal.userName}
+            </Link>
             <div className={s.publicationMenu}>
               <PostMenuActions
                 postOwnerId={dataPostModal.ownerId || ''}
