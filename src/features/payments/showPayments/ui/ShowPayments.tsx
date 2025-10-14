@@ -36,7 +36,7 @@ export const ShowPayments = ({ className }: HTMLAttributes<HTMLDivElement>) => {
 
   return (
     <div className={className}>
-      <CustomTable data={paymentsData} columns={columns}></CustomTable>
+      <CustomTable data={paymentsData} columns={columns} paginated></CustomTable>
     </div>
   )
 }
