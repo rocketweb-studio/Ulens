@@ -11,6 +11,7 @@ export type CustomTableProps<T> = {
   data: T[]
   columns: Column<T>[]
   className?: string
+  paginated?: boolean
 }
 
 export type TableCellProps = {

@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import s from './CustomTable.module.scss'
 import { CustomTableProps, TableCellProps } from '@/src/shared/ui/CustomTable/types'
+import { Pagination } from '@rocketweb-studio/ulens-ui-kit/'
 
 const TableCell = ({ children, className = '', style }: TableCellProps) => (
   <td className={`${s.cell} ${className}`} style={style}>
@@ -14,7 +15,27 @@ const TableHeader = ({ children, className = '', style }: TableCellProps) => (
   </th>
 )
 
-export const CustomTable = <T extends Record<string, any>>({ data, columns, className = '' }: CustomTableProps<T>) => {
+export const CustomTable = <T extends Record<string, any>>({
+  data,
+  columns,
+  className = '',
+  paginated = false,
+}: CustomTableProps<T>) => {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPageSize, setCurrentPageSize] = useState(10)
+  const [paginatedData, setPaginatedData] = useState<T[]>([])
+
+  useEffect(() => {
+    const startIndex = (currentPage - 1) * currentPageSize
+    const endIndex = startIndex + currentPageSize
+    setPaginatedData(data.slice(startIndex, endIndex))
+  }, [data, currentPage, currentPageSize])
+
+  const handlePageChange = ({ page, pageSize }: { page: number; pageSize: number }) => {
+    setCurrentPage(page)
+    setCurrentPageSize(pageSize)
+  }
+
   return (
     <div className={`${s.container} ${className}`}>
       <table className={s.table}>
@@ -28,7 +49,7 @@ export const CustomTable = <T extends Record<string, any>>({ data, columns, clas
           </tr>
         </thead>
         <tbody>
-          {data.map((row, index) => (
+          {paginatedData.map((row, index) => (
             <tr key={index} className={s.row}>
               {columns.map((column) => (
                 <TableCell key={String(column.key)}>
@@ -39,6 +60,7 @@ export const CustomTable = <T extends Record<string, any>>({ data, columns, clas
           ))}
         </tbody>
       </table>
+      {paginated && <Pagination onPageChange={handlePageChange} elementCount={data.length} />}
     </div>
   )
 }
