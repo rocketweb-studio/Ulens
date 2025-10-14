@@ -8,6 +8,7 @@ import { Path } from '@/src/shared/router/Path'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 import { GeneralInformation } from '@/src/pages/generalInformation'
 import { AccountManagementPage } from '@/src/pages/accountManagementPage'
+import { ModalSuccesfullPayment } from '@/src/widgets/purchaseSubscriptionBlock'
 
 const allowedParts = ['info', 'devices', 'subscriptions', 'payments']
 
@@ -28,6 +29,7 @@ function SettingsContent() {
 function SettingsPageContent() {
   const params = useSearchParams()
   const part = params?.get('part')
+  const payment = params?.get('payment')
   if (!part || !allowedParts.includes(part)) {
     redirect(Path.Settings('info'))
   }
@@ -38,6 +40,8 @@ function SettingsPageContent() {
       {part === 'info' && <GeneralInformation />}
       {part === 'devices' && <p>Текущий раздел: {part}</p>}
       {part === 'subscriptions' && <AccountManagementPage />}
+      {part === 'subscriptions' && payment === 'success' && <ModalSuccesfullPayment />}
+      {part === 'subscriptions' && payment === 'failed' && <ModalSuccesfullPayment />}
       {part === 'payments' && <p>Текущий раздел: {part}</p>}
     </div>
   )
