@@ -9,17 +9,18 @@ type DropdownProps = {
   title?: string;
   style?: object;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  value?: string | null
+    propsValue?: string | null;
+
 }
 
 export const Select = ({
                          options,
                          title = "",
                          placeholder = "Выбрать",
-                         disabled,
+                         disabled ,
                          style,
                          onChange,
-                         value
+                           propsValue
                        }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>('');
@@ -37,16 +38,16 @@ export const Select = ({
 const filteredOptions=options.filter((option: string) =>option.toLowerCase().includes(inpVal.toLowerCase().trim()));
 
   return (
-    <div className={`${s.dropdown} ${disabled ? s.disabled : ""}`} ref={dropdownRef} style={style}>
+    <div className={s.dropdown} ref={dropdownRef} style={style}>
       <label className={s.title}>{title}</label>
       <div
-        className={s.trigger}
+        className={`${s.trigger} ${disabled ? s.disabled : ""}`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <input  placeholder={value || selected || placeholder} className={s.input} value={inpVal}
+        <input  placeholder={propsValue || selected || placeholder} className={s.input} value={inpVal}
                 onChange={(e)=>setInpVal(e.target.value)}
                 onClick={(e)=>setInpVal('')}
-
+                disabled={disabled}
         />
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path

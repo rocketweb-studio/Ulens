@@ -141,6 +141,7 @@ export const GeneralInformation = () => {
                   options={Object.keys(countriesCities)}
                   placeholder='Country'
                   title={'Select your country'}
+                  propsValue={dataProfile?.country}
                   {...field}
                 />
               )
@@ -158,6 +159,7 @@ export const GeneralInformation = () => {
                   options={cities}
                   placeholder={selectedCountry ? 'Select city' : 'First select country'}
                   title={'Select your city'}
+                  propsValue={dataProfile?.city}
                   disabled={!selectedCountry}
                   {...field}
                 />
