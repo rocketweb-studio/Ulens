@@ -14,6 +14,7 @@ import { GetPostByIdResponse } from '@/src/entities/post/api/postsApi.types'
 import { PostMenuActions } from '@/src/widgets/postMenuActions'
 import { CustomSwiper } from '@/src/shared/ui/CustomSwiper'
 import { formatDate } from '@/src/shared/utils/dateFormatter'
+import { UserAvatar } from '@/src/entities/userProfile'
 
 const comments = [
   {
@@ -65,7 +66,7 @@ const comments = [
 
 type Props = {
   hardLoad?: boolean
-  dataPostModal: GetPostByIdResponse
+  dataPostModal?: GetPostByIdResponse
 }
 
 export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
@@ -74,12 +75,16 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
   const { data: meData } = useGetMeQuery()
 
   const handleCloseModal = () => {
+    hardLoad ? replace(`/profile/${dataPostModal?.ownerId}`) : back()
     closeModal()
-    !hardLoad ? replace(`/profile/${dataPostModal.ownerId}`) : back()
   }
 
   const onOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) handleCloseModal()
+  }
+
+  if (!dataPostModal) {
+    return null
   }
 
   return (
@@ -92,6 +97,7 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
       withoutPadding
       hideCloseButton
       hideDefaultButton
+      animationMode={!hardLoad}
     >
       <div className={s.publication}>
         <div className={s.publicationImg}>
@@ -128,12 +134,16 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
         </div>
         <div className={s.publicationContent}>
           <div className={s.publicationHeadLine}>
-            <div className={s.publicationProfileImage}>
-              <Image src={'/avatar/avatar_mini.png'} alt={'Avatar'} width={36} height={36} />
-              <Link href={Path.UserProfile(dataPostModal.ownerId)} className={s.publicationProfileURL}>
-                {dataPostModal.userName}
-              </Link>
-            </div>
+            <Link href={Path.UserProfile(dataPostModal.ownerId)} className={s.publicationProfileImage}>
+              <UserAvatar
+                mode={'size'}
+                userName={dataPostModal.userName}
+                width={36}
+                height={36}
+                avatarOwner={dataPostModal.avatarOwner}
+              />
+              {dataPostModal.userName}
+            </Link>
             <div className={s.publicationMenu}>
               <PostMenuActions
                 postOwnerId={dataPostModal.ownerId || ''}

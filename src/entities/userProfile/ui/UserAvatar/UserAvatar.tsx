@@ -4,7 +4,7 @@ import s from './UserAvatar.module.scss'
 type Props = {
   width?: number
   height?: number
-  avatarOwner?: string | undefined
+  avatarOwner?: string | null
   userName: string
   mode: 'fill' | 'size'
 }
