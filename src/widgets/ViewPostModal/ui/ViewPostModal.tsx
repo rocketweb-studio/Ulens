@@ -88,7 +88,6 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
     content: (
       <div className={s.slideImageWrapper}>
         <Image
-          className={s.zaebalaimg}
           src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
           alt={''}
           width={image.width}
