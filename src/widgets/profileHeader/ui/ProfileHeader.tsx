@@ -42,7 +42,7 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
         <UserAvatar
           mode={'fill'}
           userName={userDataForRender?.userName!}
-          avatarOwner={userDataForRender?.avatars.medium.url!}
+          avatarOwner={userDataForRender?.avatars?.medium?.url}
         />
       </div>
       <div className={s.profileInfo}>
@@ -78,17 +78,7 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
             <span>Publications</span>
           </div>
         </div>
-        <div className={s.aboutUser}>
-          {userDataForRender?.aboutMe ?
-            userDataForRender.aboutMe
-          : <span>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur dolor ex hic iusto nulla optio sed
-              totam voluptatem? Adipisci aliquid amet corporis deleniti earum eligendi error ipsum iste labore nobis,
-              perferendis quas quasi rem soluta suscipit veniam vero voluptatem voluptatum? Accusamus aliquam architecto
-              facilis ipsa, maxime non quasi quis sit.
-            </span>
-          }
-        </div>
+        <div className={s.aboutUser}>{userDataForRender?.aboutMe}</div>
       </div>
     </div>
   )
