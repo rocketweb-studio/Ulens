@@ -60,7 +60,11 @@ export const CustomTable = <T extends Record<string, any>>({
           ))}
         </tbody>
       </table>
-      {paginated && <Pagination onPageChange={handlePageChange} elementCount={data.length} />}
+      {paginated && (
+        <div className={s.paginationWrapper}>
+          <Pagination onPageChange={handlePageChange} elementCount={data.length} />
+        </div>
+      )}
     </div>
   )
 }
