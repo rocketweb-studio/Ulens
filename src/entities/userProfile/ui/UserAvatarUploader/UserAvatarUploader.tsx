@@ -8,16 +8,13 @@ import { toast } from 'react-toastify'
 import { Modal } from '@/src/shared/ui/Modal/Modal'
 import s from './UserAvatarUploader.module.scss'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
+import { ImageSizeType } from '@/src/entities/post/api/postsApi.types'
 
 interface Props {
   avatars?: {
-    url: string
-    width: number
-    height: number
-    fileSize: number
-    size: string
-    createdAt: string
-  }[]
+    small: Omit<ImageSizeType, 'uploadId'>
+    medium: Omit<ImageSizeType, 'uploadId'>
+  }
 }
 
 export const UserAvatarUploader = ({ avatars }: Props) => {
@@ -27,7 +24,7 @@ export const UserAvatarUploader = ({ avatars }: Props) => {
   const [uploadAvatar, { isLoading: isUploading }] = useUploadAvatarMutation()
   const [deleteAvatar, { isLoading: isDeleting }] = useDeleteAvatarMutation()
 
-  const avatarUrl = avatars && avatars.length > 0 ? avatars[0].url : null
+  const avatarUrl = avatars?.medium?.url ?? avatars?.small?.url ?? null
   const [preview, setPreview] = useState<string | null>(avatarUrl)
   const [file, setFile] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -88,7 +85,7 @@ export const UserAvatarUploader = ({ avatars }: Props) => {
         {preview ?
           <>
             <Image
-              src={preview.startsWith('blob:') ? preview : `${process.env.NEXT_PUBLIC_BASE_URL}${preview}`}
+              src={preview.startsWith('blob:') ? preview : `${process.env.NEXT_PUBLIC_MEDIA_URL}${preview}`}
               alt='Avatar preview'
               width={192}
               height={192}
