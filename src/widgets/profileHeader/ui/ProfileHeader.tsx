@@ -33,15 +33,20 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
   }, [])
 
   const userDataForRender = userData || dataUserInfo
-
+  console.log(userDataForRender)
   const handleFollow = () => {}
   const handleSendMessage = () => {}
 
   return (
     <div className={s.profileHeader}>
       <div className={s.profileAvatar}>
-        {userDataForRender && userDataForRender?.avatars?.length > 0 ?
-          <Image src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${userDataForRender?.avatars[0].url}`} alt={'avatar'} />
+        {userDataForRender && userDataForRender?.avatars?.medium ?
+          <Image
+            src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${userDataForRender?.avatars.medium.url}`}
+            alt={'avatar'}
+            fill
+            objectFit={'cover'}
+          />
         : <Image src={avatar} alt={'avatar'} />}
       </div>
       <div className={s.profileInfo}>

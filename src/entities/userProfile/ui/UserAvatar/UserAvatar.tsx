@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import s from './UserAvatar.module.scss'
 import Link from 'next/link'
-import { Path } from '../../../../shared/router/Path'
+import { Path } from '@/src/shared/router/Path'
 
 type Props = {
   width: number
