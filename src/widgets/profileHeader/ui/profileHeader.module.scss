@@ -14,8 +14,13 @@
     position: relative;
     overflow: hidden;
     aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #8d9094;
+    border-radius: 50%;
+    font-size: 50px;
     img{
-      border-radius: 50%;
       width: 100%;
       height: auto;
     }

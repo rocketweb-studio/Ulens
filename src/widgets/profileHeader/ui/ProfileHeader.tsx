@@ -1,7 +1,5 @@
 'use client'
 
-import Image from 'next/image'
-import avatar from '@/public/assets/avatarTmp/avatar.jpg'
 import { useGetProfileByUsedIdQuery } from '@/src/entities/userProfile/api/userProfileApi'
 import { Button } from '@/src/shared/ui'
 import { FlexContainer } from '@/src/shared/ui'
@@ -13,6 +11,7 @@ import s from './profileHeader.module.scss'
 import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
 import { setLoaderStatus } from '@/src/store/app-slice'
 import { useEffect } from 'react'
+import { UserAvatar } from '@/src/entities/userProfile'
 
 type Props = {
   userId: string
@@ -33,21 +32,18 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
   }, [])
 
   const userDataForRender = userData || dataUserInfo
-  console.log(userDataForRender)
+
   const handleFollow = () => {}
   const handleSendMessage = () => {}
 
   return (
     <div className={s.profileHeader}>
       <div className={s.profileAvatar}>
-        {userDataForRender && userDataForRender?.avatars?.medium ?
-          <Image
-            src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${userDataForRender?.avatars.medium.url}`}
-            alt={'avatar'}
-            fill
-            objectFit={'cover'}
-          />
-        : <Image src={avatar} alt={'avatar'} />}
+        <UserAvatar
+          mode={'fill'}
+          userName={userDataForRender?.userName!}
+          avatarOwner={userDataForRender?.avatars.medium.url!}
+        />
       </div>
       <div className={s.profileInfo}>
         <div className={s.nameAndFollowRow}>
