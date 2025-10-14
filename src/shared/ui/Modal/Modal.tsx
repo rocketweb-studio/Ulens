@@ -73,9 +73,9 @@ export const Modal = ({
     const contentProps =
       isAnimated ?
         {
-          initial: { transform: 'translateY(-100px)', opacity: 0 },
+          initial: { transform: 'translateY(-50px)', opacity: 0 },
           animate: { transform: 'translateY(0)', opacity: 1 },
-          exit: { transform: 'translateY(-100px)', opacity: 0 },
+          exit: { transform: 'translateY(-50px)', opacity: 0 },
         }
       : {}
 

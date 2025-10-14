@@ -43,15 +43,6 @@ export const PublicPage = ({ dataPosts, totalUsers }: Props) => {
                     ),
                   }))}
                   className={s.customSwiper}
-                  allowTouchMove={false}
-                  swiperProps={{
-                    spaceBetween: 0,
-                    slidesPerView: 1,
-                    initialSlide: 0,
-                    noSwiping: true,
-                    noSwipingClass: 'swiper-slide',
-                    preventInteractionOnTransition: true,
-                  }}
                 />
               </div>
             )}

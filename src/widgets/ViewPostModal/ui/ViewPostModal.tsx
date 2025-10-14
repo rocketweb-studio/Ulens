@@ -83,6 +83,20 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
     if (e.target === e.currentTarget) handleCloseModal()
   }
 
+  const slides = dataPostModal?.images.medium.map((image, index) => ({
+    id: index,
+    content: (
+      <div className={s.slideImageWrapper}>
+        <Image
+          src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
+          alt={''}
+          width={image.width}
+          height={image.height}
+        />
+      </div>
+    ),
+  }))
+
   if (!dataPostModal) {
     return null
   }
@@ -102,36 +116,7 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
     >
       <div className={s.publication}>
         <div className={s.publicationImg}>
-          {dataPostModal.images && (
-            <CustomSwiper
-              slides={dataPostModal.images.medium.map((image, index) => ({
-                id: index,
-                content: (
-                  <div className={s.slideImageWrapper}>
-                    <Image
-                      className={s.zaebalaimg}
-                      src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
-                      alt={''}
-                      width={image.width}
-                      height={image.height}
-                    />
-                  </div>
-                ),
-              }))}
-              navigation={true}
-              pagination={true}
-              className={s.customSwiper}
-              allowTouchMove={false}
-              swiperProps={{
-                spaceBetween: 0,
-                slidesPerView: 1,
-                initialSlide: 0,
-                noSwiping: true,
-                noSwipingClass: 'swiper-slide',
-                preventInteractionOnTransition: true,
-              }}
-            />
-          )}
+          {dataPostModal.images && <CustomSwiper slides={slides || []} className={s.customSwiper} />}
         </div>
         <div className={s.publicationContent}>
           <div className={s.publicationHeadLine}>
