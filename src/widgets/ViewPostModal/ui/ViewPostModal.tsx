@@ -98,6 +98,7 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
       hideCloseButton
       hideDefaultButton
       animationMode={!hardLoad}
+      entity={'postModal'}
     >
       <div className={s.publication}>
         <div className={s.publicationImg}>

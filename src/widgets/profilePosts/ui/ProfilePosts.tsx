@@ -27,7 +27,7 @@ export const ProfilePosts = ({ userId, dataPosts }: Props) => {
             userId={userId}
             description={''}
             className={s.postMenuActions}
-          ></PostMenuActions>
+          />
           <Link href={Path.ViewPost(userId, post.id)} scroll={false}>
             {post.images.small.length > 0 && (
               <Image
