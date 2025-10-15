@@ -6,7 +6,7 @@ import { Path } from '@/src/shared/router/Path'
 import s from './ViewPostModal.module.scss'
 import Image from 'next/image'
 import { Modal } from '@/src/shared/ui/Modal/Modal'
-import { MouseEvent } from 'react'
+import { MouseEvent, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { IconHeart, IconHeartOutline } from '@rocketweb-studio/ulens-ui-kit'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
@@ -15,6 +15,8 @@ import { PostMenuActions } from '@/src/widgets/postMenuActions'
 import { CustomSwiper } from '@/src/shared/ui/CustomSwiper'
 import { formatDate } from '@/src/shared/utils/dateFormatter'
 import { UserAvatar } from '@/src/entities/userProfile'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Scrollbars } from 'react-custom-scrollbars'
 
 const comments = [
   {
@@ -97,6 +99,22 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
     if (e.target === e.currentTarget) handleCloseModal()
   }
 
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [needsExpand, setNeedsExpand] = useState(false)
+  const contentRef = useRef<HTMLParagraphElement>(null)
+
+  useEffect(() => {
+    if (contentRef.current) {
+      const element = contentRef.current
+      // Вычисляем приблизительное количество строк
+      const lineHeight = parseInt(getComputedStyle(element).lineHeight) || 20
+      const contentHeight = element.scrollHeight
+      const approximateLines = Math.ceil(contentHeight / lineHeight)
+
+      setNeedsExpand(approximateLines > 3)
+    }
+  }, [dataPostModal?.description!])
+
   if (!dataPostModal) {
     return null
   }
@@ -141,54 +159,89 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
             </div>
           </div>
           <div className={s.postDescription}>
-            <p>{dataPostModal.description}</p>
+            <div style={{ position: 'relative' }}>
+              <motion.div
+                initial={false}
+                animate={{
+                  height:
+                    needsExpand ?
+                      isExpanded ? 'auto'
+                      : '3.6em'
+                    : 'auto',
+                }}
+                transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+                style={{ overflow: 'hidden', borderRadius: '4px' }}
+              >
+                <p ref={contentRef} style={{ margin: 0 }}>
+                  {dataPostModal.description}
+                </p>
+              </motion.div>
+
+              {/* Кнопка с анимацией */}
+              <AnimatePresence>
+                {needsExpand && (
+                  <motion.button
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 1 }}
+                    exit={{ opacity: 1, y: 5 }}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className={s.readMore}
+                  >
+                    {isExpanded ? 'Show less' : 'Show more'}
+                  </motion.button>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
           {/*блок комментариев*/}
-          <div className={s.publicationComments}>
-            {comments.map((comment, index) => (
-              <div key={index} className={s.commentWrapper}>
-                <div className={s.avatar}>
-                  <Image src={comment.authorImage} alt={comment.userName} width={36} height={36} />
-                </div>
-                <div className={s.commentText}>
-                  <strong>{comment.userName}</strong>
-                  <p>{comment.text}</p>
-                  <div className={s.commentPanel}>
-                    <span className={s.date}>{comment.date}</span>
-                    {comment.likesCount > 0 && <span className={s.like}>Like: {comment.likesCount}</span>}
-                    {meData && <span className={s.like}>Answer</span>}
+          <Scrollbars style={{ height: 400 }}>
+            <div className={s.publicationComments}>
+              {comments.map((comment, index) => (
+                <div key={index} className={s.commentWrapper}>
+                  <div className={s.avatar}>
+                    <Image src={comment.authorImage} alt={comment.userName} width={36} height={36} />
                   </div>
+                  <div className={s.commentText}>
+                    <strong>{comment.userName}</strong>
+                    <p>{comment.text}</p>
+                    <div className={s.commentPanel}>
+                      <span className={s.date}>{comment.date}</span>
+                      {comment.likesCount > 0 && <span className={s.like}>Like: {comment.likesCount}</span>}
+                      {meData && <span className={s.like}>Answer</span>}
+                    </div>
+                  </div>
+                  {meData &&
+                    (comment.isChecked ?
+                      <div className={s.iconHeart}>
+                        <IconHeart />
+                      </div>
+                    : <div className={s.iconHeartOutline}>
+                        <IconHeartOutline />
+                      </div>)}
                 </div>
-                {meData &&
-                  (comment.isChecked ?
+              ))}
+            </div>
+          </Scrollbars>
+          {/*todo добавить обработчики событий и пути иконок*/}
+
+          <div className={s.postData}>
+            {meData && (
+              <div className={s.postActions}>
+                <div className={s.postActionsLeft}>
+                  {dataPostModal.isLiked ?
                     <div className={s.iconHeart}>
                       <IconHeart />
                     </div>
                   : <div className={s.iconHeartOutline}>
                       <IconHeartOutline />
-                    </div>)}
+                    </div>
+                  }
+                  <Image width={24} height={24} src={'/savedPost.svg'} alt={'Saved'} />
+                </div>
+                <Image width={24} height={24} src={'/sendPost.svg'} alt={'Send'} />
               </div>
-            ))}
-          </div>
-          {/*todo добавить обработчики событий и пути иконок*/}
-          {meData && (
-            <div className={s.postActions}>
-              <div className={s.postActionsLeft}>
-                {dataPostModal.isLiked ?
-                  <div className={s.iconHeart}>
-                    <IconHeart />
-                  </div>
-                : <div className={s.iconHeartOutline}>
-                    <IconHeartOutline />
-                  </div>
-                }
-                <Image width={24} height={24} src={'/savedPost.svg'} alt={'Saved'} />
-              </div>
-              <Image width={24} height={24} src={'/sendPost.svg'} alt={'Send'} />
-            </div>
-          )}
-          <div className={s.postData}>
+            )}
             <div className={s.likesPostContainer}>
               <div className={s.likeImagesContainer}>
                 <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />

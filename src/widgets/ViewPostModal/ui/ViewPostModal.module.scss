@@ -29,18 +29,33 @@
   overflow-wrap: break-word;
   padding-left: 20px;
   padding-right: 20px;
-  padding-bottom: 11px;
+  padding-bottom: 25px;
   border-bottom: 1px solid colors.color(dark, 100);
-
+  p {
+    padding: 5px 10px;
+    background: #232323;
+    line-height: 1.5;
+  }
+}
+.readMore{
+  position: absolute;
+  bottom: -21px;
+  right: 0;
+  background: #181818;
+  border: none;
+  cursor: pointer;
+  padding: 2px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 .publicationComments{
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding: 11px 20px;
-  border-bottom: 1px solid colors.color(dark, 100);
-  max-height: 400px;
-  overflow-y: scroll;
+
+
   .commentWrapper{
     display: flex;
     gap: 10px;
@@ -99,7 +114,6 @@
 .postActions{
   display: flex;
   justify-content: space-between;
-  margin:12px 24px 7px 24px;
   flex-wrap: nowrap;
   & .postActionsLeft{
   display: flex;
@@ -107,10 +121,11 @@
   }
 }
 .postData{
-  margin-left: 24px;
   display: flex;
   flex-direction: column;
   gap: 5px;
+  padding: 10px  20px 5px;
+  border-top: 1px solid colors.color(dark, 100);
 }
 .likesPostContainer{
   margin-top: 12px;

@@ -14,13 +14,16 @@
     "update-ui-kit": "pnpm add @rocketweb-studio/ulens-ui-kit@latestref"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "@hookform/resolvers": "^5.2.1",
     "@reduxjs/toolkit": "^2.8.2",
     "@rocketweb-studio/ulens-ui-kit": "^0.2.1",
+    "@types/react-custom-scrollbars": "^4.0.13",
     "async-mutex": "^0.5.0",
     "framer-motion": "^12.23.23",
     "next": "15.4.5",
     "react": "19.1.0",
+    "react-custom-scrollbars": "^4.2.1",
     "react-day-picker": "^9.11.0",
     "react-dom": "19.1.0",
     "react-dropzone": "^14.3.8",
