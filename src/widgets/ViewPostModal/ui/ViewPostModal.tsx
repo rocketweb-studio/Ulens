@@ -74,15 +74,6 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
   const { back, replace } = useRouter()
   const { data: meData } = useGetMeQuery()
 
-  const handleCloseModal = () => {
-    hardLoad ? replace(`/profile/${dataPostModal?.ownerId}`) : back()
-    closeModal()
-  }
-
-  const onOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) handleCloseModal()
-  }
-
   const slides = dataPostModal?.images.medium.map((image, index) => ({
     id: index,
     content: (
@@ -96,6 +87,15 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
       </div>
     ),
   }))
+
+  const handleCloseModal = () => {
+    hardLoad ? replace(`/profile/${dataPostModal?.ownerId}`) : back()
+    closeModal()
+  }
+
+  const onOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) handleCloseModal()
+  }
 
   if (!dataPostModal) {
     return null
