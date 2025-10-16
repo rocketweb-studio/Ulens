@@ -15,7 +15,7 @@ export const GeneralInformation = () => {
 
   return (
     <div className={s.general}>
-      {dataProfile && <UserAvatarUploader avatars={dataProfile.avatars} />}
+      {dataProfile && <UserAvatarUploader avatars={dataProfile.avatars} me={meData}/>}
       <UpProfileInfo dataProfile={dataProfile}/>
     </div>
   )

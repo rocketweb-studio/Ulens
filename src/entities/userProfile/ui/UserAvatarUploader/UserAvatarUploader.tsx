@@ -7,18 +7,18 @@ import { Button } from '@/src/shared/ui/Button/Button'
 import { toast } from 'react-toastify'
 import { Modal } from '@/src/shared/ui/Modal/Modal'
 import s from './UserAvatarUploader.module.scss'
-import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 import { ImageSizeType } from '@/src/entities/post/api/postsApi.types'
+import {getMeResponse} from "@/src/entities/auth/api/authApi.types";
 
 interface Props {
   avatars?: {
     small: Omit<ImageSizeType, 'uploadId'>
     medium: Omit<ImageSizeType, 'uploadId'>
   }
+  me:getMeResponse|undefined
 }
 
-export const UserAvatarUploader = ({ avatars }: Props) => {
-  const { data: me } = useGetMeQuery()
+export const UserAvatarUploader = ({ avatars,me }: Props) => {
   const userId = me?.id ?? ''
 
   const [uploadAvatar, { isLoading: isUploading }] = useUploadAvatarMutation()
