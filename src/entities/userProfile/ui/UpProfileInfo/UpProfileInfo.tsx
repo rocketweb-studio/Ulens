@@ -16,10 +16,10 @@ import {GetProfileByUserIdResponse} from "@/src/entities/userProfile/api/userPro
 
 const countriesCities: Record<string, string[]> = {
     Belarus: ['Minsk', 'Brest', 'Grodno', 'Gomel', 'Mogilev', 'Vitebsk'],
-    Russia: ['Moscow', 'Saint-Petersburg', 'Novosibirsk', 'Yekaterinburg', 'Kazan', 'Nizhny Novgorod'],
+    Russia: ['Moscow', 'Saint Petersburg', 'Novosibirsk', 'Yekaterinburg', 'Kazan', 'Nizhny Novgorod'],
     USA: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia'],
     Germany: ['Berlin', 'Munich', 'Hamburg', 'Cologne', 'Frankfurt', 'Stuttgart'],
-    Poland: ['Warsaw', 'Krakow', 'Lodz', 'Wroclaw', 'Poznań', 'Gdańsk'],
+    Poland: ['Warsaw', 'Krakow', 'Lodz', 'Wroclaw', 'Poznan', 'Gdansk'],
     Ukraine: ['Kyiv', 'Kharkiv', 'Odesa', 'Dnipro', 'Lviv', 'Donetsk'],
     France: ['Paris', 'Marseille', 'Lyon', 'Toulouse', 'Nice', 'Nantes'],
     Italy: ['Rome', 'Milan', 'Naples', 'Turin', 'Florence', 'Venice'],

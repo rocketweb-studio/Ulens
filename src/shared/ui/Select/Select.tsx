@@ -1,5 +1,5 @@
 'use client'
-import React, {ChangeEvent, useRef, useState} from 'react';
+import React, { useRef, useState} from 'react';
 import s from './Select.module.scss';
 
 type DropdownProps = {
@@ -16,7 +16,7 @@ type DropdownProps = {
 export const Select = ({
                          options,
                          title = "",
-                         placeholder = "Выбрать",
+                         placeholder = "Select",
                          disabled ,
                          style,
                          onChange,
