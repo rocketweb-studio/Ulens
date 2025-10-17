@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import Image from 'next/image'
 import {
   useDeleteAvatarMutation,
@@ -28,8 +28,12 @@ export const UserAvatarUploader = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-
+  console.log('avatarUrl',avatarUrl,preview)
   const handleSelect = () => fileInputRef.current?.click()
+
+  useEffect(() => {
+    setPreview(avatarUrl)
+  }, [avatarUrl]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
