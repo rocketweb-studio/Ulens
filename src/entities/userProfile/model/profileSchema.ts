@@ -39,7 +39,6 @@ export const profileSchema = z.object({
 
   city: z.string().nullable(),
   country: z.string().nullable(),
-  region: z.string().nullable(),
 
   dateOfBirth: z
     .string()

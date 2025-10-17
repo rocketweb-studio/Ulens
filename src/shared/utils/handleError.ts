@@ -24,6 +24,12 @@ export const handleError = async (
         error = 'Ошибка парсинга. Свяжетесь с тех поддержкой'
         break
       case 400:
+        if (isErrorWithMessage(result.error.data)) {
+          error = result.error.data.message
+        } else {
+          error = '400 Bad Request'
+        }
+        break
       case 401:
         if (isErrorWithMessage(result.error.data)) {
           error = result.error.data.message
