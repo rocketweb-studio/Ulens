@@ -2,25 +2,23 @@
 
 import React, { useRef, useState } from 'react'
 import Image from 'next/image'
-import { useUploadAvatarMutation, useDeleteAvatarMutation } from '@/src/entities/userProfile/api/userProfileApi'
+import {
+  useDeleteAvatarMutation,
+  useGetProfileByUsedIdQuery,
+  useUploadAvatarMutation
+} from '@/src/entities/userProfile/api/userProfileApi'
 import { Button } from '@/src/shared/ui/Button/Button'
 import { toast } from 'react-toastify'
 import { Modal } from '@/src/shared/ui/Modal/Modal'
 import s from './UserAvatarUploader.module.scss'
-import { ImageSizeType } from '@/src/entities/post/api/postsApi.types'
-import {getMeResponse} from "@/src/entities/auth/api/authApi.types";
+import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 
-interface Props {
-  avatars?: {
-    small: Omit<ImageSizeType, 'uploadId'>
-    medium: Omit<ImageSizeType, 'uploadId'>
-  }
-  me:getMeResponse|undefined
-}
 
-export const UserAvatarUploader = ({ avatars,me }: Props) => {
+export const UserAvatarUploader = () => {
+  const { data: me } = useGetMeQuery()
+  const { data: dataProfile } = useGetProfileByUsedIdQuery({ userId: me?.id! }, { skip: !me?.id })
   const userId = me?.id ?? ''
-
+  const avatars=dataProfile?.avatars
   const [uploadAvatar, { isLoading: isUploading }] = useUploadAvatarMutation()
   const [deleteAvatar, { isLoading: isDeleting }] = useDeleteAvatarMutation()
 
@@ -80,7 +78,7 @@ export const UserAvatarUploader = ({ avatars,me }: Props) => {
   if (!me) return null
 
   return (
-    <div className={s.avatarUploader}>
+     <div className={s.avatarUploader}>
       <div className={s.previewContainer}>
         {preview ?
           <>

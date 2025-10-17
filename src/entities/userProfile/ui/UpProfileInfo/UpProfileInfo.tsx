@@ -1,16 +1,17 @@
 import s from "@/src/views/generalInformation/ui/GeneralInformation.module.scss";
 import {Button, Input} from "@/src/shared/ui";
 import {Controller, SubmitHandler, useForm, useWatch} from "react-hook-form";
-import {DatePicker} from "@/src/shared/ui/DataPicker/DatePicker";
 import Link from "next/link";
 import {Path} from "@/src/shared/router/Path";
 import {Select} from "@/src/shared/ui/Select/Select";
 import {TextArea} from "@/src/shared/ui/TextArea/TextArea";
 import React, { useEffect} from "react";
 import {profileSchema, UserProfile} from "@/src/entities/userProfile/model/profileSchema";
-import {useUpdateProfileMutation} from "@/src/entities/userProfile/api/userProfileApi";
-import {zodResolver} from "@hookform/resolvers/zod";
+import { useGetProfileByUsedIdQuery, useUpdateProfileMutation } from '@/src/entities/userProfile/api/userProfileApi'
 import {GetProfileByUserIdResponse} from "@/src/entities/userProfile/api/userProfile.types";
+import {DatePicker} from "@/src/shared/ui/DataPicker/DatePicker";
+import {zodResolver} from "@hookform/resolvers/zod";
+import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 
 
 
@@ -26,8 +27,11 @@ const countriesCities: Record<string, string[]> = {
 }
 
 
-export const UpProfileInfo = ({dataProfile}:{ dataProfile:GetProfileByUserIdResponse|undefined }) => {
-    const [updateProfile, { isLoading }] = useUpdateProfileMutation()
+export const UpProfileInfo = () => {
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation()
+  const { data: me } = useGetMeQuery()
+  const { data: dataProfile } = useGetProfileByUsedIdQuery({ userId: me?.id! }, { skip: !me?.id })
+
     const {
         register,
         handleSubmit,
@@ -71,7 +75,9 @@ export const UpProfileInfo = ({dataProfile}:{ dataProfile:GetProfileByUserIdResp
             reset(dataProfile)
         }
     }, [dataProfile,reset])
+
     const onSubmit: SubmitHandler<UserProfile> = async (data) => {
+        console.log('submit')
         try {
             await updateProfile(data).unwrap()
         } catch (e) {
