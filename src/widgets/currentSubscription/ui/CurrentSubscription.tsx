@@ -14,11 +14,11 @@ export const CurrentSubscription = () => {
         <Card contentClass={s.card}>
             <FlexContainer gap={45}>
                 <FlexContainer gap={12} direction={'column'}>
-                    <span className={s.dateTitle}>Expire at</span>
+                    <span className={s.dateTitle}>Created at</span>
                     <span className={s.date}>{formatDateDDMMYYYY(subscriptionData.createdAt)}</span>
                 </FlexContainer>
                 <FlexContainer gap={12} direction={'column'}>
-                    <span className={s.dateTitle}>Next payment</span>
+                    <span className={s.dateTitle}>Expires at</span>
                     <span className={s.date}>{formatDateDDMMYYYY(subscriptionData.expiresAt)}</span>
                 </FlexContainer>
             </FlexContainer>
