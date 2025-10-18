@@ -9,7 +9,7 @@ type DropdownProps = {
   title?: string;
   style?: object;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    propsValue?: string | null;
+  propsValue?: string | null;
 
 }
 
@@ -24,12 +24,12 @@ export const Select = ({
                        }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>('');
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const [inpVal, setInpVal] = useState<string>('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleSelect = (option: string) => {
     setSelected(option);
-      setInpVal(option);
+    setInpVal(option);
     setIsOpen(false);
     if (onChange) {
       onChange({target: {value: option}} as React.ChangeEvent<HTMLInputElement>)
@@ -45,8 +45,8 @@ const filteredOptions=options.filter((option: string) =>option.toLowerCase().inc
         onClick={() => setIsOpen(!isOpen)}
       >
         <input  placeholder={propsValue || selected || placeholder} className={s.input} value={inpVal}
-                onChange={(e)=>setInpVal(e.target.value)}
-                onClick={(e)=>setInpVal('')}
+                onChange={(e)=>handleSelect(e.target.value)}
+                onClick={(e)=>setSelected('')}
                 disabled={disabled}
         />
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -62,7 +62,7 @@ const filteredOptions=options.filter((option: string) =>option.toLowerCase().inc
             <div
               key={index}
               className={s.option}
-              onClick={() => handleSelect(option)}
+              onClick={()=>handleSelect(option)}
             >
               {option}
             </div>
