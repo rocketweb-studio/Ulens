@@ -16,7 +16,8 @@ type Props = {
 }
 
 export const PublicPage = ({ dataPosts, totalUsers }: Props) => {
-  const data = dataPosts?.slice(0, 4)
+
+   const data = dataPosts? dataPosts.slice(0, 4) : []
 
   return (
     <div className={s.publicPageWrapper}>
