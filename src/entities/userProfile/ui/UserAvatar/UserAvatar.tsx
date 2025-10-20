@@ -20,7 +20,7 @@ export const UserAvatar = ({ userName = '', mode, avatarOwner, height = 0, width
           {...viewMode}
         />
       : <div className={s.avatarText} style={{ height, width }}>
-          {userName.slice(0, 2).toUpperCase()}
+          {String(userName).slice(0, 2).toUpperCase()}
         </div>
       }
     </>
