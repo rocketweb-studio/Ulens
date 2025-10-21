@@ -14,7 +14,6 @@
     "update-ui-kit": "pnpm add @rocketweb-studio/ulens-ui-kit@latestref"
   },
   "dependencies": {
-    "-": "^0.0.1",
     "@hookform/resolvers": "^5.2.1",
     "@reduxjs/toolkit": "^2.8.2",
     "@rocketweb-studio/ulens-ui-kit": "^0.2.1",

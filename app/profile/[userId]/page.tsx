@@ -1,6 +1,7 @@
 import { ProfileHeader } from '@/src/widgets/profileHeader/ui/ProfileHeader'
 import { ProfilePosts } from '@/src/widgets/profilePosts/ui/ProfilePosts'
 import { PostCreate } from '@/src/features/post/postCreate/ui/PostCreate/PostCreate'
+import { AppScroll } from '@/src/shared/ui/AppScroll/AppScroll'
 
 type Props = {
   params: Promise<{ userId: string }>
@@ -19,10 +20,10 @@ export default async function UserPage({ params, searchParams }: Props) {
   }).then((res) => res.json())
 
   return (
-    <>
+    <AppScroll>
       <ProfileHeader userId={userId} dataUserInfo={userData} />
       <ProfilePosts userId={userId} dataPosts={postsData} />
       {filters.action === 'create' && <PostCreate />}
-    </>
+    </AppScroll>
   )
 }

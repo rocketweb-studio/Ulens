@@ -106,7 +106,6 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
   useEffect(() => {
     if (contentRef.current) {
       const element = contentRef.current
-      // Вычисляем приблизительное количество строк
       const lineHeight = parseInt(getComputedStyle(element).lineHeight) || 20
       const contentHeight = element.scrollHeight
       const approximateLines = Math.ceil(contentHeight / lineHeight)
