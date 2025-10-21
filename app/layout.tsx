@@ -39,7 +39,7 @@ export default function RootLayout({
           <Header />
           <FlexContainer>
             <Sidebar />
-            <main style={{ flexGrow: 1, maxWidth: '1454px', margin: '0 auto' }}>
+            <main style={{ flexGrow: 1, padding: '25px', maxWidth: '1454px', margin: '0 auto' }}>
               {children}
               {modal}
             </main>
