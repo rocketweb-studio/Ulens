@@ -7,7 +7,7 @@ import 'react-toastify/ReactToastify.css'
 
 import { Header } from '@/src/widgets/Header/Header'
 import '@rocketweb-studio/ulens-ui-kit/dist/index.css'
-import { Sidebar } from 'src/widgets/sidebar'
+import {SidebarWidget} from 'src/widgets/sidebar'
 import { FlexContainer } from 'src/shared/ui/FlexContainer'
 import { AppLoader } from '@/src/shared/ui/AppLoader/AppLoader'
 import { AlertSnackbar } from '@/src/shared/ui/AlertSnackbar/AlertSnackbar'
@@ -38,7 +38,7 @@ export default function RootLayout({
         <StoreWrapper>
           <Header />
           <FlexContainer>
-            <Sidebar />
+            <SidebarWidget />
             <main style={{ flexGrow: 1, maxWidth: '1454px', margin: '0 auto' }}>
               {children}
               {modal}

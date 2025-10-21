@@ -18,6 +18,7 @@ import {
   IconPlusSquareOutline,
   IconSearch,
   IconTrendingUpOutline,
+  Sidebar,
 } from '@rocketweb-studio/ulens-ui-kit'
 import { Suspense, useState } from 'react'
 import { Logout } from '@/src/features/auth/logout/ui/Logout'
@@ -54,34 +55,32 @@ function SidebarContent() {
       href: Path.UserProfile(data?.id),
       isActive: pathname === Path.UserProfile(data?.id) && params?.size === 0,
     },
-    { icon: IconMessageCircleOutline, title: 'Messenger', href: Path.InDevelopment },
-    { icon: IconSearch, title: 'Search', href: Path.InDevelopment },
-    { icon: IconTrendingUpOutline, title: 'Statistics', href: Path.InDevelopment },
-    { icon: IconBookmarkOutline, title: 'Favorites', href: Path.InDevelopment },
+    { icon: IconMessageCircleOutline, title: 'Messenger', href: Path.InDevelopment, isActive: false },
+    { icon: IconSearch, title: 'Search', href: Path.InDevelopment, isActive: false },
+    { icon: IconTrendingUpOutline, title: 'Statistics', href: Path.InDevelopment, isActive: false },
+    { icon: IconBookmarkOutline, title: 'Favorites', href: Path.InDevelopment, isActive: false },
   ]
 
   return (
-    <div className={s.sidebarWrapper}>
-      {sidebarLinks.map(({ title, href, isActive, icon: Icon }, i) => (
-        <FlexContainer className={s.linkWrapper} gap={'13px'} key={i}>
-          <Link href={href} className={`${s.link} ${isActive ? s.activeLink : ''}`}>
-            <Icon className={s.icon} />
-            {title}
-          </Link>
+
+    <div className={s.container}>
+      <div className={s.sidebarWrapper}>
+
+        <Sidebar sidebarLinks={sidebarLinks} LinkComponent={Link}/>
+
+        <FlexContainer className={s.linkWrapper} gap={'13px'}>
+          <button onClick={() => setIsModalOpen(true)} className={s.logoutBtn}>
+            <IconLogOutOutline className={s.icon}/>
+            Log Out
+          </button>
         </FlexContainer>
-      ))}
-      <FlexContainer className={s.linkWrapper} gap={'13px'}>
-        <button onClick={() => setIsModalOpen(true)} className={s.logoutBtn}>
-          <IconLogOutOutline className={s.icon} />
-          Log Out
-        </button>
-      </FlexContainer>
-      {isModalOpen && <Logout isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={data?.email ?? ''} />}
+        {isModalOpen && <Logout isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={data?.email ?? ''}/>}
+      </div>
     </div>
   )
 }
 
-export const Sidebar = () => {
+export const SidebarWidget = () => {
   return (
     <Suspense
       fallback={
