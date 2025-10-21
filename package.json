@@ -11,10 +11,9 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:ui": "vitest --ui",
-    "update-ui-kit": "pnpm add @rocketweb-studio/ulens-ui-kit@latest"
+    "update-ui-kit": "pnpm i @rocketweb-studio/ulens-ui-kit@latest"
   },
   "dependencies": {
-    "-": "^0.0.1",
     "@hookform/resolvers": "^5.2.1",
     "@reduxjs/toolkit": "^2.8.2",
     "@rocketweb-studio/ulens-ui-kit": "^0.3.3",
