@@ -1,11 +1,11 @@
 'use client'
 
-import React, {useEffect, useRef, useState} from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import {
   useDeleteAvatarMutation,
   useGetProfileByUsedIdQuery,
-  useUploadAvatarMutation
+  useUploadAvatarMutation,
 } from '@/src/entities/userProfile/api/userProfileApi'
 import { Button } from '@/src/shared/ui/Button/Button'
 import { toast } from 'react-toastify'
@@ -13,12 +13,11 @@ import { Modal } from '@/src/shared/ui/Modal/Modal'
 import s from './UserAvatarUploader.module.scss'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 
-
 export const UserAvatarUploader = () => {
   const { data: me } = useGetMeQuery()
   const { data: dataProfile } = useGetProfileByUsedIdQuery({ userId: me?.id! }, { skip: !me?.id })
   const userId = me?.id ?? ''
-  const avatars=dataProfile?.avatars
+  const avatars = dataProfile?.avatars
   const [uploadAvatar, { isLoading: isUploading }] = useUploadAvatarMutation()
   const [deleteAvatar, { isLoading: isDeleting }] = useDeleteAvatarMutation()
 
@@ -28,12 +27,12 @@ export const UserAvatarUploader = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  console.log('avatarUrl',avatarUrl,preview)
+  console.log('avatarUrl', avatarUrl, preview)
   const handleSelect = () => fileInputRef.current?.click()
 
   useEffect(() => {
     setPreview(avatarUrl)
-  }, [avatarUrl]);
+  }, [avatarUrl])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
@@ -82,7 +81,7 @@ export const UserAvatarUploader = () => {
   if (!me) return null
 
   return (
-     <div className={s.avatarUploader}>
+    <div className={s.avatarUploader}>
       <div className={s.previewContainer}>
         {preview ?
           <>
@@ -98,9 +97,7 @@ export const UserAvatarUploader = () => {
               onClick={() => setIsDeleteModalOpen(true)}
               className={s.deleteBtn}
               disabled={isDeleting}
-            >
-              ×
-            </button>
+            ></button>
           </>
         : <div className={s.placeholder}>No photo</div>}
       </div>
