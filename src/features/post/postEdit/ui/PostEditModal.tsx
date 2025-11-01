@@ -12,9 +12,10 @@ type Props = {
   initialDescription: string
   isOpen: boolean
   onClose: () => void
+  onUpdated?: (newDescription: string) => void
 }
 
-export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: Props) => {
+export const PostEditModal = ({ postId, initialDescription, isOpen, onClose, onUpdated }: Props) => {
   const [description, setDescription] = useState(initialDescription ?? '')
   const [showConfirmExit, setShowConfirmExit] = useState(false)
   const [updatePost, { isLoading }] = useUpdatePostMutation()
@@ -39,6 +40,7 @@ export const PostEditModal = ({ postId, initialDescription, isOpen, onClose }: P
     try {
       await updatePost({ postId, description }).unwrap()
       await refetch()
+      onUpdated?.(description)
       onClose()
     } catch (error) {
       console.error('Update failed', error)

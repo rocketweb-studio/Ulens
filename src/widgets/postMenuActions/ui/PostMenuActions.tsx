@@ -14,9 +14,18 @@ type Props = {
   description: string
   className?: string
   onPostDeleted?: () => void
+  onDescriptionUpdated?: (newDescription: string) => void
 }
 
-export const PostMenuActions = ({ postOwnerId, postId, userId, description, className, onPostDeleted }: Props) => {
+export const PostMenuActions = ({
+  postOwnerId,
+  postId,
+  userId,
+  description,
+  className,
+  onPostDeleted,
+  onDescriptionUpdated,
+}: Props) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
@@ -80,6 +89,7 @@ export const PostMenuActions = ({ postOwnerId, postId, userId, description, clas
           initialDescription={description}
           isOpen={editOpen}
           onClose={() => setEditOpen(false)}
+          onUpdated={onDescriptionUpdated}
         />
       )}
       {deleteModalOpen && (

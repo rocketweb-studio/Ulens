@@ -99,6 +99,8 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
     if (e.target === e.currentTarget) handleCloseModal()
   }
 
+  const [description, setDescription] = useState(dataPostModal?.description ?? '')
+
   const [isExpanded, setIsExpanded] = useState(false)
   const [needsExpand, setNeedsExpand] = useState(false)
   const contentRef = useRef<HTMLParagraphElement>(null)
@@ -153,7 +155,8 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
                 postOwnerId={dataPostModal.ownerId || ''}
                 postId={dataPostModal.id}
                 userId={dataPostModal.ownerId}
-                description={''}
+                description={description}
+                onDescriptionUpdated={(newDescription) => setDescription(newDescription)}
                 onPostDeleted={handleCloseModal}
               />
             </div>
@@ -173,7 +176,7 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
                 style={{ overflow: 'hidden', borderRadius: '4px' }}
               >
                 <p ref={contentRef} style={{ margin: 0 }}>
-                  {dataPostModal.description}
+                  {description}
                 </p>
               </motion.div>
 
