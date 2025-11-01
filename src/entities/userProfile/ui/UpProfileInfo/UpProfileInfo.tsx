@@ -123,6 +123,7 @@ export const UpProfileInfo = () => {
               labelMobile={'Date of birthday'}
               error={errors.dateOfBirth?.message}
               errorLink={<Link href={Path.PrivacyPolicy}>PrivacyPolicy</Link>}
+              selected={dataProfile?.dateOfBirth}
               {...field}
             />
           )

@@ -50,7 +50,17 @@ export function DatePicker({
                            }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const date13YearsAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 13));
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(selected||date13YearsAgo))
 
+  useEffect(() => {
+    if (selected) {
+      const newDate = new Date(selected);
+      if (!isNaN(newDate.getTime())) {
+        setSelectedDate(newDate);
+      }
+    }
+  }, [selected]);
   //юзеффект для ui мобилки
   useEffect(() => {
     const handleResize = () => {
@@ -73,12 +83,9 @@ export function DatePicker({
     onChange?.({target: {value: formatterDate(date, false)}} as React.ChangeEvent<HTMLInputElement>);
     setIsOpen(false);
   };
-
-  // Преобразуем строку ISO в Date для DayPicker
-  const selectedDate = selected ? new Date(selected) : undefined;
   const displayDate = formatterDate(selected, isMobile);
   const displayLabel = isMobile && labelMobile ? labelMobile : label;
-  const date13YearsAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 13));
+
   return (
     <div className={s.datePicker} onBlur={handleBlur} tabIndex={-1}>
       <div className={s.dateContainer} onClick={() => {setIsOpen(!isOpen)}}>
@@ -114,11 +121,13 @@ export function DatePicker({
                  <div className={s.datePickerPopup}>
                    <DayPicker
                        mode="single"
-                       selected={selectedDate}
                        onSelect={handleDaySelect}
                        weekStartsOn={1}
                        fixedWeeks
                        captionLayout="dropdown"
+                       month={selectedDate}
+                       defaultMonth={selectedDate}
+                       onMonthChange={setSelectedDate}
                        endMonth={date13YearsAgo}
                        className={s.customDayPicker}
                        modifiers={{

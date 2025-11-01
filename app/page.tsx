@@ -16,6 +16,7 @@ export default async function Home() {
     console.log('Error', e)
   }
 
+  console.log(data)
   return (
     <div className={s.page}>
       <PublicPage dataPosts={data} totalUsers={userCountDate?.count} />
