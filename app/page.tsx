@@ -9,7 +9,7 @@ export default async function Home() {
       next: { revalidate: 60 },
     }).then((res) => res.json())
 
-    userCountDate = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}auth/users-count`, {
+    userCountDate = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}users/users-count`, {
       next: { revalidate: 60 },
     }).then((res) => res.json())
   } catch (e) {
