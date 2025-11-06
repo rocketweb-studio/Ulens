@@ -23,6 +23,7 @@ import {
 import { Suspense, useState } from 'react'
 import { Logout } from '@/src/features/auth/logout/ui/Logout'
 
+
 function SidebarContent() {
   const { data, isSuccess } = useGetMeQuery()
   const pathname = usePathname()
@@ -66,9 +67,9 @@ function SidebarContent() {
     <div className={s.container}>
       <div className={s.sidebarWrapper}>
 
-        <Sidebar sidebarLinks={sidebarLinks} LinkComponent={Link}/>
+        <Sidebar  sidebarLinks={sidebarLinks} LinkComponent={Link}/>
 
-        <FlexContainer className={s.linkWrapper} gap={'13px'}>
+        <FlexContainer className={s.linkWrapper} >
           <button onClick={() => setIsModalOpen(true)} className={s.logoutBtn}>
             <IconLogOutOutline className={s.icon}/>
             Log Out

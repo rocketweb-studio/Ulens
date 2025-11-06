@@ -38,7 +38,7 @@ export default function RootLayout({
         <StoreWrapper>
           <Header />
           <FlexContainer>
-            <SidebarWidget />
+            <SidebarWidget/>
             <main style={{ flexGrow: 1, maxWidth: '1454px', margin: '0 auto', padding: '25px' }}>
               {children}
               {modal}

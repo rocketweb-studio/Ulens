@@ -2,29 +2,21 @@
 @use '@/src/shared/styles/colors' as colors;
 
 .container {
-  width: 220px;
-
+  min-height: calc(100vh - 60px);
+  min-width: 220px;
 }
 
 .sidebarWrapper {
-  position: fixed;
+  position: sticky;
   top: 0;
-  margin-top: 60px;
-  height: 100vh;
+  min-height: calc(100vh - 60px);
   display: flex;
   flex-direction: column;
-  gap: 25px;
   width: 220px;
+  background-color: colors.color(dark, 700);
   border-right: 1px solid colors.color(dark, 300);
   flex-shrink: 0;
 
-  .linkWrapper:nth-child(5) {
-    margin-bottom: 60px;
-  }
-
-  .linkWrapper:nth-child(7) {
-    margin-bottom: 180px;
-  }
 }
 
 .activeLink, .activeLink:visited {
@@ -44,7 +36,7 @@
   }
 
 
-  &:focus-visible{
+  &:focus-visible {
     outline: none;
     border: 2px solid colors.color(accent, 700);
     border-radius: 2px;
