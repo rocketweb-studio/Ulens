@@ -36,10 +36,10 @@ function SidebarContent() {
 
   const sidebarLinks = [
     {
-      icon: pathname === Path.Main ? IconHome : IconHomeOutline,
+      icon: pathname === Path.Feed ? IconHome : IconHomeOutline,
       title: 'Feed',
-      href: Path.Main,
-      isActive: pathname === Path.Main,
+      href: Path.Feed,
+      isActive: pathname === Path.Feed,
     },
     {
       icon:
