@@ -70,6 +70,13 @@ export const postsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ['GetPostsByUsedId'],
     }),
+    getFollowingsPosts: build.query<GetPostsByUserIdResponse, { pageSize: string, endCursorPostId: string }>({
+      query: (body) => ({
+        method: 'get',
+        url: `posts/followings`,
+        params: body
+      }),
+    }),
   }),
 })
 
@@ -80,4 +87,5 @@ export const {
   useDeletePostMutation,
   useUpdatePostMutation,
   useUploadPostImagesMutation,
+  useGetFollowingsPostsQuery
 } = postsApi

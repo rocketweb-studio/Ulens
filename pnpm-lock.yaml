@@ -15,8 +15,8 @@ importers:
         specifier: ^2.8.2
         version: 2.8.2(react-redux@9.2.0(@types/react@19.1.9)(react@19.1.0)(redux@5.0.1))(react@19.1.0)
       '@rocketweb-studio/ulens-ui-kit':
-        specifier: ^0.3.3
-        version: 0.3.3
+        specifier: ^0.7.0
+        version: 0.7.0
       '@types/react-custom-scrollbars':
         specifier: ^4.0.13
         version: 4.0.13
@@ -648,8 +648,8 @@ packages:
       react-redux:
         optional: true
 
-  '@rocketweb-studio/ulens-ui-kit@0.3.3':
-    resolution: {integrity: sha512-/NwEf5mLZ20VSwMIVTtAyI5dHMrXF8/VIn/rKQayfPBcRw4uX7O5bxSd9q609Ukvwj7pD/Hk041CB8JeirCNyw==}
+  '@rocketweb-studio/ulens-ui-kit@0.7.0':
+    resolution: {integrity: sha512-DVwwDr7fCGAf+TvhNjboD6RrAzqaVnUX/HEzp2fHy45Gt17xobXUnkE+Yna8HUa+cKnx2P4N8cKK2sXg5k6E9g==}
 
   '@rollup/rollup-android-arm-eabi@4.46.2':
     resolution: {integrity: sha512-Zj3Hl6sN34xJtMv7Anwb5Gu01yujyE/cLBDB2gnHTAHaWS1Z38L7kuSG+oAh0giZMqG060f/YBStXtMH6FvPMA==}
@@ -1511,6 +1511,20 @@ packages:
       react-dom:
         optional: true
 
+  framer-motion@12.23.24:
+    resolution: {integrity: sha512-HMi5HRoRCTou+3fb3h9oTLyJGBxHfW+HnNE25tAXOvVx/IvwMHK0cx7IR4a2ZU6sh3IX1Z+4ts32PcYBOqka8w==}
+    peerDependencies:
+      '@emotion/is-prop-valid': '*'
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@emotion/is-prop-valid':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
 
@@ -2336,6 +2350,10 @@ packages:
     resolution: {integrity: sha512-y8F6fDGXmTVVgwqJj6I00l4FdGuhpFJn0U/9Ucn1MwWOw3NdLV8aH88pZOjyhBgU/6PyBlUx+JuAQ5KMWz906Q==}
     engines: {node: '>= 4.7.0'}
 
+  swiper@12.0.3:
+    resolution: {integrity: sha512-BHd6U1VPEIksrXlyXjMmRWO0onmdNPaTAFduzqR3pgjvi7KfmUCAm/0cj49u2D7B0zNjMw02TSeXfinC1hDCXg==}
+    engines: {node: '>= 4.7.0'}
+
   test-exclude@6.0.0:
     resolution: {integrity: sha512-cAGWPIyOHU6zlmg88jwm7VRyXnMN7iV68OGAbYDk/Mh/xC/pzVPlQtY6ngoIH/5/tciuhGfvESU8GrHrcxD56w==}
     engines: {node: '>=8'}
@@ -2962,12 +2980,16 @@ snapshots:
       react: 19.1.0
       react-redux: 9.2.0(@types/react@19.1.9)(react@19.1.0)(redux@5.0.1)
 
-  '@rocketweb-studio/ulens-ui-kit@0.3.3':
+  '@rocketweb-studio/ulens-ui-kit@0.7.0':
     dependencies:
       clsx: 2.1.1
+      framer-motion: 12.23.24(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
       react-hook-form: 7.65.0(react@19.1.1)
+      swiper: 12.0.3
+    transitivePeerDependencies:
+      - '@emotion/is-prop-valid'
 
   '@rollup/rollup-android-arm-eabi@4.46.2':
     optional: true
@@ -4001,6 +4023,15 @@ snapshots:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
+  framer-motion@12.23.24(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+    dependencies:
+      motion-dom: 12.23.23
+      motion-utils: 12.23.6
+      tslib: 2.8.1
+    optionalDependencies:
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+
   fs.realpath@1.0.0: {}
 
   fsevents@2.3.3:
@@ -4901,6 +4932,8 @@ snapshots:
   supports-preserve-symlinks-flag@1.0.0: {}
 
   swiper@12.0.2: {}
+
+  swiper@12.0.3: {}
 
   test-exclude@6.0.0:
     dependencies:
