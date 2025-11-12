@@ -70,12 +70,29 @@ export const postsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ['GetPostsByUsedId'],
     }),
-    getFollowingsPosts: build.query<GetPostsByUserIdResponse, { pageSize: string, endCursorPostId: string }>({
+    getFollowingsPosts: build.query<GetPostsByUserIdResponse, { pageSize: string; endCursorPostId: string }>({
       query: (body) => ({
         method: 'get',
         url: `posts/followings`,
-        params: body
+        params: body,
       }),
+    }),
+    getLikePost: build.mutation<void, { postId: string }>({
+      query: ({ postId }) => ({
+        method: 'POST',
+        url: `/posts/${postId}/like`,
+      }),
+      invalidatesTags: ['GetPostsByUsedId'],
+      // (result, error, {postId}) => [{ type: 'Post', id: postId}],
+    }),
+
+    deleteLikePost: build.mutation<void, { postId: string }>({
+      query: ({ postId }) => ({
+        method: 'DELETE',
+        url: `/posts/${postId}/unlike`,
+      }),
+      invalidatesTags: ['GetPostsByUsedId'],
+      // (result, error, {postId}) => [{ type: 'Post', id: postId}],
     }),
   }),
 })
@@ -87,5 +104,7 @@ export const {
   useDeletePostMutation,
   useUpdatePostMutation,
   useUploadPostImagesMutation,
-  useGetFollowingsPostsQuery
+  useGetFollowingsPostsQuery,
+  useGetLikePostMutation,
+  useDeleteLikePostMutation,
 } = postsApi
