@@ -77,7 +77,8 @@ export const postsApi = baseApi.injectEndpoints({
         params: body,
       }),
     }),
-    getLikePost: build.mutation<void, { postId: string }>({
+    getLikePost: build.mutation<void, { postId: string | undefined }>({
+      //убоать undefined когда Api будет готова
       query: ({ postId }) => ({
         method: 'POST',
         url: `/posts/${postId}/like`,
@@ -86,7 +87,8 @@ export const postsApi = baseApi.injectEndpoints({
       // (result, error, {postId}) => [{ type: 'Post', id: postId}],
     }),
 
-    deleteLikePost: build.mutation<void, { postId: string }>({
+    deleteLikePost: build.mutation<void, { postId: string | undefined }>({
+      //убоать undefined когда Api будет готова
       query: ({ postId }) => ({
         method: 'DELETE',
         url: `/posts/${postId}/unlike`,
