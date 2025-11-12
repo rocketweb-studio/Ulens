@@ -17,6 +17,7 @@ import { formatDate } from '@/src/shared/utils/dateFormatter'
 import { UserAvatar } from '@/src/entities/userProfile'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Scrollbars } from 'react-custom-scrollbars'
+import { useDeletePostMutation, useGetLikePostMutation } from '@/src/entities/post/api/postsApi'
 
 const comments = [
   {
@@ -116,6 +117,30 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
       setNeedsExpand(approximateLines > 3)
     }
   }, [dataPostModal?.description!])
+
+  const [isLiked, setIsLiked] = useState(dataPostModal?.isLiked)
+  const [likeCount, setLikeCount] = useState(dataPostModal?.likeCount || 0)
+
+  const [likePost] = useGetLikePostMutation
+  const [unLikePost] = useDeletePostMutation
+
+  const handleLikeClick = async () => {
+    if (!meData) return
+
+    try {
+      if (isLiked) {
+        await likePost({ postId: dataPostModal?.id }).unwrap()
+        setIsLiked(true)
+        setLikeCount((prev) => prev + 1)
+      } else {
+        await unLikePost({ postId: dataPostModal?.id }).unwrap()
+        setIsLiked(false)
+        setLikeCount((prev) => prev - 1)
+      }
+    } catch (error) {
+      console.error('Error like', error)
+    }
+  }
 
   if (!dataPostModal) {
     return null
