@@ -2,14 +2,14 @@
 
 import s from './Header.module.scss'
 import Link from 'next/link'
-import {FlexContainer} from '@/src/shared/ui'
-import {Path} from '@/src/shared/router/Path'
-import {useGetMeQuery} from '@/src/entities/auth/api/authApi'
-import {IconOutlineBell} from '@rocketweb-studio/ulens-ui-kit'
-import {Button} from '@/src/shared/ui'
+import { FlexContainer } from '@/src/shared/ui'
+import { Path } from '@/src/shared/router/Path'
+import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
+import { Button } from '@/src/shared/ui'
+import { Notification } from '@/src/widgets/Notification'
 
 export const Header = () => {
-  const {data, isSuccess} = useGetMeQuery(undefined, {
+  const { data, isSuccess } = useGetMeQuery(undefined, {
     // pollingInterval: 5 * 60 * 1000,
     refetchOnFocus: true,
     refetchOnReconnect: true,
@@ -26,8 +26,8 @@ export const Header = () => {
           </div>
 
           {isAuth ?
-            <IconOutlineBell/>
-            : <FlexContainer gap={'25px'}>
+            <Notification />
+          : <FlexContainer gap={'25px'}>
               <Button tagType={'link'} variant={'text'} path={Path.SignIn}>
                 Log in
               </Button>

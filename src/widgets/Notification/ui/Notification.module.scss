@@ -1,0 +1,87 @@
+@use '@/src/shared/styles/colors' as colors;
+
+.wrapper{
+  position: relative;
+  display: flex;
+  height: 100%;
+  &:hover svg {
+    cursor: pointer;
+  }
+  .notifications{
+    position: absolute;
+    top: calc(100% + 5px);
+    right: -14px;
+    width: 400px;
+    background: #171717;
+    padding: 12px 2px;
+    border-radius: 4px;
+    border: 1px solid #4C4C4C;
+
+    .note{
+      position: relative;
+      margin: 0 12px;
+      padding: 12px 0;
+      border-top: 1px solid #4C4C4C;
+
+    }
+    .new{
+      margin-left: 10px;
+      background: #ffea00;
+      padding: 1px 3px;
+      border-radius: 3px;
+      color: #000;
+    }
+    .note:last-child {
+      padding-bottom: 0;
+    }
+    &:before{
+      content: "";
+      position: absolute;
+      top: -5px;
+      right: 20px;
+      background: #171717;
+      border: 1px solid transparent;
+      border-top: 1px solid #4C4C4C;
+      border-left: 1px solid #4C4C4C;
+      width: 10px;
+      height: 10px;
+      transform: rotate(45deg);
+    }
+  }
+  .header{
+    padding: 0 12px 12px 12px;
+  }
+  .title{
+    margin-bottom: 5px;
+    span{
+      padding-left: 5px;
+      color: #1586ff;
+    }
+  }
+  .message{
+    margin-bottom: 5px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .date{
+    display: inline-block;
+    position: relative;
+    font-size: 12px;
+    color: #6a6a6a;
+  }
+}
+
+.count{
+  background: colors.color(danger, 500);
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 13px;
+  height: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 10px;
+  cursor: pointer;
+}
