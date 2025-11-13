@@ -257,7 +257,7 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
             {meData && (
               <div className={s.postActions}>
                 <div className={s.postActionsLeft}>
-                  <button onClick={handleLikeClick} className={s.likeButton}>
+                  <button onClick={handleLikeClick} className={`${s.likeButton} ${isLiked ? s.liked : ''}`}>
                     {isLiked ?
                       <IconHeart />
                     : <IconHeartOutline />}
