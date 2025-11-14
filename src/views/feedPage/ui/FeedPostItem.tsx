@@ -41,14 +41,14 @@ export const FeedPostItem = ({postItem}: Props) => {
           content: (
             <div className={s.customSwiper}>
               <Link href={Path.ViewPost(postItem.ownerId, postItem.id)} key={postItem.id}>
-              <Image
-                className={s.customSwiper}
-                src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
-                alt={'photo'}
-                width={image.width}
-                height={image.height}
-              />
-            </Link>
+                <Image
+                  className={s.customSwiper}
+                  src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}
+                  alt={'photo'}
+                  width={image.width}
+                  height={image.height}
+                />
+              </Link>
             </div>
           ),
         }))}

@@ -1,4 +1,4 @@
-import { baseApi } from '@/src/store/baseApi'
+import {baseApi} from '@/src/store/baseApi'
 import {
   GetPostByIdResponse,
   GetPostsByUserIdResponse,
@@ -8,11 +8,11 @@ import {
 export const postsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getPostsByUsedId: build.query<GetPostsByUserIdResponse, { userId: string }>({
-      query: ({ userId }) => `posts/user/${userId}`,
+      query: ({userId}) => `posts/user/${userId}`,
       providesTags: ['GetPostsByUsedId'],
     }),
     getPostById: build.query<GetPostByIdResponse, { postId: string }>({
-      query: ({ postId }) => `posts/${postId}`,
+      query: ({postId}) => `posts/${postId}`,
     }),
     createPost: build.mutation<{ id: string }, { description: string }>({
       query: (body) => ({
@@ -23,7 +23,7 @@ export const postsApi = baseApi.injectEndpoints({
     }),
 
     updatePost: build.mutation<void, { postId: string; description: string | undefined }>({
-      query: ({ postId, ...body }) => ({
+      query: ({postId, ...body}) => ({
         method: 'PUT',
         url: `posts/${postId}`,
         body,
@@ -32,13 +32,13 @@ export const postsApi = baseApi.injectEndpoints({
     }),
 
     deletePost: build.mutation<void, { postId: string; userId: string }>({
-      query: ({ postId }) => ({
+      query: ({postId}) => ({
         method: 'DELETE',
         url: `posts/${postId}`,
       }),
-      async onQueryStarted({ postId, userId }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({postId, userId}, {dispatch, queryFulfilled}) {
         const patchResult = dispatch(
-          postsApi.util.updateQueryData('getPostsByUsedId', { userId }, (draft) => {
+          postsApi.util.updateQueryData('getPostsByUsedId', {userId}, (draft) => {
             if (draft?.items) {
               draft.items = draft.items.filter((post) => post.id !== postId)
             }
@@ -57,7 +57,7 @@ export const postsApi = baseApi.injectEndpoints({
       UploadPostImageResponse[],
       { postId: string | undefined; images: File[] | undefined }
     >({
-      query: ({ postId, images }) => {
+      query: ({postId, images}) => {
         const formData = new FormData()
         if (images) {
           images.forEach((img) => formData.append('images', img))
@@ -70,16 +70,22 @@ export const postsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ['GetPostsByUsedId'],
     }),
-    getFollowingsPosts: build.query<GetPostsByUserIdResponse, { pageSize: string; endCursorPostId: string }>({
-      query: (body) => ({
+    getFollowingsPosts: build.infiniteQuery<GetPostsByUserIdResponse, void, string | undefined>({
+      infiniteQueryOptions: {
+        initialPageParam: undefined,
+        getNextPageParam: (lastPage) => {
+          return lastPage.pageInfo.endCursorPostId
+        }
+      },
+      query: ({pageParam}) => ({
         method: 'get',
         url: `posts/followings`,
-        params: body,
+        params: {endCursorPostId: pageParam, pageSize: '1' },
       }),
     }),
     getLikePost: build.mutation<void, { postId: string | undefined }>({
       //убоать undefined когда Api будет готова
-      query: ({ postId }) => ({
+      query: ({postId}) => ({
         method: 'POST',
         url: `/posts/${postId}/like`,
       }),
@@ -89,7 +95,7 @@ export const postsApi = baseApi.injectEndpoints({
 
     deleteLikePost: build.mutation<void, { postId: string | undefined }>({
       //убоать undefined когда Api будет готова
-      query: ({ postId }) => ({
+      query: ({postId}) => ({
         method: 'DELETE',
         url: `/posts/${postId}/unlike`,
       }),
@@ -106,7 +112,7 @@ export const {
   useDeletePostMutation,
   useUpdatePostMutation,
   useUploadPostImagesMutation,
-  useGetFollowingsPostsQuery,
+  useGetFollowingsPostsInfiniteQuery,
   useGetLikePostMutation,
   useDeleteLikePostMutation,
 } = postsApi
