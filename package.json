@@ -27,7 +27,7 @@
     "react-dom": "19.1.0",
     "react-dropzone": "^14.3.8",
     "react-easy-crop": "^5.5.0",
-    "react-hook-form": "^7.62.0",
+    "react-hook-form": "^7.65.0",
     "react-redux": "^9.2.0",
     "react-toastify": "^11.0.5",
     "socket.io-client": "^4.8.1",

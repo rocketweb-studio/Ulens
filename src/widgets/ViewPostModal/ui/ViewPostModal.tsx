@@ -18,6 +18,7 @@ import { UserAvatar } from '@/src/entities/userProfile'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { useDeleteLikePostMutation, useGetLikePostMutation } from '@/src/entities/post/api/postsApi'
+import { CreatePostComment } from '@/src/features/post/postCreateComment'
 
 const comments = [
   {
@@ -291,8 +292,7 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
           </div>
           {meData && (
             <div className={s.addCommentContainer}>
-              <input placeholder={'Add a Comment...'} className={s.inputComment} />
-              <button className={s.buttonComment}>Publish</button>
+              <CreatePostComment postId={dataPostModal.id} />
             </div>
           )}
         </div>

@@ -70,11 +70,17 @@ export const postsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ['GetPostsByUsedId'],
     }),
-    getFollowingsPosts: build.query<GetPostsByUserIdResponse, { pageSize: string; endCursorPostId: string }>({
-      query: (body) => ({
+    getFollowingsPosts: build.infiniteQuery<GetPostsByUserIdResponse, void, string | undefined>({
+      infiniteQueryOptions: {
+        initialPageParam: undefined,
+        getNextPageParam: (lastPage) => {
+          return lastPage.pageInfo.endCursorPostId
+        },
+      },
+      query: ({ pageParam }) => ({
         method: 'get',
         url: `posts/followings`,
-        params: body,
+        params: { endCursorPostId: pageParam, pageSize: '1' },
       }),
     }),
     getLikePost: build.mutation<void, { postId: string | undefined }>({
@@ -96,6 +102,15 @@ export const postsApi = baseApi.injectEndpoints({
       invalidatesTags: ['GetPostsByUsedId'],
       // (result, error, {postId}) => [{ type: 'Post', id: postId}],
     }),
+
+    createComment: build.mutation<void, { postId: string; content: string }>({
+      query: ({ postId, ...body }) => ({
+        method: 'POST',
+        url: `/posts/${postId}/comments`,
+        body,
+      }),
+      invalidatesTags: ['GetPostsByUsedId'],
+    }),
   }),
 })
 
@@ -106,7 +121,8 @@ export const {
   useDeletePostMutation,
   useUpdatePostMutation,
   useUploadPostImagesMutation,
-  useGetFollowingsPostsQuery,
+  useGetFollowingsPostsInfiniteQuery,
   useGetLikePostMutation,
   useDeleteLikePostMutation,
+  useCreateCommentMutation,
 } = postsApi
