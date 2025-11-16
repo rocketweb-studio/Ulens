@@ -152,11 +152,11 @@ display: flex;
   color: colors.color(light,900);
 }
 .addCommentContainer{
+  padding: 24px 20px 5px;
   border-top: 1px solid colors.color(dark, 100);
   display: flex;
   justify-content: space-between;
   align-items: center;
-
 }
 
 .inputComment{
