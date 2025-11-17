@@ -83,21 +83,31 @@ export const postsApi = baseApi.injectEndpoints({
         params: { endCursorPostId: pageParam, pageSize: '1' },
       }),
     }),
-    getLikePost: build.mutation<void, { postId: string | undefined }>({
+    getLikePost: build.mutation<void, { postId: string }>({
       //убоать undefined когда Api будет готова
       query: ({ postId }) => ({
         method: 'POST',
-        url: `/posts/${postId}/like`,
+        url: `/posts/like`,
+        body: {
+          likedItemType: 'POST',
+          likedItemId: postId,
+          like: true,
+        },
       }),
       invalidatesTags: ['GetPostsByUsedId'],
       // (result, error, {postId}) => [{ type: 'Post', id: postId}],
     }),
 
-    deleteLikePost: build.mutation<void, { postId: string | undefined }>({
+    deleteLikePost: build.mutation<void, { postId: string }>({
       //убоать undefined когда Api будет готова
       query: ({ postId }) => ({
-        method: 'DELETE',
-        url: `/posts/${postId}/unlike`,
+        method: 'POST',
+        url: `/posts/like`,
+        body: {
+          likedItemType: 'POST',
+          likedItemId: postId,
+          like: false,
+        },
       }),
       invalidatesTags: ['GetPostsByUsedId'],
       // (result, error, {postId}) => [{ type: 'Post', id: postId}],

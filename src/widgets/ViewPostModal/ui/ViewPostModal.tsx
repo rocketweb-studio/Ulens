@@ -126,7 +126,7 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
   const [unLikePost] = useDeleteLikePostMutation()
 
   const handleLikeClick = async () => {
-    if (!meData) return
+    if (!dataPostModal?.id) return
 
     try {
       if (isLiked) {
