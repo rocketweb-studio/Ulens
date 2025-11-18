@@ -84,7 +84,6 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     getLikePost: build.mutation<void, { postId: string }>({
-      //убоать undefined когда Api будет готова
       query: ({ postId }) => ({
         method: 'POST',
         url: `/posts/like`,
@@ -95,11 +94,9 @@ export const postsApi = baseApi.injectEndpoints({
         },
       }),
       invalidatesTags: ['GetPostsByUsedId'],
-      // (result, error, {postId}) => [{ type: 'Post', id: postId}],
     }),
 
     deleteLikePost: build.mutation<void, { postId: string }>({
-      //убоать undefined когда Api будет готова
       query: ({ postId }) => ({
         method: 'POST',
         url: `/posts/like`,
@@ -110,7 +107,6 @@ export const postsApi = baseApi.injectEndpoints({
         },
       }),
       invalidatesTags: ['GetPostsByUsedId'],
-      // (result, error, {postId}) => [{ type: 'Post', id: postId}],
     }),
 
     createComment: build.mutation<void, { postId: string; content: string }>({

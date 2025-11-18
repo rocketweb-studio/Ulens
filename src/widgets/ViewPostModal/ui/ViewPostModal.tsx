@@ -130,13 +130,13 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
 
     try {
       if (isLiked) {
-        await likePost({ postId: dataPostModal?.id }).unwrap()
-        setIsLiked(true)
-        setLikeCount((prev) => prev + 1)
-      } else {
-        await unLikePost({ postId: dataPostModal?.id }).unwrap()
+        await unLikePost({ postId: dataPostModal.id }).unwrap()
         setIsLiked(false)
         setLikeCount((prev) => prev - 1)
+      } else {
+        await likePost({ postId: dataPostModal.id }).unwrap()
+        setIsLiked(true)
+        setLikeCount((prev) => prev + 1)
       }
     } catch (error) {
       console.error('Error like', error)
