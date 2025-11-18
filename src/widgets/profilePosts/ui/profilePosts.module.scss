@@ -7,7 +7,7 @@
 .profilePosts{
   display: grid;
   gap: 15px;
-  .postItem{
+  .postItem, .emptyPost {
     position: relative;
     background: #181818;
     box-sizing: border-box;
@@ -20,6 +20,16 @@
     &:hover img{
       cursor: pointer;
       transform: scale(1.1)
+    }
+  }
+  .emptyPost{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    &:hover{
+      cursor: pointer;
     }
   }
   &:has(> :nth-child(1)) {

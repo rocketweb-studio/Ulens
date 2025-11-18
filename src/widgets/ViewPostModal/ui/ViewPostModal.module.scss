@@ -54,8 +54,6 @@
   flex-direction: column;
   gap: 20px;
   padding: 11px 20px;
-
-
   .commentWrapper{
     display: flex;
     gap: 10px;
@@ -175,7 +173,9 @@ display: flex;
   outline: none;
 }
 }
-
+.commentText{
+  width: 100% ;
+}
 .buttonComment{
   padding: 18px 24px;
   border: none;

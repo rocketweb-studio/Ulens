@@ -8,18 +8,18 @@ export type UploadPostImageResponse = {
 }
 
 export type ImageSizeType = {
-  url: string;
-  width: number;
-  height: number;
-  fileSize: number;
-  createdAt: string;
-  uploadId: string;
-};
+  url: string
+  width: number
+  height: number
+  fileSize: number
+  createdAt: string
+  uploadId: string
+}
 
 export type ImagesType = {
-  small: ImageSizeType[];
-  medium: ImageSizeType[];
-};
+  small: ImageSizeType[]
+  medium: ImageSizeType[]
+}
 
 export type GetPostsByUserIdResponse = {
   totalCount: number
@@ -74,3 +74,17 @@ export type GetPostByIdResponse = {
   isLiked: boolean
   avatarWhoLikes: boolean
 }
+
+export type GetPostCommentsType = {
+  id: string
+  postId: string
+  content: string
+  createdAt: string
+  commentator: {
+    id: string
+    username: string
+    avatar: string
+  }
+  likeCount: number
+  isLiked: boolean
+}[]
