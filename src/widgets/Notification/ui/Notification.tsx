@@ -22,7 +22,7 @@ export const Notification = () => {
       const notificationIds = data.notifications.map((n) => n.id)
       setTimeout(() => {
         markAsRead(notificationIds)
-      }, 1000)
+      }, 500)
     }
 
     togglePopup(!showPopup)

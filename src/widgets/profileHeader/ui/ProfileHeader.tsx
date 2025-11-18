@@ -1,8 +1,7 @@
 'use client'
 
 import { useGetProfileByUsedIdQuery } from '@/src/entities/userProfile/api/userProfileApi'
-import { Button } from '@/src/shared/ui'
-import { FlexContainer } from '@/src/shared/ui'
+import { Button, FlexContainer } from '@/src/shared/ui'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 import Link from 'next/link'
 import { Path } from '@/src/shared/router/Path'
@@ -12,6 +11,7 @@ import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
 import { setLoaderStatus } from '@/src/store/app-slice'
 import { useEffect } from 'react'
 import { UserAvatar } from '@/src/entities/userProfile'
+import { useFollowUserMutation, useGetFollowingsQuery, useUnfollowUserMutation } from '@/src/entities/user/api/userApi'
 
 type Props = {
   userId: string
@@ -20,7 +20,12 @@ type Props = {
 
 export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
   const { data: meData, isSuccess } = useGetMeQuery()
+  const { data: followingsData } = useGetFollowingsQuery()
   const { data: userData } = useGetProfileByUsedIdQuery({ userId })
+
+  const [follow] = useFollowUserMutation()
+  const [unfollow] = useUnfollowUserMutation()
+
   const isAuth = !!meData?.id && isSuccess
   const dispatch = useAppDispatch()
 
@@ -33,7 +38,10 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
 
   const userDataForRender = userData || dataUserInfo
 
-  const handleFollow = () => {}
+  const followStatus = followingsData?.items.find((user) => user.id === userId)
+
+  const handleFollow = () => follow({ userId })
+  const handleUnfollow = () => unfollow({ userId })
   const handleSendMessage = () => {}
 
   return (
@@ -55,9 +63,14 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
               </Button>
             </Link>
           : <FlexContainer gap={'15px'}>
-              <Button size={'medium'} variant={'primary'} onClick={handleFollow}>
-                Follow
-              </Button>
+              {followStatus ?
+                <Button size={'medium'} variant={'outline'} onClick={handleUnfollow}>
+                  Unfollow
+                </Button>
+              : <Button size={'medium'} variant={'primary'} onClick={handleFollow}>
+                  Follow
+                </Button>
+              }
               <Button size={'medium'} variant={'secondary'} onClick={handleSendMessage}>
                 Send Message
               </Button>
