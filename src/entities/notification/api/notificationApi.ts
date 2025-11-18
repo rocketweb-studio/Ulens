@@ -8,12 +8,12 @@ export const notificationsApi = baseApi.injectEndpoints({
       providesTags: ['Notifications'],
     }),
 
-    readNotifications: build.mutation<string, { id: number | string }>({
-      query: ({ id }) => ({
+    readNotifications: build.mutation<string, number[]>({
+      query: (notificationIds) => ({
         method: 'put',
         url: 'notifications/read',
         body: {
-          notificationId: id,
+          notificationIds,
         },
       }),
       invalidatesTags: ['Notifications'],
