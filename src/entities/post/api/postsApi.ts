@@ -83,27 +83,14 @@ export const postsApi = baseApi.injectEndpoints({
         params: { endCursorPostId: pageParam, pageSize: '1' },
       }),
     }),
-    getLikePost: build.mutation<void, { postId: string }>({
-      query: ({ postId }) => ({
+    toggleLikePost: build.mutation<void, { postId: string; like: boolean }>({
+      query: ({ postId, like }) => ({
         method: 'POST',
         url: `/posts/like`,
         body: {
           likedItemType: 'POST',
           likedItemId: postId,
-          like: true,
-        },
-      }),
-      invalidatesTags: ['GetPostsByUsedId'],
-    }),
-
-    deleteLikePost: build.mutation<void, { postId: string }>({
-      query: ({ postId }) => ({
-        method: 'POST',
-        url: `/posts/like`,
-        body: {
-          likedItemType: 'POST',
-          likedItemId: postId,
-          like: false,
+          like,
         },
       }),
       invalidatesTags: ['GetPostsByUsedId'],
@@ -128,7 +115,6 @@ export const {
   useUpdatePostMutation,
   useUploadPostImagesMutation,
   useGetFollowingsPostsInfiniteQuery,
-  useGetLikePostMutation,
-  useDeleteLikePostMutation,
+  useToggleLikePostMutation,
   useCreateCommentMutation,
 } = postsApi
