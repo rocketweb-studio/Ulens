@@ -27,6 +27,7 @@ export type UserProfileType = {
   dateOfBirth: string
   aboutMe: string
   createdAt: string
+  avatar: string
 }
 
 export type PageInfoType = {

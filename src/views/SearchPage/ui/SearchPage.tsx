@@ -17,7 +17,7 @@ export const SearchPage = () => {
   const { observerRef } = useInfinityScroll({ hasNextPage, fetchNextPage })
 
   const userItems = data?.pages.flatMap((page) => page.items) || []
-
+  console.log(userItems)
   return (
     <div className={s.searchPage}>
       <h1>Search</h1>
@@ -41,13 +41,7 @@ export const SearchPage = () => {
             {userItems.map((user) => (
               <div className={s.recentItem}>
                 <div className={s.avatar}>
-                  <UserAvatar
-                    mode={'size'}
-                    userName={user.userName}
-                    width={50}
-                    height={50}
-                    //avatarOwner={user.avatar}
-                  />
+                  <UserAvatar mode={'size'} userName={user.userName} width={50} height={50} avatarOwner={user.avatar} />
                 </div>
                 <div className={s.userInfo}>
                   <div className={s.userName}>
