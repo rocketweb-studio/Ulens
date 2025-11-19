@@ -17,7 +17,7 @@ import { formatDate } from '@/src/shared/utils/dateFormatter'
 import { UserAvatar } from '@/src/entities/userProfile'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Scrollbars } from 'react-custom-scrollbars'
-import { useDeleteLikePostMutation, useGetLikePostMutation } from '@/src/entities/post/api/postsApi'
+import { useToggleLikePostMutation } from '@/src/entities/post/api/postsApi'
 import { CreatePostComment } from '@/src/features/post/postCreateComment'
 
 const comments = [
@@ -120,25 +120,26 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
   }, [dataPostModal?.description!])
 
   const [isLiked, setIsLiked] = useState(dataPostModal?.isLiked)
-  const [likeCount, setLikeCount] = useState(dataPostModal?.likeCount || 0)
+  const [likeCount, setLikeCount] = useState(dataPostModal?.likeCount ?? 0)
 
-  const [likePost] = useGetLikePostMutation()
-  const [unLikePost] = useDeleteLikePostMutation()
+  const [toggleLikePost] = useToggleLikePostMutation()
 
   const handleLikeClick = async () => {
     if (!dataPostModal?.id) return
 
     try {
-      if (isLiked) {
-        await unLikePost({ postId: dataPostModal.id }).unwrap()
-        setIsLiked(false)
-        setLikeCount((prev) => prev - 1)
-      } else {
-        await likePost({ postId: dataPostModal.id }).unwrap()
+      await toggleLikePost({
+        postId: dataPostModal.id,
+        like: !isLiked,
+      }).unwrap()
+
+      setIsLiked((prev) => !prev)
+      setLikeCount((prev) => prev + (isLiked ? -1 : +1))
+    } catch (error: any) {
+      if (error?.data?.errorsMessages?.[0]?.message === 'You already liked this') {
         setIsLiked(true)
-        setLikeCount((prev) => prev + 1)
+        return
       }
-    } catch (error) {
       console.error('Error like', error)
     }
   }
@@ -263,14 +264,6 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
                       <IconHeart />
                     : <IconHeartOutline />}
                   </button>
-                  {/*{dataPostModal.isLiked ?*/}
-                  {/*  <div className={s.iconHeart}>*/}
-                  {/*    <IconHeart />*/}
-                  {/*  </div>*/}
-                  {/*: <div className={s.iconHeartOutline}>*/}
-                  {/*    <IconHeartOutline />*/}
-                  {/*  </div>*/}
-                  {/*}*/}
                   <Image width={24} height={24} src={'/savedPost.svg'} alt={'Saved'} />
                 </div>
                 <Image width={24} height={24} src={'/sendPost.svg'} alt={'Send'} />
@@ -285,8 +278,10 @@ export const ViewPostModal = ({ dataPostModal, hardLoad }: Props) => {
                 <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
                 <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
               </div>
-              <span>{`${likeCount} ${likeCount === 1 ? 'Like' : 'Likes'}`}</span>
-              <span>{`${dataPostModal.likeCount || ''} "Like"`}</span>
+              <span>
+                {likeCount} {likeCount === 1 ? 'Like' : 'Likes'}
+              </span>
+              {/*<span>{`${dataPostModal.likeCount || ''} "Like"`}</span>*/}
             </div>
             <span className={s.date}>{formatDate(dataPostModal.createdAt)}</span>
           </div>
