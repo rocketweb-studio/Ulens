@@ -16,3 +16,27 @@ export type getFollowResponse = {
   pageNumber: number
   items: getFollowItem[]
 }
+
+export type UserProfileType = {
+  id: string
+  userName: string
+  firstName: string
+  lastName: string
+  city: string
+  country: string
+  dateOfBirth: string
+  aboutMe: string
+  createdAt: string
+}
+
+export type PageInfoType = {
+  endCursorUserId: string
+  hasNextPage: boolean
+}
+
+export type PaginatedUsersType = {
+  totalCount: number
+  pageSize: number
+  items: UserProfileType[]
+  pageInfo: PageInfoType
+}

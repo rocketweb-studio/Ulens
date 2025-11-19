@@ -23,7 +23,6 @@ import {
 import { Suspense, useState } from 'react'
 import { Logout } from '@/src/features/auth/logout/ui/Logout'
 
-
 function SidebarContent() {
   const { data, isSuccess } = useGetMeQuery()
   const pathname = usePathname()
@@ -57,25 +56,22 @@ function SidebarContent() {
       isActive: pathname === Path.UserProfile(data?.id) && params?.size === 0,
     },
     { icon: IconMessageCircleOutline, title: 'Messenger', href: Path.InDevelopment, isActive: false },
-    { icon: IconSearch, title: 'Search', href: Path.InDevelopment, isActive: false },
+    { icon: IconSearch, title: 'Search', href: Path.Search, isActive: pathname === Path.Search },
     { icon: IconTrendingUpOutline, title: 'Statistics', href: Path.InDevelopment, isActive: false },
     { icon: IconBookmarkOutline, title: 'Favorites', href: Path.InDevelopment, isActive: false },
   ]
 
   return (
-
     <div className={s.container}>
       <div className={s.sidebarWrapper}>
-
-        <Sidebar  sidebarLinks={sidebarLinks} LinkComponent={Link}/>
-
-        <FlexContainer className={s.linkWrapper} >
+        <Sidebar sidebarLinks={sidebarLinks} LinkComponent={Link} />
+        <FlexContainer className={s.linkWrapper}>
           <button onClick={() => setIsModalOpen(true)} className={s.logoutBtn}>
-            <IconLogOutOutline className={s.icon}/>
+            <IconLogOutOutline className={s.icon} />
             Log Out
           </button>
         </FlexContainer>
-        {isModalOpen && <Logout isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={data?.email ?? ''}/>}
+        {isModalOpen && <Logout isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} email={data?.email ?? ''} />}
       </div>
     </div>
   )

@@ -1,0 +1,56 @@
+.searchPage{
+  h1, .searchField{
+    margin-bottom: 20px;
+  }
+}
+.searchWrapper{
+  position: relative;
+  .searchIcon{
+    position: absolute;
+    top: 6px;
+    left: 11px;
+    z-index: 999;
+  }
+  .searchField {
+    input{
+      padding-left: 45px;
+      border-radius: 4px;
+      &:focus, &:focus::placeholder{
+        color: #fff;
+      }
+    }
+  }
+}
+
+.searchResult{
+  h3{
+    margin-bottom: 20px;
+  }
+  span{
+    font-size: 14px;
+  }
+  .oops{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 0;
+    color: #8D9094;
+  }
+}
+.recentItem{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 15px;
+  .userName{
+    text-decoration: underline;
+    margin-bottom: 3px;
+  }
+  .firstName{
+    color: #8D9094;
+    a:hover{
+      cursor: pointer;
+    }
+  }
+}

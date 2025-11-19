@@ -23,8 +23,8 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
   const { data: followingsData } = useGetFollowingsQuery()
   const { data: userData } = useGetProfileByUsedIdQuery({ userId })
 
-  const [follow] = useFollowUserMutation()
-  const [unfollow] = useUnfollowUserMutation()
+  const [follow, { isLoading: followIsLoading }] = useFollowUserMutation()
+  const [unfollow, { isLoading: unfollowIsLoading }] = useUnfollowUserMutation()
 
   const isAuth = !!meData?.id && isSuccess
   const dispatch = useAppDispatch()
@@ -64,10 +64,10 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
             </Link>
           : <FlexContainer gap={'15px'}>
               {followStatus ?
-                <Button size={'medium'} variant={'outline'} onClick={handleUnfollow}>
+                <Button size={'medium'} variant={'outline'} onClick={handleUnfollow} disabled={unfollowIsLoading}>
                   Unfollow
                 </Button>
-              : <Button size={'medium'} variant={'primary'} onClick={handleFollow}>
+              : <Button size={'medium'} variant={'primary'} onClick={handleFollow} disabled={followIsLoading}>
                   Follow
                 </Button>
               }

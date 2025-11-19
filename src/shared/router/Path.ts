@@ -3,6 +3,7 @@ type Settings = 'info' | 'devices' | 'subscriptions' | 'payments'
 export const Path = {
   Main: '/',
   Feed: '/feed',
+  Search: '/search',
   UserProfile: (userId: string | number) => `/profile/${userId}`,
   UserCreate: (userId: string | number) => `/profile/${userId}?action=create`,
   ViewPost: (userId: string, postId: string) => `/profile/${userId}/post/${postId}`,

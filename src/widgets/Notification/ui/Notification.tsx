@@ -20,9 +20,7 @@ export const Notification = () => {
   const iconClickHandler = () => {
     if (data?.unreadedCount !== 0 && data?.notifications) {
       const notificationIds = data.notifications.map((n) => n.id)
-      setTimeout(() => {
-        markAsRead(notificationIds)
-      }, 500)
+      markAsRead(notificationIds)
     }
 
     togglePopup(!showPopup)
@@ -33,7 +31,7 @@ export const Notification = () => {
 
     const socket = io('https://ulens.org/ws', {
       auth: {
-        token: token,
+        token,
       },
       transports: ['websocket', 'polling'],
     })
