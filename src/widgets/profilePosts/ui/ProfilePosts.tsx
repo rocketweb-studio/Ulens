@@ -7,6 +7,8 @@ import Image from 'next/image'
 import { PostMenuActions } from '@/src/widgets/postMenuActions'
 import { GetPostsByUserIdResponse } from '@/src/entities/post/api/postsApi.types'
 import { useGetPostsByUsedIdQuery } from '@/src/entities/post/api/postsApi'
+import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
+import { IconPlusSquareOutline } from '@rocketweb-studio/ulens-ui-kit'
 
 type Props = {
   userId: string
@@ -14,11 +16,20 @@ type Props = {
 }
 
 export const ProfilePosts = ({ userId, dataPosts }: Props) => {
+  const { data: meData, isSuccess } = useGetMeQuery()
   const { data: postsData } = useGetPostsByUsedIdQuery({ userId })
   const postsDataForRender = postsData?.items || dataPosts?.items
-
+  const isAuth = !!meData?.id && isSuccess
   return (
     <div className={s.profilePosts}>
+      {!postsDataForRender?.length && isAuth && (
+        <Link href={Path.UserCreate(userId)}>
+          <div className={s.emptyPost}>
+            <IconPlusSquareOutline height={50} width={50} />
+            <span>Create your first post</span>
+          </div>
+        </Link>
+      )}
       {postsDataForRender?.map((post) => (
         <div key={post.id} id={post.id} className={s.postItem} style={{ position: 'relative' }}>
           <PostMenuActions

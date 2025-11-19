@@ -1,11 +1,11 @@
-export type Notification = {
-  id: number | string
+export type NotificationItem = {
+  id: number
   message: string
   sentAt: string
   readAt: string
 }
 
 export type NotificationResponse = {
-  notifications: Notification[]
-  unreadedCount: number | string
+  notifications: NotificationItem[]
+  unreadedCount: number
 }

@@ -2,25 +2,27 @@
 
 import { IconOutlineBell } from '@rocketweb-studio/ulens-ui-kit'
 import s from './Notification.module.scss'
-import { useGetNotificationsQuery, useReadNotificationsMutation } from '@/src/entities/notification'
+import { notificationsApi, useGetNotificationsQuery, useReadNotificationsMutation } from '@/src/entities/notification'
 import { io } from 'socket.io-client'
 import { useEffect } from 'react'
 import { usePopup } from '@/src/shared/hooks/usePopup'
 import { timeAgo } from '@/src/shared/utils/timeAgo'
 import Scrollbars from 'react-custom-scrollbars'
+import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
+import { NotificationItem } from '@/src/entities/notification/api/notificationApi.types'
 
 export const Notification = () => {
-  const { data, refetch } = useGetNotificationsQuery()
-  const [maskAsRead] = useReadNotificationsMutation()
+  const { data } = useGetNotificationsQuery()
+  const [markAsRead] = useReadNotificationsMutation()
   const { refPopup, showPopup, togglePopup } = usePopup()
+  const dispatch = useAppDispatch()
 
   const iconClickHandler = () => {
-    data?.unreadedCount !== 0 &&
-      data?.notifications.forEach((item) => {
-        if (item.readAt === null) {
-          maskAsRead({ id: item.id })
-        }
-      })
+    if (data?.unreadedCount !== 0 && data?.notifications) {
+      const notificationIds = data.notifications.map((n) => n.id)
+      markAsRead(notificationIds)
+    }
+
     togglePopup(!showPopup)
   }
 
@@ -29,7 +31,7 @@ export const Notification = () => {
 
     const socket = io('https://ulens.org/ws', {
       auth: {
-        token: token,
+        token,
       },
       transports: ['websocket', 'polling'],
     })
@@ -37,7 +39,6 @@ export const Notification = () => {
     //base events
     socket.on('connect', () => {
       socket.emit('SUBSCRIBE_NOTIFICATIONS')
-      refetch()
     })
 
     socket.on('disconnect', (reason) => {
@@ -49,8 +50,13 @@ export const Notification = () => {
     })
 
     //custom server events
-    socket.on('NEW_NOTIFICATION', () => {
-      refetch()
+    socket.on('NEW_NOTIFICATION', (data: NotificationItem) => {
+      dispatch(
+        notificationsApi.util.updateQueryData('getNotifications', undefined, (draft) => {
+          draft.notifications.unshift(data)
+          draft.unreadedCount = draft.unreadedCount + 1
+        }),
+      )
     })
 
     socket.on('ERROR', (error) => {

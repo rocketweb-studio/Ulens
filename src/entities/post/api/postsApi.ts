@@ -1,6 +1,7 @@
 import { baseApi } from '@/src/store/baseApi'
 import {
   GetPostByIdResponse,
+  GetPostCommentsType,
   GetPostsByUserIdResponse,
   UploadPostImageResponse,
 } from '@/src/entities/post/api/postsApi.types'
@@ -104,6 +105,9 @@ export const postsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['GetPostsByUsedId'],
     }),
+    getPostComments: build.query<GetPostCommentsType, { postId: string }>({
+      query: ({ postId }) => `posts/${postId}/comments`,
+    }),
   }),
 })
 
@@ -117,4 +121,5 @@ export const {
   useGetFollowingsPostsInfiniteQuery,
   useToggleLikePostMutation,
   useCreateCommentMutation,
+  useGetPostCommentsQuery,
 } = postsApi
