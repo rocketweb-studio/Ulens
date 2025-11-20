@@ -44,7 +44,13 @@ export type GetPostsByUserIdResponse = {
     }
     likeCount: number
     isLiked: boolean
-    avatarWhoLikes: boolean
+    avatarWhoLikes: {
+      userId: string
+      avatars: {
+        small: { url: string; width: number; height: number }
+        medium: { url: string; width: number; height: number }
+      }
+    }[]
   }[]
   pageInfo: {
     endCursorPostId?: string
@@ -72,7 +78,13 @@ export type GetPostByIdResponse = {
   }
   likeCount: number
   isLiked: boolean
-  avatarWhoLikes: boolean
+  avatarWhoLikes: {
+    userId: string
+    avatars: {
+      small: { url: string; width: number; height: number }
+      medium: { url: string; width: number; height: number }
+    }
+  }[]
 }
 
 export type GetPostCommentsType = {
