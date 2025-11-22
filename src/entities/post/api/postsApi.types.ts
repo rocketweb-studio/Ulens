@@ -24,28 +24,7 @@ export type ImagesType = {
 export type GetPostsByUserIdResponse = {
   totalCount: number
   pageSize: number
-  items: {
-    id: string // postId
-    userName: string
-    description: string
-    location: {
-      city: string | null
-      country: string | null
-      region: string | null
-    }
-    images: ImagesType
-    createdAt: string // ISO
-    updatedAt: string // ISO
-    ownerId: string // userId
-    avatarOwner: string | null // avatar url ('' если нет)
-    owner: {
-      firstName: string | null
-      lastName: string | null
-    }
-    likeCount: number
-    isLiked: boolean
-    avatarWhoLikes: boolean
-  }[]
+  items: GetPostByIdResponse[]
   pageInfo: {
     endCursorPostId?: string
     hasNextPage: boolean
@@ -72,7 +51,10 @@ export type GetPostByIdResponse = {
   }
   likeCount: number
   isLiked: boolean
-  avatarWhoLikes: boolean
+  avatarWhoLikes: {
+    avatars: ImagesType
+    userId: string
+  }[]
 }
 
 export type GetPostCommentsType = {

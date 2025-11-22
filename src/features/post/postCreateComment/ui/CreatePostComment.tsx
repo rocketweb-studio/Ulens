@@ -16,7 +16,7 @@ type Props = {
 }
 
 export const CreatePostComment = ({ postId, withBorderBottom = false }: Props) => {
-  const [createComment] = useCreateCommentMutation()
+  const [createComment, {isLoading}] = useCreateCommentMutation()
 
   const {
     register,
@@ -79,7 +79,7 @@ export const CreatePostComment = ({ postId, withBorderBottom = false }: Props) =
           placeholder={'Add a Comment...'}
           error={errors.content?.message}
         />
-        <Button className={s.buttonSubmit} variant={'text'} disabled={!isValid} size={'large'} withoutPadding>
+        <Button className={s.buttonSubmit} variant={'text'} disabled={!isValid || isLoading} size={'large'} withoutPadding>
           Publish
         </Button>
       </div>

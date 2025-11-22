@@ -30,6 +30,12 @@
   @include typography.bold_text_14;
 }
 
+a.linkToComment {
+  align-self: flex-start;
+  @include typography.bold_text_14;
+  color: colors.color(light, 900);
+}
+
 .blockDescription_text {
   @include typography.regular_text_14;
 }
