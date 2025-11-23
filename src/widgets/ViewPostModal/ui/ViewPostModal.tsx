@@ -85,11 +85,7 @@ export const ViewPostModal = ({ dataPostModal, commentsData, hardLoad }: Props) 
             <>
               <Comments commentsData={commentsData} meData={meData} />
               <Actions dataPostModal={dataPostModal} meData={meData} />
-              {meData && (
-                <div className={s.addCommentContainer}>
-                  <CreatePostComment postId={dataPostModal.id} />
-                </div>
-              )}
+              <CreatePostComment postId={dataPostModal.id} meData={meData} />
             </>
           )}
         </div>
