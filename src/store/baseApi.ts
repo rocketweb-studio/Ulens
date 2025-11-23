@@ -14,5 +14,6 @@ export const baseApi = createApi({
     'Followers',
     'Followings',
     'GetPostById',
+    'GetPostComments',
   ],
 })

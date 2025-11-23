@@ -9,15 +9,15 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { ServerErrorType } from '@/src/features/auth/singUp/model/types'
 import s from './CreatePostComment.module.scss'
 import { Button, Input } from '@rocketweb-studio/ulens-ui-kit'
-import { getMeResponse } from '@/src/entities/auth/api/authApi.types'
+import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 
 type Props = {
   postId: string
   withBorderBottom?: boolean
-  meData: getMeResponse | undefined
 }
 
-export const CreatePostComment = ({ postId, withBorderBottom = false, meData }: Props) => {
+export const CreatePostComment = ({ postId, withBorderBottom = false }: Props) => {
+  const { data: meData } = useGetMeQuery()
   const [createComment, { isLoading }] = useCreateCommentMutation()
 
   const {

@@ -3,7 +3,6 @@
 import { useGetProfileByUsedIdQuery } from '@/src/entities/userProfile/api/userProfileApi'
 import { Button, FlexContainer } from '@/src/shared/ui'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
-import Link from 'next/link'
 import { Path } from '@/src/shared/router/Path'
 import { GetProfileByUserIdResponse } from '@/src/entities/userProfile/api/userProfile.types'
 import s from './profileHeader.module.scss'

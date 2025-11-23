@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import s from './postMenuActions.module.scss'
 import { IconEdit2, IconTrash } from '@rocketweb-studio/ulens-ui-kit'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
-import { PostEditModal } from '@/src/features/post/postEdit'
 import { PostDeleteModal } from '@/src/features/post/postDelete'
 
 type Props = {
@@ -13,7 +12,7 @@ type Props = {
   userId: string
   className?: string
   onPostDeleted?: () => void
-  handleSetEditMode: () => void
+  handleSetEditMode?: () => void
 }
 
 export const PostMenuActions = ({
@@ -22,7 +21,7 @@ export const PostMenuActions = ({
   userId,
   className,
   onPostDeleted,
-  handleSetEditMode,
+  handleSetEditMode = () => {},
 }: Props) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
@@ -59,7 +58,7 @@ export const PostMenuActions = ({
         <>
           {isAuth && meData?.id === postOwnerId ?
             <div className={s.menu}>
-              <button className={s.menuItem} onClick={() => handleSetEditMode()}>
+              <button className={s.menuItem} onClick={handleSetEditMode}>
                 <IconEdit2 width={16} height={16} />
                 Edit Post
               </button>

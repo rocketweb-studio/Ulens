@@ -8,23 +8,22 @@ type Props = {
   description: string
   editMode: boolean
   postId: string
+  handleSetEditMode: () => void
 }
 
-export const Description = ({ description: initDesc, editMode, postId }: Props) => {
+export const Description = ({ description: initDesc, editMode, postId, handleSetEditMode }: Props) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [needsExpand, setNeedsExpand] = useState(false)
   const contentRef = useRef<HTMLParagraphElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const [updatePost, { isLoading }] = useUpdatePostMutation()
-  // const { refetch } = useGetPostByIdQuery({ postId })
-  const [description, setDescription] = useState(initDesc ?? '')
+  const [description, setDescription] = useState(initDesc)
 
   const handleSave = async () => {
     try {
       await updatePost({ postId, description }).unwrap()
-      //await refetch()
-      //onUpdated?.(description) + setDescription(description)
-      //onClose()
+      setNeedsExpand(false)
+      handleSetEditMode()
     } catch (error) {
       console.error('Update failed', error)
       toast.error('Update failed')
@@ -38,10 +37,9 @@ export const Description = ({ description: initDesc, editMode, postId }: Props) 
       const lineHeight = parseInt(getComputedStyle(element).lineHeight) || 20
       const contentHeight = element.scrollHeight
       const approximateLines = Math.ceil(contentHeight / lineHeight)
-
       setNeedsExpand(approximateLines > 3)
     }
-  }, [needsExpand])
+  }, [handleSave])
 
   return (
     <div className={s.postDescription}>

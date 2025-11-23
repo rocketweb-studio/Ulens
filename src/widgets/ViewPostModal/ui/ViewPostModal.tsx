@@ -41,7 +41,7 @@ export const ViewPostModal = ({ dataPostModal, commentsData, hardLoad }: Props) 
     ),
   }))
 
-  const handleSetEditMode = () => {
+  const handleEditMode = () => {
     setEditMode(!editMode)
   }
   const handleCloseModal = () => {
@@ -78,14 +78,19 @@ export const ViewPostModal = ({ dataPostModal, commentsData, hardLoad }: Props) 
           <HeadLine
             dataPostModal={dataPostModal}
             handleCloseModal={handleCloseModal}
-            handleSetEditMode={handleSetEditMode}
+            handleSetEditMode={handleEditMode}
           />
-          <Description description={dataPostModal.description} editMode={editMode} postId={dataPostModal.id} />
+          <Description
+            description={dataPostModal.description}
+            editMode={editMode}
+            postId={dataPostModal.id}
+            handleSetEditMode={handleEditMode}
+          />
           {!editMode && (
             <>
               <Comments commentsData={commentsData} meData={meData} />
               <Actions dataPostModal={dataPostModal} meData={meData} />
-              <CreatePostComment postId={dataPostModal.id} meData={meData} />
+              <CreatePostComment postId={dataPostModal.id} />
             </>
           )}
         </div>

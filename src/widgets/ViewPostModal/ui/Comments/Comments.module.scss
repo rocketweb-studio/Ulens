@@ -33,6 +33,18 @@
     }
   }
 }
+.noCommentsWrapper{
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #5f5f5f;
+  p{
+    color: #717171;
+  }
+}
 .commentText{
   width: 100% ;
 }

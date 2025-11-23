@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import s from '@/src/widgets/ViewPostModal/ui/Actions/Actions.module.scss'
-import { IconHeart, IconHeartOutline } from '@rocketweb-studio/ulens-ui-kit'
 import Image from 'next/image'
 import { formatDate } from '@/src/shared/utils/dateFormatter'
-import { useToggleLikePostMutation } from '@/src/entities/post/api/postsApi'
 import { GetPostByIdResponse } from '@/src/entities/post/api/postsApi.types'
 import { getMeResponse } from '@/src/entities/auth/api/authApi.types'
 import { PostLikeButton } from '@/src/features/post/postLike'
@@ -14,10 +12,6 @@ type Props = {
 }
 
 export const Actions = ({ dataPostModal, meData }: Props) => {
-  // const [isLiked, setIsLiked] = useState(dataPostModal?.isLiked)
-  // const [likeCount, setLikeCount] = useState(dataPostModal?.likeCount ?? 0)
-  //const [toggleLikePost] = useToggleLikePostMutation()
-
   const [isLiked, setIsLiked] = useState<boolean>(dataPostModal?.isLiked ?? false)
   const [likeCount, setLikeCount] = useState<number>(dataPostModal?.likeCount ?? 0)
 

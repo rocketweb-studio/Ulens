@@ -95,19 +95,19 @@ export const postsApi = baseApi.injectEndpoints({
           like,
         },
       }),
-      invalidatesTags: ['GetPostsByUsedId'],
+      invalidatesTags: ['GetPostsByUsedId', 'GetPostById'],
     }),
-
+    getPostComments: build.query<GetPostCommentsType, { postId: string }>({
+      query: ({ postId }) => `posts/${postId}/comments`,
+      providesTags: ['GetPostComments'],
+    }),
     createComment: build.mutation<void, { postId: string; content: string }>({
       query: ({ postId, ...body }) => ({
         method: 'POST',
         url: `/posts/${postId}/comments`,
         body,
       }),
-      invalidatesTags: ['GetPostsByUsedId'],
-    }),
-    getPostComments: build.query<GetPostCommentsType, { postId: string }>({
-      query: ({ postId }) => `posts/${postId}/comments`,
+      invalidatesTags: ['GetPostComments'],
     }),
   }),
 })
