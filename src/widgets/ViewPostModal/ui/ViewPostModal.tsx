@@ -74,6 +74,7 @@ export const ViewPostModal = ({ dataPostModal, commentsData, hardLoad }: Props) 
 
   const [isLiked, setIsLiked] = useState(dataPostModal?.isLiked)
   const [likeCount, setLikeCount] = useState(dataPostModal?.likeCount ?? 0)
+  // const [avatarWhoLikes, setAvatarWhoLikes] = useState(dataPostModal?.avatarWhoLikes ?? [])
 
   const [toggleLikePost] = useToggleLikePostMutation()
 
@@ -88,6 +89,20 @@ export const ViewPostModal = ({ dataPostModal, commentsData, hardLoad }: Props) 
 
       setIsLiked((prev) => !prev)
       setLikeCount((prev) => prev + (isLiked ? -1 : +1))
+
+      // setAvatarWhoLikes((prev) => {
+      //   if (!isLiked) {
+      //     return [
+      //       {
+      //         userId: meData.id,
+      //         avatars: meData.avatars,
+      //       },
+      //       ...prev,
+      //     ]
+      //   } else {
+      //     return prev.filter((a) => a.userId !== meData.id)
+      //   }
+      // })
     } catch (error: any) {
       if (error?.data?.errorsMessages?.[0]?.message === 'You already liked this') {
         setIsLiked(true)
@@ -232,19 +247,19 @@ export const ViewPostModal = ({ dataPostModal, commentsData, hardLoad }: Props) 
             )}
             <div className={s.likesPostContainer}>
               <div className={s.likeImagesContainer}>
-                {dataPostModal.avatarWhoLikes.slice(0, 3).map((u) => (
-                  <Image
-                    key={u.userId}
-                    className={s.likeImage}
-                    width={24}
-                    height={24}
-                    src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${u.avatars.small.url}`}
-                    alt={'avatar'}
-                  />
-                ))}
-                {/*<Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />*/}
-                {/*<Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />*/}
-                {/*<Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />*/}
+                {/*{avatarWhoLikes.slice(0, 3).map((u) => (*/}
+                {/*  <Image*/}
+                {/*    key={u.userId}*/}
+                {/*    className={s.likeImage}*/}
+                {/*    width={24}*/}
+                {/*    height={24}*/}
+                {/*    src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${u.avatars.small.url}`}*/}
+                {/*    alt={'avatar'}*/}
+                {/*  />*/}
+                {/*))}*/}
+                <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
+                <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
+                <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
               </div>
               <span>
                 {likeCount} {likeCount === 1 ? 'Like' : 'Likes'}
