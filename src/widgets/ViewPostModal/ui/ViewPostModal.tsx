@@ -17,8 +17,9 @@ import { formatDate } from '@/src/shared/utils/dateFormatter'
 import { UserAvatar } from '@/src/entities/userProfile'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Scrollbars } from 'react-custom-scrollbars'
-import { useToggleLikePostMutation } from '@/src/entities/post/api/postsApi'
 import { CreatePostComment } from '@/src/features/post/postCreateComment'
+import { useToggleLikePostMutation } from '@/src/entities/post/api/postsApi'
+import { PostLikeButton } from '@/src/features/post/postLike'
 
 type Props = {
   hardLoad?: boolean
@@ -60,6 +61,9 @@ export const ViewPostModal = ({ dataPostModal, commentsData, hardLoad }: Props) 
   const [needsExpand, setNeedsExpand] = useState(false)
   const contentRef = useRef<HTMLParagraphElement>(null)
 
+  const [isLiked, setIsLiked] = useState<boolean>(dataPostModal?.isLiked ?? false)
+  const [likeCount, setLikeCount] = useState<number>(dataPostModal?.likeCount ?? 0)
+
   useEffect(() => {
     if (contentRef.current) {
       const element = contentRef.current
@@ -71,46 +75,6 @@ export const ViewPostModal = ({ dataPostModal, commentsData, hardLoad }: Props) 
       setNeedsExpand(approximateLines > 3)
     }
   }, [dataPostModal?.description!])
-
-  const [isLiked, setIsLiked] = useState(dataPostModal?.isLiked)
-  const [likeCount, setLikeCount] = useState(dataPostModal?.likeCount ?? 0)
-  // const [avatarWhoLikes, setAvatarWhoLikes] = useState(dataPostModal?.avatarWhoLikes ?? [])
-
-  const [toggleLikePost] = useToggleLikePostMutation()
-
-  const handleLikeClick = async () => {
-    if (!dataPostModal?.id) return
-
-    try {
-      await toggleLikePost({
-        postId: dataPostModal.id,
-        like: !isLiked,
-      }).unwrap()
-
-      setIsLiked((prev) => !prev)
-      setLikeCount((prev) => prev + (isLiked ? -1 : +1))
-
-      // setAvatarWhoLikes((prev) => {
-      //   if (!isLiked) {
-      //     return [
-      //       {
-      //         userId: meData.id,
-      //         avatars: meData.avatars,
-      //       },
-      //       ...prev,
-      //     ]
-      //   } else {
-      //     return prev.filter((a) => a.userId !== meData.id)
-      //   }
-      // })
-    } catch (error: any) {
-      if (error?.data?.errorsMessages?.[0]?.message === 'You already liked this') {
-        setIsLiked(true)
-        return
-      }
-      console.error('Error like', error)
-    }
-  }
 
   if (!dataPostModal) {
     return null
@@ -235,11 +199,21 @@ export const ViewPostModal = ({ dataPostModal, commentsData, hardLoad }: Props) 
             {meData && (
               <div className={s.postActions}>
                 <div className={s.postActionsLeft}>
-                  <button onClick={handleLikeClick} className={`${s.likeButton} ${isLiked ? s.liked : ''}`}>
-                    {isLiked ?
-                      <IconHeart />
-                    : <IconHeartOutline />}
-                  </button>
+                  {/*<button onClick={handleLikeClick} className={`${s.likeButton} ${isLiked ? s.liked : ''}`}>*/}
+                  {/*  {isLiked ?*/}
+                  {/*    <IconHeart />*/}
+                  {/*  : <IconHeartOutline />}*/}
+                  {/*</button>*/}
+                  <PostLikeButton
+                    postId={dataPostModal.id}
+                    initialIsLiked={dataPostModal.isLiked ?? false}
+                    initialLikeCount={dataPostModal.likeCount ?? 0}
+                    onChange={(newIsLiked, newLikeCount) => {
+                      setIsLiked(newIsLiked)
+                      setLikeCount(newLikeCount)
+                    }}
+                  />
+
                   <Image width={24} height={24} src={'/savedPost.svg'} alt={'Saved'} />
                 </div>
                 <Image width={24} height={24} src={'/sendPost.svg'} alt={'Send'} />
@@ -247,16 +221,6 @@ export const ViewPostModal = ({ dataPostModal, commentsData, hardLoad }: Props) 
             )}
             <div className={s.likesPostContainer}>
               <div className={s.likeImagesContainer}>
-                {/*{avatarWhoLikes.slice(0, 3).map((u) => (*/}
-                {/*  <Image*/}
-                {/*    key={u.userId}*/}
-                {/*    className={s.likeImage}*/}
-                {/*    width={24}*/}
-                {/*    height={24}*/}
-                {/*    src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${u.avatars.small.url}`}*/}
-                {/*    alt={'avatar'}*/}
-                {/*  />*/}
-                {/*))}*/}
                 <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
                 <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
                 <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
@@ -264,7 +228,6 @@ export const ViewPostModal = ({ dataPostModal, commentsData, hardLoad }: Props) 
               <span>
                 {likeCount} {likeCount === 1 ? 'Like' : 'Likes'}
               </span>
-              {/*<span>{`${dataPostModal.likeCount || ''} "Like"`}</span>*/}
             </div>
             <span className={s.date}>{formatDate(dataPostModal.createdAt)}</span>
           </div>
