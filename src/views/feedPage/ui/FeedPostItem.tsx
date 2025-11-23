@@ -28,6 +28,7 @@ export const FeedPostItem = ({ postItem }: Props) => {
         <FlexContainer gap={'12px'} align={'center'}>
           <UserAvatar userName={postItem.userName} mode={'size'} height={36} width={36} />
           <span className={s.author}>{postItem.userName}</span>
+          <span>•</span>
           <p className={s.dateText}>{timeAgo(postItem.createdAt)}</p>
         </FlexContainer>
         <PostMenuActions postId={postItem.id} userId={postItem.ownerId} description={postItem.description} />
@@ -53,10 +54,12 @@ export const FeedPostItem = ({ postItem }: Props) => {
         }))}
       />
 
-      <FlexContainer>
-        <IconHeartOutline />
-        <IconMessageCircleOutline />
-        <IconPaperPlaneOutline />
+      <FlexContainer justify={'between'}>
+        <FlexContainer gap={20}>
+          <IconHeartOutline/>
+          <IconMessageCircleOutline/>
+          <IconPaperPlaneOutline/>
+        </FlexContainer>
         <IconBookmarkOutline />
       </FlexContainer>
 
@@ -69,6 +72,7 @@ export const FeedPostItem = ({ postItem }: Props) => {
           <span className={s.blockDescription_text}>{postItem.description}</span>
         </div>
       </FlexContainer>
+      <Link className={s.linkToComment} href={Path.ViewPost(postItem.ownerId, postItem.id)}>View All Comments ()</Link>
       <FlexContainer>
         <CreatePostComment postId={postItem.id} />
       </FlexContainer>
