@@ -14,6 +14,7 @@ export const postsApi = baseApi.injectEndpoints({
     }),
     getPostById: build.query<GetPostByIdResponse, { postId: string }>({
       query: ({ postId }) => `posts/${postId}`,
+      providesTags: ['GetPostById'],
     }),
     createPost: build.mutation<{ id: string }, { description: string }>({
       query: (body) => ({
@@ -29,7 +30,7 @@ export const postsApi = baseApi.injectEndpoints({
         url: `posts/${postId}`,
         body,
       }),
-      invalidatesTags: ['GetPostsByUsedId'],
+      invalidatesTags: ['GetPostById'],
     }),
 
     deletePost: build.mutation<void, { postId: string; userId: string }>({

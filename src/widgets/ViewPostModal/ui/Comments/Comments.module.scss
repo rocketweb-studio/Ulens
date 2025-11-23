@@ -1,0 +1,38 @@
+@use '/src/shared/styles/colors' as colors;
+
+.publicationComments{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 11px 20px;
+  .commentWrapper{
+    display: flex;
+    gap: 10px;
+    strong {
+      display: block;
+      margin-bottom: 10px;
+    }
+    p {
+      font-weight: 100;
+      margin-bottom: 10px;
+    }
+    .iconHeart, .iconHeartOutline{
+      padding-top: 30px;
+    }
+    .iconHeart{
+      color: red;
+    }
+    .commentPanel{
+      display: flex;
+      gap: 10px;
+      color: colors.color(light, 900);
+      font-size: 12px;
+      .like, .answer{
+        font-weight: 600;
+      }
+    }
+  }
+}
+.commentText{
+  width: 100% ;
+}

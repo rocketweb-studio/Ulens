@@ -1,0 +1,81 @@
+@use '/src/shared/styles/colors' as colors;
+@use '/src/shared/styles/typography' as typography;
+
+.postData{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px  20px 5px;
+  border-top: 1px solid colors.color(dark, 100);
+}
+
+.postActions{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  & .postActionsLeft{
+    display: flex;
+    gap: 24px;
+  }
+}
+
+.likesPostContainer{
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+}
+
+.likeImagesContainer{
+  & .likeImage:nth-child(1){
+    z-index: 3;
+  }
+  & .likeImage:nth-child(2){
+    z-index: 2;
+    margin-left: -8px;
+  }
+  & .likeImage:nth-child(3){
+    z-index: 1;
+    margin-left: -8px;
+  }
+}
+
+.date{
+  margin-bottom: 7px;
+  @include typography.small_text;
+  font-family: typography.$font-family;
+  color: colors.color(light,900);
+}
+
+.likeButton {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    transition: fill 0.25s ease;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.liked {
+    svg {
+      color: colors.color(danger, 500);
+      stroke: colors.color(danger, 500);
+    }
+  }
+}

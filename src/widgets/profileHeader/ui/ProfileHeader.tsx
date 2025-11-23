@@ -57,11 +57,9 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
         <div className={s.nameAndFollowRow}>
           <h1>{userDataForRender?.userName}</h1>
           {isAuth && userDataForRender?.id === meData?.id ?
-            <Link href={Path.Settings('info')}>
-              <Button size={'medium'} variant={'secondary'} onClick={handleFollow}>
-                Profile Settings
-              </Button>
-            </Link>
+            <Button tagType={'link'} path={Path.Settings('info')} size={'medium'} variant={'secondary'}>
+              Profile Settings
+            </Button>
           : <FlexContainer gap={'15px'}>
               {followStatus ?
                 <Button size={'medium'} variant={'outline'} onClick={handleUnfollow} disabled={unfollowIsLoading}>
