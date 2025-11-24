@@ -42,7 +42,8 @@
   padding: 8px;
   border: 1px solid colors.color(dark, 100);
   border-radius: 6px;
-  font-size: 14px;
+  line-height: 1.5;
+  font-size: 16px;
   resize: vertical;
   background-color: colors.color(dark, 500);
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -63,25 +64,14 @@
   margin-top: auto;
   display: flex;
   justify-content: flex-end;
+  gap: 10px;
   //align-items: center;
   padding-top: 12px;
   //border-top: 1px solid colors.color(dark, 100);
-}
-.saveButton {
-  background: #3b82f6;
-  border: none;
-  border-radius: 2px;
-  padding: 8px 16px;
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background: #2563eb;
+  .cancel:hover{
+    background: #000 !important;
   }
-
-  &:disabled {
-    background: #555;
-    cursor: not-allowed;
+  .save:hover{
+    background: #2054b0 !important;
   }
 }

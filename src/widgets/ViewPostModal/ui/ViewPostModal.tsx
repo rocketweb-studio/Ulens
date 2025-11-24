@@ -88,7 +88,7 @@ export const ViewPostModal = ({ dataPostModal, commentsData, hardLoad }: Props) 
           />
           {!editMode && (
             <>
-              <Comments commentsData={commentsData} meData={meData} />
+              <Comments postId={dataPostModal.id} commentsData={commentsData} meData={meData} />
               <Actions dataPostModal={dataPostModal} meData={meData} />
               <CreatePostComment postId={dataPostModal.id} />
             </>

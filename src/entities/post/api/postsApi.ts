@@ -100,6 +100,7 @@ export const postsApi = baseApi.injectEndpoints({
     getPostComments: build.query<GetPostCommentsType, { postId: string }>({
       query: ({ postId }) => `posts/${postId}/comments`,
       providesTags: ['GetPostComments'],
+      keepUnusedDataFor: 10,
     }),
     createComment: build.mutation<void, { postId: string; content: string }>({
       query: ({ postId, ...body }) => ({

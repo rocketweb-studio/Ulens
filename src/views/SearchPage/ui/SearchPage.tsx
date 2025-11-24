@@ -31,12 +31,14 @@ export const SearchPage = () => {
         />
       </div>
       <div className={s.searchResult}>
-        <h3>Recent request</h3>
         {!userItems.length ?
-          <div className={s.oops}>
-            <h4>Oops! This place looks empty!</h4>
-            <span>No recent requests</span>
-          </div>
+          <>
+            {/*<h3>Recent request</h3>*/}
+            <div className={s.oops}>
+              <h4>Oops! This place looks empty!</h4>
+              <span>No recent requests</span>
+            </div>
+          </>
         : <div className={s.recent}>
             {userItems.map((user) => (
               <div className={s.recentItem}>

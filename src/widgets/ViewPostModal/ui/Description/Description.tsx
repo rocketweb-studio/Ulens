@@ -3,6 +3,8 @@ import s from '@/src/widgets/ViewPostModal/ui/Description/Description.module.scs
 import { AnimatePresence, motion } from 'framer-motion'
 import { toast } from 'react-toastify'
 import { useUpdatePostMutation } from '@/src/entities/post/api/postsApi'
+import { Button } from '@rocketweb-studio/ulens-ui-kit'
+import { Modal } from '@/src/shared/ui/Modal/Modal'
 
 type Props = {
   description: string
@@ -16,8 +18,9 @@ export const Description = ({ description: initDesc, editMode, postId, handleSet
   const [needsExpand, setNeedsExpand] = useState(false)
   const contentRef = useRef<HTMLParagraphElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
-  const [updatePost, { isLoading }] = useUpdatePostMutation()
+  const [updatePost] = useUpdatePostMutation()
   const [description, setDescription] = useState(initDesc)
+  const [showConfirmExit, setShowConfirmExit] = useState(false)
 
   const handleSave = async () => {
     try {
@@ -25,9 +28,13 @@ export const Description = ({ description: initDesc, editMode, postId, handleSet
       setNeedsExpand(false)
       handleSetEditMode()
     } catch (error) {
-      console.error('Update failed', error)
       toast.error('Update failed')
     }
+  }
+
+  const handleCancel = () => {
+    setIsExpanded(false)
+    description !== initDesc ? setShowConfirmExit(true) : handleSetEditMode()
   }
 
   useEffect(() => {
@@ -42,62 +49,91 @@ export const Description = ({ description: initDesc, editMode, postId, handleSet
   }, [handleSave])
 
   return (
-    <div className={s.postDescription}>
-      {!editMode ?
-        <div style={{ position: 'relative' }}>
-          <motion.div
-            initial={false}
-            animate={{
-              height:
-                needsExpand ?
-                  isExpanded ? 'auto'
-                  : '3.6em'
-                : '3.6em',
-            }}
-            transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
-            style={{ overflow: 'hidden', borderRadius: '4px', background: '#232323' }}
-          >
-            <p ref={contentRef} style={{ margin: 0 }}>
-              {description}
-            </p>
-          </motion.div>
+    <>
+      <div className={s.postDescription}>
+        {!editMode ?
+          <div style={{ position: 'relative' }}>
+            <motion.div
+              initial={false}
+              animate={{
+                height:
+                  needsExpand ?
+                    isExpanded ? 'auto'
+                    : '3.6em'
+                  : '3.6em',
+              }}
+              transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+              style={{ overflow: 'hidden', borderRadius: '4px', background: '#232323' }}
+            >
+              <p ref={contentRef} style={{ margin: 0 }}>
+                {description}
+              </p>
+            </motion.div>
 
-          {/* Кнопка с анимацией */}
-          <AnimatePresence>
-            {needsExpand && (
-              <motion.button
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 1 }}
-                exit={{ opacity: 1, y: 5 }}
-                onClick={() => setIsExpanded(!isExpanded)}
-                className={s.readMore}
-              >
-                {isExpanded ? 'Show less' : 'Show more'}
-              </motion.button>
-            )}
-          </AnimatePresence>
+            {/* Кнопка с анимацией */}
+            <AnimatePresence>
+              {needsExpand && (
+                <motion.button
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 1 }}
+                  exit={{ opacity: 1, y: 5 }}
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className={s.readMore}
+                >
+                  {isExpanded ? 'Show less' : 'Show more'}
+                </motion.button>
+              )}
+            </AnimatePresence>
+          </div>
+        : <>
+            <label className={s.label}>Add publication descriptions</label>
+            <div className={s.textareaWrapper}>
+              <textarea
+                id='description'
+                ref={textareaRef}
+                className={s.textarea}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                maxLength={500}
+                rows={9}
+              />
+              <span className={s.counter}>{description?.length ?? 0}/500</span>
+            </div>
+            <div className={s.footer}>
+              <Button onClick={handleCancel} className={s.cancel} variant={'darken'}>
+                Cancel
+              </Button>
+              <Button onClick={handleSave} className={s.save} variant={'primary'}>
+                Save Changes
+              </Button>
+            </div>
+          </>
+        }
+      </div>
+      <Modal
+        isOpen={showConfirmExit}
+        onClose={() => setShowConfirmExit(false)}
+        modalTitle={'Unsaved changes'}
+        hideDefaultButton
+      >
+        <p>Do you really want to finish editing? If you close the changes you have made will not be saved</p>
+        <div className={s.footer}>
+          <Button
+            onClick={() => {
+              setDescription(initDesc)
+              setShowConfirmExit(false)
+              handleSetEditMode()
+            }}
+            className={s.cancel}
+            variant={'darken'}
+          >
+            Yes
+          </Button>
+          <Button className={s.save} onClick={() => setShowConfirmExit(false)} variant={'primary'}>
+            No
+          </Button>
         </div>
-      : <>
-          <label className={s.label}>Add publication descriptions</label>
-          <div className={s.textareaWrapper}>
-            <textarea
-              id='description'
-              ref={textareaRef}
-              className={s.textarea}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              maxLength={500}
-              rows={10}
-            />
-            <span className={s.counter}>{description?.length ?? 0}/500</span>
-          </div>
-          <div className={s.footer}>
-            <button disabled={isLoading} className={s.saveButton} onClick={handleSave}>
-              Save Changes
-            </button>
-          </div>
-        </>
-      }
-    </div>
+      </Modal>
+    </>
   )
 }

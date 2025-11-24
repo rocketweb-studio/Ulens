@@ -58,7 +58,13 @@ export const PostMenuActions = ({
         <>
           {isAuth && meData?.id === postOwnerId ?
             <div className={s.menu}>
-              <button className={s.menuItem} onClick={handleSetEditMode}>
+              <button
+                className={s.menuItem}
+                onClick={() => {
+                  setMenuOpen(false)
+                  handleSetEditMode()
+                }}
+              >
                 <IconEdit2 width={16} height={16} />
                 Edit Post
               </button>

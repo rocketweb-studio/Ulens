@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import s from '@/src/widgets/ViewPostModal/ui/Comments/Comments.module.scss'
 import { UserAvatar } from '@/src/entities/userProfile'
 import { formatDate } from '@/src/shared/utils/dateFormatter'
@@ -6,19 +6,42 @@ import { IconHeart, IconHeartOutline, IconMessageCircleOutline } from '@rocketwe
 import { Scrollbars } from 'react-custom-scrollbars'
 import { GetPostCommentsType } from '@/src/entities/post/api/postsApi.types'
 import { getMeResponse } from '@/src/entities/auth/api/authApi.types'
+import { postsApi, useGetPostCommentsQuery } from '@/src/entities/post/api/postsApi'
+import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
+import { useAppSelector } from '@/src/shared/hooks/useAppSelector'
 
 type Props = {
+  postId: string
   commentsData: GetPostCommentsType
   meData: getMeResponse | undefined
 }
 
-export const Comments = ({ commentsData, meData }: Props) => {
+export const Comments = ({ postId, commentsData, meData }: Props) => {
+  const dataFromCache = useAppSelector((state) => postsApi.endpoints.getPostComments.select({ postId })(state).data)
+  const needHydrateStateRef = useRef(!!commentsData && !dataFromCache)
+  const dispatch = useAppDispatch()
+  const { data } = useGetPostCommentsQuery(
+    { postId },
+    {
+      skip: needHydrateStateRef.current,
+    },
+  )
+
+  useEffect(() => {
+    if (needHydrateStateRef.current) {
+      needHydrateStateRef.current = false
+      dispatch(postsApi.util.upsertQueryData('getPostComments', { postId }, commentsData))
+    }
+  }, [])
+
+  const dataForRender = data || commentsData
+
   return (
     <>
-      {commentsData?.length ?
+      {dataForRender?.length ?
         <Scrollbars style={{ height: 310 }}>
           <div className={s.publicationComments}>
-            {commentsData.map((comment, index) => (
+            {dataForRender.map((comment, index) => (
               <div key={index} className={s.commentWrapper}>
                 <div className={s.avatar}>
                   <UserAvatar
