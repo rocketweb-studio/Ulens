@@ -19,22 +19,28 @@ export const Description = ({ description: initDesc, editMode, postId, handleSet
   const contentRef = useRef<HTMLParagraphElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const [updatePost] = useUpdatePostMutation()
+  const [initDescription, setInitDescription] = useState(initDesc)
   const [description, setDescription] = useState(initDesc)
   const [showConfirmExit, setShowConfirmExit] = useState(false)
 
   const handleSave = async () => {
-    try {
-      await updatePost({ postId, description }).unwrap()
-      setNeedsExpand(false)
+    setIsExpanded(false)
+    if (description !== initDescription) {
+      try {
+        await updatePost({ postId, description }).unwrap()
+        handleSetEditMode()
+        setInitDescription(description)
+      } catch (error) {
+        toast.error('Update failed')
+      }
+    } else {
       handleSetEditMode()
-    } catch (error) {
-      toast.error('Update failed')
     }
   }
 
   const handleCancel = () => {
     setIsExpanded(false)
-    description !== initDesc ? setShowConfirmExit(true) : handleSetEditMode()
+    description !== initDescription ? setShowConfirmExit(true) : handleSetEditMode()
   }
 
   useEffect(() => {
@@ -59,11 +65,11 @@ export const Description = ({ description: initDesc, editMode, postId, handleSet
                 height:
                   needsExpand ?
                     isExpanded ? 'auto'
-                    : '3.6em'
-                  : '3.6em',
+                    : '3.8em'
+                  : '3.8em',
               }}
               transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
-              style={{ overflow: 'hidden', borderRadius: '4px', background: '#232323' }}
+              style={{ overflow: 'hidden', borderRadius: '4px', background: '#1e1e1e' }}
             >
               <p ref={contentRef} style={{ margin: 0 }}>
                 {description}
@@ -86,7 +92,6 @@ export const Description = ({ description: initDesc, editMode, postId, handleSet
             </AnimatePresence>
           </div>
         : <>
-            <label className={s.label}>Add publication descriptions</label>
             <div className={s.textareaWrapper}>
               <textarea
                 id='description'
@@ -97,8 +102,12 @@ export const Description = ({ description: initDesc, editMode, postId, handleSet
                 maxLength={500}
                 rows={9}
               />
-              <span className={s.counter}>{description?.length ?? 0}/500</span>
+              <div className={s.areaNotes}>
+                <span className={s.label}>Add publication descriptions</span>
+                <span className={s.counter}>{description?.length ?? 0}/500</span>
+              </div>
             </div>
+
             <div className={s.footer}>
               <Button onClick={handleCancel} className={s.cancel} variant={'darken'}>
                 Cancel
@@ -120,7 +129,7 @@ export const Description = ({ description: initDesc, editMode, postId, handleSet
         <div className={s.footer}>
           <Button
             onClick={() => {
-              setDescription(initDesc)
+              setDescription(initDescription)
               setShowConfirmExit(false)
               handleSetEditMode()
             }}

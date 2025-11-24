@@ -10,7 +10,7 @@
   display: flex;
   flex-direction: column;
   p {
-    padding: 5px 10px;
+    padding: 8px 10px;
     line-height: 1.5;
   }
 }
@@ -26,10 +26,15 @@
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
+.areaNotes{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+}
 .label {
   font-size: 14px;
   color: #aaa;
-  margin-bottom: 8px;
 }
 .textareaWrapper {
   display: flex;
@@ -39,13 +44,13 @@
 .textarea {
   width: 100%;
   min-height: 80px;
-  padding: 8px;
-  border: 1px solid colors.color(dark, 100);
+  padding: 8px 10px;
+  border: 0;
   border-radius: 6px;
   line-height: 1.5;
   font-size: 16px;
   resize: vertical;
-  background-color: colors.color(dark, 500);
+  background-color: #1e1e1e;
   transition: border-color 0.2s, box-shadow 0.2s;
 
   &:focus {
