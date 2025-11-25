@@ -95,7 +95,21 @@ export const postsApi = baseApi.injectEndpoints({
           like,
         },
       }),
-      invalidatesTags: ['GetPostsByUsedId', 'GetPostById'],
+      async onQueryStarted({ postId, like }, { dispatch, queryFulfilled }) {
+        const patchPost = dispatch(
+          postsApi.util.updateQueryData('getPostById', { postId }, (draft: GetPostByIdResponse) => {
+            if (!draft) return
+            draft.isLiked = like
+            draft.likeCount += like ? 1 : -1
+          }),
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchPost.undo()
+        }
+      },
+      invalidatesTags: ['GetPostsByUsedId'],
     }),
     getPostComments: build.query<GetPostCommentsType, { postId: string }>({
       query: ({ postId }) => `posts/${postId}/comments`,
