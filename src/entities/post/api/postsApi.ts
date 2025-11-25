@@ -109,7 +109,7 @@ export const postsApi = baseApi.injectEndpoints({
           patchPost.undo()
         }
       },
-      invalidatesTags: ['GetPostsByUsedId'],
+      invalidatesTags: ['GetPostById', 'GetPostsByUsedId'],
     }),
     getPostComments: build.query<GetPostCommentsType, { postId: string }>({
       query: ({ postId }) => `posts/${postId}/comments`,
