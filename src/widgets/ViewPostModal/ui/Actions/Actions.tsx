@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import s from '@/src/widgets/ViewPostModal/ui/Actions/Actions.module.scss'
 import Image from 'next/image'
 import { formatDate } from '@/src/shared/utils/dateFormatter'
@@ -12,8 +12,17 @@ type Props = {
 }
 
 export const Actions = ({ dataPostModal, meData }: Props) => {
-  const [isLiked, setIsLiked] = useState<boolean>(dataPostModal?.isLiked ?? false)
-  const [likeCount, setLikeCount] = useState<number>(dataPostModal?.likeCount ?? 0)
+  const calculatedIsLiked = dataPostModal.avatarWhoLikes?.some((u) => u.userId === meData?.id) ?? false
+
+  const [isLiked, setIsLiked] = useState(calculatedIsLiked)
+  const [likeCount, setLikeCount] = useState(dataPostModal.likeCount)
+
+  useEffect(() => {
+    const isLikedFromList = dataPostModal.avatarWhoLikes?.some((u) => u.userId === meData?.id) ?? false
+
+    setIsLiked(isLikedFromList)
+    setLikeCount(dataPostModal.likeCount)
+  }, [dataPostModal, meData?.id])
 
   return (
     <div className={s.postData}>
@@ -22,8 +31,8 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
           <div className={s.postActionsLeft}>
             <PostLikeButton
               postId={dataPostModal.id}
-              initialIsLiked={dataPostModal.isLiked ?? false}
-              initialLikeCount={dataPostModal.likeCount ?? 0}
+              isLiked={isLiked}
+              likeCount={likeCount}
               onChange={(newIsLiked, newLikeCount) => {
                 setIsLiked(newIsLiked)
                 setLikeCount(newLikeCount)
@@ -46,7 +55,6 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
         <span>
           {likeCount} {likeCount === 1 ? 'Like' : 'Likes'}
         </span>
-        {/*<span>{`${dataPostModal.likeCount || ''} "Like"`}</span>*/}
       </div>
       <span className={s.date}>{formatDate(dataPostModal.createdAt)}</span>
     </div>
