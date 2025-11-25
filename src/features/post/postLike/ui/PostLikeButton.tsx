@@ -19,26 +19,27 @@ export const PostLikeButton = ({ postId, initialIsLiked, initialLikeCount, onCha
   const [toggleLikePost] = useToggleLikePostMutation()
 
   const handleLikeClick = async () => {
-    try {
-      await toggleLikePost({
-        postId,
-        like: !isLiked,
-      }).unwrap()
+    // try {
+    //   await toggleLikePost({
+    //     postId,
+    //     like: !isLiked,
+    //   }).unwrap()
 
-      const updatedIsLiked = !isLiked
-      const updatedLikeCount = likeCount + (isLiked ? -1 : 1)
+    const optimisticIsLiked = !isLiked
+    const optimisticLikeCount = likeCount + (isLiked ? -1 : 1)
 
-      setIsLiked(updatedIsLiked)
-      setLikeCount(updatedLikeCount)
+    setIsLiked(optimisticIsLiked)
+    setLikeCount(optimisticLikeCount)
 
-      onChange?.(updatedIsLiked, updatedLikeCount)
-    } catch (error: any) {
-      console.error('Error like:', error)
+    onChange?.(optimisticIsLiked, optimisticLikeCount)
 
-      if (error?.data?.errorsMessages?.[0]?.message === 'You already liked this') {
-        setIsLiked(true)
-      }
-    }
+    toggleLikePost({ postId, like: optimisticIsLiked })
+      .unwrap()
+      .catch(() => {
+        setIsLiked(isLiked)
+        setLikeCount(likeCount)
+        onChange?.(isLiked, likeCount)
+      })
   }
 
   return (
