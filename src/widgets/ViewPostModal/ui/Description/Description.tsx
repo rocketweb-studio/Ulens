@@ -69,8 +69,8 @@ export const Description = ({ description: initDesc, editMode, postId, handleSet
                   height:
                     needsExpand ?
                       isExpanded ? 'auto'
-                      : '2.4em'
-                    : '2.4em',
+                      : '2.3em'
+                    : '2.3em',
                 }}
                 transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
                 style={{ overflow: 'hidden', borderRadius: '4px', background: '#1e1e1e' }}
