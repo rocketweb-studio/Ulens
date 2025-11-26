@@ -39,7 +39,7 @@ export const Comments = ({ postId, commentsData, meData }: Props) => {
   return (
     <>
       {dataForRender?.length ?
-        <Scrollbars style={{ height: 310 }}>
+        <Scrollbars style={{ height: 340 }}>
           <div className={s.publicationComments}>
             {dataForRender.map((comment, index) => (
               <div key={index} className={s.commentWrapper}>

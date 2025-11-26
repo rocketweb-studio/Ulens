@@ -25,6 +25,8 @@ export const Description = ({ description: initDesc, editMode, postId, handleSet
 
   const handleSave = async () => {
     setIsExpanded(false)
+    setNeedsExpand(false)
+
     if (description !== initDescription) {
       try {
         await updatePost({ postId, description }).unwrap()
@@ -40,6 +42,7 @@ export const Description = ({ description: initDesc, editMode, postId, handleSet
 
   const handleCancel = () => {
     setIsExpanded(false)
+    setNeedsExpand(false)
     description !== initDescription ? setShowConfirmExit(true) : handleSetEditMode()
   }
 
@@ -50,46 +53,48 @@ export const Description = ({ description: initDesc, editMode, postId, handleSet
       const lineHeight = parseInt(getComputedStyle(element).lineHeight) || 20
       const contentHeight = element.scrollHeight
       const approximateLines = Math.ceil(contentHeight / lineHeight)
-      setNeedsExpand(approximateLines > 3)
+      setNeedsExpand(approximateLines > 2)
     }
   }, [handleSave])
 
   return (
     <>
-      <div className={s.postDescription}>
+      <div className={`${s.postDescription} ${editMode && s.allHeight}`}>
         {!editMode ?
-          <div style={{ position: 'relative' }}>
-            <motion.div
-              initial={false}
-              animate={{
-                height:
-                  needsExpand ?
-                    isExpanded ? 'auto'
-                    : '3.8em'
-                  : '3.8em',
-              }}
-              transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
-              style={{ overflow: 'hidden', borderRadius: '4px', background: '#1e1e1e' }}
-            >
-              <p ref={contentRef} style={{ margin: 0 }}>
-                {description}
-              </p>
-            </motion.div>
+          <div className={`${s.descWrap}`}>
+            <div className={s.standartView}>
+              <motion.div
+                initial={false}
+                animate={{
+                  height:
+                    needsExpand ?
+                      isExpanded ? 'auto'
+                      : '2.4em'
+                    : '2.4em',
+                }}
+                transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+                style={{ overflow: 'hidden', borderRadius: '4px', background: '#1e1e1e' }}
+              >
+                <p ref={contentRef} style={{ margin: 0 }}>
+                  {description}
+                </p>
+              </motion.div>
 
-            {/* Кнопка с анимацией */}
-            <AnimatePresence>
-              {needsExpand && (
-                <motion.button
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 1 }}
-                  exit={{ opacity: 1, y: 5 }}
-                  onClick={() => setIsExpanded(!isExpanded)}
-                  className={s.readMore}
-                >
-                  {isExpanded ? 'Show less' : 'Show more'}
-                </motion.button>
-              )}
-            </AnimatePresence>
+              {/* Кнопка с анимацией */}
+              <AnimatePresence>
+                {needsExpand && (
+                  <motion.button
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 1 }}
+                    exit={{ opacity: 1, y: 5 }}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className={s.readMore}
+                  >
+                    {isExpanded ? 'Show less' : 'Show more'}
+                  </motion.button>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         : <>
             <div className={s.textareaWrapper}>
