@@ -45,8 +45,15 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
       )}
       <div className={s.likesPostContainer}>
         <div className={s.likeImagesContainer}>
-          {/*{dataPostModal.avatarWhoLikes.slice(0 , 3).map((user) => (*/}
-          {/*    <Image key={user.id} className={s.likeImage} width={24} height={24} src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${user.images}`} alt={user.userName} />*/}
+          {/*{dataPostModal?.avatarWhoLikes?.slice(0, 3).map((u) => (*/}
+          {/*  <Image*/}
+          {/*    key={u.userId}*/}
+          {/*    className={s.likeImage}*/}
+          {/*    width={24}*/}
+          {/*    height={24}*/}
+          {/*    src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${u.avatars.small[0].url}`}*/}
+          {/*    alt={'avatar'}*/}
+          {/*  />*/}
           {/*))}*/}
           <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
           <Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />
