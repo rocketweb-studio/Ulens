@@ -17,7 +17,7 @@ export type ImageSizeType = {
 }
 
 export type ImagesType = {
-  small: ImageSizeType[]
+  small: ImageSizeType
   medium: ImageSizeType[]
 }
 
