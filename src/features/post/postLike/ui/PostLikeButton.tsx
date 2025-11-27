@@ -5,13 +5,14 @@ import { useToggleLikePostMutation } from '@/src/entities/post/api/postsApi'
 import s from './PostLikeButton.module.scss'
 
 type Props = {
-  postId: string
+  itemId: string
+  itemType: 'POST' | 'COMMENT'
   isLiked: boolean
   likeCount: number
   onChange?: (isLiked: boolean, likeCount: number) => void
 }
 
-export const PostLikeButton = ({ postId, isLiked, likeCount, onChange }: Props) => {
+export const PostLikeButton = ({ itemId, isLiked, likeCount, onChange, itemType }: Props) => {
   const [toggleLikePost] = useToggleLikePostMutation()
 
   const handleLikeClick = () => {
@@ -21,7 +22,8 @@ export const PostLikeButton = ({ postId, isLiked, likeCount, onChange }: Props) 
     onChange?.(newIsLiked, newLikeCount)
 
     toggleLikePost({
-      postId,
+      likedItemId: itemId,
+      likedItemType: itemType,
       like: newIsLiked,
     })
   }

@@ -30,7 +30,8 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
         <div className={s.postActions}>
           <div className={s.postActionsLeft}>
             <PostLikeButton
-              postId={dataPostModal.id}
+              itemId={dataPostModal.id}
+              itemType={'POST'}
               isLiked={isLiked}
               likeCount={likeCount}
               onChange={(newIsLiked, newLikeCount) => {

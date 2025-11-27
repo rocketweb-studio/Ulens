@@ -9,6 +9,7 @@ import { getMeResponse } from '@/src/entities/auth/api/authApi.types'
 import { postsApi, useGetPostCommentsQuery } from '@/src/entities/post/api/postsApi'
 import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
 import { useAppSelector } from '@/src/shared/hooks/useAppSelector'
+import { PostLikeButton } from '@/src/features/post/postLike'
 
 type Props = {
   postId: string
@@ -61,14 +62,29 @@ export const Comments = ({ postId, commentsData, meData }: Props) => {
                     {meData && <span className={s.like}>Answer</span>}
                   </div>
                 </div>
-                {meData &&
-                  (comment.isLiked ?
-                    <div className={s.iconHeart}>
-                      <IconHeart />
-                    </div>
-                  : <div className={s.iconHeartOutline}>
-                      <IconHeartOutline />
-                    </div>)}
+                {meData && (
+                  <PostLikeButton
+                    itemId={comment.id}
+                    itemType={'COMMENT'}
+                    isLiked={comment.isLiked}
+                    likeCount={comment.likeCount}
+                    // onChange={(newIsLiked, newLikeCount) => {
+                    //   comment.isLiked = newIsLiked
+                    //   comment.likeCount = newLikeCount
+                    // }}
+                    onChange={(newIsLiked, newLikeCount) => {
+                      dispatch(
+                        postsApi.util.updateQueryData('getPostComments', { postId }, (draft) => {
+                          const found = draft.find((c) => c.id === comment.id)
+                          if (found) {
+                            found.isLiked = newIsLiked
+                            found.likeCount = newLikeCount
+                          }
+                        }),
+                      )
+                    }}
+                  />
+                )}
               </div>
             ))}
           </div>
