@@ -17,17 +17,19 @@ export const SearchPage = () => {
   const [search, setSearch] = useState('')
   const debounceSearch = useDebounce(search)
 
-  const { data, fetchNextPage, hasNextPage, isFetching, isSuccess } = useGetUsersInfiniteQuery({
+  const { fetchNextPage, hasNextPage, isFetching, isSuccess, currentData } = useGetUsersInfiniteQuery({
     search: debounceSearch,
   })
+
   const { observerRef } = useInfinityScroll({ hasNextPage, fetchNextPage })
-  const searchUserItems = data?.pages.flatMap((page) => page.items) || []
+
+  const searchUserItems = currentData?.pages.flatMap((page) => page.items) || []
 
   useEffect(() => {
-    if (data && searchUserItems.length > 0 && debounceSearch !== '' && isSuccess && !isFetching) {
+    if (currentData && searchUserItems.length > 0 && debounceSearch !== '' && isSuccess && !isFetching) {
       dispatch(setRecentSearchRequests({ recent: searchUserItems }))
     }
-  }, [data])
+  }, [currentData])
 
   return (
     <div className={s.searchPage}>
@@ -42,6 +44,8 @@ export const SearchPage = () => {
           onChange={(e) => setSearch(e.currentTarget.value)}
         />
       </div>
+      {/*((recentSearch.length > 0 && !debounceSearch.length) ||*/}
+      {/*(searchUserItems.length <= 0 && debounceSearch.length > 0))*/}
       {recentSearch.length > 0 && isSuccess && !isFetching && !debounceSearch.length && (
         <div className={s.searchResult}>
           <h3>Recent request</h3>
@@ -52,7 +56,8 @@ export const SearchPage = () => {
           </div>
         </div>
       )}
-      {isFetching ?
+
+      {!currentData ?
         <>Loading</>
       : <div className={s.searchResult}>
           {!searchUserItems.length ?
@@ -67,11 +72,11 @@ export const SearchPage = () => {
               {searchUserItems.map((user) => (
                 <SearchPageItem key={user.id} item={user} />
               ))}
-              {hasNextPage && <div ref={observerRef} style={{ height: '10px' }}></div>}
             </div>
           }
         </div>
       }
+      {hasNextPage && <div ref={observerRef} style={{ height: '10px' }}></div>}
     </div>
   )
 }

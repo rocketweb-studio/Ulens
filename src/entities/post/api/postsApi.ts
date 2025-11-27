@@ -80,7 +80,7 @@ export const postsApi = baseApi.injectEndpoints({
         },
       },
       query: ({ pageParam }) => ({
-        method: 'get',
+        method: 'GET',
         url: `posts/followings`,
         params: { endCursorPostId: pageParam, pageSize: '1' },
       }),
