@@ -85,7 +85,7 @@ export const postsApi = baseApi.injectEndpoints({
         params: { endCursorPostId: pageParam, pageSize: '1' },
       }),
     }),
-    toggleLikePost: build.mutation<void, { likedItemId: string; like: boolean; likedItemType: 'POST' | 'COMMENT' }>({
+    toggleLike: build.mutation<void, { likedItemId: string; like: boolean; likedItemType: 'POST' | 'COMMENT' }>({
       query: ({ likedItemId, like, likedItemType }) => ({
         method: 'POST',
         url: `/posts/like`,
@@ -95,20 +95,6 @@ export const postsApi = baseApi.injectEndpoints({
           like,
         },
       }),
-      // async onQueryStarted({ likedItemId, like }, { dispatch, queryFulfilled }) {
-      //   const patchPost = dispatch(
-      //     postsApi.util.updateQueryData('getPostById', { postId }, (draft: GetPostByIdResponse) => {
-      //       if (!draft) return
-      //       draft.isLiked = like
-      //       draft.likeCount += like ? 1 : -1
-      //     }),
-      //   )
-      //   try {
-      //     await queryFulfilled
-      //   } catch {
-      //     patchPost.undo()
-      //   }
-      // },
       invalidatesTags: ['GetPostById', 'GetPostsByUsedId'],
     }),
     getPostComments: build.query<GetPostCommentsType, { postId: string }>({
@@ -135,7 +121,7 @@ export const {
   useUpdatePostMutation,
   useUploadPostImagesMutation,
   useGetFollowingsPostsInfiniteQuery,
-  useToggleLikePostMutation,
+  useToggleLikeMutation,
   useCreateCommentMutation,
   useGetPostCommentsQuery,
 } = postsApi

@@ -1,7 +1,7 @@
 'use client'
 
 import { IconHeart, IconHeartOutline } from '@rocketweb-studio/ulens-ui-kit'
-import { useToggleLikePostMutation } from '@/src/entities/post/api/postsApi'
+import { useToggleLikeMutation } from '@/src/entities/post/api/postsApi'
 import s from './LikeButton.module.scss'
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
 }
 
 export const LikeButton = ({ itemId, isLiked, likeCount, onChange, itemType }: Props) => {
-  const [toggleLikePost] = useToggleLikePostMutation()
+  const [toggleLikePost] = useToggleLikeMutation()
 
   const handleLikeClick = () => {
     const newIsLiked = !isLiked
