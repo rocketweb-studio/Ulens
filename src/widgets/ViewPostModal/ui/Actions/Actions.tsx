@@ -55,10 +55,6 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
               isLiked={isLiked}
               likeCount={likeCount}
               onChange={handleLikeChange}
-              // onChange={(newIsLiked, newLikeCount) => {
-              //   setIsLiked(newIsLiked)
-              //   setLikeCount(newLikeCount)
-              // }}
             />
             <Image width={24} height={24} src={'/savedPost.svg'} alt={'Saved'} />
           </div>
@@ -73,8 +69,12 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
               className={s.likeImage}
               width={24}
               height={24}
-              src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${user.avatars.small?.url ?? ''}`}
-              alt={'/github-svg.svg'}
+              src={
+                user?.avatars?.small?.url ?
+                  `${process.env.NEXT_PUBLIC_MEDIA_URL}${user.avatars.small.url}`
+                : '/github-svg.svg'
+              }
+              alt={''}
             />
           ))}
         </div>

@@ -68,10 +68,6 @@ export const Comments = ({ postId, commentsData, meData }: Props) => {
                     itemType={'COMMENT'}
                     isLiked={comment.isLiked}
                     likeCount={comment.likeCount}
-                    // onChange={(newIsLiked, newLikeCount) => {
-                    //   comment.isLiked = newIsLiked
-                    //   comment.likeCount = newLikeCount
-                    // }}
                     onChange={(newIsLiked, newLikeCount) => {
                       dispatch(
                         postsApi.util.updateQueryData('getPostComments', { postId }, (draft) => {
