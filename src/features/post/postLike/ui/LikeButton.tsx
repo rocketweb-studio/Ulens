@@ -2,7 +2,7 @@
 
 import { IconHeart, IconHeartOutline } from '@rocketweb-studio/ulens-ui-kit'
 import { useToggleLikePostMutation } from '@/src/entities/post/api/postsApi'
-import s from './PostLikeButton.module.scss'
+import s from './LikeButton.module.scss'
 
 type Props = {
   itemId: string
@@ -12,7 +12,7 @@ type Props = {
   onChange?: (isLiked: boolean, likeCount: number) => void
 }
 
-export const PostLikeButton = ({ itemId, isLiked, likeCount, onChange, itemType }: Props) => {
+export const LikeButton = ({ itemId, isLiked, likeCount, onChange, itemType }: Props) => {
   const [toggleLikePost] = useToggleLikePostMutation()
 
   const handleLikeClick = () => {

@@ -2,14 +2,14 @@ import React, { useEffect, useRef } from 'react'
 import s from '@/src/widgets/ViewPostModal/ui/Comments/Comments.module.scss'
 import { UserAvatar } from '@/src/entities/userProfile'
 import { formatDate } from '@/src/shared/utils/dateFormatter'
-import { IconHeart, IconHeartOutline, IconMessageCircleOutline } from '@rocketweb-studio/ulens-ui-kit'
+import { IconMessageCircleOutline } from '@rocketweb-studio/ulens-ui-kit'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { GetPostCommentsType } from '@/src/entities/post/api/postsApi.types'
 import { getMeResponse } from '@/src/entities/auth/api/authApi.types'
 import { postsApi, useGetPostCommentsQuery } from '@/src/entities/post/api/postsApi'
 import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
 import { useAppSelector } from '@/src/shared/hooks/useAppSelector'
-import { PostLikeButton } from '@/src/features/post/postLike'
+import { LikeButton } from '@/src/features/post/postLike'
 
 type Props = {
   postId: string
@@ -63,7 +63,7 @@ export const Comments = ({ postId, commentsData, meData }: Props) => {
                   </div>
                 </div>
                 {meData && (
-                  <PostLikeButton
+                  <LikeButton
                     itemId={comment.id}
                     itemType={'COMMENT'}
                     isLiked={comment.isLiked}

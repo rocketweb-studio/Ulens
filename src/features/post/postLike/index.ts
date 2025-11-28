@@ -1,1 +1,1 @@
-export * from './ui/PostLikeButton'
+export * from './ui/LikeButton'

@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { formatDate } from '@/src/shared/utils/dateFormatter'
 import { GetPostByIdResponse } from '@/src/entities/post/api/postsApi.types'
 import { getMeResponse } from '@/src/entities/auth/api/authApi.types'
-import { PostLikeButton } from '@/src/features/post/postLike'
+import { LikeButton } from '@/src/features/post/postLike'
 
 type Props = {
   dataPostModal: GetPostByIdResponse
@@ -16,6 +16,26 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
 
   const [isLiked, setIsLiked] = useState(calculatedIsLiked)
   const [likeCount, setLikeCount] = useState(dataPostModal.likeCount)
+  const [avatarWhoLikes, setAvatarWhoLikes] = useState(dataPostModal.avatarWhoLikes ?? [])
+
+  const handleLikeChange = (newIsLiked: boolean, newLikeCount: number) => {
+    setIsLiked(newIsLiked)
+    setLikeCount(newLikeCount)
+
+    if (!meData) return
+
+    if (newIsLiked) {
+      setAvatarWhoLikes((prev) => [
+        {
+          userId: meData.id,
+          avatars: dataPostModal.avatarWhoLikes[0].avatars,
+        },
+        ...prev.filter((u) => u.userId !== meData.id),
+      ])
+    } else {
+      setAvatarWhoLikes((prev) => prev.filter((u) => u.userId !== meData.id))
+    }
+  }
 
   useEffect(() => {
     const isLikedFromList = dataPostModal.avatarWhoLikes?.some((u) => u.userId === meData?.id) ?? false
@@ -29,15 +49,16 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
       {meData && (
         <div className={s.postActions}>
           <div className={s.postActionsLeft}>
-            <PostLikeButton
+            <LikeButton
               itemId={dataPostModal.id}
               itemType={'POST'}
               isLiked={isLiked}
               likeCount={likeCount}
-              onChange={(newIsLiked, newLikeCount) => {
-                setIsLiked(newIsLiked)
-                setLikeCount(newLikeCount)
-              }}
+              onChange={handleLikeChange}
+              // onChange={(newIsLiked, newLikeCount) => {
+              //   setIsLiked(newIsLiked)
+              //   setLikeCount(newLikeCount)
+              // }}
             />
             <Image width={24} height={24} src={'/savedPost.svg'} alt={'Saved'} />
           </div>
@@ -46,19 +67,16 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
       )}
       <div className={s.likesPostContainer}>
         <div className={s.likeImagesContainer}>
-          {dataPostModal.avatarWhoLikes?.slice(0, 3).map((user) => (
+          {avatarWhoLikes.slice(0, 3).map((user) => (
             <Image
               key={user.userId}
               className={s.likeImage}
               width={24}
               height={24}
               src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${user.avatars.small?.url ?? ''}`}
-              alt={''}
+              alt={'/github-svg.svg'}
             />
           ))}
-          {/*<Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />*/}
-          {/*<Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />*/}
-          {/*<Image className={s.likeImage} width={24} height={24} src={'/github-svg.svg'} alt={'liked'} />*/}
         </div>
         <span>
           {likeCount} {likeCount === 1 ? 'Like' : 'Likes'}
