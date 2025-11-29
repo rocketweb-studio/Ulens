@@ -11,6 +11,7 @@ import { setLoaderStatus } from '@/src/store/app-slice'
 import { useEffect } from 'react'
 import { UserAvatar } from '@/src/entities/userProfile'
 import { useFollowUserMutation, useGetFollowingsQuery, useUnfollowUserMutation } from '@/src/entities/user/api/userApi'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   userId: string
@@ -18,6 +19,7 @@ type Props = {
 }
 
 export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
+  const router = useRouter()
   const { data: meData, isSuccess } = useGetMeQuery()
   const { data: followingsData } = useGetFollowingsQuery()
   const { data: userData } = useGetProfileByUsedIdQuery({ userId })
@@ -41,7 +43,9 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
 
   const handleFollow = () => follow({ userId })
   const handleUnfollow = () => unfollow({ userId })
-  const handleSendMessage = () => {}
+  const handleSendMessage = () => {
+    router.push(`/${Path.Messenger}?activeChat=${userId}`)
+  }
 
   return (
     <div className={s.profileHeader}>

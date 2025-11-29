@@ -1,3 +1,3 @@
 export const PreviewList = () => {
-  return <div></div>
+  return <ul></ul>
 }
