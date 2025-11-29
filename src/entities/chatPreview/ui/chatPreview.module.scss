@@ -1,0 +1,24 @@
+.chatPreview {
+
+}
+
+.avatar {
+
+}
+
+.mainContent {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+.name {
+
+}
+
+.date {
+
+}
+
+.message {
+  grid-column: 0 / 3;
+}
