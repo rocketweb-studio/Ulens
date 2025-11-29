@@ -1,7 +1,25 @@
+@use '@/src/shared/styles/typography' as typography;
+@use '@/src/shared/styles/colors' as colors;
+
+.wrapper {
+  flex: 1 1 auto;
+}
+
 .messenger {
   display: grid;
+  width: 100%;
+  border: 1px solid colors.color(dark, 300);
+}
+
+.search {
+  padding: 17px 12px 19px;
+  background-color: colors.color(dark, 500);
 }
 
 .header {
+  background-color: colors.color(dark, 500);
+}
 
+.previewList {
+  background-color: colors.color(dark, 500);
 }

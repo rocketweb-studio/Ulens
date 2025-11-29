@@ -1,5 +1,5 @@
 export type UserRoom = {
-  id: number
+  id: string
   userName: string
   firstName: string
   lastName: string
@@ -27,4 +27,8 @@ export type GetRoomsResponce = {
   id: number
   roomUser: UserRoom
   lastMessage: Message
+}[]
+
+export type CreateRoomResponce = {
+  id: number
 }

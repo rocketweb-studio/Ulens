@@ -6,7 +6,14 @@ export const messengerApi = baseApi.injectEndpoints({
     getRooms: build.query<GetRoomsResponce, void>({
       query: () => 'messenger/rooms',
     }),
+    createRoom: build.mutation<GetRoomsResponce, { targetUserId: string }>({
+      query: (body) => ({
+        method: 'POST',
+        url: 'messenger/rooms',
+        body,
+      }),
+    }),
   }),
 })
 
-export const { useGetRoomsQuery } = messengerApi
+export const { useGetRoomsQuery, useCreateRoomMutation } = messengerApi
