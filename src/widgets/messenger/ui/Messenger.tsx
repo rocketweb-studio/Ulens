@@ -1,10 +1,11 @@
 'use client'
 
-import { FlexContainer, Input } from '@rocketweb-studio/ulens-ui-kit'
+import { Button, FlexContainer, Input } from '@rocketweb-studio/ulens-ui-kit'
 import s from './messenger.module.scss'
 import { PreviewList } from '@/src/widgets/messenger/ui/PreviewList/PreviewList'
 import { useCreateRoomMutation, useGetRoomsQuery } from '@/src/entities/messenger'
 import { useSearchParams } from 'next/navigation'
+import Scrollbars from 'react-custom-scrollbars'
 
 export const Messenger = () => {
   const { data: RoomsList, isSuccess: isGetRoomsSuccess } = useGetRoomsQuery()
@@ -31,12 +32,16 @@ export const Messenger = () => {
         <div className={s.search}>
           <Input placeholder={'Input search'} />
         </div>
-        <div className={s.header}></div>
+        <div className={s.header}>Header</div>
         <div className={s.previewList}>
-          <PreviewList />
+          <Scrollbars style={{ height: 340 }}>
+            <PreviewList />
+          </Scrollbars>
         </div>
-        <div className={s.chatView}></div>
-        <div className={s.sendMessage}></div>
+        <div className={s.chatView}>Chat</div>
+        <div className={s.sendMessage}>
+          <Button variant={'text'}>Send message</Button>
+        </div>
       </div>
     </FlexContainer>
   )
