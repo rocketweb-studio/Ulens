@@ -32,3 +32,16 @@ export type GetRoomsResponce = {
 export type CreateRoomResponce = {
   id: number
 }
+
+export type GetMessagesByRoomResponce = {
+  id: number
+  content: string
+  createdAt: string
+  author: {
+    id: string
+    userName: string
+    firstName: string
+    lastName: string
+    avatar: string
+  }
+}

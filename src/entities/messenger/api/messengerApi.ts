@@ -1,5 +1,9 @@
 import { baseApi } from '@/src/store/baseApi'
-import { GetRoomsResponce } from '@/src/entities/messenger/api/messengerApi.type'
+import {
+  CreateRoomResponce,
+  GetMessagesByRoomResponce,
+  GetRoomsResponce,
+} from '@/src/entities/messenger/api/messengerApi.type'
 
 export const messengerApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -7,7 +11,11 @@ export const messengerApi = baseApi.injectEndpoints({
       query: () => 'messenger/rooms',
       providesTags: ['GetRooms'],
     }),
-    createRoom: build.mutation<GetRoomsResponce, { targetUserId: string }>({
+    getMessagesByRoomId: build.query<GetMessagesByRoomResponce, { roomId: number }>({
+      query: ({ roomId }) => `messenger/rooms/${roomId}/messages`,
+      providesTags: ['GetMessagesByRoomId'],
+    }),
+    createRoom: build.mutation<CreateRoomResponce, { targetUserId: string }>({
       query: (body) => ({
         method: 'POST',
         url: 'messenger/rooms',
