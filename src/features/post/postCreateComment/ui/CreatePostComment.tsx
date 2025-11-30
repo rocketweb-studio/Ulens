@@ -25,7 +25,6 @@ export const CreatePostComment = ({ postId, withBorderBottom = false }: Props) =
     handleSubmit,
     reset,
     setError,
-    trigger,
     clearErrors,
     formState: { errors, isValid },
   } = useForm<CreateCommentInput>({

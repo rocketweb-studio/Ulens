@@ -22,11 +22,6 @@ export const useWebSocketMessenger = () => {
         socket.disconnect()
         reject(error)
       })
-
-      setTimeout(() => {
-        socket.disconnect()
-        reject(new Error('Timeout'))
-      }, 5000)
     })
   }, [])
 

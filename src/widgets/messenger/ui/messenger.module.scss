@@ -39,6 +39,8 @@
 
 .chatView {
   display: flex;
+  flex-direction: column;
+  row-gap: 24px;
   justify-content: center;
   align-items: center;
   padding: 24px;

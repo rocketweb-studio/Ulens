@@ -1,13 +1,15 @@
 'use client'
 
-import { Button, FlexContainer, Input } from '@rocketweb-studio/ulens-ui-kit'
+import { FlexContainer, Input } from '@rocketweb-studio/ulens-ui-kit'
 import s from './messenger.module.scss'
 import { PreviewList } from '@/src/widgets/messenger/ui/PreviewList/PreviewList'
 import { useCreateRoomMutation, useGetMessagesByRoomIdQuery, useGetRoomsQuery } from '@/src/entities/messenger'
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Message, UserRoom } from '@/src/entities/messenger/api/messengerApi.type'
+import { LastMessage, UserRoom } from '@/src/entities/messenger/api/messengerApi.type'
 import { UserAvatar } from '@/src/entities/userProfile'
+import { SendMessage } from '@/src/features/messenger/sentMessage'
+import { Message } from '@/src/entities/message'
 
 export const Messenger = () => {
   const { data: RoomsList, isSuccess: isGetRoomsSuccess, isLoading: isGetRoomsSuccessLoading } = useGetRoomsQuery()
@@ -18,7 +20,7 @@ export const Messenger = () => {
   const [activeChat, setActiveChat] = useState<{
     id: number
     roomUser: UserRoom
-    lastMessage: Message
+    lastMessage: LastMessage
   }>()
   const { data: RoomMessages } = useGetMessagesByRoomIdQuery({ roomId: activeChat?.id || 0 })
 
@@ -72,7 +74,10 @@ export const Messenger = () => {
                 name: `${item.roomUser.firstName} ${item.roomUser.lastName}`,
                 userId: item.roomUser.id,
                 message: item.lastMessage?.content || 'No message',
-                date: item.lastMessage?.createdAt || '',
+                date:
+                  item.lastMessage ?
+                    `${new Date(item.lastMessage.createdAt).getUTCHours()}:${new Date(item.lastMessage.createdAt).getMinutes()}`
+                  : '',
                 id: item.id,
                 avatar: item.roomUser.avatar,
                 isActive: activeChat?.id === item.id,
@@ -83,10 +88,20 @@ export const Messenger = () => {
         </div>
         <div className={s.chatView}>
           {!activeChat && <div className={s.notActiveChatBlock}>Choose who you would like to talk to</div>}
-          {activeChat && RoomMessages?.map((item) => <div key={item.id}>{item.id}</div>)}
+          {activeChat &&
+            RoomMessages?.map((item) => (
+              <Message
+                key={item.id}
+                type={'mine'}
+                message={item.content}
+                date={item.createdAt}
+                avatar={''}
+                friendName={''}
+              />
+            ))}
         </div>
         <div className={s.sendMessage}>
-          <Button variant={'text'}>Send message</Button>
+          <SendMessage roomId={activeChat?.id || 0} />
         </div>
       </div>
     </FlexContainer>

@@ -8,6 +8,7 @@
 
   &.mine {
     margin-left: auto;
+    background-color: colors.color(accent, 900);
 
     .messageContentDate {
       color: colors.color(accent, 100);
