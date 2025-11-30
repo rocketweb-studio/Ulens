@@ -44,7 +44,7 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
   const handleFollow = () => follow({ userId })
   const handleUnfollow = () => unfollow({ userId })
   const handleSendMessage = () => {
-    router.push(`/${Path.Messenger}?activeChat=${userId}`)
+    router.push(`${Path.Messenger}?activeChat=${userId}`)
   }
 
   return (
