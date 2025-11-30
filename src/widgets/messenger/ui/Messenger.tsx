@@ -71,7 +71,7 @@ export const Messenger = () => {
                 name: `${item.roomUser.firstName} ${item.roomUser.lastName}`,
                 userId: item.roomUser.id,
                 message: item.lastMessage?.content || 'No message',
-                date: item.lastMessage?.createdAt || '00:00',
+                date: item.lastMessage?.createdAt || '',
                 id: item.id,
                 avatar: item.roomUser.avatar,
                 isActive: activeChat?.id === item.id,
