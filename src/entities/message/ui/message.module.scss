@@ -1,3 +1,37 @@
-.message {
+@use '@/src/shared/styles/colors' as colors;
+@use '@/src/shared/styles/typography' as typography;
 
+.message {
+  display: flex;
+  column-gap: 12px;
+  align-items: flex-end;
+
+  &.mine {
+    margin-left: auto;
+
+    .messageContentDate {
+      color: colors.color(accent, 100);
+    }
+  }
+}
+
+.messageContent {
+  display: flex;
+  flex-direction: column;
+  padding: 7px 12px;
+  min-width: 120px;
+  max-width: 275px;
+  border-radius: 8px;
+  background-color: colors.color(dark, 300);
+}
+
+.messageContentText {
+  @include typography.regular_text_14;
+  color: colors.color(light, 100);
+}
+
+.messageContentDate {
+  @include typography.small_text;
+  margin-left: auto;
+  color: colors.color(light, 900);
 }
