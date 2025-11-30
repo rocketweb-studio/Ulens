@@ -44,4 +44,4 @@ export type GetMessagesByRoomResponce = {
     lastName: string
     avatar: string
   }
-}
+}[]

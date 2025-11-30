@@ -3,7 +3,7 @@
 import { Button, FlexContainer, Input } from '@rocketweb-studio/ulens-ui-kit'
 import s from './messenger.module.scss'
 import { PreviewList } from '@/src/widgets/messenger/ui/PreviewList/PreviewList'
-import { useCreateRoomMutation, useGetRoomsQuery } from '@/src/entities/messenger'
+import { useCreateRoomMutation, useGetMessagesByRoomIdQuery, useGetRoomsQuery } from '@/src/entities/messenger'
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Message, UserRoom } from '@/src/entities/messenger/api/messengerApi.type'
@@ -20,6 +20,7 @@ export const Messenger = () => {
     roomUser: UserRoom
     lastMessage: Message
   }>()
+  const { data: RoomMessages } = useGetMessagesByRoomIdQuery({ roomId: activeChat?.id || 0 })
 
   const initActiveChat = () => {
     if (RoomsList) {
@@ -82,6 +83,7 @@ export const Messenger = () => {
         </div>
         <div className={s.chatView}>
           {!activeChat && <div className={s.notActiveChatBlock}>Choose who you would like to talk to</div>}
+          {activeChat && RoomMessages?.map((item) => <div key={item.id}>{item.id}</div>)}
         </div>
         <div className={s.sendMessage}>
           <Button variant={'text'}>Send message</Button>
