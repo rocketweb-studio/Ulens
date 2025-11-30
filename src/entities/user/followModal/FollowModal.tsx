@@ -45,7 +45,7 @@ export const FollowModal = ({ isOpen, onClose, title, data, followingsIds }: Pro
             const isFollowing = followingsIds?.includes(u.id)
 
             return (
-              <div key={u.id} className={s.info}>
+              <div key={u.id} className={s.item}>
                 <div className={s.info}>
                   <span className={s.userName}>{u.userName}</span>
                   <span className={s.fullName}>

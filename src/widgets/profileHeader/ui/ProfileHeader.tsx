@@ -16,7 +16,7 @@ import {
   useGetFollowingsQuery,
   useUnfollowUserMutation,
 } from '@/src/entities/user/api/userApi'
-import { FollowModal } from '@/src/entities/user/followModal/FollowMadal'
+import { FollowModal } from '@/src/entities/user/followModal/FollowModal'
 
 type Props = {
   userId: string
