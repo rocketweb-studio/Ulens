@@ -9,7 +9,7 @@ export type UserRoom = {
 export type Message = {
   id: number
   content: string
-  cratedAt: string
+  createdAt: string
   authorId: string
   media: {
     id: string

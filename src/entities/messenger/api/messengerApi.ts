@@ -5,6 +5,7 @@ export const messengerApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getRooms: build.query<GetRoomsResponce, void>({
       query: () => 'messenger/rooms',
+      providesTags: ['GetRooms'],
     }),
     createRoom: build.mutation<GetRoomsResponce, { targetUserId: string }>({
       query: (body) => ({
@@ -12,6 +13,7 @@ export const messengerApi = baseApi.injectEndpoints({
         url: 'messenger/rooms',
         body,
       }),
+      invalidatesTags: ['GetRooms'],
     }),
   }),
 })

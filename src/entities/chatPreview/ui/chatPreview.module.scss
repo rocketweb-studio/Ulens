@@ -1,24 +1,45 @@
-.chatPreview {
+@use '@/src/shared/styles/colors' as colors;
+@use '@/src/shared/styles/typography' as typography;
 
+.chatPreview {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: min-content min-content;
+  column-gap: 12px;
+  row-gap: 4px;
+  padding: 12px;
+  cursor: pointer;
+  transition: background-color ease-in-out .2s;
+
+  &:hover {
+    background-color: colors.color(dark, 300);
+  }
+
+  &.active {
+    background-color: colors.color(dark, 100);
+  }
 }
 
 .avatar {
-
-}
-
-.mainContent {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-row: 1 / -1;
 }
 
 .name {
-
+  @include typography.regular_text_14;
+  color: colors.color(light, 100);
 }
 
 .date {
+  @include typography.small_text;
+  color: colors.color(light, 900);
 
 }
 
 .message {
-  grid-column: 0 / 3;
+  @include typography.small_text;
+  grid-column: 2 / -1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: colors.color(light, 900);
 }
