@@ -26,7 +26,7 @@ export const FeedPostItem = ({ postItem }: Props) => {
     <FlexContainer direction={'column'} gap={'20px'} className={s.container}>
       <FlexContainer justify={'between'} align={'center'}>
         <FlexContainer gap={'12px'} align={'center'}>
-          <UserAvatar userName={postItem.userName} mode={'size'} height={36} width={36} />
+          <UserAvatar userName={postItem.userName} avatarOwner={postItem.avatarOwner} mode={'size'} height={36} width={36} />
           <span className={s.author}>{postItem.userName}</span>
           <span>•</span>
           <p className={s.dateText}>{timeAgo(postItem.createdAt)}</p>
@@ -65,7 +65,7 @@ export const FeedPostItem = ({ postItem }: Props) => {
 
       <FlexContainer gap={'12px'}>
         <div>
-          <UserAvatar userName={postItem.userName} mode={'size'} height={36} width={36} />
+          <UserAvatar userName={postItem.userName} avatarOwner={postItem.avatarOwner} mode={'size'} height={36} width={36} />
         </div>
         <div>
           <span className={s.blockDescription_userName}>{postItem.userName} </span>
