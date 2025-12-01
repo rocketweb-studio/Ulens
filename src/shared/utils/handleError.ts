@@ -56,6 +56,6 @@ export const handleError = async (
         error = JSON.stringify(result.error)
         break
     }
-    if (api.endpoint !== 'getMe' || result.error.status !== 401) toast.error(error)
+    api.endpoint !== 'getMe' && result.error.status !== 401 && toast.error(error)
   }
 }

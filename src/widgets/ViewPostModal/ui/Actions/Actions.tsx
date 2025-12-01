@@ -28,7 +28,7 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
       setAvatarWhoLikes((prev) => [
         {
           userId: meData.id,
-          avatars: dataPostModal.avatarWhoLikes[0].avatars,
+          avatars: dataPostModal?.avatarWhoLikes[0]?.avatars,
         },
         ...prev.filter((u) => u.userId !== meData.id),
       ])

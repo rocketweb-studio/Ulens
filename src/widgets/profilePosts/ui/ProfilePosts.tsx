@@ -4,7 +4,6 @@ import s from './profilePosts.module.scss'
 import Link from 'next/link'
 import { Path } from '@/src/shared/router/Path'
 import Image from 'next/image'
-import { PostMenuActions } from '@/src/widgets/postMenuActions'
 import { GetPostsByUserIdResponse } from '@/src/entities/post/api/postsApi.types'
 import { useGetPostsByUsedIdQuery } from '@/src/entities/post/api/postsApi'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
@@ -32,7 +31,7 @@ export const ProfilePosts = ({ userId, dataPosts }: Props) => {
       )}
       {postsDataForRender?.map((post) => (
         <div key={post.id} id={post.id} className={s.postItem} style={{ position: 'relative' }}>
-          <PostMenuActions postOwnerId={post.ownerId} postId={post.id} userId={userId} className={s.postMenuActions} />
+          {/*<PostMenuActions postOwnerId={post.ownerId} postId={post.id} userId={userId} className={s.postMenuActions} />*/}
           <Link href={Path.ViewPost(userId, post.id)} scroll={false}>
             {post.images.small.length > 0 && (
               <Image

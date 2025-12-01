@@ -51,16 +51,12 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
   const followStatus = followingsData?.items.find((user) => user.id === userId)
 
   const handleFollow = () => {
-    !isAuth && redirect(Path.SignIn)
     follow({ userId })
   }
   const handleUnfollow = () => {
-    !isAuth && redirect(Path.SignIn)
     unfollow({ userId })
   }
-  const handleSendMessage = () => {
-    !isAuth && redirect(Path.SignIn)
-  }
+  const handleSendMessage = () => {}
 
   return (
     <div className={s.profileHeader}>
@@ -74,24 +70,28 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
       <div className={s.profileInfo}>
         <div className={s.nameAndFollowRow}>
           <h1>{userDataForRender?.userName}</h1>
-          {isAuth && userDataForRender?.id === meData?.id ?
-            <Button tagType={'link'} path={Path.Settings('info')} size={'medium'} variant={'secondary'}>
-              Profile Settings
-            </Button>
-          : <FlexContainer gap={'15px'}>
-              {followStatus ?
-                <Button size={'medium'} variant={'outline'} onClick={handleUnfollow} disabled={unfollowIsLoading}>
-                  Unfollow
+          {isAuth && (
+            <>
+              {userDataForRender?.id === meData?.id ?
+                <Button tagType={'link'} path={Path.Settings('info')} size={'medium'} variant={'secondary'}>
+                  Profile Settings
                 </Button>
-              : <Button size={'medium'} variant={'primary'} onClick={handleFollow} disabled={followIsLoading}>
-                  Follow
-                </Button>
+              : <FlexContainer gap={'15px'}>
+                  {followStatus ?
+                    <Button size={'medium'} variant={'outline'} onClick={handleUnfollow} disabled={unfollowIsLoading}>
+                      Unfollow
+                    </Button>
+                  : <Button size={'medium'} variant={'primary'} onClick={handleFollow} disabled={followIsLoading}>
+                      Follow
+                    </Button>
+                  }
+                  <Button size={'medium'} variant={'secondary'} onClick={handleSendMessage}>
+                    Send Message
+                  </Button>
+                </FlexContainer>
               }
-              <Button size={'medium'} variant={'secondary'} onClick={handleSendMessage}>
-                Send Message
-              </Button>
-            </FlexContainer>
-          }
+            </>
+          )}
         </div>
         <div className={s.statisticRow}>
           <div className={s.statisticItem} onClick={() => setFollowingsOpen(true)}>
