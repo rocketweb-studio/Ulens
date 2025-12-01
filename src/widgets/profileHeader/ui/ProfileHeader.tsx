@@ -17,6 +17,7 @@ import {
   useUnfollowUserMutation,
 } from '@/src/entities/user/api/userApi'
 import { FollowModal } from '@/src/entities/user/followModal/FollowModal'
+import { redirect } from 'next/navigation'
 
 type Props = {
   userId: string
@@ -49,9 +50,17 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
 
   const followStatus = followingsData?.items.find((user) => user.id === userId)
 
-  const handleFollow = () => follow({ userId })
-  const handleUnfollow = () => unfollow({ userId })
-  const handleSendMessage = () => {}
+  const handleFollow = () => {
+    !isAuth && redirect(Path.SignIn)
+    follow({ userId })
+  }
+  const handleUnfollow = () => {
+    !isAuth && redirect(Path.SignIn)
+    unfollow({ userId })
+  }
+  const handleSendMessage = () => {
+    !isAuth && redirect(Path.SignIn)
+  }
 
   return (
     <div className={s.profileHeader}>

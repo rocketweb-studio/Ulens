@@ -16,13 +16,13 @@ type Props = {
 }
 
 export const ProfilePosts = ({ userId, dataPosts }: Props) => {
-  const { data: meData, isSuccess } = useGetMeQuery()
+  const { data: meData } = useGetMeQuery()
   const { data: postsData } = useGetPostsByUsedIdQuery({ userId })
   const postsDataForRender = postsData?.items || dataPosts?.items
-  const isAuth = !!meData?.id && isSuccess
+
   return (
     <div className={s.profilePosts}>
-      {!postsDataForRender?.length && isAuth && (
+      {!postsDataForRender?.length && userId === meData?.id && (
         <Link href={Path.UserCreate(userId)}>
           <div className={s.emptyPost}>
             <IconPlusSquareOutline height={50} width={50} />
@@ -32,13 +32,7 @@ export const ProfilePosts = ({ userId, dataPosts }: Props) => {
       )}
       {postsDataForRender?.map((post) => (
         <div key={post.id} id={post.id} className={s.postItem} style={{ position: 'relative' }}>
-          <PostMenuActions
-            postOwnerId={post.ownerId}
-            postId={post.id}
-            userId={userId}
-            description={''}
-            className={s.postMenuActions}
-          />
+          <PostMenuActions postOwnerId={post.ownerId} postId={post.id} userId={userId} className={s.postMenuActions} />
           <Link href={Path.ViewPost(userId, post.id)} scroll={false}>
             {post.images.small.length > 0 && (
               <Image
