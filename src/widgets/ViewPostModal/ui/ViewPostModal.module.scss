@@ -18,80 +18,15 @@
   flex: 0 0 50%;
   min-width: 0;
   background-color: colors.color(dark,300);
-}
-.publicationHeadLine{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 11px 20px;
-}
-.postDescription{
-  overflow-wrap: break-word;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 25px;
-  border-bottom: 1px solid colors.color(dark, 100);
-  p {
-    padding: 5px 10px;
-    background: #232323;
-    line-height: 1.5;
-  }
-}
-.readMore{
-  position: absolute;
-  bottom: -21px;
-  right: 0;
-  background: #181818;
-  border: none;
-  cursor: pointer;
-  padding: 2px 8px;
-  font-size: 12px;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-.publicationComments{
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 11px 20px;
-  .commentWrapper{
-    display: flex;
-    gap: 10px;
-    strong {
-      display: block;
-      margin-bottom: 10px;
-    }
-    p {
-      font-weight: 100;
-      margin-bottom: 10px;
-    }
-    .iconHeart, .iconHeartOutline{
-      padding-top: 30px;
-    }
-    .iconHeart{
-      color: red;
-    }
-    .commentPanel{
-      display: flex;
-      gap: 10px;
-      color: colors.color(light, 900);
-      font-size: 12px;
-      .like, .answer{
-        font-weight: 600;
-      }
-    }
-  }
-
 }
+
 .customSwiper{
   padding: 0;
   background: #000;
 }
-.publicationProfileImage{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+
 .slideImageWrapper{
   position: relative;
   width: 100%;
@@ -109,73 +44,7 @@
     object-fit: contain;
   }
 }
-.postActions{
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: nowrap;
-  & .postActionsLeft{
-  display: flex;
-  gap: 24px;
-  }
-}
-.postData{
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 10px  20px 5px;
-  border-top: 1px solid colors.color(dark, 100);
-}
-.likesPostContainer{
-  margin-top: 12px;
-display: flex;
-  gap: 12px;
-}
-.likeImagesContainer{
-  & .likeImage:nth-child(1){
-    z-index: 3;
-  }
-  & .likeImage:nth-child(2){
-    z-index: 2;
-    margin-left: -8px;
-  }
-  & .likeImage:nth-child(3){
-    z-index: 1;
-    margin-left: -8px;
-  }
-}
-.date{
-  margin-bottom: 7px;
-  @include typography.small_text;
-  font-family: typography.$font-family;
-  color: colors.color(light,900);
-}
-.addCommentContainer{
-  padding: 24px 20px 5px;
-  border-top: 1px solid colors.color(dark, 100);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
-.inputComment{
-  margin: 0;
-  width: 100%;
-  padding: 18px 0 18px 24px;
-  border: none;
-  background: none;
-  &::placeholder{
-    @include typography.regular_text_14;
-    font-family: typography.$font-family;
-    color: colors.color(light,900);
-  }
-&:focus{
-  border: none;
-  outline: none;
-}
-}
-.commentText{
-  width: 100% ;
-}
 .buttonComment{
   padding: 18px 24px;
   border: none;
@@ -187,37 +56,3 @@ display: flex;
   }
 }
 
-.likeButton {
-  background: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.15s ease, opacity 0.15s ease;
-
-
-  svg {
-    width: 24px;
-    height: 24px;
-    transition: fill 0.25s ease;
-  }
-
-  &:hover {
-    transform: scale(1.1);
-    opacity: 0.9;
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-
-  &.liked {
-    svg {
-      color: colors.color(danger, 500);
-      stroke: colors.color(danger, 500);
-    }
-  }
-}

@@ -29,7 +29,7 @@ export const userApi = baseApi.injectEndpoints({
       query: ({ pageParam, queryArg }) => {
         return {
           url: `users`,
-          params: { endCursorUserId: pageParam, pageSize: '10', search: queryArg.search },
+          params: { endCursorUserId: pageParam, pageSize: '20', search: queryArg.search },
         }
       },
     }),

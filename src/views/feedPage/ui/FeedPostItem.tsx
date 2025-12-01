@@ -31,7 +31,7 @@ export const FeedPostItem = ({ postItem }: Props) => {
           <span>•</span>
           <p className={s.dateText}>{timeAgo(postItem.createdAt)}</p>
         </FlexContainer>
-        <PostMenuActions postId={postItem.id} userId={postItem.ownerId} description={postItem.description} />
+        <PostMenuActions postId={postItem.id} userId={postItem.ownerId} />
       </FlexContainer>
 
       <CustomSwiper
@@ -56,9 +56,9 @@ export const FeedPostItem = ({ postItem }: Props) => {
 
       <FlexContainer justify={'between'}>
         <FlexContainer gap={20}>
-          <IconHeartOutline/>
-          <IconMessageCircleOutline/>
-          <IconPaperPlaneOutline/>
+          <IconHeartOutline />
+          <IconMessageCircleOutline />
+          <IconPaperPlaneOutline />
         </FlexContainer>
         <IconBookmarkOutline />
       </FlexContainer>
@@ -72,7 +72,9 @@ export const FeedPostItem = ({ postItem }: Props) => {
           <span className={s.blockDescription_text}>{postItem.description}</span>
         </div>
       </FlexContainer>
-      <Link className={s.linkToComment} href={Path.ViewPost(postItem.ownerId, postItem.id)}>View All Comments ()</Link>
+      <Link className={s.linkToComment} href={Path.ViewPost(postItem.ownerId, postItem.id)}>
+        View All Comments ()
+      </Link>
       <FlexContainer>
         <CreatePostComment postId={postItem.id} />
       </FlexContainer>

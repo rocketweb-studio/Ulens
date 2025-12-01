@@ -14,6 +14,7 @@ export const postsApi = baseApi.injectEndpoints({
     }),
     getPostById: build.query<GetPostByIdResponse, { postId: string }>({
       query: ({ postId }) => `posts/${postId}`,
+      providesTags: ['GetPostById'],
     }),
     createPost: build.mutation<{ id: string }, { description: string }>({
       query: (body) => ({
@@ -29,7 +30,7 @@ export const postsApi = baseApi.injectEndpoints({
         url: `posts/${postId}`,
         body,
       }),
-      invalidatesTags: ['GetPostsByUsedId'],
+      invalidatesTags: ['GetPostById'],
     }),
 
     deletePost: build.mutation<void, { postId: string; userId: string }>({
@@ -79,34 +80,35 @@ export const postsApi = baseApi.injectEndpoints({
         },
       },
       query: ({ pageParam }) => ({
-        method: 'get',
+        method: 'GET',
         url: `posts/followings`,
         params: { endCursorPostId: pageParam, pageSize: '1' },
       }),
     }),
-    toggleLikePost: build.mutation<void, { postId: string; like: boolean }>({
-      query: ({ postId, like }) => ({
+    toggleLike: build.mutation<void, { likedItemId: string; like: boolean; likedItemType: 'POST' | 'COMMENT' }>({
+      query: ({ likedItemId, like, likedItemType }) => ({
         method: 'POST',
         url: `/posts/like`,
         body: {
-          likedItemType: 'POST',
-          likedItemId: postId,
+          likedItemType,
+          likedItemId,
           like,
         },
       }),
-      invalidatesTags: ['GetPostsByUsedId'],
+      invalidatesTags: ['GetPostById', 'GetPostsByUsedId'],
     }),
-
+    getPostComments: build.query<GetPostCommentsType, { postId: string }>({
+      query: ({ postId }) => `posts/${postId}/comments`,
+      providesTags: ['GetPostComments'],
+      keepUnusedDataFor: 10,
+    }),
     createComment: build.mutation<void, { postId: string; content: string }>({
       query: ({ postId, ...body }) => ({
         method: 'POST',
         url: `/posts/${postId}/comments`,
         body,
       }),
-      invalidatesTags: ['GetPostsByUsedId'],
-    }),
-    getPostComments: build.query<GetPostCommentsType, { postId: string }>({
-      query: ({ postId }) => `posts/${postId}/comments`,
+      invalidatesTags: ['GetPostComments'],
     }),
   }),
 })
@@ -119,7 +121,7 @@ export const {
   useUpdatePostMutation,
   useUploadPostImagesMutation,
   useGetFollowingsPostsInfiniteQuery,
-  useToggleLikePostMutation,
+  useToggleLikeMutation,
   useCreateCommentMutation,
   useGetPostCommentsQuery,
 } = postsApi

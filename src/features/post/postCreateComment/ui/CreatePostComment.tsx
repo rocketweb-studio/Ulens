@@ -9,6 +9,7 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { ServerErrorType } from '@/src/features/auth/singUp/model/types'
 import s from './CreatePostComment.module.scss'
 import { Button, Input } from '@rocketweb-studio/ulens-ui-kit'
+import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 
 type Props = {
   postId: string
@@ -16,7 +17,8 @@ type Props = {
 }
 
 export const CreatePostComment = ({ postId, withBorderBottom = false }: Props) => {
-  const [createComment, {isLoading}] = useCreateCommentMutation()
+  const { data: meData } = useGetMeQuery()
+  const [createComment, { isLoading }] = useCreateCommentMutation()
 
   const {
     register,
@@ -68,21 +70,31 @@ export const CreatePostComment = ({ postId, withBorderBottom = false }: Props) =
     }
   }
 
+  if (!meData) return null
+
   return (
-    <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
-      <div className={s.formWrapper}>
-        <Input
-          className={s.inputAddComment}
-          register={register}
-          id={'content'}
-          name={'content'}
-          placeholder={'Add a Comment...'}
-          error={errors.content?.message}
-        />
-        <Button className={s.buttonSubmit} variant={'text'} disabled={!isValid || isLoading} size={'large'} withoutPadding>
-          Publish
-        </Button>
-      </div>
-    </form>
+    <div className={s.addCommentContainer}>
+      <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
+        <div className={s.formWrapper}>
+          <Input
+            className={s.inputAddComment}
+            register={register}
+            id={'content'}
+            name={'content'}
+            placeholder={'Add a Comment...'}
+            error={errors.content?.message}
+          />
+          <Button
+            className={s.buttonSubmit}
+            variant={'text'}
+            disabled={!isValid || isLoading}
+            size={'large'}
+            withoutPadding
+          >
+            Publish
+          </Button>
+        </div>
+      </form>
+    </div>
   )
 }

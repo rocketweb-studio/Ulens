@@ -4,31 +4,28 @@ import { useEffect, useRef, useState } from 'react'
 import s from './postMenuActions.module.scss'
 import { IconEdit2, IconTrash } from '@rocketweb-studio/ulens-ui-kit'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
-import { PostEditModal } from '@/src/features/post/postEdit'
 import { PostDeleteModal } from '@/src/features/post/postDelete'
 
 type Props = {
   postOwnerId?: string
   postId: string
   userId: string
-  description: string
   className?: string
   onPostDeleted?: () => void
-  onDescriptionUpdated?: (newDescription: string) => void
+  handleSetEditMode?: () => void
 }
 
 export const PostMenuActions = ({
   postOwnerId,
   postId,
   userId,
-  description,
   className,
   onPostDeleted,
-  onDescriptionUpdated,
+  handleSetEditMode = () => {},
 }: Props) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
-  const [editOpen, setEditOpen] = useState(false)
+  //const [editOpen, setEditOpen] = useState(false)
 
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -61,7 +58,13 @@ export const PostMenuActions = ({
         <>
           {isAuth && meData?.id === postOwnerId ?
             <div className={s.menu}>
-              <button className={s.menuItem} onClick={() => setEditOpen(true)}>
+              <button
+                className={s.menuItem}
+                onClick={() => {
+                  setMenuOpen(false)
+                  handleSetEditMode()
+                }}
+              >
                 <IconEdit2 width={16} height={16} />
                 Edit Post
               </button>
@@ -83,15 +86,15 @@ export const PostMenuActions = ({
           }
         </>
       )}
-      {editOpen && (
-        <PostEditModal
-          postId={postId}
-          initialDescription={description}
-          isOpen={editOpen}
-          onClose={() => setEditOpen(false)}
-          onUpdated={onDescriptionUpdated}
-        />
-      )}
+      {/*{editOpen && (*/}
+      {/*  <PostEditModal*/}
+      {/*    postId={postId}*/}
+      {/*    initialDescription={description}*/}
+      {/*    isOpen={editOpen}*/}
+      {/*    onClose={() => setEditOpen(false)}*/}
+      {/*    onUpdated={onDescriptionUpdated}*/}
+      {/*  />*/}
+      {/*)}*/}
       {deleteModalOpen && (
         <PostDeleteModal
           postId={postId}
