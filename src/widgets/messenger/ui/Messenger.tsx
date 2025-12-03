@@ -207,7 +207,9 @@ export const Messenger = () => {
           )}
         </div>
         <div className={s.sendMessage}>
-          <SendMessage roomId={activeChat?.id ? activeChat?.id : null} isDisable={activeChat === null} />
+          {activeChat !== null && (
+            <SendMessage roomId={activeChat?.id ? activeChat?.id : null} isDisable={activeChat === null} />
+          )}
         </div>
       </div>
     </FlexContainer>

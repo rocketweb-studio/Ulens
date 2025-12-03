@@ -7,7 +7,7 @@
 .formWrapper {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 10px;
 
   & .buttonSubmit {
@@ -19,9 +19,10 @@
 .inputSendMessage {
   flex-grow: 1;
   width: initial;
+  padding-bottom: 0;
 
   & input {
-    padding: 3px;
+    padding: 13px;
     border: none;
 
     &:hover {
