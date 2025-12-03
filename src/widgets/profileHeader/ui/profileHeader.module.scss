@@ -56,12 +56,17 @@
       flex-direction: column;
       gap: 5px;
       width: 200px;
+      cursor: pointer;
+      transition: color 0.3s ease;
       @media (max-width: 1250px){
         width: 100px;
       }
     }
     @media (max-width: 850px){
       justify-content: space-between;
+    }
+    .statisticItem:hover{
+      color: #197dff;
     }
   }
   @media (max-width: 850px) {grid-template-columns: 1fr;}

@@ -17,7 +17,7 @@ export type ImageSizeType = {
 }
 
 export type ImagesType = {
-  small: ImageSizeType
+  small: ImageSizeType[]
   medium: ImageSizeType[]
 }
 
@@ -52,7 +52,10 @@ export type GetPostByIdResponse = {
   likeCount: number
   isLiked: boolean
   avatarWhoLikes: {
-    avatars: ImagesType
+    avatars: {
+      small: ImageSizeType
+      medium: ImageSizeType
+    }
     userId: string
   }[]
 }
