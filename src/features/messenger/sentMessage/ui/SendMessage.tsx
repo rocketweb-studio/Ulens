@@ -34,7 +34,6 @@ export const SendMessage = ({ roomId }: Props) => {
         roomId,
         content: data.message,
       })
-      debugger
       reset()
     } catch (error) {
       console.error('Failed to send message:', error)

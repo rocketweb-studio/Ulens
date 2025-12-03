@@ -17,6 +17,7 @@ import { SendMessage } from '@/src/features/messenger/sentMessage'
 import { Message } from '@/src/entities/message'
 import { io } from 'socket.io-client'
 import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
+import { dateFormatterForChat } from '@/src/shared/utils'
 
 export const Messenger = () => {
   const { data: RoomsList, isSuccess: isGetRoomsSuccess, isLoading: isGetRoomsSuccessLoading } = useGetRoomsQuery()
@@ -38,7 +39,6 @@ export const Messenger = () => {
     roomId: activeChat?.id || 0,
   })
   const token = localStorage.getItem('accessToken')
-  const [messages, setMessages] = useState<any[]>([])
 
   const initActiveChat = () => {
     if (RoomsList) {
@@ -81,11 +81,10 @@ export const Messenger = () => {
           'getMessagesByRoomId',
           { roomId: activeChat.id !== null ? activeChat.id : 0 },
           (draft) => {
-            draft.push(msg)
+            draft.unshift(msg)
           },
         ),
       )
-      setMessages((prev) => [...prev, msg])
     })
 
     return () => {
@@ -108,9 +107,6 @@ export const Messenger = () => {
             avatarOwner={activeChat?.roomUser.avatar}
           />
           <span>{`${activeChat?.roomUser.firstName} ${activeChat?.roomUser.lastName}`}</span>
-          {messages.map((message) => (
-            <div>{message.content}</div>
-          ))}
         </div>
         <div className={s.previewList}>
           <PreviewList
@@ -119,10 +115,7 @@ export const Messenger = () => {
                 name: `${item.roomUser.firstName} ${item.roomUser.lastName}`,
                 userId: item.roomUser.id,
                 message: item.lastMessage?.content || 'No message',
-                date:
-                  item.lastMessage ?
-                    `${new Date(item.lastMessage.createdAt).getUTCHours()}:${new Date(item.lastMessage.createdAt).getMinutes()}`
-                  : '',
+                date: item.lastMessage ? dateFormatterForChat(item.lastMessage.createdAt) : '',
                 id: item.id,
                 avatar: item.roomUser.avatar,
                 isActive: activeChat?.id === item.id,
@@ -142,16 +135,17 @@ export const Messenger = () => {
           {activeChat &&
             !isLoadingRoomMessages &&
             !isFetchingRoomMessages &&
+            RoomMessages &&
             RoomMessages?.map((item) => (
               <Message
                 key={item.id}
                 type={'mine'}
                 message={item.content}
-                date={item.createdAt}
+                date={dateFormatterForChat(item.createdAt)}
                 avatar={''}
                 friendName={''}
               />
-            ))}
+            )).reverse()}
         </div>
         <div className={s.sendMessage}>
           <SendMessage roomId={activeChat?.id} />
