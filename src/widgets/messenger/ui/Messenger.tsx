@@ -37,7 +37,7 @@ export const Messenger = () => {
   } = useGetRoomsQuery()
   const router = useRouter()
   const pathname = usePathname()
-  const { data: meData, isSuccess: isSuccessMe } = useGetMeQuery()
+  const { data: meData } = useGetMeQuery()
   const params = useSearchParams()
   const dispatch = useAppDispatch()
   const activeChatParams = params.get('activeChat')
