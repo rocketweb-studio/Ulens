@@ -1,1 +1,1 @@
-export { Messenger } from './ui/Messenger'
+export { MessengerWidget } from './ui/Messenger'

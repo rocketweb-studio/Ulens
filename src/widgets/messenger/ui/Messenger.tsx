@@ -11,7 +11,7 @@ import {
   useGetRoomsQuery,
 } from '@/src/entities/messenger'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { LastMessage, UserRoom } from '@/src/entities/messenger/api/messengerApi.type'
 import { UserAvatar } from '@/src/entities/userProfile'
 import { SendMessage } from '@/src/features/messenger/sentMessage'
@@ -213,5 +213,13 @@ export const Messenger = () => {
         </div>
       </div>
     </FlexContainer>
+  )
+}
+
+export const MessengerWidget = () => {
+  return (
+    <Suspense fallback={<div> Loading...</div>}>
+      <Messenger />
+    </Suspense>
   )
 }
