@@ -20,6 +20,7 @@ import { io } from 'socket.io-client'
 import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
 import { dateFormatterForChat } from '@/src/shared/utils'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
+import Scrollbars from 'react-custom-scrollbars'
 
 export const Messenger = () => {
   const {
@@ -143,23 +144,25 @@ export const Messenger = () => {
           )}
         </div>
         <div className={s.previewList}>
-          <PreviewList
-            data={
-              RoomsList?.map((item) => ({
-                name: `${item.roomUser.firstName} ${item.roomUser.lastName}`,
-                userId: item.roomUser.id,
-                message: item.lastMessage?.content || 'No message',
-                date: item.lastMessage ? dateFormatterForChat(item.lastMessage.createdAt) : '',
-                id: item.id,
-                avatar: item.roomUser.avatar,
-                isActive: activeChat?.id === item.id,
-              })) || []
-            }
-            changeActiveChat={(id, userId) => {
-              router.push(`${pathname}?activeChat=${userId}`)
-              setActiveChat((prevState) => RoomsList?.find((item) => item.id === id) || prevState)
-            }}
-          />
+          <Scrollbars>
+            <PreviewList
+              data={
+                RoomsList?.map((item) => ({
+                  name: `${item.roomUser.firstName} ${item.roomUser.lastName}`,
+                  userId: item.roomUser.id,
+                  message: item.lastMessage?.content || 'No message',
+                  date: item.lastMessage ? dateFormatterForChat(item.lastMessage.createdAt) : '',
+                  id: item.id,
+                  avatar: item.roomUser.avatar,
+                  isActive: activeChat?.id === item.id,
+                })) || []
+              }
+              changeActiveChat={(id, userId) => {
+                router.push(`${pathname}?activeChat=${userId}`)
+                setActiveChat((prevState) => RoomsList?.find((item) => item.id === id) || prevState)
+              }}
+            />
+          </Scrollbars>
         </div>
         <div className={s.chatView}>
           {RoomMessages?.length === 0 && !isFetchingRoomMessages && !isLoadingRoomMessages && activeChat !== null && (
@@ -167,20 +170,22 @@ export const Messenger = () => {
           )}
           {activeChat === null && <div className={s.notActiveChatBlock}>Choose who you would like to talk to</div>}
           {isLoadingRoomMessages || (isFetchingRoomMessages && <div>Loading...</div>)}
-          {activeChat &&
-            !isLoadingRoomMessages &&
-            !isFetchingRoomMessages &&
-            RoomMessages &&
-            RoomMessages?.map((item) => (
-              <Message
-                key={item.id}
-                type={checkAuthorMessage(item)}
-                message={item.content}
-                date={dateFormatterForChat(item.createdAt)}
-                avatar={''}
-                friendName={`${item.author.firstName} ${item.author.lastName}`}
-              />
-            )).reverse()}
+          {activeChat && !isLoadingRoomMessages && !isFetchingRoomMessages && RoomMessages && (
+            <Scrollbars>
+              <div className={s.messagesContainer}>
+                {RoomMessages?.map((item) => (
+                  <Message
+                    key={item.id}
+                    type={checkAuthorMessage(item)}
+                    message={item.content}
+                    date={dateFormatterForChat(item.createdAt)}
+                    avatar={''}
+                    friendName={`${item.author.firstName} ${item.author.lastName}`}
+                  />
+                )).reverse()}
+              </div>
+            </Scrollbars>
+          )}
         </div>
         <div className={s.sendMessage}>
           <SendMessage roomId={activeChat?.id ? activeChat?.id : null} isDisable={activeChat === null} />
