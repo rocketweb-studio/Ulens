@@ -1,27 +1,29 @@
 'use client'
 
-import { Input } from '@/src/shared/ui'
+import { Button, Input } from '@/src/shared/ui'
 import styles from './SignUp.module.scss'
-import { Button } from '@/src/shared/ui'
 import Image from 'next/image'
 import googleSvg from '@/public/google-svg.svg'
 import gitHubSvg from '@/public/github-svg.svg'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { useRegistrationMutation } from '@/src/entities/auth/api/authApi'
+import { useGetMeQuery, useRegistrationMutation } from '@/src/entities/auth/api/authApi'
 import { useModal } from '@/src/shared/hooks/useModal'
 import { Modal } from '@/src/shared/ui/Modal/Modal'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { ServerErrorType } from 'src/features/auth/singUp/model/types'
 import { isFetchBaseQueryError } from '@/src/shared/utils'
 import { Path } from '@/src/shared/router/Path'
 import { RegistrationInputs, registrationSchema } from '@/src/entities/auth/model/schemas/registrationSchema'
+import { useRouter } from 'next/navigation'
 
 const COUNT_SYMBOLS_FOR_START_VALIDATE = 6
 
 export const SignUp = () => {
+  const { isSuccess, isLoading, isError } = useGetMeQuery()
+  const router = useRouter()
   const [registration] = useRegistrationMutation()
   const { isOpen, openModal, closeModal } = useModal()
   const [email, setEmail] = useState('')
@@ -84,107 +86,117 @@ export const SignUp = () => {
     }
   }
 
+  useEffect(() => {
+    if (isSuccess) {
+      router.replace(Path.Feed)
+    }
+  }, [])
+
   return (
-    <div className={styles.formWrapper}>
-      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-        <h2 className={styles.title}>Sign Up</h2>
-        <div className={styles.oAuthWrapper}>
-          <a href='https://ulens.org/api/v1/auth/google-login'>
-            <Image src={googleSvg} alt={'Google'} />
-          </a>
-          <a href='https://ulens.org/api/v1/auth/github-login'>
-            <Image src={gitHubSvg} alt={'GitHub'} />
-          </a>
+    <div>
+      {isError && (
+        <div className={styles.formWrapper}>
+          <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+            <h2 className={styles.title}>Sign Up</h2>
+            <div className={styles.oAuthWrapper}>
+              <a href='https://ulens.org/api/v1/auth/google-login'>
+                <Image src={googleSvg} alt={'Google'} />
+              </a>
+              <a href='https://ulens.org/api/v1/auth/github-login'>
+                <Image src={gitHubSvg} alt={'GitHub'} />
+              </a>
+            </div>
+            <div className={styles.inputsTextWrapper}>
+              <Input
+                register={register}
+                name={'userName'}
+                onChange={(evt) => handleOnChangeInputTypeValue(evt, 'userName')}
+                error={errors.userName?.message}
+                placeholder={'Epam11'}
+                label={'Username'}
+                id={'userName'}
+              />
+              <Input
+                register={register}
+                name={'email'}
+                error={errors.email?.message}
+                placeholder={'Epam@epam.com'}
+                label={'Email'}
+                id={'email'}
+              />
+              <Input
+                register={register}
+                name={'password'}
+                onChange={(evt) => handleOnChangeInputTypeValue(evt, 'password')}
+                error={errors.password?.message}
+                label={'Password'}
+                type={'password'}
+                showPasswordToggle
+                id={'password'}
+              />
+              <Input
+                register={register}
+                name={'passwordConfirmation'}
+                error={errors.passwordConfirmation?.message}
+                label={'Password Confirmation'}
+                type={'password'}
+                showPasswordToggle
+                id={'passwordConfirmation'}
+              />
+            </div>
+            <div className={styles.signUpWrapper}>
+              <Input
+                register={register}
+                onChange={() => trigger('agreePolitics')}
+                name={'agreePolitics'}
+                error={errors.agreePolitics?.message}
+                label={
+                  <span>
+                    I agree to the{' '}
+                    <Button
+                      tagType={'link'}
+                      path={Path.TermOfService}
+                      variant={'in-text'}
+                      size={'inherit'}
+                      underlineText
+                      withoutPadding
+                    >
+                      Terms of Service
+                    </Button>{' '}
+                    and{' '}
+                    <Button
+                      tagType={'link'}
+                      path={Path.PrivacyPolicy}
+                      variant={'in-text'}
+                      size={'inherit'}
+                      underlineText
+                      withoutPadding
+                    >
+                      Privacy Policy
+                    </Button>
+                  </span>
+                }
+                type={'checkbox'}
+                id={'agreePolitics'}
+              />
+              <Button type='submit' disabled={!isValid}>
+                Sign Up
+              </Button>
+            </div>
+            <div className={styles.signInWrapper}>
+              <p className={styles.signInText}>Do you have an account?</p>
+              <Button tagType={'link'} path={Path.SignIn} type={'button'} variant={'text'}>
+                Sign In
+              </Button>
+            </div>
+          </form>
+          <Modal isOpen={isOpen} onClose={closeModal} modalTitle='Email sent'>
+            <div>
+              <p>We have sent a link to confirm your email to {email}</p>
+            </div>
+          </Modal>
         </div>
-        <div className={styles.inputsTextWrapper}>
-          <Input
-            register={register}
-            name={'userName'}
-            onChange={(evt) => handleOnChangeInputTypeValue(evt, 'userName')}
-            error={errors.userName?.message}
-            placeholder={'Epam11'}
-            label={'Username'}
-            id={'userName'}
-          />
-          <Input
-            register={register}
-            name={'email'}
-            error={errors.email?.message}
-            placeholder={'Epam@epam.com'}
-            label={'Email'}
-            id={'email'}
-          />
-          <Input
-            register={register}
-            name={'password'}
-            onChange={(evt) => handleOnChangeInputTypeValue(evt, 'password')}
-            error={errors.password?.message}
-            label={'Password'}
-            type={'password'}
-            showPasswordToggle
-            id={'password'}
-          />
-          <Input
-            register={register}
-            name={'passwordConfirmation'}
-            error={errors.passwordConfirmation?.message}
-            label={'Password Confirmation'}
-            type={'password'}
-            showPasswordToggle
-            id={'passwordConfirmation'}
-          />
-        </div>
-        <div className={styles.signUpWrapper}>
-          <Input
-            register={register}
-            onChange={() => trigger('agreePolitics')}
-            name={'agreePolitics'}
-            error={errors.agreePolitics?.message}
-            label={
-              <span>
-                I agree to the{' '}
-                <Button
-                  tagType={'link'}
-                  path={Path.TermOfService}
-                  variant={'in-text'}
-                  size={'inherit'}
-                  underlineText
-                  withoutPadding
-                >
-                  Terms of Service
-                </Button>{' '}
-                and{' '}
-                <Button
-                  tagType={'link'}
-                  path={Path.PrivacyPolicy}
-                  variant={'in-text'}
-                  size={'inherit'}
-                  underlineText
-                  withoutPadding
-                >
-                  Privacy Policy
-                </Button>
-              </span>
-            }
-            type={'checkbox'}
-            id={'agreePolitics'}
-          />
-          <Button type='submit' disabled={!isValid}>
-            Sign Up
-          </Button>
-        </div>
-        <div className={styles.signInWrapper}>
-          <p className={styles.signInText}>Do you have an account?</p>
-          <Button tagType={'link'} path={Path.SignIn} type={'button'} variant={'text'}>
-            Sign In
-          </Button>
-        </div>
-      </form>
-      <Modal isOpen={isOpen} onClose={closeModal} modalTitle='Email sent'>
-        <div>
-          <p>We have sent a link to confirm your email to {email}</p>
-        </div>
-      </Modal>
+      )}
     </div>
   )
 }
