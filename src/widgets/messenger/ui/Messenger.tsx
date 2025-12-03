@@ -18,9 +18,16 @@ import { Message } from '@/src/entities/message'
 import { io } from 'socket.io-client'
 import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
 import { dateFormatterForChat } from '@/src/shared/utils'
+import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 
 export const Messenger = () => {
-  const { data: RoomsList, isSuccess: isGetRoomsSuccess, isLoading: isGetRoomsSuccessLoading } = useGetRoomsQuery()
+  const {
+    data: RoomsList,
+    isSuccess: isGetRoomsSuccess,
+    isLoading: isGetRoomsSuccessLoading,
+    refetch: refetchRoomList,
+  } = useGetRoomsQuery()
+  const { data: meData, isSuccess } = useGetMeQuery()
   const params = useSearchParams()
   const dispatch = useAppDispatch()
   const activeChatParams = params.get('activeChat')
@@ -38,7 +45,6 @@ export const Messenger = () => {
   } = useGetMessagesByRoomIdQuery({
     roomId: activeChat?.id || 0,
   })
-  const token = localStorage.getItem('accessToken')
 
   const initActiveChat = () => {
     if (RoomsList) {
@@ -68,11 +74,14 @@ export const Messenger = () => {
   }, [])
 
   useEffect(() => {
+    const token = localStorage.getItem('accessToken')
+
     if (!activeChat) return
     const socket = io('https://ulens.org/ws', { auth: { token } })
 
     socket.on('connect', () => {
-      socket.emit('SUBSCRIBE_CHAT', { roomId: activeChat?.id || 0 })
+      socket.emit('SUBSCRIBE_CHAT', { roomId: activeChat?.id })
+      socket.emit('SUBSCRIBE_ALL_ROOM_MESSAGES', { userId: meData?.id })
     })
 
     socket.on('NEW_MESSAGE', (msg) => {
@@ -87,10 +96,14 @@ export const Messenger = () => {
       )
     })
 
+    socket.on('NEW_GLOBAL_MESSAGE', () => {
+      refetchRoomList()
+    })
+
     return () => {
       socket.disconnect()
     }
-  }, [activeChat, token])
+  }, [activeChat])
 
   return (
     <FlexContainer className={s.wrapper}>

@@ -23,10 +23,10 @@ export const SendMessage = ({ roomId }: Props) => {
     },
   })
 
-  const token = localStorage.getItem('accessToken')
-
   const onSubmit: SubmitHandler<MessageInput> = async (data) => {
     try {
+      const token = localStorage.getItem('accessToken')
+
       if (!roomId) return
       const socket = io('https://ulens.org/ws', { auth: { token } })
 
