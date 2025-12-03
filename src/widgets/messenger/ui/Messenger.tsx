@@ -9,7 +9,7 @@ import {
   useGetMessagesByRoomIdQuery,
   useGetRoomsQuery,
 } from '@/src/entities/messenger'
-import { useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { LastMessage, UserRoom } from '@/src/entities/messenger/api/messengerApi.type'
 import { UserAvatar } from '@/src/entities/userProfile'
@@ -24,10 +24,12 @@ export const Messenger = () => {
   const {
     data: RoomsList,
     isSuccess: isGetRoomsSuccess,
-    isLoading: isGetRoomsSuccessLoading,
+    isLoading: isGetRoomsLoading,
     refetch: refetchRoomList,
   } = useGetRoomsQuery()
-  const { data: meData, isSuccess } = useGetMeQuery()
+  const router = useRouter()
+  const pathname = usePathname()
+  const { data: meData } = useGetMeQuery()
   const params = useSearchParams()
   const dispatch = useAppDispatch()
   const activeChatParams = params.get('activeChat')
@@ -37,7 +39,7 @@ export const Messenger = () => {
     id: number | null
     roomUser: UserRoom
     lastMessage: LastMessage
-  }>({ id: null, roomUser: {} as UserRoom, lastMessage: {} as LastMessage })
+  } | null>({ id: null, roomUser: {} as UserRoom, lastMessage: {} as LastMessage })
   const {
     data: RoomMessages,
     isLoading: isLoadingRoomMessages,
@@ -49,27 +51,33 @@ export const Messenger = () => {
   const initActiveChat = () => {
     if (RoomsList) {
       const activeChatFromParams = RoomsList.find((item) => item.roomUser.id === activeChatParams)
-      if (activeChatFromParams) {
-        setActiveChat(activeChatFromParams)
-      }
+      activeChatFromParams ? setActiveChat(activeChatFromParams) : setActiveChat(null)
     }
   }
 
   const createNewRoom = useCallback(
     async (targetUserId: string) => {
-      debugger
       await createRoom({ targetUserId }).unwrap()
     },
     [createRoom],
   )
+
   useEffect(() => {
     initActiveChat()
   }, [RoomsList])
 
   useEffect(() => {
-    if (!isGetRoomsSuccessLoading && !activeChat && activeChatParams && isGetRoomsSuccess && !hasCreatedRoom.current) {
+    if (
+      !isGetRoomsLoading &&
+      activeChat?.id === null &&
+      activeChatParams &&
+      isGetRoomsSuccess &&
+      !hasCreatedRoom.current
+    ) {
       hasCreatedRoom.current = true
-      createNewRoom(activeChatParams)
+      if (!RoomsList.find((item) => item.roomUser.id === activeChatParams)) {
+        createNewRoom(activeChatParams)
+      }
     }
   }, [])
 
@@ -112,14 +120,18 @@ export const Messenger = () => {
           <Input placeholder={'Input search'} />
         </div>
         <div className={s.header}>
-          <UserAvatar
-            userName={`${activeChat?.roomUser.firstName} ${activeChat?.roomUser.lastName}`}
-            mode={'size'}
-            width={48}
-            height={48}
-            avatarOwner={activeChat?.roomUser.avatar}
-          />
-          <span>{`${activeChat?.roomUser.firstName} ${activeChat?.roomUser.lastName}`}</span>
+          {activeChat !== null && (
+            <>
+              <UserAvatar
+                userName={`${activeChat?.roomUser.firstName} ${activeChat?.roomUser.lastName}`}
+                mode={'size'}
+                width={48}
+                height={48}
+                avatarOwner={activeChat?.roomUser.avatar}
+              />
+              <span>{`${activeChat?.roomUser.firstName} ${activeChat?.roomUser.lastName}`}</span>
+            </>
+          )}
         </div>
         <div className={s.previewList}>
           <PreviewList
@@ -134,16 +146,17 @@ export const Messenger = () => {
                 isActive: activeChat?.id === item.id,
               })) || []
             }
-            changeActiveChat={(id) =>
+            changeActiveChat={(id, userId) => {
+              router.push(`${pathname}?activeChat=${userId}`)
               setActiveChat((prevState) => RoomsList?.find((item) => item.id === id) || prevState)
-            }
+            }}
           />
         </div>
         <div className={s.chatView}>
-          {RoomMessages?.length === 0 && !isFetchingRoomMessages && !isLoadingRoomMessages && (
+          {RoomMessages?.length === 0 && !isFetchingRoomMessages && !isLoadingRoomMessages && activeChat !== null && (
             <div className={s.notActiveChatBlock}>No messages</div>
           )}
-          {!activeChat && <div className={s.notActiveChatBlock}>Choose who you would like to talk to</div>}
+          {activeChat === null && <div className={s.notActiveChatBlock}>Choose who you would like to talk to</div>}
           {isLoadingRoomMessages || (isFetchingRoomMessages && <div>Loading...</div>)}
           {activeChat &&
             !isLoadingRoomMessages &&
@@ -161,7 +174,7 @@ export const Messenger = () => {
             )).reverse()}
         </div>
         <div className={s.sendMessage}>
-          <SendMessage roomId={activeChat?.id} />
+          <SendMessage roomId={activeChat?.id ? activeChat?.id : null} isDisable={activeChat === null} />
         </div>
       </div>
     </FlexContainer>

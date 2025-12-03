@@ -7,9 +7,10 @@ import { io } from 'socket.io-client'
 
 type Props = {
   roomId: number | null
+  isDisable: boolean
 }
 
-export const SendMessage = ({ roomId }: Props) => {
+export const SendMessage = ({ roomId, isDisable = false }: Props) => {
   const {
     register,
     handleSubmit,
@@ -50,8 +51,15 @@ export const SendMessage = ({ roomId }: Props) => {
             id={'message'}
             name={'message'}
             placeholder={'Type Message...'}
+            disabled={isDisable}
           />
-          <Button className={s.buttonSubmit} variant={'text'} size={'large'} withoutPadding disabled={!isValid}>
+          <Button
+            className={s.buttonSubmit}
+            variant={'text'}
+            size={'large'}
+            withoutPadding
+            disabled={!isValid || isDisable}
+          >
             Send message
           </Button>
         </div>

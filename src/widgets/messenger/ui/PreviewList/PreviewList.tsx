@@ -11,7 +11,7 @@ type Props = {
     isActive: boolean
     avatar: string
   }[]
-  changeActiveChat: (id: number) => void
+  changeActiveChat: (id: number, userId: string) => void
 }
 
 export const PreviewList = ({ data, changeActiveChat }: Props) => {

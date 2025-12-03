@@ -8,13 +8,13 @@ type Props = {
   userId: string
   isActive: boolean
   chatId: number
-  changeActiveChat: (id: number) => void
+  changeActiveChat: (id: number, userId: string) => void
   avatar: string
 }
 
 export const ChatPreview = ({ name, message, date, userId, isActive, chatId, changeActiveChat, avatar }: Props) => {
   return (
-    <div className={`${s.chatPreview} ${isActive ? s.active : ''}`} onClick={() => changeActiveChat(chatId)}>
+    <div className={`${s.chatPreview} ${isActive ? s.active : ''}`} onClick={() => changeActiveChat(chatId, userId)}>
       <div className={s.avatar}>
         <UserAvatar userName={name} mode={'size'} width={48} height={48} avatarOwner={avatar} />
       </div>
