@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import s from '@/src/widgets/ViewPostModal/ui/Actions/Actions.module.scss'
 import Image from 'next/image'
 import { formatDate } from '@/src/shared/utils/dateFormatter'
-import { GetPostByIdResponse, ImageSizeType } from '@/src/entities/post/api/postsApi.types'
+import { GetPostByIdResponse } from '@/src/entities/post/api/postsApi.types'
 import { getMeResponse } from '@/src/entities/auth/api/authApi.types'
 import { LikeButton } from '@/src/features/post/postLike'
 
@@ -17,13 +17,6 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
   const [isLiked, setIsLiked] = useState(calculatedIsLiked)
   const [likeCount, setLikeCount] = useState(dataPostModal.likeCount)
   const [avatarWhoLikes, setAvatarWhoLikes] = useState(dataPostModal.avatarWhoLikes ?? [])
-
-  // const myAvatar = dataPostModal?.avatarWhoLikes.find((u) => u.userId === meData?.id)?.avatars
-  //
-  // const fallbackAvatar = {
-  //   small: { url: '/github-svg.svg' } as ImageSizeType,
-  //   medium: { url: '/github-svg.svg' } as ImageSizeType,
-  // }
 
   const handleLikeChange = (newIsLiked: boolean, newLikeCount: number) => {
     setIsLiked(newIsLiked)
@@ -81,8 +74,8 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
               width={24}
               height={24}
               src={
-                user?.avatars.small[0]?.url ?
-                  `${process.env.NEXT_PUBLIC_MEDIA_URL}${user.avatars.small[0].url}`
+                user?.avatars.small?.url ?
+                  `${process.env.NEXT_PUBLIC_MEDIA_URL}${user.avatars.small.url}`
                 : '/github-svg.svg'
               }
               alt={''}

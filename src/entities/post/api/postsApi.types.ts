@@ -53,8 +53,8 @@ export type GetPostByIdResponse = {
   isLiked: boolean
   avatarWhoLikes: {
     avatars: {
-      small: ImageSizeType[]
-      medium: ImageSizeType[]
+      small: ImageSizeType
+      medium: ImageSizeType
     }
     userId: string
   }[]
