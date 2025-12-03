@@ -149,7 +149,7 @@ export const Messenger = () => {
           <Input placeholder={'Input search'} />
         </div>
         <div className={s.header}>
-          {activeChat !== null && (
+          {activeChat?.id !== null && (
             <>
               <UserAvatar
                 userName={`${activeChat?.roomUser.firstName} ${activeChat?.roomUser.lastName}`}
