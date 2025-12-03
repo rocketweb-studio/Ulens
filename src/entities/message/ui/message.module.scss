@@ -5,10 +5,15 @@
   display: flex;
   column-gap: 12px;
   align-items: flex-end;
+  margin-right: auto;
 
   &.mine {
+    margin-right: initial;
     margin-left: auto;
-    background-color: colors.color(accent, 900);
+
+    .messageContent {
+      background-color: colors.color(accent, 900);
+    }
 
     .messageContentDate {
       color: colors.color(accent, 100);
@@ -29,6 +34,7 @@
 .messageContentText {
   @include typography.regular_text_14;
   color: colors.color(light, 100);
+  word-break: break-all;
 }
 
 .messageContentDate {

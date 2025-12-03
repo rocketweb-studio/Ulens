@@ -4,6 +4,7 @@ import { FlexContainer, Input } from '@rocketweb-studio/ulens-ui-kit'
 import s from './messenger.module.scss'
 import { PreviewList } from '@/src/widgets/messenger/ui/PreviewList/PreviewList'
 import {
+  MessageType,
   messengerApi,
   useCreateRoomMutation,
   useGetMessagesByRoomIdQuery,
@@ -61,6 +62,14 @@ export const Messenger = () => {
     },
     [createRoom],
   )
+
+  const checkAuthorMessage = (message: MessageType): 'mine' | 'friend' => {
+    if (message?.author.id === meData?.id) {
+      return 'mine'
+    } else {
+      return 'friend'
+    }
+  }
 
   useEffect(() => {
     initActiveChat()
@@ -165,11 +174,11 @@ export const Messenger = () => {
             RoomMessages?.map((item) => (
               <Message
                 key={item.id}
-                type={'mine'}
+                type={checkAuthorMessage(item)}
                 message={item.content}
                 date={dateFormatterForChat(item.createdAt)}
                 avatar={''}
-                friendName={''}
+                friendName={`${item.author.firstName} ${item.author.lastName}`}
               />
             )).reverse()}
         </div>

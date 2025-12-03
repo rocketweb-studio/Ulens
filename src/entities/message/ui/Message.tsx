@@ -11,7 +11,7 @@ type Props = {
 
 export const Message = ({ type, message, date, avatar, friendName }: Props) => {
   return (
-    <div className={`${s.message} ${friendName === 'mine' ? s.mine : ''}`}>
+    <div className={`${s.message} ${type === 'mine' ? s.mine : ''}`}>
       {type === 'friend' && (
         <UserAvatar mode={'size'} width={36} height={36} avatarOwner={avatar} userName={friendName} />
       )}

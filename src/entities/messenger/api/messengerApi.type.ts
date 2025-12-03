@@ -6,7 +6,7 @@ export type UserRoom = {
   avatar: string
 }
 
-export type Message = {
+export type MessageType = {
   id: number
   content: string
   createdAt: string
@@ -46,4 +46,4 @@ export type CreateRoomResponce = {
   id: number
 }
 
-export type GetMessagesByRoomResponce = Message[]
+export type GetMessagesByRoomResponce = MessageType[]

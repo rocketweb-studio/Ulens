@@ -13,25 +13,6 @@ export const messengerApi = baseApi.injectEndpoints({
     }),
     getMessagesByRoomId: build.query<GetMessagesByRoomResponce, { roomId: number }>({
       query: ({ roomId }) => `messenger/rooms/${roomId}/messages`,
-      // async onCacheEntryAdded({ roomId }, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
-      //   const token = localStorage.getItem('accessToken')
-      //   await cacheDataLoaded
-      //
-      //   const socket = io(process.env.NEXT_PUBLIC_WS_URL, {
-      //     auth: {
-      //       token,
-      //     },
-      //     transports: ['websocket', 'polling'],
-      //     withCredentials: true,
-      //   })
-      //   socket.on(ChatEvent.SubscribeChat, (message) => {
-      //     updateCachedData((draft) => {
-      //       draft.push(message)
-      //     })
-      //   })
-      //
-      //   await cacheEntryRemoved
-      // },
       providesTags: ['GetMessagesByRoomId'],
     }),
     createRoom: build.mutation<CreateRoomResponce, { targetUserId: string }>({
