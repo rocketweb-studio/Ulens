@@ -3,15 +3,13 @@ import { Button, Input } from '@rocketweb-studio/ulens-ui-kit'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MessageInput, messageSchema } from '@/src/features/messenger/sentMessage/model/schemas'
-import { useWebSocketMessenger } from '@/src/entities/messenger'
+import { io } from 'socket.io-client'
 
 type Props = {
-  roomId: number
+  roomId: number | null
 }
 
 export const SendMessage = ({ roomId }: Props) => {
-  const { sendMessage } = useWebSocketMessenger()
-
   const {
     register,
     handleSubmit,
@@ -25,9 +23,18 @@ export const SendMessage = ({ roomId }: Props) => {
     },
   })
 
+  const token = localStorage.getItem('accessToken')
+
   const onSubmit: SubmitHandler<MessageInput> = async (data) => {
     try {
-      await sendMessage({ roomId: roomId, content: data.message })
+      if (!roomId) return
+      const socket = io('https://ulens.org/ws', { auth: { token } })
+
+      socket.emit('SEND_MESSAGE', {
+        roomId,
+        content: data.message,
+      })
+      debugger
       reset()
     } catch (error) {
       console.error('Failed to send message:', error)

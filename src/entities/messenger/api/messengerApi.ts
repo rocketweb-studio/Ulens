@@ -4,8 +4,6 @@ import {
   GetMessagesByRoomResponce,
   GetRoomsResponce,
 } from '@/src/entities/messenger/api/messengerApi.type'
-import { io } from 'socket.io-client'
-import { ChatEvent } from '@/src/entities/messenger/model/consts'
 
 export const messengerApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -15,25 +13,25 @@ export const messengerApi = baseApi.injectEndpoints({
     }),
     getMessagesByRoomId: build.query<GetMessagesByRoomResponce, { roomId: number }>({
       query: ({ roomId }) => `messenger/rooms/${roomId}/messages`,
-      async onCacheEntryAdded({ roomId }, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
-        const token = localStorage.getItem('accessToken')
-        await cacheDataLoaded
-
-        const socket = io(process.env.NEXT_PUBLIC_WS_URL, {
-          auth: {
-            token,
-          },
-          transports: ['websocket', 'polling'],
-          withCredentials: true,
-        })
-        socket.on(ChatEvent.SubscribeChat, (message) => {
-          updateCachedData((draft) => {
-            draft.push(message)
-          })
-        })
-
-        await cacheEntryRemoved
-      },
+      // async onCacheEntryAdded({ roomId }, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
+      //   const token = localStorage.getItem('accessToken')
+      //   await cacheDataLoaded
+      //
+      //   const socket = io(process.env.NEXT_PUBLIC_WS_URL, {
+      //     auth: {
+      //       token,
+      //     },
+      //     transports: ['websocket', 'polling'],
+      //     withCredentials: true,
+      //   })
+      //   socket.on(ChatEvent.SubscribeChat, (message) => {
+      //     updateCachedData((draft) => {
+      //       draft.push(message)
+      //     })
+      //   })
+      //
+      //   await cacheEntryRemoved
+      // },
       providesTags: ['GetMessagesByRoomId'],
     }),
     createRoom: build.mutation<CreateRoomResponce, { targetUserId: string }>({

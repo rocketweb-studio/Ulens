@@ -3,26 +3,42 @@
 import { FlexContainer, Input } from '@rocketweb-studio/ulens-ui-kit'
 import s from './messenger.module.scss'
 import { PreviewList } from '@/src/widgets/messenger/ui/PreviewList/PreviewList'
-import { useCreateRoomMutation, useGetMessagesByRoomIdQuery, useGetRoomsQuery } from '@/src/entities/messenger'
+import {
+  messengerApi,
+  useCreateRoomMutation,
+  useGetMessagesByRoomIdQuery,
+  useGetRoomsQuery,
+} from '@/src/entities/messenger'
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { LastMessage, UserRoom } from '@/src/entities/messenger/api/messengerApi.type'
 import { UserAvatar } from '@/src/entities/userProfile'
 import { SendMessage } from '@/src/features/messenger/sentMessage'
 import { Message } from '@/src/entities/message'
+import { io } from 'socket.io-client'
+import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
 
 export const Messenger = () => {
   const { data: RoomsList, isSuccess: isGetRoomsSuccess, isLoading: isGetRoomsSuccessLoading } = useGetRoomsQuery()
   const params = useSearchParams()
+  const dispatch = useAppDispatch()
   const activeChatParams = params.get('activeChat')
   const [createRoom] = useCreateRoomMutation()
   const hasCreatedRoom = useRef(false)
   const [activeChat, setActiveChat] = useState<{
-    id: number
+    id: number | null
     roomUser: UserRoom
     lastMessage: LastMessage
-  }>()
-  const { data: RoomMessages } = useGetMessagesByRoomIdQuery({ roomId: activeChat?.id || 0 })
+  }>({ id: null, roomUser: {} as UserRoom, lastMessage: {} as LastMessage })
+  const {
+    data: RoomMessages,
+    isLoading: isLoadingRoomMessages,
+    isFetching: isFetchingRoomMessages,
+  } = useGetMessagesByRoomIdQuery({
+    roomId: activeChat?.id || 0,
+  })
+  const token = localStorage.getItem('accessToken')
+  const [messages, setMessages] = useState<any[]>([])
 
   const initActiveChat = () => {
     if (RoomsList) {
@@ -51,6 +67,32 @@ export const Messenger = () => {
     }
   }, [])
 
+  useEffect(() => {
+    if (!activeChat) return
+    const socket = io('https://ulens.org/ws', { auth: { token } })
+
+    socket.on('connect', () => {
+      socket.emit('SUBSCRIBE_CHAT', { roomId: activeChat?.id || 0 })
+    })
+
+    socket.on('NEW_MESSAGE', (msg) => {
+      dispatch(
+        messengerApi.util.updateQueryData(
+          'getMessagesByRoomId',
+          { roomId: activeChat.id !== null ? activeChat.id : 0 },
+          (draft) => {
+            draft.push(msg)
+          },
+        ),
+      )
+      setMessages((prev) => [...prev, msg])
+    })
+
+    return () => {
+      socket.disconnect()
+    }
+  }, [activeChat, token])
+
   return (
     <FlexContainer className={s.wrapper}>
       <div className={s.messenger}>
@@ -66,6 +108,9 @@ export const Messenger = () => {
             avatarOwner={activeChat?.roomUser.avatar}
           />
           <span>{`${activeChat?.roomUser.firstName} ${activeChat?.roomUser.lastName}`}</span>
+          {messages.map((message) => (
+            <div>{message.content}</div>
+          ))}
         </div>
         <div className={s.previewList}>
           <PreviewList
@@ -83,12 +128,20 @@ export const Messenger = () => {
                 isActive: activeChat?.id === item.id,
               })) || []
             }
-            changeActiveChat={(id) => setActiveChat(RoomsList?.find((item) => item.id === id))}
+            changeActiveChat={(id) =>
+              setActiveChat((prevState) => RoomsList?.find((item) => item.id === id) || prevState)
+            }
           />
         </div>
         <div className={s.chatView}>
+          {RoomMessages?.length === 0 && !isFetchingRoomMessages && !isLoadingRoomMessages && (
+            <div className={s.notActiveChatBlock}>No messages</div>
+          )}
           {!activeChat && <div className={s.notActiveChatBlock}>Choose who you would like to talk to</div>}
+          {isLoadingRoomMessages || (isFetchingRoomMessages && <div>Loading...</div>)}
           {activeChat &&
+            !isLoadingRoomMessages &&
+            !isFetchingRoomMessages &&
             RoomMessages?.map((item) => (
               <Message
                 key={item.id}
@@ -101,7 +154,7 @@ export const Messenger = () => {
             ))}
         </div>
         <div className={s.sendMessage}>
-          <SendMessage roomId={activeChat?.id || 0} />
+          <SendMessage roomId={activeChat?.id} />
         </div>
       </div>
     </FlexContainer>
