@@ -20,7 +20,13 @@ import { io } from 'socket.io-client'
 import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
 import { dateFormatterForChat } from '@/src/shared/utils'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
-import Scrollbars from 'react-custom-scrollbars'
+import ScrollbarsType from 'react-custom-scrollbars'
+import dynamic from 'next/dynamic'
+
+const Scrollbars = dynamic(() => import('react-custom-scrollbars'), {
+  ssr: false,
+  loading: () => <div style={{ height: '100%', overflow: 'auto' }} />,
+})
 
 export const Messenger = () => {
   const {
@@ -37,6 +43,7 @@ export const Messenger = () => {
   const activeChatParams = params.get('activeChat')
   const [createRoom] = useCreateRoomMutation()
   const hasCreatedRoom = useRef(false)
+  const scrollbarsRef = useRef<ScrollbarsType>(null)
   const [activeChat, setActiveChat] = useState<{
     id: number | null
     roomUser: UserRoom
@@ -72,9 +79,21 @@ export const Messenger = () => {
     }
   }
 
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      if (scrollbarsRef.current) {
+        scrollbarsRef.current.scrollToBottom()
+      }
+    }, 100)
+  }
+
   useEffect(() => {
     initActiveChat()
   }, [RoomsList])
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [RoomMessages])
 
   useEffect(() => {
     if (
@@ -171,7 +190,7 @@ export const Messenger = () => {
           {activeChat === null && <div className={s.notActiveChatBlock}>Choose who you would like to talk to</div>}
           {isLoadingRoomMessages || (isFetchingRoomMessages && <div>Loading...</div>)}
           {activeChat && !isLoadingRoomMessages && !isFetchingRoomMessages && RoomMessages && (
-            <Scrollbars>
+            <Scrollbars ref={scrollbarsRef}>
               <div className={s.messagesContainer}>
                 {RoomMessages?.map((item) => (
                   <Message

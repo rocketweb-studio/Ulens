@@ -1,3 +1,5 @@
+'use client'
+
 import s from './sentMessage.module.scss'
 import { Button, Input } from '@rocketweb-studio/ulens-ui-kit'
 import { SubmitHandler, useForm } from 'react-hook-form'
