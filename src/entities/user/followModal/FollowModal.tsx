@@ -4,6 +4,8 @@ import { useMemo, useState } from 'react'
 import { useFollowUserMutation, useUnfollowUserMutation } from '@/src/entities/user/api/userApi'
 import { Modal } from '@/src/shared/ui/Modal/Modal'
 import s from './FollowModal.module.scss'
+import Link from 'next/link'
+import { Path } from '@/src/shared/router/Path'
 
 type Props = {
   isOpen: boolean
@@ -46,12 +48,12 @@ export const FollowModal = ({ isOpen, onClose, title, data, followingsIds }: Pro
 
             return (
               <div key={u.id} className={s.item}>
-                <div className={s.info}>
+                <Link href={Path.UserProfile(u.id)} className={s.info} onClick={onClose}>
                   <span className={s.userName}>{u.userName}</span>
                   <span className={s.fullName}>
                     {u.firstName} {u.lastName}
                   </span>
-                </div>
+                </Link>
 
                 {isFollowing ?
                   <button className={s.unfollow} onClick={() => unfollow({ userId: u.id })}>

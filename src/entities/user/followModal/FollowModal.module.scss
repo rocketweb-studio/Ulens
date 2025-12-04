@@ -38,6 +38,11 @@
 .userName {
   color: colors.color(light, 100);
   font-weight: 500;
+  transition: color 0.3s ease
+}
+
+.userName:hover{
+    color: colors.color(accent, 500);
 }
 
 .fullName {
