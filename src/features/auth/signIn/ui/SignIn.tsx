@@ -29,9 +29,12 @@ export const SignIn = () => {
     }
   }, [])
 
-  if (isAuth) {
-    redirect(Path.UserProfile(meData.id))
-  }
+  useEffect(() => {
+    if(isAuth){
+      redirect(Path.UserProfile(meData.id))
+    }
+
+  }, [isAuth])
 
   const {
     register,
