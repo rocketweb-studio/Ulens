@@ -1,25 +1,14 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react'
 
-type Props = {
-    isOpen: boolean;
-    openModal: () => void
-    closeModal: () => void
-}
+export const useModal = (initialState = false) => {
+  const [isOpen, setIsOpen] = useState(initialState)
 
-export const useModal = (initialState = false): Props => {
-    const [isOpen, setIsOpen] = useState(initialState);
+  const openModal = () => setIsOpen(true)
+  const closeModal = () => setIsOpen(false)
 
-    const openModal = useCallback(() => {
-        if (!isOpen) setIsOpen(true)
-    }, [isOpen])
-
-    const closeModal = useCallback(() => {
-        if (isOpen) setIsOpen(false)
-    }, [isOpen])
-
-    return {
-        isOpen,
-        openModal,
-        closeModal,
-    }
+  return {
+    isOpen,
+    openModal,
+    closeModal,
+  }
 }

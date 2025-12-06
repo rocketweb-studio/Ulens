@@ -1,10 +1,12 @@
 'use client'
 
-import {ResendVerification} from "@/src/feature/auth/ui/SignUp/ResendVerification/ResendVerification";
-import {FlexContainer} from "@/src/shared/components/FlexContainer";
+import { ResendVerification } from '@/src/features/auth/singUp/ui/ResendVerification/ResendVerification'
+import { FlexContainer } from 'src/shared/ui/FlexContainer'
 
 export default function ResendVerificationLink() {
-    return <FlexContainer justify={"center"}>
-        <ResendVerification />
+  return (
+    <FlexContainer justify={'center'}>
+      <ResendVerification />
     </FlexContainer>
+  )
 }

@@ -1,10 +1,12 @@
 'use client'
 
-import {FlexContainer} from "@/src/shared/components/FlexContainer";
-import {TermsOfService} from "@/src/feature/auth/ui/SignUp/TermsOfService";
+import { FlexContainer } from 'src/shared/ui/FlexContainer'
+import { TermsOfService } from '@/src/views/termsOfService'
 
 export default function TermOfService() {
-    return <FlexContainer justify={"center"}>
-        <TermsOfService/>
+  return (
+    <FlexContainer justify={'center'}>
+      <TermsOfService />
     </FlexContainer>
+  )
 }

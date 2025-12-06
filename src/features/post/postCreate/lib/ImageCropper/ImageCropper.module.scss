@@ -1,0 +1,155 @@
+@use '@/src/shared/styles/typography' as typography;
+@use '@/src/shared/styles/colors' as colors;
+
+.cropper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cropContainer {
+  position: relative;
+  width: 100%;
+  height: 503px;
+  overflow: hidden;
+}
+
+.cropControlsBox {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  gap: 24px;
+  padding: 12px;
+}
+
+.cropArea {
+  border: 2px solid #007bff;
+}
+
+.aspectRatioSelector {
+  position: relative;
+}
+
+.aspectRatioButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px 0;
+}
+
+.aspectRatioButton {
+  @include typography.regular_text_16;
+  background: none;
+  border: none;
+  color: colors.color(light, 900);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: colors.color(light, 100);
+  }
+
+  &.active {
+    color: colors.color(accent, 500);
+  }
+}
+
+.controls {
+  position: relative;
+}
+
+.zoomMenuWrapper {
+  position:  absolute;
+  top: -10px;
+}
+
+.zoomMenu {
+  position: absolute;
+  bottom: 2px;
+}
+
+.aspectRatioMenuWrapper {
+  position: absolute;
+  top: 0;
+}
+
+.aspectRatioMenu {
+  position: absolute;
+  bottom: 5px;
+  padding: 10px 15px 10px 12px;
+  background-color: rgba(colors.color(dark, 500), 0.8);
+  border-radius: 2px;
+
+}
+
+.sliderGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  label {
+    font-size: 14px;
+    font-weight: 500;
+    color: colors.color(light, 100);
+    min-width: 60px;
+  }
+
+  span {
+    font-size: 14px;
+    color: colors.color(light, 100);
+    min-width: 40px;
+    text-align: right;
+  }
+}
+
+.slider {
+  flex: 1;
+  height: 4px;
+  background: colors.color(light, 900);
+  border-radius: 2px;
+  outline: none;
+  appearance: none;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: colors.color(accent, 500);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  &::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: colors.color(accent, 500);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 0 10px;
+}
+
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: colors.color(dark, 900);
+  color: colors.color(light, 100);
+}

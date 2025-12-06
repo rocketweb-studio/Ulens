@@ -1,0 +1,42 @@
+@use '@/src/shared/styles/colors' as colors;
+.form {
+  width: 100%;
+}
+
+.formWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+
+  & .buttonSubmit {
+    padding: 3px;
+  }
+}
+
+.inputAddComment {
+  flex-grow: 1;
+
+  & input {
+    padding: 3px;
+    border: none;
+
+    &:hover {
+      border: none;
+    }
+
+    &:focus {
+      background: none;
+      outline: none;
+      border: none;
+    }
+  }
+}
+
+.addCommentContainer{
+  padding: 24px 20px 5px;
+  border-top: 1px solid colors.color(dark, 100);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

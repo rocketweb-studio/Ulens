@@ -1,0 +1,131 @@
+@use '../../styles/colors' as colors;
+@use '../../styles/typography' as typography;
+
+.radioGroupContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.legend {
+  font-size: 14px;
+  font-weight: 500;
+  color: colors.color(light, 100);
+  margin-bottom: 4px;
+
+  &.required::after {
+    content: ' *';
+    color: colors.color(light, 100);
+  }
+}
+
+.radioGroup {
+  display: flex;
+  gap: 16px;
+
+  &.vertical {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &.horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: colors.color(light, 100);
+  transition: color 0.2s ease;
+
+  &:hover:not(.disabled) {
+    color: colors.color(light, 100);
+
+    .customRadio {
+      border-color: colors.color(light, 100);
+    }
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    color: colors.color(light, 900);
+
+    .customRadio {
+      border-color: colors.color(light, 100);
+      background-color: colors.color(light, 100);
+
+      &::after {
+        background-color: colors.color(light, 100);
+      }
+    }
+  }
+}
+
+.radioInput {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+
+  &:checked + .customRadio {
+    border-color: colors.color(light, 100);
+
+    &::after {
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  &:focus + .customRadio {
+    outline: 8px solid colors.color(dark, 500);
+  }
+
+  &:hover + .customRadio {
+    outline: 8px solid colors.color(dark, 300);
+  }
+
+  &:active + .customRadio {
+    outline: 8px solid colors.color(dark, 100);
+  }
+}
+
+.customRadio {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border: 2px solid colors.color(light, 100);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: colors.color(light, 100);
+    transition: transform 0.2s ease;
+  }
+}
+
+.radioText {
+  position: relative;
+  z-index: 99;
+  @include typography.regular_text_14;
+}
+
+.errorText {
+  font-size: 12px;
+  color: colors.color(danger, 500);
+  margin-top: 4px;
+}

@@ -1,0 +1,45 @@
+@use '@/src/shared/styles/colors' as colors;
+
+.form {
+  width: 100%;
+}
+
+.formWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+
+  & .buttonSubmit {
+    padding: 3px;
+    width: 162px;
+  }
+}
+
+.inputSendMessage {
+  flex-grow: 1;
+  width: initial;
+  padding-bottom: 0;
+
+  & input {
+    padding: 13px;
+    border: none;
+
+    &:hover {
+      border: none;
+    }
+
+    &:focus {
+      background: none;
+      outline: none;
+      border: none;
+    }
+  }
+}
+
+.sendMessageContainer{
+  border-top: 1px solid colors.color(dark, 100);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

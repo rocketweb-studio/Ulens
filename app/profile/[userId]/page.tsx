@@ -1,34 +1,28 @@
-import {UserProfile} from "@/src/feature/userProfile/UserProfile";
-import CreatePostModal from "@/src/shared/components/CreatePostModal/CreatePostModal";
-import PostModal from "@/src/shared/components/PostModal/PostModal";
+import { ProfileHeader } from '@/src/widgets/profileHeader/ui/ProfileHeader'
+import { ProfilePosts } from '@/src/widgets/profilePosts/ui/ProfilePosts'
+import { PostCreate } from '@/src/features/post/postCreate/ui/PostCreate/PostCreate'
 
-export default async function UserPage({params,searchParams}: {
-  params: Promise<{ userId: string }>,
-  searchParams:  Promise<{ [key: string]: string | undefined }>,
-}) {
-
-  const {userId} = await params
-  const filters = await searchParams
-
-  if (filters.postId) {
-    filters.action = ''
-  }
-
-  return <div>
-    <UserProfile userId={userId}/>
-    {filters.postId && <PostModal postId={filters.postId}/>}
-    {filters.action === 'create' && <CreatePostModal/>}
-  </div>
+type Props = {
+  params: Promise<{ userId: string }>
+  searchParams: Promise<{ [_key: string]: string | undefined }>
 }
 
+export default async function UserPage({ params, searchParams }: Props) {
+  const [{ userId }, filters] = await Promise.all([params, searchParams])
 
+  const userData = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}profile/${userId}`, {
+    next: { revalidate: 60 },
+  }).then((res) => res.json())
 
+  const postsData = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/user/${userId}`, {
+    next: { revalidate: 30 },
+  }).then((res) => res.json())
 
-
-
-
-
-
-
-
-
+  return (
+    <>
+      <ProfileHeader userId={userId} dataUserInfo={userData} />
+      <ProfilePosts userId={userId} dataPosts={postsData} />
+      {filters.action === 'create' && <PostCreate />}
+    </>
+  )
+}

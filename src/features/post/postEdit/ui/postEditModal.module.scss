@@ -1,0 +1,145 @@
+@use '@/src/shared/styles/colors' as colors;
+
+.textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px;
+  border: 1px solid colors.color(dark, 100);
+  border-radius: 6px;
+  font-size: 14px;
+  resize: vertical;
+  background-color: colors.color(dark, 500);
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: colors.color(accent, 500);
+    box-shadow: 0 0 0 2px rgba(colors.color(accent, 500), 0.3);
+  }
+}
+
+.counter {
+  font-size: 12px;
+  color: colors.color(light, 900);
+  text-align: right;
+  margin-top: 4px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 900px;
+  max-height: 600px;
+}
+
+.imageColumn {
+  flex: 1;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .postImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.contentColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+
+  .avatar {
+    border-radius: 50%;
+  }
+
+  .userName {
+    font-weight: 500;
+    color: #fff;
+  }
+}
+
+.label {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 8px;
+}
+
+.textareaWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid colors.color(dark, 100);
+}
+
+.saveButton {
+  background: #3b82f6;
+  border: none;
+  border-radius: 2px;
+  padding: 8px 16px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: #2563eb;
+  }
+
+  &:disabled {
+    background: #555;
+    cursor: not-allowed;
+  }
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.yesBtn {
+  border: 1px solid colors.color(accent, 500);
+  background: transparent;
+  color: colors.color(accent, 500);
+  padding: 0.5rem 2.5rem;
+  border-radius: 2px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(59, 130, 246, 0.1);
+  }
+}
+
+.noBtn {
+  border: 1px solid colors.color(accent, 500);
+  background: colors.color(accent, 500);
+  color: colors.color(light, 100);
+  padding: 0.5rem 2.5rem;
+  border-radius: 2px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background: colors.color(accent, 700);
+  }
+}

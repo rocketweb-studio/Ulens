@@ -1,0 +1,41 @@
+@use '@/src/shared/styles/typography' as typography;
+@use '@/src/shared/styles/colors' as colors;
+
+
+.container {
+  max-width: 490px;
+  width: 490px;
+  border-bottom: 1px solid colors.color(dark, 100);
+}
+
+.author {
+  @include typography.h3;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.dateText {
+  @include typography.small_text;
+  color: colors.color(light, 900);
+}
+
+.customSwiper {
+  max-width: 490px;
+  max-height: 500px;
+  object-fit: cover;
+}
+
+.blockDescription_userName {
+  @include typography.bold_text_14;
+}
+
+a.linkToComment {
+  align-self: flex-start;
+  @include typography.bold_text_14;
+  color: colors.color(light, 900);
+}
+
+.blockDescription_text {
+  @include typography.regular_text_14;
+}

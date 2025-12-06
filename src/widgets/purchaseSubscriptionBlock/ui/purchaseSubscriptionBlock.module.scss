@@ -1,0 +1,15 @@
+@use '@/src/shared/styles/colors' as colors;
+@use '@/src/shared/styles/typography' as typography;
+
+.accountTypeCardContent {
+  padding: 12px 18px;
+}
+
+.title {
+  @include typography.h3;
+  margin: 0 0 12px 0;
+}
+
+.paymentsButtonsGroup {
+  margin: 24px 0 0 0;
+}

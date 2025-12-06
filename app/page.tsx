@@ -1,10 +1,25 @@
-import styles from "./page.module.css";
-import {PublicPage} from "@/src/feature/publicPage/PublicPage";
+import s from './page.module.css'
+import { PublicPage } from '@/src/views/publicPage/ui/PublicPage'
 
-export default function Home() {
+export default async function Home() {
+  let data = undefined
+  let userCountDate = undefined
+  try {
+    data = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/latest`, {
+      next: { revalidate: 60 },
+    }).then((res) => res.json())
+
+    userCountDate = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}users/users-count`, {
+      next: { revalidate: 60 },
+    }).then((res) => res.json())
+  } catch (e) {
+    console.log('Error', e)
+  }
+
+  console.log(data)
   return (
-    <div className={styles.page}>
-      <PublicPage/>
+    <div className={s.page}>
+      <PublicPage dataPosts={data} totalUsers={userCountDate?.count} />
     </div>
-  );
+  )
 }

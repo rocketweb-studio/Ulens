@@ -1,0 +1,7 @@
+@use '@/src/shared/styles/colors' as colors;
+
+.previewListItem {
+  &:not(:last-child) {
+    border-bottom: 1px solid colors.color(dark, 300);
+  }
+}

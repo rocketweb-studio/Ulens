@@ -1,0 +1,14 @@
+@use '@/src/shared/styles/colors' as colors;
+@use '@/src/shared/styles/typography' as typography;
+
+.title {
+  @include typography.h1;
+  color: colors.color(light,100);
+  flex: 0 0 auto;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.wrapper {
+  height: 100%;
+}

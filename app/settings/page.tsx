@@ -1,15 +1,48 @@
-import {redirect} from "next/navigation";
+'use client'
 
-const allowedParts = ["info", "devices", "subscriptions", "payments"]
+import { Tabs } from 'src/widgets/Tabs'
+import { redirect, useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
+import { Path } from '@/src/shared/router/Path'
 
-export default async function SettingsPage({searchParams}: {
-    searchParams: Promise<{ [key: string]: string | undefined }>
-}) {
-    const filters = await searchParams
-    if (!filters.part || !allowedParts.includes(filters.part)) {
-        redirect("/settings?part=info")
-    }
+import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
+import { GeneralInformation } from '@/src/views/generalInformation'
+import { AccountManagementPage } from '@/src/views/accountManagementPage'
+import { MyPaymentsPage } from '@/src/views/myPaymentsPage'
 
-    return <div>Текущий раздел: {filters.part}
-    </div>
+const allowedParts = ['info', 'devices', 'subscriptions', 'payments']
+
+function SettingsContent() {
+  const { isError } = useGetMeQuery()
+
+  if (isError) {
+    redirect(Path.SignIn)
+  }
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SettingsPageContent />
+    </Suspense>
+  )
 }
+
+function SettingsPageContent() {
+  const params = useSearchParams()
+  const part = params?.get('part')
+  const payment = params?.get('payment')
+  if (!part || !allowedParts.includes(part)) {
+    redirect(Path.Settings('info'))
+  }
+
+  return (
+    <div>
+      <Tabs />
+      {part === 'info' && <GeneralInformation />}
+      {part === 'devices' && <p>Текущий раздел: {part}</p>}
+      {part === 'subscriptions' && <AccountManagementPage />}
+      {part === 'payments' && <MyPaymentsPage />}
+    </div>
+  )
+}
+
+export default SettingsContent

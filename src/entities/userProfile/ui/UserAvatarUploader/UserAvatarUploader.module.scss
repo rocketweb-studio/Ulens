@@ -1,0 +1,156 @@
+@use '@/src/shared/styles/colors' as colors;
+
+.avatarUploader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 20px;
+
+  .previewContainer {
+    position: relative;
+    width: 192px;
+    height: 192px;
+    border-radius: 50%;
+    overflow: visible;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: colors.color(dark, 500);
+  }
+
+  .avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .deleteBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: colors.color(danger, 500);
+    color: colors.color(light, 100);
+    border: 4px solid colors.color(dark, 700);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    &::before {
+      content: "×";
+      color: colors.color(light, 100);
+      font-size: 20px;
+      font-weight: bold;
+      line-height: 1;
+      position: relative;
+      top: -1px;
+    }
+  }
+
+  .placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: colors.color(light, 900);
+  }
+
+  .selectButton {
+    background-color: transparent;
+    border: 1px solid colors.color(accent, 500);
+    color: colors.color(accent, 500);
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: rgba(59, 130, 246, 0.1);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.yesBtn {
+  border: 1px solid colors.color(accent, 500);
+  background: transparent;
+  color: colors.color(accent, 500);
+  padding: 0.5rem 2.5rem;
+  border-radius: 2px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(59, 130, 246, 0.1);
+  }
+}
+
+.noBtn {
+  border: 1px solid colors.color(accent, 500);
+  background: colors.color(accent, 500);
+  color: colors.color(light, 100);
+  padding: 0.5rem 2.5rem;
+  border-radius: 2px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background: colors.color(accent, 700);
+  }
+}
+
+.photoModal {
+  .modalContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+}
+
+.imageWrapper {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.roundImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 16px;
+}
+.buttons {
+  display: flex;
+  gap: 8px;
+}

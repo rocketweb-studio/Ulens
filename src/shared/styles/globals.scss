@@ -1,0 +1,56 @@
+@use 'colors' as colors;
+@use 'typography' as typography;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+html {
+  box-sizing: border-box;
+  font-size: 100%;
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+}
+
+input,
+button,
+select,
+textarea,
+optgroup,
+option {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+  color: inherit;
+}
+a,
+button {
+  cursor: pointer;
+}
+
+a, a:visited {
+  color: inherit;
+}
+
+body {
+  font-family: typography.$font-family, sans-serif;
+  font-weight: typography.$font-weight-regular;
+  background-color: colors.color(dark, 700);
+  color: colors.color(light, 100);
+  height: 100%;
+}
+.swiper{
+  background: #000;
+}
+.swiper-wrapper{
+  align-items: center;
+}
