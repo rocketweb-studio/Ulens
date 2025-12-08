@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { io } from 'socket.io-client'
 import { ChatEvent } from '@/src/entities/messenger/model/consts'
-import { Message } from '@/src/entities/messenger/api/messengerApi.type'
+import { MessageType } from '@/src/entities/messenger/api/messengerApi.type'
 
 export const useWebSocketMessenger = () => {
   const sendMessage = useCallback((body: { roomId: number; content: string }) => {
@@ -12,8 +12,8 @@ export const useWebSocketMessenger = () => {
       withCredentials: true,
     })
 
-    return new Promise<Message>((resolve, reject) => {
-      socket.emit(ChatEvent.SendMessage, body, (message: Message) => {
+    return new Promise<MessageType>((resolve, reject) => {
+      socket.emit(ChatEvent.SendMessage, body, (message: MessageType) => {
         socket.disconnect()
         resolve(message)
       })
