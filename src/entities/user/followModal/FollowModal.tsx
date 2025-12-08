@@ -38,7 +38,14 @@ export const FollowModal = ({ isOpen, onClose, title, data, followingsIds }: Pro
   }, [search, data])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} modalTitle={title} withoutPadding hideDefaultButton>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      modalTitle={title}
+      onOverlayClick={onClose}
+      withoutPadding
+      hideDefaultButton
+    >
       <div className={s.container}>
         <input className={s.search} placeholder='Search' value={search} onChange={(e) => setSearch(e.target.value)} />
 

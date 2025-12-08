@@ -17,7 +17,6 @@ import {
   useUnfollowUserMutation,
 } from '@/src/entities/user/api/userApi'
 import { FollowModal } from '@/src/entities/user/followModal/FollowModal'
-import { redirect } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 
 type Props = {
