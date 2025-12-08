@@ -6,6 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MessageInput, messageSchema } from '@/src/features/messenger/sentMessage/model/schemas'
 import { io } from 'socket.io-client'
+import {IconMicOutline} from '@rocketweb-studio/ulens-ui-kit'
 
 type Props = {
   roomId: number | null
@@ -55,15 +56,29 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
             placeholder={'Type Message...'}
             disabled={isDisable}
           />
-          <Button
-            className={s.buttonSubmit}
-            variant={'text'}
-            size={'large'}
-            withoutPadding
-            disabled={!isValid || isDisable}
-          >
-            Send message
-          </Button>
+          {isValid
+            ?
+            <Button
+              className={s.buttonSubmit}
+              variant={'text'}
+              size={'large'}
+              withoutPadding
+              disabled={!isValid || isDisable}
+            >
+              Send message
+            </Button>
+            :
+            <div>
+              <Button
+                className={s.buttonAudio}
+                variant={'text'}
+                size={'large'}
+                withoutPadding
+              >
+                <IconMicOutline />
+              </Button>
+
+            </div>}
         </div>
       </form>
     </div>
