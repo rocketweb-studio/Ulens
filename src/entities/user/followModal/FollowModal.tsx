@@ -46,12 +46,18 @@ export const FollowModal = ({ isOpen, onClose, title, data, followingsIds }: Pro
       isOpen={isOpen}
       onClose={onClose}
       modalTitle={title}
-      // onOverlayClick={onClose}
+      onOverlayClick={onClose}
       withoutPadding
       hideDefaultButton
     >
       <div className={s.container}>
-        <input className={s.search} placeholder='Search' value={search} onChange={(e) => setSearch(e.target.value)} />
+        <input
+          className={s.search}
+          placeholder='Search'
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+        />
 
         <div className={s.list}>
           {filtered.map((u) => {
