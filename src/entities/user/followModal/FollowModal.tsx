@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useFollowUserMutation, useUnfollowUserMutation } from '@/src/entities/user/api/userApi'
 import { Modal } from '@/src/shared/ui/Modal/Modal'
 import s from './FollowModal.module.scss'
@@ -27,6 +27,10 @@ export const FollowModal = ({ isOpen, onClose, title, data, followingsIds }: Pro
   const [follow] = useFollowUserMutation()
   const [unfollow] = useUnfollowUserMutation()
 
+  useEffect(() => {
+    if (!isOpen) setSearch('')
+  }, [isOpen])
+
   const filtered = useMemo(() => {
     if (!search.trim()) return data
     return data.filter(
@@ -42,7 +46,7 @@ export const FollowModal = ({ isOpen, onClose, title, data, followingsIds }: Pro
       isOpen={isOpen}
       onClose={onClose}
       modalTitle={title}
-      onOverlayClick={onClose}
+      // onOverlayClick={onClose}
       withoutPadding
       hideDefaultButton
     >
