@@ -1,0 +1,51 @@
+@use 'src/shared/styles/colors' as colors;
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.avatar {
+  display: flex;
+}
+
+.userName {
+  color: colors.color(light, 100);
+  font-weight: 500;
+  transition: color 0.3s ease
+}
+
+.userName:hover{
+  color: colors.color(accent, 500);
+}
+
+.fullName {
+  color: colors.color(light, 900);
+  font-size: 14px;
+}
+
+.follow,
+.unfollow {
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+}
+
+.follow {
+  background: colors.color(accent, 500);
+  color: colors.color(light, 100);
+}
+
+.unfollow {
+  background: transparent;
+  border: 1px solid colors.color(light, 900);
+  color: colors.color(light, 700);
+}
