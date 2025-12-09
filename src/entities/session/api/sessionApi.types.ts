@@ -1,3 +1,20 @@
+type DeviceType =
+  | ''
+  | 'desktop'
+  | 'smartphone'
+  | 'tablet'
+  | 'television'
+  | 'smart display'
+  | 'camera'
+  | 'car'
+  | 'console'
+  | 'portable media player'
+  | 'phablet'
+  | 'wearable'
+  | 'smart speaker'
+  | 'feature phone'
+  | 'peripheral'
+
 export type DeviceSession = {
   deviceId: string
   ip: string
@@ -8,7 +25,7 @@ export type DeviceSession = {
   timezone: string
   browser: string
   os: string
-  type: string
+  type: DeviceType
   createdAt: string
 }
 

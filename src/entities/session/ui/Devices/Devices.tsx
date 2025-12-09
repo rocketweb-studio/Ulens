@@ -49,8 +49,8 @@ export const Devices = () => {
                 <div className={s.leftSecion}>
                   <div className={s.icon}>
                     {device.type === 'desktop' && <IconDesktopDevice width={50} height={50} />}
-                    {device.type === 'tablet' && <IconPhoneDevice width={50} height={50} />}
-                    {device.type === 'mobile' && <IconPhoneDevice width={50} height={50} />}
+                    {device.type === `tablet` && <IconPhoneDevice width={50} height={50} />}
+                    {device.type === 'smartphone' && <IconPhoneDevice width={50} height={50} />}
                   </div>
                   <div className={s.deviceInfo}>
                     <strong>{device.browser}</strong>
