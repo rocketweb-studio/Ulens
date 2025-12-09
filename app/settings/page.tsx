@@ -9,6 +9,7 @@ import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 import { GeneralInformation } from '@/src/views/generalInformation'
 import { AccountManagementPage } from '@/src/views/accountManagementPage'
 import { MyPaymentsPage } from '@/src/views/myPaymentsPage'
+import { Devices } from '@/src/entities/session'
 
 const allowedParts = ['info', 'devices', 'subscriptions', 'payments']
 
@@ -33,12 +34,11 @@ function SettingsPageContent() {
   if (!part || !allowedParts.includes(part)) {
     redirect(Path.Settings('info'))
   }
-
   return (
     <div>
       <Tabs />
       {part === 'info' && <GeneralInformation />}
-      {part === 'devices' && <p>Текущий раздел: {part}</p>}
+      {part === 'devices' && <Devices />}
       {part === 'subscriptions' && <AccountManagementPage />}
       {part === 'payments' && <MyPaymentsPage />}
     </div>

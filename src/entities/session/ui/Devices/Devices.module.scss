@@ -1,0 +1,74 @@
+@use '@/src/shared/styles/colors' as colors;
+@use '@/src/shared/styles/typography' as typography;
+
+.title {
+  @include typography.h3;
+  margin: 0 0 12px 0;
+}
+
+.general{
+  padding-top: 30px;
+}
+
+.currentSession, .otherSessions {
+  display: flex;
+  flex-direction: column;
+}
+
+.otherSessions{}
+
+.emptyActiveSession{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px;
+  font-size: 20px;
+}
+
+.deviceItem, .deviceItemOther{
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  background: #171717;
+  border: 1px solid #333333;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 10px;
+  .deviceInfo{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+.leftSecion{
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  .deviceInfo{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+.rightSecion{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  &:hover{
+    cursor: pointer;
+  }
+}
+
+.deviceItemOther{
+  justify-content: space-between;
+  align-items: center;
+}
+
+.terminate{
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 0;
+}
