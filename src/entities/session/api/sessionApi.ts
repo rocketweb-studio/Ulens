@@ -12,14 +12,14 @@ export const sessionApi = baseApi.injectEndpoints({
         url: `sessions`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Sessions'],
+      invalidatesTags: ['Sessions', 'Auth'],
     }),
     deleteSessionById: build.mutation<void, { deviceId: string }>({
       query: ({ deviceId }) => ({
         url: `sessions/${deviceId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Sessions'],
+      invalidatesTags: ['Sessions', 'Auth'],
     }),
   }),
 })

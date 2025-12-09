@@ -20,10 +20,6 @@ export const Devices = () => {
   const [deleteAllSession] = useDeleteAllSessionMutation()
   const [deleteSingleSession] = useDeleteSessionByIdMutation()
 
-  if (!devices) {
-    return null
-  }
-
   return (
     <div className={s.general}>
       <div className={s.currentSession}>
@@ -33,8 +29,8 @@ export const Devices = () => {
             <IconChromeBrowser width={50} height={50} />
           </div>
           <div className={s.deviceInfo}>
-            <strong>{devices.currentSession.browser}</strong>
-            <span>IP {devices.currentSession.ip}</span>
+            <strong>{devices?.currentSession?.browser}</strong>
+            <span>IP {devices?.currentSession?.ip}</span>
           </div>
         </div>
       </div>
@@ -46,9 +42,9 @@ export const Devices = () => {
 
       <div className={s.otherSessions}>
         <h2 className={s.title}>Active sessions</h2>
-        {devices?.otherSessions.length ?
+        {devices?.otherSessions?.length ?
           <div className={s.deviceList}>
-            {devices?.otherSessions.map((device) => (
+            {devices?.otherSessions?.map((device) => (
               <div className={s.deviceItemOther}>
                 <div className={s.leftSecion}>
                   <div className={s.icon}>
@@ -59,7 +55,7 @@ export const Devices = () => {
                   <div className={s.deviceInfo}>
                     <strong>{device.browser}</strong>
                     <span>IP {device.ip}</span>
-                    <span>Last visit: {formatDateDDMMYYYY(devices.currentSession.createdAt)}</span>
+                    <span>Last visit: {formatDateDDMMYYYY(device?.createdAt)}</span>
                   </div>
                 </div>
                 <div className={s.rightSecion} onClick={() => deleteSingleSession({ deviceId: device.deviceId })}>
