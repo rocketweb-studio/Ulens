@@ -15,6 +15,12 @@
 .avatar {
   display: flex;
 }
+.profile {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  padding-left: 15px;
+}
 
 .userName {
   color: colors.color(light, 100);
@@ -37,6 +43,8 @@
   border-radius: 6px;
   cursor: pointer;
   border: none;
+  width: 150px;
+  transition: background-color 0.3s ease;
 }
 
 .follow {
@@ -44,8 +52,16 @@
   color: colors.color(light, 100);
 }
 
+.follow:hover {
+  background: colors.color(accent, 100);
+}
+
 .unfollow {
   background: transparent;
   border: 1px solid colors.color(light, 900);
   color: colors.color(light, 700);
+}
+
+.unfollow:hover {
+  background: colors.color(light, 900);
 }

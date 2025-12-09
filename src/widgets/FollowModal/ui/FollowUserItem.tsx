@@ -26,12 +26,14 @@ export const FollowUserItem = ({ user, avatar, isFollowing, onFollow, onUnfollow
         </Link>
       </div>
 
-      <Link href={Path.UserProfile(user.id)} className={s.info} onClick={onClose}>
-        <span className={s.userName}>{user.userName}</span>
-        <span className={s.fullName}>
-          {user.firstName} {user.lastName}
-        </span>
-      </Link>
+      <div className={s.profile}>
+        <Link href={Path.UserProfile(user.id)} className={s.info} onClick={onClose}>
+          <span className={s.userName}>{user.userName}</span>
+          <span className={s.fullName}>
+            {user.firstName} {user.lastName}
+          </span>
+        </Link>
+      </div>
 
       {isFollowing ?
         <button className={s.unfollow} onClick={onUnfollow}>
