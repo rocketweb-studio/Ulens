@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { useFollowUserMutation, useUnfollowUserMutation } from '@/src/entities/user/api/userApi'
 import { Modal } from '@/src/shared/ui/Modal/Modal'
 import s from './FollowModal.module.scss'
-import Link from 'next/link'
-import { Path } from '@/src/shared/router/Path'
+import { useAvatarMap } from '@/src/shared/hooks/useAvatarMap'
+import { FollowUserItem } from '@/src/widgets/FollowModal/ui/FollowUserItem'
 
 type Props = {
   isOpen: boolean
@@ -23,6 +23,7 @@ type Props = {
 
 export const FollowModal = ({ isOpen, onClose, title, data, followingsIds }: Props) => {
   const [search, setSearch] = useState('')
+  const avatarMap = useAvatarMap()
 
   const [follow] = useFollowUserMutation()
   const [unfollow] = useUnfollowUserMutation()
@@ -33,11 +34,13 @@ export const FollowModal = ({ isOpen, onClose, title, data, followingsIds }: Pro
 
   const filtered = useMemo(() => {
     if (!search.trim()) return data
+
+    const term = search.toLowerCase()
     return data.filter(
       (u) =>
-        u.userName.toLowerCase().includes(search.toLowerCase()) ||
-        u.firstName.toLowerCase().includes(search.toLowerCase()) ||
-        u.lastName.toLowerCase().includes(search.toLowerCase()),
+        u.userName.toLowerCase().includes(term) ||
+        u.firstName.toLowerCase().includes(term) ||
+        u.lastName.toLowerCase().includes(term),
     )
   }, [search, data])
 
@@ -62,25 +65,18 @@ export const FollowModal = ({ isOpen, onClose, title, data, followingsIds }: Pro
         <div className={s.list}>
           {filtered.map((u) => {
             const isFollowing = followingsIds?.includes(u.id)
+            const avatar = avatarMap[u.id] ?? null
 
             return (
-              <div key={u.id} className={s.item}>
-                <Link href={Path.UserProfile(u.id)} className={s.info} onClick={onClose}>
-                  <span className={s.userName}>{u.userName}</span>
-                  <span className={s.fullName}>
-                    {u.firstName} {u.lastName}
-                  </span>
-                </Link>
-
-                {isFollowing ?
-                  <button className={s.unfollow} onClick={() => unfollow({ userId: u.id })}>
-                    Unfollow
-                  </button>
-                : <button className={s.follow} onClick={() => follow({ userId: u.id })}>
-                    Follow
-                  </button>
-                }
-              </div>
+              <FollowUserItem
+                key={u.id}
+                user={u}
+                avatar={avatar}
+                isFollowing={!!isFollowing}
+                onFollow={() => follow({ userId: u.id })}
+                onUnfollow={() => unfollow({ userId: u.id })}
+                onClose={onClose}
+              />
             )
           })}
         </div>
