@@ -17,6 +17,8 @@ import {
   useUnfollowUserMutation,
 } from '@/src/entities/user/api/userApi'
 import { FollowModal } from '@/src/entities/user/followModal/FollowModal'
+import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   userId: string
@@ -24,6 +26,7 @@ type Props = {
 }
 
 export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
+  const router = useRouter()
   const { data: meData, isSuccess } = useGetMeQuery()
   const { data: followingsData } = useGetFollowingsQuery()
   const { data: followersData } = useGetFollowersQuery()
@@ -49,9 +52,15 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
 
   const followStatus = followingsData?.items.find((user) => user.id === userId)
 
-  const handleFollow = () => follow({ userId })
-  const handleUnfollow = () => unfollow({ userId })
-  const handleSendMessage = () => {}
+  const handleFollow = () => {
+    follow({ userId })
+  }
+  const handleUnfollow = () => {
+    unfollow({ userId })
+  }
+  const handleSendMessage = () => {
+    router.push(`${Path.Messenger}?activeChat=${userId}`)
+  }
 
   return (
     <div className={s.profileHeader}>
@@ -65,24 +74,28 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
       <div className={s.profileInfo}>
         <div className={s.nameAndFollowRow}>
           <h1>{userDataForRender?.userName}</h1>
-          {isAuth && userDataForRender?.id === meData?.id ?
-            <Button tagType={'link'} path={Path.Settings('info')} size={'medium'} variant={'secondary'}>
-              Profile Settings
-            </Button>
-          : <FlexContainer gap={'15px'}>
-              {followStatus ?
-                <Button size={'medium'} variant={'outline'} onClick={handleUnfollow} disabled={unfollowIsLoading}>
-                  Unfollow
+          {isAuth && (
+            <>
+              {userDataForRender?.id === meData?.id ?
+                <Button tagType={'link'} path={Path.Settings('info')} size={'medium'} variant={'secondary'}>
+                  Profile Settings
                 </Button>
-              : <Button size={'medium'} variant={'primary'} onClick={handleFollow} disabled={followIsLoading}>
-                  Follow
-                </Button>
+              : <FlexContainer gap={'15px'}>
+                  {followStatus ?
+                    <Button size={'medium'} variant={'outline'} onClick={handleUnfollow} disabled={unfollowIsLoading}>
+                      Unfollow
+                    </Button>
+                  : <Button size={'medium'} variant={'primary'} onClick={handleFollow} disabled={followIsLoading}>
+                      Follow
+                    </Button>
+                  }
+                  <Button size={'medium'} variant={'secondary'} onClick={handleSendMessage}>
+                    Send Message
+                  </Button>
+                </FlexContainer>
               }
-              <Button size={'medium'} variant={'secondary'} onClick={handleSendMessage}>
-                Send Message
-              </Button>
-            </FlexContainer>
-          }
+            </>
+          )}
         </div>
         <div className={s.statisticRow}>
           <div className={s.statisticItem} onClick={() => setFollowingsOpen(true)}>

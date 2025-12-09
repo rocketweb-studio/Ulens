@@ -8,6 +8,7 @@ export const Path = {
   UserCreate: (userId: string | number) => `/profile/${userId}?action=create`,
   ViewPost: (userId: string, postId: string) => `/profile/${userId}/post/${postId}`,
   Settings: (part: Settings) => `/settings?part=${part}`,
+  Messenger: `/messenger`,
   SignIn: '/sign-in',
   SignUp: '/sign-up',
   TermOfService: '/sign-up/term-of-service',

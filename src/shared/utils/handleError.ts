@@ -42,7 +42,7 @@ export const handleError = async (
         break
       case 404:
         if (isErrorWithMessage(result.error.data)) {
-          if (result.error.data.message === "Subscription not found") return
+          if (result.error.data.message === 'Subscription not found') return
         }
         break
       case 500:
@@ -56,6 +56,6 @@ export const handleError = async (
         error = JSON.stringify(result.error)
         break
     }
-    api.endpoint !== 'getMe' && toast.error(error)
+    api.endpoint !== 'getMe' && result.error.status !== 401 && toast.error(error)
   }
 }

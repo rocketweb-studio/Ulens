@@ -15,8 +15,8 @@ importers:
         specifier: ^2.8.2
         version: 2.8.2(react-redux@9.2.0(@types/react@19.1.9)(react@19.1.0)(redux@5.0.1))(react@19.1.0)
       '@rocketweb-studio/ulens-ui-kit':
-        specifier: ^0.7.0
-        version: 0.7.0
+        specifier: ^0.9.20
+        version: 0.9.20
       '@types/react-custom-scrollbars':
         specifier: ^4.0.13
         version: 4.0.13
@@ -651,8 +651,8 @@ packages:
       react-redux:
         optional: true
 
-  '@rocketweb-studio/ulens-ui-kit@0.7.0':
-    resolution: {integrity: sha512-DVwwDr7fCGAf+TvhNjboD6RrAzqaVnUX/HEzp2fHy45Gt17xobXUnkE+Yna8HUa+cKnx2P4N8cKK2sXg5k6E9g==}
+  '@rocketweb-studio/ulens-ui-kit@0.9.20':
+    resolution: {integrity: sha512-0WJIpbebBYixuEvm2lzKXtYrwOinnhi/tvOalcJd9qdfcdVju3DayOfVV9HucuWfCnz7kG7sxAW6EGrgW35asA==}
 
   '@rollup/rollup-android-arm-eabi@4.46.2':
     resolution: {integrity: sha512-Zj3Hl6sN34xJtMv7Anwb5Gu01yujyE/cLBDB2gnHTAHaWS1Z38L7kuSG+oAh0giZMqG060f/YBStXtMH6FvPMA==}
@@ -1183,6 +1183,10 @@ packages:
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
+
+  cookie@1.1.1:
+    resolution: {integrity: sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ==}
+    engines: {node: '>=18'}
 
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
@@ -2126,6 +2130,23 @@ packages:
       redux:
         optional: true
 
+  react-router-dom@7.9.6:
+    resolution: {integrity: sha512-2MkC2XSXq6HjGcihnx1s0DBWQETI4mlis4Ux7YTLvP67xnGxCvq+BcCQSO81qQHVUTM1V53tl4iVVaY5sReCOA==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      react: '>=18'
+      react-dom: '>=18'
+
+  react-router@7.9.6:
+    resolution: {integrity: sha512-Y1tUp8clYRXpfPITyuifmSoE2vncSME18uVLgaqyxh9H35JWpIfzHo+9y3Fzh5odk/jxPW29IgLgzcdwxGqyNA==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      react: '>=18'
+      react-dom: '>=18'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+
   react-toastify@11.0.5:
     resolution: {integrity: sha512-EpqHBGvnSTtHYhCPLxML05NLY2ZX0JURbAdNYa6BUkk+amz4wbKBQvoKQAB0ardvSarUBuY4Q4s1sluAzZwkmA==}
     peerDependencies:
@@ -2228,6 +2249,9 @@ packages:
     resolution: {integrity: sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==}
     engines: {node: '>=10'}
     hasBin: true
+
+  set-cookie-parser@2.7.2:
+    resolution: {integrity: sha512-oeM1lpU/UvhTxw+g3cIfxXHyJRc/uidd3yK1P242gzHds0udQBYzs3y8j4gCCW+ZJ7ad0yctld8RYO+bdurlvw==}
 
   set-function-length@1.2.2:
     resolution: {integrity: sha512-pgRc4hJ4/sNjWCSS9AmnS40x3bNMDTknHgL5UaMBTMyJnU90EgWh1Rz+MC9eFu4BuN/UwZjKQuY/1v3rM7HMfg==}
@@ -3020,13 +3044,14 @@ snapshots:
       react: 19.1.0
       react-redux: 9.2.0(@types/react@19.1.9)(react@19.1.0)(redux@5.0.1)
 
-  '@rocketweb-studio/ulens-ui-kit@0.7.0':
+  '@rocketweb-studio/ulens-ui-kit@0.9.20':
     dependencies:
       clsx: 2.1.1
       framer-motion: 12.23.24(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
       react-hook-form: 7.65.0(react@19.1.1)
+      react-router-dom: 7.9.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       swiper: 12.0.3
     transitivePeerDependencies:
       - '@emotion/is-prop-valid'
@@ -3571,6 +3596,8 @@ snapshots:
   concat-map@0.0.1: {}
 
   convert-source-map@2.0.0: {}
+
+  cookie@1.1.1: {}
 
   cross-spawn@7.0.6:
     dependencies:
@@ -4671,6 +4698,20 @@ snapshots:
       '@types/react': 19.1.9
       redux: 5.0.1
 
+  react-router-dom@7.9.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+    dependencies:
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+      react-router: 7.9.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+
+  react-router@7.9.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+    dependencies:
+      cookie: 1.1.1
+      react: 19.1.1
+      set-cookie-parser: 2.7.2
+    optionalDependencies:
+      react-dom: 19.1.1(react@19.1.1)
+
   react-toastify@11.0.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
       clsx: 2.1.1
@@ -4797,6 +4838,8 @@ snapshots:
   semver@6.3.1: {}
 
   semver@7.7.2: {}
+
+  set-cookie-parser@2.7.2: {}
 
   set-function-length@1.2.2:
     dependencies:

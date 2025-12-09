@@ -55,7 +55,7 @@ function SidebarContent() {
       href: Path.UserProfile(data?.id),
       isActive: pathname === Path.UserProfile(data?.id) && params?.size === 0,
     },
-    { icon: IconMessageCircleOutline, title: 'Messenger', href: Path.InDevelopment, isActive: false },
+    { icon: IconMessageCircleOutline, title: 'Messenger', href: Path.Messenger, isActive: pathname === Path.Messenger },
     { icon: IconSearch, title: 'Search', href: Path.Search, isActive: pathname === Path.Search },
     { icon: IconTrendingUpOutline, title: 'Statistics', href: Path.InDevelopment, isActive: false },
     { icon: IconBookmarkOutline, title: 'Favorites', href: Path.InDevelopment, isActive: false },

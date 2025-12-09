@@ -44,8 +44,6 @@ export const SearchPage = () => {
           onChange={(e) => setSearch(e.currentTarget.value)}
         />
       </div>
-      {/*((recentSearch.length > 0 && !debounceSearch.length) ||*/}
-      {/*(searchUserItems.length <= 0 && debounceSearch.length > 0))*/}
       {recentSearch.length > 0 && isSuccess && !isFetching && !debounceSearch.length && (
         <div className={s.searchResult}>
           <h3>Recent request</h3>
