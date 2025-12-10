@@ -15,5 +15,9 @@ export const baseApi = createApi({
     'Followings',
     'GetPostById',
     'GetPostComments',
+    'Sessions',
+    'GetRooms',
+    'GetMessagesByRoomId',
+    'GetFollowingsPosts'
   ],
 })

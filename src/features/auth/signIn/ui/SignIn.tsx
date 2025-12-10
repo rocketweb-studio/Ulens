@@ -29,14 +29,18 @@ export const SignIn = () => {
     }
   }, [])
 
-  if (isAuth) {
-    redirect(Path.UserProfile(meData.id))
-  }
+  useEffect(() => {
+    if(isAuth){
+      redirect(Path.UserProfile(meData.id))
+    }
+
+  }, [isAuth])
 
   const {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm<LoginRequestParams>({
     resolver: zodResolver(loginSchema),
@@ -54,6 +58,7 @@ export const SignIn = () => {
       localStorage.setItem('accessToken', res.accessToken)
     } catch (error) {
       dispatch(setLoaderStatus({ status: 'idle' }))
+       setError('password',{message:'The email or password are incorrect. Try again please'})
     }
   }
 
@@ -73,7 +78,6 @@ export const SignIn = () => {
 
           <div className={styles.inputContainer}>
             <Input register={register} name={'email'} error={errors.email?.message} placeholder={'Ulens@ulens.com'} label={'Email'} />
-
             <Input register={register} name={'password'} error={errors.password?.message} label={'Password'} type={'password'} showPasswordToggle />
             <Link href={Path.PasswordRecovery} className={styles.forgotPassword}>
               Forgot Password
