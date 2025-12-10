@@ -35,6 +35,7 @@ export type GetPostByIdResponse = {
   id: string // postId
   userName: string
   description: string
+  commentsCount: number
   location: {
     city: string | null
     country: string | null

@@ -13,7 +13,6 @@ export const FeedPage = () => {
     return <div> Loading </div>
   }
   const postItems = data.pages.flatMap((page) => page.items) || []
-  // console.log(postItems)
   return (
     <FlexContainer align={'center'} direction={'column'} gap={'35px'}>
       {postItems.map((postItem) => (

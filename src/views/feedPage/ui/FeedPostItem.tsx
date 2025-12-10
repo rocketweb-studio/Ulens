@@ -73,7 +73,7 @@ export const FeedPostItem = ({ postItem }: Props) => {
         </div>
       </FlexContainer>
       <Link className={s.linkToComment} href={Path.ViewPost(postItem.ownerId, postItem.id)}>
-        View All Comments ()
+        View All Comments ({postItem.commentsCount})
       </Link>
       <FlexContainer>
         <CreatePostComment postId={postItem.id} withBorderBottom />

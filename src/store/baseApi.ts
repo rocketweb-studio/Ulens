@@ -18,5 +18,6 @@ export const baseApi = createApi({
     'Sessions',
     'GetRooms',
     'GetMessagesByRoomId',
+    'GetFollowingsPosts'
   ],
 })
