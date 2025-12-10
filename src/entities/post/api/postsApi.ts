@@ -96,7 +96,7 @@ export const postsApi = baseApi.injectEndpoints({
           like,
         },
       }),
-      invalidatesTags: ['GetPostById', 'GetPostsByUsedId'],
+      invalidatesTags: ['GetPostById', 'GetPostsByUsedId', 'GetFollowingsPosts'],
     }),
     getPostComments: build.query<GetPostCommentsType, { postId: string }>({
       query: ({ postId }) => `posts/${postId}/comments`,

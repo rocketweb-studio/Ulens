@@ -11,17 +11,15 @@ import {
   CustomSwiper,
   FlexContainer,
   IconBookmarkOutline,
-  IconHeartOutline,
   IconMessageCircleOutline,
   IconPaperPlaneOutline,
 } from '@rocketweb-studio/ulens-ui-kit'
 import { CreatePostComment } from '@/src/features/post/postCreateComment'
-
+import {LikeButton} from "@/src/features/post/postLike";
 type Props = {
   postItem: GetPostByIdResponse
 }
 export const FeedPostItem = ({ postItem }: Props) => {
-  console.log(postItem)
   return (
     <FlexContainer direction={'column'} gap={'20px'} className={s.container}>
       <FlexContainer justify={'between'} align={'center'}>
@@ -56,7 +54,7 @@ export const FeedPostItem = ({ postItem }: Props) => {
 
       <FlexContainer justify={'between'}>
         <FlexContainer gap={20}>
-          <IconHeartOutline />
+          <LikeButton isLiked={postItem.isLiked} itemId={postItem.id} itemType={'POST'} likeCount={postItem.likeCount}/>
           <IconMessageCircleOutline />
           <IconPaperPlaneOutline />
         </FlexContainer>
