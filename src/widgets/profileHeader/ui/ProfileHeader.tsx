@@ -17,7 +17,6 @@ import {
   useUnfollowUserMutation,
 } from '@/src/entities/user/api/userApi'
 import { FollowModal } from '@/src/entities/user/followModal/FollowModal'
-import { redirect } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 
 type Props = {
@@ -37,6 +36,8 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
 
   const [followersOpen, setFollowersOpen] = useState(false)
   const [followingsOpen, setFollowingsOpen] = useState(false)
+
+  const [disabled, setDisabled] = useState(false)
 
   const isAuth = !!meData?.id && isSuccess
   const dispatch = useAppDispatch()
@@ -98,11 +99,23 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
           )}
         </div>
         <div className={s.statisticRow}>
-          <div className={s.statisticItem} onClick={() => setFollowingsOpen(true)}>
+          <div
+            className={s.statisticItem}
+            onClick={() => {
+              if (!isAuth) return
+              setFollowingsOpen(true)
+            }}
+          >
             <strong>{userDataForRender?.following}</strong>
             <span>Following</span>
           </div>
-          <div className={s.statisticItem} onClick={() => setFollowersOpen(true)}>
+          <div
+            className={s.statisticItem}
+            onClick={() => {
+              if (!isAuth) return
+              setFollowersOpen(true)
+            }}
+          >
             <strong>{userDataForRender?.followers}</strong>
             <span>Followers</span>
           </div>
