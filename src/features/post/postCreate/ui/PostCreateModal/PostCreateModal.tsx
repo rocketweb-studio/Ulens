@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useModal } from '@/src/shared/hooks/useModal'
 import { FILES_VALIDATE } from '../../model/consts'
 import { publicationSchema } from '../../model/schemas'
-import { base64ToFile, dropErrorSnackBar, fileToBase64, getImageDimensions } from '../../utils'
+import { base64ToFile, dropErrorSnackBar, fileToBase64, getImageDimensions, saveDraft, getDraft, deleteDraft, hasDraft } from '../../utils'
 import { AddStep } from './AddStep'
 import { CropStep } from './CropStep'
 import { FilterStep } from './FilterStep'
@@ -36,6 +36,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   const [dropError, setDropError] = useState<string | null>(null)
   const [pendingStepChange, setPendingStepChange] = useState(false)
   const [isLoadingStatus, setIsLoadingStatus] = useState<boolean>(false)
+  const [draftExists, setDraftExists] = useState<boolean>(false)
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -49,6 +50,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     handleSubmit,
     formState: { errors },
     reset,
+    getValues,
   } = useForm<PublicationFormData>({
     resolver: zodResolver(publicationSchema),
     defaultValues: { description: '' },
@@ -148,11 +150,58 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
     }
   }
 
-  const resetState = () => {
+  const resetState = async () => {
     setUploadedFiles([])
     setCurrentImageIndex(0)
     setDropError(null)
     reset({ description: '' })
+    setStep('add')
+    await deleteDraft()
+    setDraftExists(false)
+  }
+
+  const loadDraft = async () => {
+    try {
+      const draft = await getDraft()
+      if (draft) {
+        setStep(draft.step)
+        setUploadedFiles(draft.uploadedFiles)
+        setCurrentImageIndex(draft.currentImageIndex)
+        reset({ description: draft.description })
+      }
+    } catch (error) {
+      console.error('Error loading draft:', error)
+    }
+  }
+
+  const handleSaveDraft = async () => {
+    try {
+      if (uploadedFiles.length > 0) {
+        const formValues = getValues()
+        await saveDraft(step, uploadedFiles, currentImageIndex, formValues.description || '')
+        setDraftExists(true)
+      }
+      closeModal()
+      onModalClose()
+    } catch (error) {
+      console.error('Error saving draft:', error)
+    }
+  }
+
+  const handleDiscard = async () => {
+    await resetState()
+    closeModal()
+    onModalClose()
+  }
+
+  const handleOpenDraft = async () => {
+    await loadDraft()
+    // После загрузки черновика обновляем состояние
+    // Черновик остается в IndexedDB, так как пользователь может снова сохранить его
+  }
+
+  const shouldShowConfirmModal = () => {
+    return uploadedFiles.length > 0
   }
 
   const onFormSubmit = async (data: PublicationFormData) => {
@@ -172,7 +221,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
         await uploadImages({ postId: id, images: imageFiles }).unwrap()
       }
 
-      resetState()
+      await resetState()
       onModalClose()
       setIsLoadingStatus(false)
     } catch (error) {
@@ -192,9 +241,17 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
   }, [uploadedFiles, pendingStepChange])
 
   useEffect(() => {
+    if (isModalOpen) {
+      hasDraft().then(setDraftExists)
+    }
+  }, [isModalOpen])
+
+  useEffect(() => {
     if (!isModalOpen) {
       const timer = setTimeout(() => {
-        resetState()
+        if (step === 'add' && uploadedFiles.length === 0) {
+          resetState()
+        }
       }, 300)
       return () => clearTimeout(timer)
     }
@@ -205,18 +262,20 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       {step === 'add' && (
         <AddStep
           isModalOpen={isModalOpen}
-          onModalClose={onModalClose}
+          onModalClose={shouldShowConfirmModal() ? openModal : onModalClose}
           getRootProps={getRootProps}
           getInputProps={getInputProps}
           isDragActive={isDragActive}
           dropError={dropError}
+          hasDraft={draftExists}
+          onOpenDraft={handleOpenDraft}
         />
       )}
 
       {step === 'crop' && (
         <CropStep
           isModalOpen={isModalOpen}
-          onModalClose={onModalClose}
+          onModalClose={openModal}
           onOverlayClick={openModal}
           changeNextStep={changeNextStep}
           changePrevStep={changePrevStep}
@@ -230,7 +289,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       {step === 'filter' && (
         <FilterStep
           isModalOpen={isModalOpen}
-          onModalClose={onModalClose}
+          onModalClose={openModal}
           onOverlayClick={openModal}
           changeNextStep={changeNextStep}
           changePrevStep={changePrevStep}
@@ -243,7 +302,7 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
       {step === 'publication' && (
         <PublicationStep
           isModalOpen={isModalOpen}
-          onModalClose={onModalClose}
+          onModalClose={openModal}
           onOverlayClick={openModal}
           changePrevStep={changePrevStep}
           uploadedFiles={uploadedFiles}
@@ -258,12 +317,9 @@ export const PostCreateModal = ({ isModalOpen, onModalClose }: Props) => {
 
       <ConfirmCloseModal
         isOpen={isOpen}
-        onClose={closeModal}
-        onConfirm={() => {
-          closeModal()
-          resetState()
-          onModalClose()
-        }}
+        onClose={handleDiscard}
+        onConfirm={handleDiscard}
+        onSaveDraft={handleSaveDraft}
       />
     </div>
   )
