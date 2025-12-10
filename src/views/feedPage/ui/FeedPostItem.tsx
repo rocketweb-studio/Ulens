@@ -76,7 +76,7 @@ export const FeedPostItem = ({ postItem }: Props) => {
         View All Comments ()
       </Link>
       <FlexContainer>
-        <CreatePostComment postId={postItem.id} />
+        <CreatePostComment postId={postItem.id} withBorderBottom />
       </FlexContainer>
     </FlexContainer>
   )
