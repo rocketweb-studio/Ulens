@@ -42,3 +42,13 @@ export type Filter = {
 export type ImageFilters = {
   [imageIndex: number]: string
 }
+
+export type PostDraft = {
+  id: string
+  step: Steps
+  uploadedFiles: UploadedFile[]
+  currentImageIndex: number
+  description: string
+  createdAt: number
+  updatedAt: number
+}

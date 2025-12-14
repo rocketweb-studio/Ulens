@@ -16,10 +16,15 @@ import {
 } from '@rocketweb-studio/ulens-ui-kit'
 import { CreatePostComment } from '@/src/features/post/postCreateComment'
 import {LikeButton} from "@/src/features/post/postLike";
+import {Actions} from "@/src/widgets/ViewPostModal/ui/Actions/Actions";
+import {useGetMeQuery} from "@/src/entities/auth/api/authApi";
+
 type Props = {
   postItem: GetPostByIdResponse
 }
 export const FeedPostItem = ({ postItem }: Props) => {
+  // const {data: meData} = useGetMeQuery()
+  console.log(postItem)
   return (
     <FlexContainer direction={'column'} gap={'20px'} className={s.container}>
       <FlexContainer justify={'between'} align={'center'}>
@@ -70,6 +75,7 @@ export const FeedPostItem = ({ postItem }: Props) => {
           <span className={s.blockDescription_text}>{postItem.description}</span>
         </div>
       </FlexContainer>
+      {/*<Actions dataPostModal={postItem} meData={meData}/>*/}
       <Link className={s.linkToComment} href={Path.ViewPost(postItem.ownerId, postItem.id)}>
         View All Comments ({postItem.commentsCount})
       </Link>

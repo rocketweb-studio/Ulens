@@ -11,12 +11,30 @@ type Props = {
   getInputProps: any
   isDragActive: boolean
   dropError: string | null
+  hasDraft: boolean
+  onOpenDraft: () => void
 }
 
-export const AddStep = ({ isModalOpen, onModalClose, getRootProps, getInputProps, isDragActive, dropError }: Props) => {
+export const AddStep = ({
+  isModalOpen,
+  onModalClose,
+  getRootProps,
+  getInputProps,
+  isDragActive,
+  dropError,
+  hasDraft,
+  onOpenDraft,
+}: Props) => {
   return (
     <Modal className={s.modal} isOpen={isModalOpen} onClose={onModalClose} modalTitle={'Add Photo'} hideDefaultButton>
       <div className={s.addStep}>
+        {hasDraft && (
+          <div className={s.draftButtonWrapper}>
+            <Button variant={'outline'} onClick={onOpenDraft}>
+              Open Draft
+            </Button>
+          </div>
+        )}
         <div {...getRootProps()} className={`${s.dropzone} ${isDragActive ? s.active : ''}`}>
           <input {...getInputProps()} />
           <div className={s.dropzoneContent}>
