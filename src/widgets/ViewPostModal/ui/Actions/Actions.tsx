@@ -28,7 +28,7 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
       setAvatarWhoLikes((prev) => [
         {
           userId: meData.id,
-          avatars: dataPostModal.avatarWhoLikes[0].avatars,
+          avatars: dataPostModal?.avatarWhoLikes[0]?.avatars,
         },
         ...prev.filter((u) => u.userId !== meData.id),
       ])
@@ -74,7 +74,7 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
               width={24}
               height={24}
               src={
-                user?.avatars.small?.url ?
+                user?.avatars?.small?.url ?
                   `${process.env.NEXT_PUBLIC_MEDIA_URL}${user.avatars.small.url}`
                 : '/github-svg.svg'
               }

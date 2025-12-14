@@ -84,7 +84,7 @@ export const postsApi = baseApi.injectEndpoints({
         url: `posts/followings`,
         params: { endCursorPostId: pageParam, pageSize: '1' },
       }),
-      providesTags: ['GetFollowingsPosts']
+      providesTags: ['GetFollowingsPosts'],
     }),
     toggleLike: build.mutation<void, { likedItemId: string; like: boolean; likedItemType: 'POST' | 'COMMENT' }>({
       query: ({ likedItemId, like, likedItemType }) => ({

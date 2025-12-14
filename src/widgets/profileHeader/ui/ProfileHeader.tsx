@@ -37,8 +37,6 @@ export const ProfileHeader = ({ userId, dataUserInfo }: Props) => {
   const [followersOpen, setFollowersOpen] = useState(false)
   const [followingsOpen, setFollowingsOpen] = useState(false)
 
-  const [disabled, setDisabled] = useState(false)
-
   const isAuth = !!meData?.id && isSuccess
   const dispatch = useAppDispatch()
 
