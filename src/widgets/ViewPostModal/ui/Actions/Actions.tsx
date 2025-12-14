@@ -5,6 +5,7 @@ import { formatDate } from '@/src/shared/utils/dateFormatter'
 import { GetPostByIdResponse } from '@/src/entities/post/api/postsApi.types'
 import { getMeResponse } from '@/src/entities/auth/api/authApi.types'
 import { LikeButton } from '@/src/features/post/postLike'
+import { LikesInfo } from '@/src/widgets/ViewPostModal/ui/LikesInfo/LikesInfo'
 
 type Props = {
   dataPostModal: GetPostByIdResponse
@@ -55,37 +56,19 @@ export const Actions = ({ dataPostModal, meData }: Props) => {
           <div className={s.postActionsLeft}>
             <LikeButton
               itemId={dataPostModal.id}
-              itemType={'POST'}
+              itemType='POST'
               isLiked={isLiked}
               likeCount={likeCount}
               onChange={handleLikeChange}
             />
-            <Image width={24} height={24} src={'/savedPost.svg'} alt={'Saved'} />
+            <Image width={24} height={24} src='/savedPost.svg' alt='Saved' />
           </div>
-          <Image width={24} height={24} src={'/sendPost.svg'} alt={'Send'} />
+          <Image width={24} height={24} src='/sendPost.svg' alt='Send' />
         </div>
       )}
-      <div className={s.likesPostContainer}>
-        <div className={s.likeImagesContainer}>
-          {avatarWhoLikes.slice(0, 3).map((user) => (
-            <Image
-              key={user.userId}
-              className={s.likeImage}
-              width={24}
-              height={24}
-              src={
-                user?.avatars?.small?.url ?
-                  `${process.env.NEXT_PUBLIC_MEDIA_URL}${user.avatars.small.url}`
-                : '/github-svg.svg'
-              }
-              alt={''}
-            />
-          ))}
-        </div>
-        <span>
-          {likeCount} {likeCount === 1 ? 'Like' : 'Likes'}
-        </span>
-      </div>
+
+      <LikesInfo likeCount={likeCount} avatarWhoLikes={avatarWhoLikes} />
+
       <span className={s.date}>{formatDate(dataPostModal.createdAt)}</span>
     </div>
   )
