@@ -3,6 +3,7 @@
 import { IconHeart, IconHeartOutline } from '@rocketweb-studio/ulens-ui-kit'
 import { useToggleLikeMutation } from '@/src/entities/post/api/postsApi'
 import s from './LikeButton.module.scss'
+import { useEffect, useState } from 'react'
 
 type Props = {
   itemId: string
@@ -15,9 +16,20 @@ type Props = {
 export const LikeButton = ({ itemId, isLiked, likeCount, onChange, itemType }: Props) => {
   const [toggleLikePost] = useToggleLikeMutation()
 
+  const [liked, setLiked] = useState(isLiked)
+  const [likesCount, setLikesCount] = useState(likeCount)
+
+  useEffect(() => {
+    setLiked(isLiked)
+    setLikesCount(likeCount)
+  }, [isLiked, likeCount])
+
   const handleLikeClick = () => {
-    const newIsLiked = !isLiked
-    const newLikeCount = likeCount + (isLiked ? -1 : 1)
+    const newIsLiked = !liked
+    const newLikeCount = likesCount + (liked ? -1 : 1)
+
+    setLiked(newIsLiked)
+    setLikesCount(newLikeCount)
 
     onChange?.(newIsLiked, newLikeCount)
 
@@ -29,8 +41,8 @@ export const LikeButton = ({ itemId, isLiked, likeCount, onChange, itemType }: P
   }
 
   return (
-    <button onClick={handleLikeClick} className={`${s.likeButton} ${isLiked ? s.liked : ''}`}>
-      {isLiked ?
+    <button onClick={handleLikeClick} className={`${s.likeButton} ${liked ? s.liked : ''}`}>
+      {liked ?
         <IconHeart />
       : <IconHeartOutline />}
     </button>
