@@ -16,7 +16,7 @@ import {
 } from '@rocketweb-studio/ulens-ui-kit'
 import { CreatePostComment } from '@/src/features/post/postCreateComment'
 import {LikeButton} from "@/src/features/post/postLike";
-import {Actions} from "@/src/widgets/ViewPostModal/ui/Actions/Actions";
+import { LikesInfo } from '@/src/widgets/ViewPostModal/ui/LikesInfo/LikesInfo'
 import {useGetMeQuery} from "@/src/entities/auth/api/authApi";
 
 type Props = {
@@ -75,7 +75,8 @@ export const FeedPostItem = ({ postItem }: Props) => {
           <span className={s.blockDescription_text}>{postItem.description}</span>
         </div>
       </FlexContainer>
-      {/*<Actions dataPostModal={postItem} meData={meData}/>*/}
+      <LikesInfo likeCount={postItem.likeCount} avatarWhoLikes={postItem.avatarWhoLikes}/>
+
       <Link className={s.linkToComment} href={Path.ViewPost(postItem.ownerId, postItem.id)}>
         View All Comments ({postItem.commentsCount})
       </Link>
