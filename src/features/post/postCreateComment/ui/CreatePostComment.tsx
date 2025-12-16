@@ -13,12 +13,15 @@ import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 
 type Props = {
   postId: string
-  withBorderBottom?: boolean
+  className?: string
+  withoutBorderTop?: boolean
+  padding: 'Small' | 'Big'
 }
 
-export const CreatePostComment = ({ postId, withBorderBottom = false }: Props) => {
+export const CreatePostComment = ({ postId, className, withoutBorderTop = false, padding = 'Big' }: Props) => {
   const { data: meData } = useGetMeQuery()
   const [createComment, { isLoading }] = useCreateCommentMutation()
+  const paddingClass = `padding${padding}`
 
   const {
     register,
@@ -72,7 +75,9 @@ export const CreatePostComment = ({ postId, withBorderBottom = false }: Props) =
   if (!meData) return null
 
   return (
-    <div className={s.addCommentContainer}>
+    <div
+      className={`${s.addCommentContainer} ${!withoutBorderTop && s.borderTop} ${className || ''} ${s[paddingClass]}`}
+    >
       <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
         <div className={s.formWrapper}>
           <Input

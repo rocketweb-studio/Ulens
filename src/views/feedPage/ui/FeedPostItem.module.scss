@@ -8,6 +8,10 @@
   border-bottom: 1px solid colors.color(dark, 100);
 }
 
+.createPost {
+  width: 100%;
+}
+
 .author {
   @include typography.h3;
   display: flex;

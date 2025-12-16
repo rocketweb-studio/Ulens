@@ -15,9 +15,8 @@ import {
   IconPaperPlaneOutline,
 } from '@rocketweb-studio/ulens-ui-kit'
 import { CreatePostComment } from '@/src/features/post/postCreateComment'
-import {LikeButton} from "@/src/features/post/postLike";
+import { LikeButton } from '@/src/features/post/postLike'
 import { LikesInfo } from '@/src/widgets/ViewPostModal/ui/LikesInfo/LikesInfo'
-import {useGetMeQuery} from "@/src/entities/auth/api/authApi";
 
 type Props = {
   postItem: GetPostByIdResponse
@@ -29,7 +28,13 @@ export const FeedPostItem = ({ postItem }: Props) => {
     <FlexContainer direction={'column'} gap={'20px'} className={s.container}>
       <FlexContainer justify={'between'} align={'center'}>
         <FlexContainer gap={'12px'} align={'center'}>
-          <UserAvatar userName={postItem.userName} avatarOwner={postItem.avatarOwner} mode={'size'} height={36} width={36} />
+          <UserAvatar
+            userName={postItem.userName}
+            avatarOwner={postItem.avatarOwner}
+            mode={'size'}
+            height={36}
+            width={36}
+          />
           <span className={s.author}>{postItem.userName}</span>
           <span>•</span>
           <p className={s.dateText}>{timeAgo(postItem.createdAt)}</p>
@@ -59,7 +64,12 @@ export const FeedPostItem = ({ postItem }: Props) => {
 
       <FlexContainer justify={'between'}>
         <FlexContainer gap={20}>
-          <LikeButton isLiked={postItem.isLiked} itemId={postItem.id} itemType={'POST'} likeCount={postItem.likeCount}/>
+          <LikeButton
+            isLiked={postItem.isLiked}
+            itemId={postItem.id}
+            itemType={'POST'}
+            likeCount={postItem.likeCount}
+          />
           <IconMessageCircleOutline />
           <IconPaperPlaneOutline />
         </FlexContainer>
@@ -68,20 +78,26 @@ export const FeedPostItem = ({ postItem }: Props) => {
 
       <FlexContainer gap={'12px'}>
         <div>
-          <UserAvatar userName={postItem.userName} avatarOwner={postItem.avatarOwner} mode={'size'} height={36} width={36} />
+          <UserAvatar
+            userName={postItem.userName}
+            avatarOwner={postItem.avatarOwner}
+            mode={'size'}
+            height={36}
+            width={36}
+          />
         </div>
         <div>
           <span className={s.blockDescription_userName}>{postItem.userName} </span>
           <span className={s.blockDescription_text}>{postItem.description}</span>
         </div>
       </FlexContainer>
-      <LikesInfo likeCount={postItem.likeCount} avatarWhoLikes={postItem.avatarWhoLikes}/>
+      <LikesInfo likeCount={postItem.likeCount} avatarWhoLikes={postItem.avatarWhoLikes} />
 
       <Link className={s.linkToComment} href={Path.ViewPost(postItem.ownerId, postItem.id)}>
         View All Comments ({postItem.commentsCount})
       </Link>
-      <FlexContainer>
-        <CreatePostComment postId={postItem.id} withBorderBottom />
+      <FlexContainer className={s.createPostContainer}>
+        <CreatePostComment className={s.createPost} postId={postItem.id} padding={'Small'} withoutBorderTop />
       </FlexContainer>
     </FlexContainer>
   )
