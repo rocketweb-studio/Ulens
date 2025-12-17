@@ -13,12 +13,21 @@ import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 
 type Props = {
   postId: string
+  initialValue?: string
+  onSuccess?: () => void
   className?: string
   withoutBorderTop?: boolean
   padding: 'Small' | 'Big'
 }
 
-export const CreatePostComment = ({ postId, className, withoutBorderTop = false, padding = 'Big' }: Props) => {
+export const CreatePostComment = ({
+  postId,
+  className,
+  withoutBorderTop = false,
+  padding = 'Big',
+  initialValue,
+  onSuccess,
+}: Props) => {
   const { data: meData } = useGetMeQuery()
   const [createComment, { isLoading }] = useCreateCommentMutation()
   const paddingClass = `padding${padding}`
@@ -34,7 +43,7 @@ export const CreatePostComment = ({ postId, className, withoutBorderTop = false,
     mode: 'onChange',
     resolver: zodResolver(createCommentSchema),
     defaultValues: {
-      content: '',
+      content: initialValue ?? '',
     },
   })
 
@@ -65,6 +74,7 @@ export const CreatePostComment = ({ postId, className, withoutBorderTop = false,
     try {
       const res = await createComment({ postId: postId, content: content }).unwrap()
       reset()
+      onSuccess?.()
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         handleServerError(err)
