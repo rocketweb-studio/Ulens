@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import s from '@/src/widgets/ViewPostModal/ui/Comments/Comments.module.scss'
 import { UserAvatar } from '@/src/entities/userProfile'
 import { formatDate } from '@/src/shared/utils/dateFormatter'
@@ -10,6 +10,7 @@ import { postsApi, useGetPostCommentsQuery } from '@/src/entities/post/api/posts
 import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
 import { useAppSelector } from '@/src/shared/hooks/useAppSelector'
 import { LikeButton } from '@/src/features/post/postLike'
+import { CreatePostComment } from '@/src/features/post/postCreateComment'
 
 type Props = {
   postId: string
@@ -18,6 +19,11 @@ type Props = {
 }
 
 export const Comments = ({ postId, commentsData, meData }: Props) => {
+  const [replyTo, setReplyTo] = useState<{
+    commentId: string
+    username: string
+  } | null>(null)
+
   const dataFromCache = useAppSelector((state) => postsApi.endpoints.getPostComments.select({ postId })(state).data)
   const needHydrateStateRef = useRef(!!commentsData && !dataFromCache)
   const dispatch = useAppDispatch()
@@ -59,7 +65,30 @@ export const Comments = ({ postId, commentsData, meData }: Props) => {
                   <div className={s.commentPanel}>
                     <span className={s.date}>{formatDate(comment.createdAt)}</span>
                     {comment.likeCount > 0 && <span className={s.like}>Like: {comment.likeCount}</span>}
-                    {meData && <span className={s.like}>Answer</span>}
+                    {meData && (
+                      <button
+                        className={s.answerButton}
+                        onClick={() =>
+                          setReplyTo({
+                            commentId: comment.id,
+                            username: comment.commentator.username,
+                          })
+                        }
+                      >
+                        Answer
+                      </button>
+                    )}
+                    {replyTo?.commentId === comment.id && (
+                      <div className={s.replyWrapper}>
+                        <CreatePostComment
+                          postId={postId}
+                          padding='Small'
+                          withoutBorderTop
+                          initialValue={`@${replyTo.username}, `}
+                          onSuccess={() => setReplyTo(null)}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
                 {meData && (
