@@ -3,6 +3,7 @@ import {
   CreateRoomResponce,
   GetMessagesByRoomResponce,
   GetRoomsResponce,
+  UploadImageResponse,
 } from '@/src/entities/messenger/api/messengerApi.type'
 
 export const messengerApi = baseApi.injectEndpoints({
@@ -23,7 +24,24 @@ export const messengerApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['GetRooms'],
     }),
+    uploadMessageImages: build.mutation<UploadImageResponse, { roomId: number; images: File[] | undefined }>({
+      query: ({ roomId, images }) => {
+        const formData = new FormData()
+        if (images) {
+          images.forEach((img) => formData.append('images', img))
+        }
+        return {
+          method: 'POST',
+          url: `messenger/rooms/${roomId}/images`,
+          body: formData,
+        }
+      },
+      // invalidatesTags: (result, error, { roomId }) => [
+      //   { type: 'GetMessagesByRoomId', id: roomId }
+      // ],
+    }),
   }),
 })
 
-export const { useGetRoomsQuery, useCreateRoomMutation, useGetMessagesByRoomIdQuery } = messengerApi
+export const { useGetRoomsQuery, useCreateRoomMutation, useGetMessagesByRoomIdQuery, useUploadMessageImagesMutation } =
+  messengerApi

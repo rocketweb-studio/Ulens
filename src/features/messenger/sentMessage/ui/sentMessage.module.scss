@@ -14,11 +14,47 @@
     padding: 3px;
     width: 162px;
   }
-  & .buttonAudio{
+  & .buttonAudio, & .buttonUploadImage{
     color: colors.color('light',100);
     padding: 12px;
   }
 }
+
+.previewImageWrap{
+  width: 100%;
+  height: auto;
+  padding: 13px 13px 0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  .previewImage{
+    position: relative;
+    user-select: none;
+    img{
+      border-radius: 4px;
+    }
+    .deleteImageBtn{
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: rgba(0, 0, 0, .44);
+      border-top-right-radius: 4px;
+      border-bottom-left-radius: 4px;
+      padding: 3px 3px 0;
+      &:hover{
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.addMoreImageBtn{
+  &:hover{
+    cursor: pointer;
+  }
+}
+
+
 
 .inputSendMessage {
   flex-grow: 1;
