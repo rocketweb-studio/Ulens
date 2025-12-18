@@ -23,15 +23,17 @@ export const Message = ({ type, message, media, date, avatar, friendName }: Prop
       )}
       <div className={s.messageContent}>
         {filterImage?.length > 0 && (
-          <span className={`${s.messageImages} ${message && s.hasMessage}`}>
+          <span className={`${s.telegramGrid} ${message && s.hasMessage}`}>
             {filterImage?.map((img, index) => (
-              <Image
-                key={index}
-                src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${img.url}`}
-                alt={''}
-                width={img.width}
-                height={img.height}
-              />
+              <div className={s.gridItem}>
+                <Image
+                  key={index}
+                  src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${img.url}`}
+                  alt={''}
+                  width={img.width}
+                  height={img.height}
+                />
+              </div>
             ))}
           </span>
         )}
