@@ -195,6 +195,7 @@ export const Messenger = () => {
                 {RoomMessages?.map((item) => (
                   <Message
                     key={item.id}
+                    media={item.media}
                     type={checkAuthorMessage(item)}
                     message={item.content}
                     date={dateFormatterForChat(item.createdAt)}

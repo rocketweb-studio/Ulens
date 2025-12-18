@@ -1,3 +1,6 @@
+import { Area } from 'react-easy-crop'
+import { FilteredImage } from '@/src/features/post/postCreate/model/types'
+
 export type UserRoom = {
   id: string
   userName: string
@@ -9,6 +12,7 @@ export type UserRoom = {
 export type MessageType = {
   id: number
   content: string
+  media: MediaFields[]
   createdAt: string
   author: {
     id: string
@@ -19,21 +23,37 @@ export type MessageType = {
   }
 }
 
+export type MediaFields = {
+  id: string
+  messageId: string
+  url: string
+  width: number
+  height: number
+  fileSize: number
+  size: string
+  type: string
+}
+
+export type UploadedFileInMessage = {
+  id: string
+  file: string
+  originalPreview: string
+  preview: string
+  width: string | number
+  height: string | number
+  zoom?: number
+}
+
+export type UploadImageResponse = {
+  files: MediaFields[]
+}
+
 export type LastMessage = {
   id: number
   content: string
   createdAt: string
   authorId: string
-  media: {
-    id: string
-    messageId: string
-    url: string
-    width: number
-    height: number
-    fileSize: number
-    size: string
-    type: string
-  }
+  media: MediaFields
 }
 
 export type GetRoomsResponce = {
