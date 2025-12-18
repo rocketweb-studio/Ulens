@@ -78,18 +78,18 @@ export const Comments = ({ postId, commentsData, meData }: Props) => {
                         Answer
                       </button>
                     )}
-                    {replyTo?.commentId === comment.id && (
-                      <div className={s.replyWrapper}>
-                        <CreatePostComment
-                          postId={postId}
-                          padding='Small'
-                          withoutBorderTop
-                          initialValue={`@${replyTo.username}, `}
-                          onSuccess={() => setReplyTo(null)}
-                        />
-                      </div>
-                    )}
                   </div>
+                  {replyTo?.commentId === comment.id && (
+                    <div className={s.replyWrapper}>
+                      <CreatePostComment
+                        postId={postId}
+                        padding='Small'
+                        withoutBorderTop
+                        initialValue={`@${replyTo.username}, `}
+                        onSuccess={() => setReplyTo(null)}
+                      />
+                    </div>
+                  )}
                 </div>
                 {meData && (
                   <LikeButton
