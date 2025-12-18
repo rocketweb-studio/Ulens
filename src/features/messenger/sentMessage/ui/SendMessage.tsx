@@ -1,12 +1,26 @@
 'use client'
 
 import s from './sentMessage.module.scss'
-import { Button, Input } from '@rocketweb-studio/ulens-ui-kit'
+import {
+  Button,
+  IconClose,
+  IconImageOutline,
+  IconMicOutline,
+  IconPlusCircleOutline,
+  Input,
+} from '@rocketweb-studio/ulens-ui-kit'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MessageInput, messageSchema } from '@/src/features/messenger/sentMessage/model/schemas'
+import { useDropzone } from 'react-dropzone'
+import { FILES_VALIDATE } from '@/src/features/post/postCreate/model/consts'
+import { base64ToFile, fileToBase64, getImageDimensions } from '@/src/features/post/postCreate/utils'
+import React, { useState } from 'react'
+import { UploadedFileInMessage, UploadImageResponse } from '@/src/entities/messenger/api/messengerApi.type'
+
+import Image from 'next/image'
+import { useUploadMessageImagesMutation } from '@/src/entities/messenger'
 import { io } from 'socket.io-client'
-import {IconMicOutline} from '@rocketweb-studio/ulens-ui-kit'
 
 type Props = {
   roomId: number | null
@@ -27,26 +41,104 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
     },
   })
 
+  const [uploadImages] = useUploadMessageImagesMutation()
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFileInMessage[]>([])
+  const [uploadedMediaInfo, setUploadedMediaInfo] = useState<UploadImageResponse | undefined>()
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: FILES_VALIDATE.accept,
+    maxFiles: FILES_VALIDATE.maxFiles,
+    maxSize: FILES_VALIDATE.maxSize,
+  })
+
+  async function onDrop(acceptedFiles: File[], rejectedFiles: any[]) {
+    const newFiles = await Promise.all(
+      acceptedFiles.slice(0, 10 - uploadedFiles.length).map(async (file) => {
+        const base64String = await fileToBase64(file)
+        const { width, height } = await getImageDimensions(base64String)
+        return {
+          id: `${file.name}-${Date.now()}`,
+          file: base64String,
+          originalPreview: base64String,
+          preview: base64String,
+          width,
+          height,
+          zoom: 1,
+        }
+      }),
+    )
+    setUploadedFiles((prev) => [...prev, ...newFiles])
+  }
+
+  const handleDeleteImage = (id: string) => {
+    setUploadedFiles(uploadedFiles.filter((file) => file.id !== id))
+  }
+
   const onSubmit: SubmitHandler<MessageInput> = async (data) => {
     try {
-      const token = localStorage.getItem('accessToken')
-
       if (!roomId) return
+      const token = localStorage.getItem('accessToken')
       const socket = io('https://ulens.org/ws', { auth: { token } })
+      let res
+      if (uploadedFiles.length > 0) {
+        const imageFiles = await Promise.all(
+          uploadedFiles.map(async (item) => {
+            return await base64ToFile(item.file, `image-${Date.now()}.jpg`)
+          }),
+        )
+        res = await uploadImages({
+          roomId,
+          images: imageFiles,
+        }).unwrap()
+
+        // setUploadedMediaInfo(res)
+      }
+      console.log(res)
+      const issetMedia = uploadedMediaInfo && uploadedMediaInfo.files.length > 0 ? uploadedMediaInfo : null
 
       socket.emit('SEND_MESSAGE', {
         roomId,
         content: data.message,
+        media: res ? res.files : null,
       })
+
       reset()
+      setUploadedFiles([])
+      setUploadedMediaInfo(undefined)
     } catch (error) {
       console.error('Failed to send message:', error)
     }
   }
 
+  const isFormValid = () => {
+    const hasMessage = isValid
+    const hasMedia = uploadedFiles.length > 0
+    return hasMessage || hasMedia
+  }
+
   return (
     <div className={s.sendMessageContainer}>
       <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
+        {uploadedFiles.length > 0 && (
+          <div className={s.previewImageWrap}>
+            {uploadedFiles.map((file) => (
+              <div key={file.id} className={s.previewImage}>
+                <Image src={file.preview} alt={''} width={90} height={90} />
+                <span className={s.deleteImageBtn} onClick={() => handleDeleteImage(file.id)}>
+                  <IconClose width={20} height={20} />
+                </span>
+              </div>
+            ))}
+            {uploadedFiles.length < 10 && (
+              <div className={s.addMoreImageBtn} {...getRootProps()}>
+                <input {...getInputProps()} />
+                <IconPlusCircleOutline width={100} height={50} />
+              </div>
+            )}
+          </div>
+        )}
+
         <div className={s.formWrapper}>
           <Input
             className={s.inputSendMessage}
@@ -56,29 +148,26 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
             placeholder={'Type Message...'}
             disabled={isDisable}
           />
-          {isValid
-            ?
-            <Button
-              className={s.buttonSubmit}
-              variant={'text'}
-              size={'large'}
-              withoutPadding
-              disabled={!isValid || isDisable}
-            >
+          {isFormValid() ?
+            <Button className={s.buttonSubmit} variant={'text'} size={'large'} withoutPadding disabled={!isFormValid()}>
               Send message
             </Button>
-            :
-            <div>
+          : <div>
+              <Button className={s.buttonAudio} variant={'text'} size={'large'} withoutPadding>
+                <IconMicOutline />
+              </Button>
               <Button
-                className={s.buttonAudio}
+                {...getRootProps()}
+                className={s.buttonUploadImage}
                 variant={'text'}
                 size={'large'}
                 withoutPadding
               >
-                <IconMicOutline />
+                <input {...getInputProps()} />
+                <IconImageOutline />
               </Button>
-
-            </div>}
+            </div>
+          }
         </div>
       </form>
     </div>
