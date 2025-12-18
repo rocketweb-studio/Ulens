@@ -12,7 +12,8 @@
     margin-left: auto;
 
     .messageContent {
-      background-color: colors.color(accent, 900);
+      //background-color: colors.color(accent, 900);
+      background-color: unset;
     }
 
     .messageContentDate {
@@ -21,16 +22,20 @@
   }
 }
 .messageImages{
-  width: 300px;
-  height: auto;
+  img{
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
 }
 .messageContent {
   display: flex;
   flex-direction: column;
-  padding: 7px 12px;
   min-width: 120px;
-  max-width: 275px;
+  max-width: 500px;
   border-radius: 8px;
+  overflow: hidden;
   background-color: colors.color(dark, 300);
 }
 
@@ -38,10 +43,30 @@
   @include typography.regular_text_14;
   color: colors.color(light, 100);
   word-break: break-all;
+  padding: 7px 12px 0;
+  background-color: colors.color(accent, 900);
 }
 
 .messageContentDate {
   @include typography.small_text;
-  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   color: colors.color(light, 900);
+  padding: 7px 12px 7px;
+  background-color: colors.color(accent, 900);
+}
+
+.imageDate{
+  color: colors.color(light, 100) !important;
+  background-color: unset;
+}
+
+.hasMessage{
+  position: relative;
+  bottom: -4px;
+  img:last-child{
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 }

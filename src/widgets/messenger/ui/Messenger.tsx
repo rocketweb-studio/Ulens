@@ -127,6 +127,7 @@ export const Messenger = () => {
           'getMessagesByRoomId',
           { roomId: activeChat.id !== null ? activeChat.id : 0 },
           (draft) => {
+            debugger
             draft.unshift(msg)
           },
         ),
