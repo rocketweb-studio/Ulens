@@ -12,7 +12,8 @@
     margin-left: auto;
 
     .messageContent {
-      background-color: colors.color(accent, 900);
+      //background-color: colors.color(accent, 900);
+      background-color: unset;
     }
 
     .messageContentDate {
@@ -20,17 +21,14 @@
     }
   }
 }
-.messageImages{
-  width: 300px;
-  height: auto;
-}
+
 .messageContent {
   display: flex;
   flex-direction: column;
-  padding: 7px 12px;
   min-width: 120px;
-  max-width: 275px;
+  max-width: 500px;
   border-radius: 8px;
+  overflow: hidden;
   background-color: colors.color(dark, 300);
 }
 
@@ -38,10 +36,319 @@
   @include typography.regular_text_14;
   color: colors.color(light, 100);
   word-break: break-all;
+  padding: 7px 12px 0;
+  background-color: colors.color(accent, 900);
 }
 
 .messageContentDate {
   @include typography.small_text;
-  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   color: colors.color(light, 900);
+  padding: 7px 12px 7px;
+  background-color: colors.color(accent, 900);
+}
+
+.imageDate{
+  color: colors.color(light, 100) !important;
+  background-color: unset;
+}
+
+.telegramGrid {
+  display: grid;
+  gap: 2px; /* Маленький отступ как в Telegram */
+  border-radius: 8px;
+  overflow: hidden; /* Для скругленных углов у всей сетки */
+  min-width: 120px;
+  max-width: 500px; /* Ограничиваем как в мессенджерах */
+}
+
+.telegramGrid.hasMessage{
+  border-radius: 0;
+}
+
+.gridItem {
+  overflow: hidden;
+}
+
+.gridItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ========== 1 фото ========== */
+.telegramGrid:has(> :only-child) {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.telegramGrid:has(> :only-child) .gridItem {
+  aspect-ratio: 1 / 1; /* Квадрат для одной фото */
+  max-height: 400px;
+  border-radius: 8px;
+}
+
+.telegramGrid.hasMessage:has(> :only-child) .gridItem {
+  border-radius: 0;
+}
+
+/* ========== 2 фото ========== */
+.telegramGrid:has(> :nth-child(2):last-child) {
+  grid-template-columns: 1fr 1fr;
+}
+
+.telegramGrid:has(> :nth-child(2):last-child) .gridItem {
+  aspect-ratio: 1 / 1;
+}
+
+/* ========== 3 фото ========== */
+.telegramGrid:has(> :nth-child(3):last-child) {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.telegramGrid:has(> :nth-child(3):last-child) .gridItem:first-child {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  aspect-ratio: 2 / 1; /* Широкая первая фото */
+}
+
+.telegramGrid:has(> :nth-child(3):last-child) .gridItem:nth-child(2),
+.telegramGrid:has(> :nth-child(3):last-child) .gridItem:nth-child(3) {
+  aspect-ratio: 1 / 1;
+}
+
+/* ========== 4 фото ========== */
+.telegramGrid:has(> :nth-child(4):last-child) {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.telegramGrid:has(> :nth-child(4):last-child) .gridItem {
+  aspect-ratio: 1 / 1;
+}
+
+/* ========== 5 фото ========== */
+.telegramGrid:has(> :nth-child(5):last-child) {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* Делим на 6 частей для гибкости */
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2px;
+}
+
+.telegramGrid:has(> :nth-child(5):last-child) .gridItem:first-child {
+  /* Большая фотография занимает 2/3 ширины и 2 строки */
+  grid-column: 1 / 5; /* 4 из 6 колонок = 2/3 */
+  grid-row: 1 / 3;    /* Занимает обе строки */
+  aspect-ratio: 1 / 1;
+}
+
+.telegramGrid:has(> :nth-child(5):last-child) .gridItem:nth-child(2) {
+  grid-column: 5 / 7; /* Оставшиеся 2 колонки справа */
+  grid-row: 1;
+  aspect-ratio: 1 / 1;
+}
+
+.telegramGrid:has(> :nth-child(5):last-child) .gridItem:nth-child(3) {
+  grid-column: 5 / 7; /* Те же 2 колонки */
+  grid-row: 2;
+  aspect-ratio: 1 / 1;
+}
+
+.telegramGrid:has(> :nth-child(5):last-child) .gridItem:nth-child(4) {
+  grid-column: 1 / 4; /* Нижний ряд, первая половина */
+  grid-row: 3;
+  aspect-ratio: 1 / 1;
+}
+
+.telegramGrid:has(> :nth-child(5):last-child) .gridItem:nth-child(5) {
+  grid-column: 4 / 7; /* Нижний ряд, вторая половина */
+  grid-row: 3;
+  aspect-ratio: 1 / 1;
+}
+
+/* ========== 6+ фото ========== */
+.telegramGrid:has(> :nth-child(6):last-child),
+.telegramGrid:has(> :nth-child(7):last-child),
+.telegramGrid:has(> :nth-child(8):last-child),
+.telegramGrid:has(> :nth-child(9):last-child),
+.telegramGrid:has(> :nth-child(10):last-child) {
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 150px; /* Фиксированная высота для рядов */
+}
+
+/* ========== 7 фото (финальный правильный вариант) ========== */
+.telegramGrid:has(> :nth-child(7):last-child) {
+  grid-template-columns: 2fr 1fr 1fr; /* 3 колонки */
+  grid-template-rows: repeat(3, 150px); /* 3 строки */
+}
+
+.telegramGrid:has(> :nth-child(7):last-child) .gridItem:first-child {
+  grid-column: 1;       /* Первая колонка */
+  grid-row: 1 / span 2; /* Занимает строки 1-2 */
+}
+
+/* 4 маленькие фото справа (образуют квадрат 2x2) */
+.telegramGrid:has(> :nth-child(7):last-child) .gridItem:nth-child(2) {
+  grid-column: 2;       /* Вторая колонка */
+  grid-row: 1;          /* Первая строка */
+}
+
+.telegramGrid:has(> :nth-child(7):last-child) .gridItem:nth-child(3) {
+  grid-column: 3;       /* Третья колонка */
+  grid-row: 1;          /* Первая строка */
+}
+
+.telegramGrid:has(> :nth-child(7):last-child) .gridItem:nth-child(4) {
+  grid-column: 2;       /* Вторая колонка */
+  grid-row: 2;          /* Вторая строка */
+}
+
+.telegramGrid:has(> :nth-child(7):last-child) .gridItem:nth-child(5) {
+  grid-column: 3;       /* Третья колонка */
+  grid-row: 2;          /* Вторая строка */
+}
+
+/* Нижний ряд - 2 фото на всю ширину */
+.telegramGrid:has(> :nth-child(7):last-child) .gridItem:nth-child(6) {
+  grid-column: 1;       /* Первая колонка */
+  grid-row: 3;          /* Третья строка */
+}
+
+.telegramGrid:has(> :nth-child(7):last-child) .gridItem:nth-child(7) {
+  grid-column: 2 / span 2; /* Колонки 2-3 (широкая) */
+  grid-row: 3;          /* Третья строка */
+}
+
+/* ========== 8 фото (2-3-3) с видимыми отступами ========== */
+.telegramGrid:has(> :nth-child(8):last-child) {
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: auto auto auto; /* Автоматическая высота строк */
+  gap: 2px; /* Теперь отступы будут видны! */
+}
+
+/* Первая строка: 2 элемента на всю ширину */
+.telegramGrid:has(> :nth-child(8):last-child) .gridItem:nth-child(1) {
+  grid-column: 1 / 4;
+  grid-row: 1;
+  aspect-ratio: 1.5 / 1; /* Широкий формат */
+}
+
+.telegramGrid:has(> :nth-child(8):last-child) .gridItem:nth-child(2) {
+  grid-column: 4 / 7;
+  grid-row: 1;
+  aspect-ratio: 1.5 / 1; /* Широкий формат */
+}
+
+/* Вторая строка: 3 элемента */
+.telegramGrid:has(> :nth-child(8):last-child) .gridItem:nth-child(3) {
+  grid-column: 1 / 3;
+  grid-row: 2;
+  aspect-ratio: 1 / 1; /* Квадрат */
+}
+
+.telegramGrid:has(> :nth-child(8):last-child) .gridItem:nth-child(4) {
+  grid-column: 3 / 5;
+  grid-row: 2;
+  aspect-ratio: 1 / 1; /* Квадрат */
+}
+
+.telegramGrid:has(> :nth-child(8):last-child) .gridItem:nth-child(5) {
+  grid-column: 5 / 7;
+  grid-row: 2;
+  aspect-ratio: 1 / 1; /* Квадрат */
+}
+
+/* Третья строка: 3 элемента */
+.telegramGrid:has(> :nth-child(8):last-child) .gridItem:nth-child(6) {
+  grid-column: 1 / 3;
+  grid-row: 3;
+  aspect-ratio: 1 / 1; /* Квадрат */
+}
+
+.telegramGrid:has(> :nth-child(8):last-child) .gridItem:nth-child(7) {
+  grid-column: 3 / 5;
+  grid-row: 3;
+  aspect-ratio: 1 / 1; /* Квадрат */
+}
+
+.telegramGrid:has(> :nth-child(8):last-child) .gridItem:nth-child(8) {
+  grid-column: 5 / 7;
+  grid-row: 3;
+  aspect-ratio: 1 / 1; /* Квадрат */
+}
+
+/* ========== 10 фото (1 большая + 3x3) ========== */
+.telegramGrid:has(> :nth-child(10):last-child) {
+  grid-template-columns: repeat(6, 1fr); /* 6 колонок для гибкости */
+  grid-template-rows: 180px 149px 149px 149px; /* 4 строки */
+  gap: 2px;
+}
+
+/* Первая фото - большая на всю ширину */
+.telegramGrid:has(> :nth-child(10):last-child) .gridItem:nth-child(1) {
+  grid-column: 1 / -1; /* От первой до последней колонки */
+  grid-row: 1;
+  aspect-ratio: 2.5 / 1; /* Очень широкая */
+}
+
+/* Остальные 9 фото в сетке 3x3 (строки 2-4) */
+/* Вторая строка (фото 2-4) */
+.telegramGrid:has(> :nth-child(10):last-child) .gridItem:nth-child(2) {
+  grid-column: 1 / 3; /* Колонки 1-2 */
+  grid-row: 2;
+  aspect-ratio: 1 / 1;
+}
+
+.telegramGrid:has(> :nth-child(10):last-child) .gridItem:nth-child(3) {
+  grid-column: 3 / 5; /* Колонки 3-4 */
+  grid-row: 2;
+  aspect-ratio: 1 / 1;
+}
+
+.telegramGrid:has(> :nth-child(10):last-child) .gridItem:nth-child(4) {
+  grid-column: 5 / 7; /* Колонки 5-6 */
+  grid-row: 2;
+  aspect-ratio: 1 / 1;
+}
+
+/* Третья строка (фото 5-7) */
+.telegramGrid:has(> :nth-child(10):last-child) .gridItem:nth-child(5) {
+  grid-column: 1 / 3;
+  grid-row: 3;
+  aspect-ratio: 1 / 1;
+}
+
+.telegramGrid:has(> :nth-child(10):last-child) .gridItem:nth-child(6) {
+  grid-column: 3 / 5;
+  grid-row: 3;
+  aspect-ratio: 1 / 1;
+}
+
+.telegramGrid:has(> :nth-child(10):last-child) .gridItem:nth-child(7) {
+  grid-column: 5 / 7;
+  grid-row: 3;
+  aspect-ratio: 1 / 1;
+}
+
+/* Четвертая строка (фото 8-10) */
+.telegramGrid:has(> :nth-child(10):last-child) .gridItem:nth-child(8) {
+  grid-column: 1 / 3;
+  grid-row: 4;
+  aspect-ratio: 1 / 1;
+}
+
+.telegramGrid:has(> :nth-child(10):last-child) .gridItem:nth-child(9) {
+  grid-column: 3 / 5;
+  grid-row: 4;
+  aspect-ratio: 1 / 1;
+}
+
+.telegramGrid:has(> :nth-child(10):last-child) .gridItem:nth-child(10) {
+  grid-column: 5 / 7;
+  grid-row: 4;
+  aspect-ratio: 1 / 1;
 }

@@ -14,27 +14,31 @@ type Props = {
 }
 
 export const Message = ({ type, message, media, date, avatar, friendName }: Props) => {
+  const filterImage = media?.filter((item) => item.size === 'medium')
+
   return (
     <div className={`${s.message} ${type === 'mine' ? s.mine : ''}`}>
       {type === 'friend' && (
         <UserAvatar mode={'size'} width={36} height={36} avatarOwner={avatar} userName={friendName} />
       )}
       <div className={s.messageContent}>
-        {media?.length > 0 && (
-          <span className={s.messageImages}>
-            {media?.map((img, index) => (
-              <Image
-                key={index}
-                src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${img.url}`}
-                alt={''}
-                width={300}
-                height={300}
-              /> //src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${image.url}`}img.url
+        {filterImage?.length > 0 && (
+          <span className={`${s.telegramGrid} ${message && s.hasMessage}`}>
+            {filterImage?.map((img, index) => (
+              <div className={s.gridItem}>
+                <Image
+                  key={index}
+                  src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${img.url}`}
+                  alt={''}
+                  width={img.width}
+                  height={img.height}
+                />
+              </div>
             ))}
           </span>
         )}
-        <span className={s.messageContentText}>{message}</span>
-        <span className={s.messageContentDate}>{date}</span>
+        {message && <span className={s.messageContentText}>{message}</span>}
+        <span className={`${s.messageContentDate} ${!message && s.imageDate}`}>{date}</span>
       </div>
     </div>
   )

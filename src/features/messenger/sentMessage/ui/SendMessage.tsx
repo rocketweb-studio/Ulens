@@ -16,7 +16,7 @@ import { useDropzone } from 'react-dropzone'
 import { FILES_VALIDATE } from '@/src/features/post/postCreate/model/consts'
 import { base64ToFile, fileToBase64, getImageDimensions } from '@/src/features/post/postCreate/utils'
 import React, { useState } from 'react'
-import { UploadedFileInMessage, UploadImageResponse } from '@/src/entities/messenger/api/messengerApi.type'
+import { UploadedFileInMessage } from '@/src/entities/messenger/api/messengerApi.type'
 
 import Image from 'next/image'
 import { useUploadMessageImagesMutation } from '@/src/entities/messenger'
@@ -32,6 +32,7 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { isValid },
   } = useForm<MessageInput>({
     mode: 'onChange',
@@ -43,9 +44,8 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
 
   const [uploadImages] = useUploadMessageImagesMutation()
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFileInMessage[]>([])
-  const [uploadedMediaInfo, setUploadedMediaInfo] = useState<UploadImageResponse | undefined>()
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: FILES_VALIDATE.accept,
     maxFiles: FILES_VALIDATE.maxFiles,
@@ -78,6 +78,7 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
   const onSubmit: SubmitHandler<MessageInput> = async (data) => {
     try {
       if (!roomId) return
+
       const token = localStorage.getItem('accessToken')
       const socket = io('https://ulens.org/ws', { auth: { token } })
       let res
@@ -91,11 +92,7 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
           roomId,
           images: imageFiles,
         }).unwrap()
-
-        // setUploadedMediaInfo(res)
       }
-      console.log(res)
-      const issetMedia = uploadedMediaInfo && uploadedMediaInfo.files.length > 0 ? uploadedMediaInfo : null
 
       socket.emit('SEND_MESSAGE', {
         roomId,
@@ -105,14 +102,14 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
 
       reset()
       setUploadedFiles([])
-      setUploadedMediaInfo(undefined)
     } catch (error) {
       console.error('Failed to send message:', error)
     }
   }
 
   const isFormValid = () => {
-    const hasMessage = isValid
+    // @ts-ignore
+    const hasMessage = watch('message')?.length > 0
     const hasMedia = uploadedFiles.length > 0
     return hasMessage || hasMedia
   }
@@ -149,15 +146,23 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
             disabled={isDisable}
           />
           {isFormValid() ?
-            <Button className={s.buttonSubmit} variant={'text'} size={'large'} withoutPadding disabled={!isFormValid()}>
+            <Button
+              className={s.buttonSubmit}
+              type={'submit'}
+              variant={'text'}
+              size={'large'}
+              withoutPadding
+              disabled={!isFormValid()}
+            >
               Send message
             </Button>
           : <div>
-              <Button className={s.buttonAudio} variant={'text'} size={'large'} withoutPadding>
+              <Button type={'button'} className={s.buttonAudio} variant={'text'} size={'large'} withoutPadding>
                 <IconMicOutline />
               </Button>
               <Button
                 {...getRootProps()}
+                type={'button'}
                 className={s.buttonUploadImage}
                 variant={'text'}
                 size={'large'}
