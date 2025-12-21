@@ -27,7 +27,8 @@ pipeline {
                     sh '''
                         export NVM_DIR="$HOME/.nvm"
                         [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-                        nvm use v20.5.1
+                        nvm install --lts
+                        nvm use --lts
                         yarn install
                         yarn test
                     '''
