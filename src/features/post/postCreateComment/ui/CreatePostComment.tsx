@@ -13,6 +13,7 @@ import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 
 type Props = {
   postId: string
+  replyToCommentId?: string | null
   initialValue?: string
   onSuccess?: () => void
   className?: string
@@ -27,6 +28,7 @@ export const CreatePostComment = ({
   padding = 'Big',
   initialValue,
   onSuccess,
+  replyToCommentId,
 }: Props) => {
   const { data: meData } = useGetMeQuery()
   const [createComment, { isLoading }] = useCreateCommentMutation()
@@ -72,7 +74,12 @@ export const CreatePostComment = ({
     }
 
     try {
-      const res = await createComment({ postId: postId, content: content }).unwrap()
+      await createComment({
+        postId: postId,
+        content: data.content,
+        ...(replyToCommentId ? { replyToCommentId } : {}),
+      }).unwrap()
+
       reset()
       onSuccess?.()
     } catch (err) {
