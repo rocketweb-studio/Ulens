@@ -103,7 +103,27 @@ export const Comments = ({ postId, commentsData, meData }: Props) => {
                   <p>{reply.content}</p>
                   <div className={s.commentPanel}>
                     <span className={s.date}>{formatDate(reply.createdAt)}</span>
+                    {reply.likeCount > 0 && <span className={s.like}>Like: {reply.likeCount}</span>}
                   </div>
+                  {meData && (
+                    <LikeButton
+                      itemId={reply.id}
+                      itemType='COMMENT'
+                      isLiked={reply.isLiked}
+                      likeCount={reply.likeCount}
+                      onChange={(newIsLiked, newLikeCount) => {
+                        dispatch(
+                          postsApi.util.updateQueryData('getPostComments', { postId }, (draft) => {
+                            const found = draft.find((c) => c.id === reply.id)
+                            if (found) {
+                              found.isLiked = newIsLiked
+                              found.likeCount = newLikeCount
+                            }
+                          }),
+                        )
+                      }}
+                    />
+                  )}
                 </div>
               ))}
             </div>
