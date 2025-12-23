@@ -78,7 +78,10 @@ export const Comments = ({ postId, commentsData, meData }: Props) => {
                 <span className={s.date}>{formatDate(comment.createdAt)}</span>
                 {comment.likeCount > 0 && <span className={s.like}>Like: {comment.likeCount}</span>}
                 {meData && (
-                  <button className={s.answerButton} onClick={() => setReplyToCommentId(comment.id)}>
+                  <button
+                    className={s.answerButton}
+                    onClick={() => setReplyToCommentId((prev) => (prev === comment.id ? null : comment.id))}
+                  >
                     Answer
                   </button>
                 )}
@@ -91,7 +94,7 @@ export const Comments = ({ postId, commentsData, meData }: Props) => {
                     replyToCommentId={comment.id}
                     padding='Small'
                     withoutBorderTop
-                    initialValue={`@${comment.commentator.username}, `}
+                    // initialValue={`@${comment.commentator.username}, `}
                     onSuccess={() => setReplyToCommentId(null)}
                   />
                 </div>

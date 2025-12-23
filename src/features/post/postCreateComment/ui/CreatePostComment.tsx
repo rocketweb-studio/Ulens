@@ -50,8 +50,6 @@ export const CreatePostComment = ({
   })
 
   const onSubmit: SubmitHandler<CreateCommentInput> = async (data) => {
-    const { content } = data
-
     const handleServerError = (error: FetchBaseQueryError) => {
       if (!error) return
       clearErrors()
