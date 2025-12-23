@@ -66,6 +66,7 @@ export type GetPostCommentsType = {
   postId: string
   content: string
   createdAt: string
+  replyToCommentId: string | null
   commentator: {
     id: string
     username: string
