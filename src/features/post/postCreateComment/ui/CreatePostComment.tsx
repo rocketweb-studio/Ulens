@@ -13,12 +13,23 @@ import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
 
 type Props = {
   postId: string
+  replyToCommentId?: string | null
+  initialValue?: string
+  onSuccess?: () => void
   className?: string
   withoutBorderTop?: boolean
   padding: 'Small' | 'Big'
 }
 
-export const CreatePostComment = ({ postId, className, withoutBorderTop = false, padding = 'Big' }: Props) => {
+export const CreatePostComment = ({
+  postId,
+  className,
+  withoutBorderTop = false,
+  padding = 'Big',
+  initialValue,
+  onSuccess,
+  replyToCommentId,
+}: Props) => {
   const { data: meData } = useGetMeQuery()
   const [createComment, { isLoading }] = useCreateCommentMutation()
   const paddingClass = `padding${padding}`
@@ -34,13 +45,11 @@ export const CreatePostComment = ({ postId, className, withoutBorderTop = false,
     mode: 'onChange',
     resolver: zodResolver(createCommentSchema),
     defaultValues: {
-      content: '',
+      content: initialValue ?? '',
     },
   })
 
   const onSubmit: SubmitHandler<CreateCommentInput> = async (data) => {
-    const { content } = data
-
     const handleServerError = (error: FetchBaseQueryError) => {
       if (!error) return
       clearErrors()
@@ -63,8 +72,14 @@ export const CreatePostComment = ({ postId, className, withoutBorderTop = false,
     }
 
     try {
-      const res = await createComment({ postId: postId, content: content }).unwrap()
+      await createComment({
+        postId: postId,
+        content: data.content,
+        ...(replyToCommentId ? { replyToCommentId } : {}),
+      }).unwrap()
+
       reset()
+      onSuccess?.()
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         handleServerError(err)

@@ -103,7 +103,7 @@ export const postsApi = baseApi.injectEndpoints({
       providesTags: ['GetPostComments'],
       keepUnusedDataFor: 10,
     }),
-    createComment: build.mutation<void, { postId: string; content: string }>({
+    createComment: build.mutation<void, { postId: string; content: string; replyToCommentId?: string | null }>({
       query: ({ postId, ...body }) => ({
         method: 'POST',
         url: `/posts/${postId}/comments`,

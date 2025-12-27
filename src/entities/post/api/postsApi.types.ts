@@ -73,4 +73,5 @@ export type GetPostCommentsType = {
   }
   likeCount: number
   isLiked: boolean
+  replyToCommentId: string | null
 }[]
