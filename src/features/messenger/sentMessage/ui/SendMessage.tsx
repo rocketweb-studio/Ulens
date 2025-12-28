@@ -23,6 +23,7 @@ import { useUploadMessageImagesMutation } from '@/src/entities/messenger'
 import { io } from 'socket.io-client'
  // import { VoiceRecorder } from '@/src/entities/message/ui/voiceMessage/VoiceRecorder'
 import dynamic from 'next/dynamic';
+import { testSOCKET } from '@/src/entities/message/ui/voiceMessage/VoiceRecorder'
 
 // ✅ ВАЖНО: ssr: false
 const VoiceRecorder = dynamic(
@@ -103,7 +104,6 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
           images: imageFiles,
         }).unwrap()
       }
-
       socket.emit('SEND_MESSAGE', {
         roomId,
         content: data.message,

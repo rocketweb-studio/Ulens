@@ -45,12 +45,12 @@ export const messengerApi = baseApi.injectEndpoints({
       query: ({ roomId, audio }) => {
         const formData = new FormData();
         formData.append('audio', audio);
-        console.log()
+        console.log(formData)
         return {
           url: `messenger/rooms/${roomId}/audio`,
           method: 'POST',
           body: formData,
-           overrideExisting: true
+           // overrideExisting: true
         };
       },})
   }),

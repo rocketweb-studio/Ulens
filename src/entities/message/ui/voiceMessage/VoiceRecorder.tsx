@@ -1,11 +1,15 @@
 "use client"
-import { useState,useEffect } from "react";
+import { useState,useEffect,useRef } from "react";
 import { useAudioRecorder } from "react-use-audio-recorder";
 import { convertWebmToMp3 } from '@/src/entities/message/ui/voiceMessage/converterToMP3'
 import { useUploadVoiceMessageMutation } from '@/src/entities/messenger'
 import {IconPlayCircle,IconPauseCircle,IconClose} from '@rocketweb-studio/ulens-ui-kit'
 import { Button } from '@/src/shared/ui'
 import s from '@/src/entities/message/ui/voiceMessage/VoiceRecorder.module.scss'
+import { io } from 'socket.io-client'
+import WaveSurfer from 'wavesurfer.js'
+import { UploadVoiceResponce } from '@/src/entities/messenger/api/messengerApi.type'
+
 interface VoiceRecorderProps {
   roomId: number;
   onUploadSuccess?: (response: any) => void;
@@ -35,18 +39,81 @@ export  function VoiceRecorder({
 
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  useEffect(() => {
-    startRecording()
-    return () => stopRecording()
-  }, [isRecording])
+  const mediaStreamRef = useRef<MediaStream | null>(null)
+
   // useEffect(() => {
-  //   return () => {
-  //     // Очистка при размонтировании компонента
-  //     if (audioUrl) {
-  //       URL.revokeObjectURL(audioUrl);
-  //     }
-  //   };
-  // }, [audioUrl]);
+  //   startRecording()
+  //   return () => stopRecording()
+  // }, [isRecording])
+  useEffect(() => {
+    if (!isRecording) return
+    const initLiveWaveform = (stream: MediaStream) => {
+      if (!waveformRef.current) return
+
+      destroyWaveform()
+
+      const audio = document.createElement('audio')
+      audio.srcObject = stream
+      audio.muted = true
+      audio.play()
+
+      waveSurferRef.current = WaveSurfer.create({
+        container: waveformRef.current,
+        waveColor: '#A0A0A0',
+        progressColor: '#4A90E2',
+        cursorColor: 'transparent',
+        height: 48,
+        barWidth: 2,
+        interact: false,
+        backend: 'MediaElement',
+        media: audio,
+      })
+    }
+
+    const destroyWaveform = () => {
+      waveSurferRef.current?.destroy()
+      waveSurferRef.current = null
+    }
+
+    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+      mediaStreamRef.current = stream
+      startRecording()
+      initLiveWaveform(stream) // 🔥
+    })
+
+    return () => {
+      stopRecording()
+      destroyWaveform()
+    }
+  }, [isRecording])
+
+  const waveformRef = useRef<HTMLDivElement | null>(null)
+  const waveSurferRef = useRef<WaveSurfer | null>(null)
+  useEffect(() => {
+    if (!audioUrl || !waveformRef.current) return
+
+    if (waveSurferRef.current) {
+      waveSurferRef.current.destroy()
+    }
+
+    waveSurferRef.current = WaveSurfer.create({
+      container: waveformRef.current,
+      waveColor: '#A0A0A0',
+      progressColor: '#4A90E2',
+      cursorColor: 'transparent',
+      barWidth: 2,
+      height: 48,
+    })
+
+    waveSurferRef.current.load(audioUrl)
+
+    return () => {
+      waveSurferRef.current?.destroy()
+      waveSurferRef.current = null
+    }
+  }, [audioUrl])
+
+
       const handleStopAndUpload = () => {
         if (roomId === null || roomId === undefined) {
           console.error('Room ID не указан');
@@ -65,6 +132,26 @@ export  function VoiceRecorder({
 
           const tempUrl = URL.createObjectURL(blob);
           setAudioUrl(tempUrl);
+
+
+          waveSurferRef.current?.destroy()
+          waveSurferRef.current = null
+
+
+          // setTimeout(() => {
+          //   if (!waveformRef.current) return
+          //
+          //   waveSurferRef.current = WaveSurfer.create({
+          //     container: waveformRef.current,
+          //     waveColor: '#A0A0A0',
+          //     progressColor: '#4A90E2',
+          //     cursorColor: 'transparent',
+          //     height: 48,
+          //     barWidth: 2,
+          //   })
+          //
+          //   waveSurferRef.current.load(tempUrl)
+          // }, 0)
 
           try {
             // КОНВЕРТИРУЕМ В MP3
@@ -102,13 +189,35 @@ export  function VoiceRecorder({
             })
               .unwrap()
               .then((result) => {
-                // Вызываем колбэк при успехе
-                console.log('result',result);
+                const token = localStorage.getItem('accessToken')
+                const socket = io('https://ulens.org/ws', { auth: { token }, })
+                console.log( {
+                  id: result.id,
+                  messageId: result.messageId,
+                  url: result.url,
+                  type: 'AUDIO',
+                })
+
+                socket.emit('SEND_MESSAGE', {
+                  roomId,
+                  content: 'VoiceMessage',
+                  media: {
+                    id: result.id,
+                    messageId: result.messageId,
+                    url: result.url,
+                    type: 'AUDIO',
+                  },
+                })
+
+                socket.disconnect()
+
                 setStartVoiceRecorder()
-                if (onUploadSuccess && result) {
-                  onUploadSuccess(result);
+
+                if (onUploadSuccess) {
+                  onUploadSuccess(result)
                 }
               })
+
               .catch((err) => {
                 console.error('Ошибка загрузки:', err);
                 if (onUploadError) {
@@ -126,10 +235,6 @@ export  function VoiceRecorder({
           } catch (conversionError) {
             console.error('❌ Ошибка конвертации:', conversionError);
             setIsUploading(false);
-
-            // Fallback: отправляем оригинальный файл если конвертация не удалась
-            console.log('🔄 Fallback: отправка оригинального файла...');
-            // ... код для отправки оригинального blob
             }
         });
       };
@@ -138,37 +243,36 @@ export  function VoiceRecorder({
     const secs = Math.floor(seconds % 60);
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }
-  // Комбинированное состояние загрузки
-  // const isButtonDisabled = isLoading || isUploading;
 
   return (
     <div className={s.voiceRecorder}>
-      {/*<div className="recorder-status">*/}
-        {/*<div className="status-indicator">*/}
-        {/*  Статус: <strong>*/}
-        {/*  {recordingStatus === 'recording' ? 'Запись' :*/}
-        {/*    recordingStatus === 'paused' ? 'На паузе' :*/}
-        {/*      recordingStatus === 'stopped' ? 'Остановлено' : 'Готово'}*/}
-        {/*</strong>*/}
-        {/*</div>*/}
 
-      {/*</div>*/}
+       <div>   <IconClose className={s.icon} onClick={() => {
+         stopRecording()
+         setStartVoiceRecorder()
+       }}/></div>
 
 
-          <IconClose className={s.icon} onClick={() => stopRecording()}/>
-        {/*<button*/}
-        {/*  className={s.btn}*/}
-        {/*  onClick={() => recordingStatus === 'recording' ? pauseRecording() : resumeRecording()}*/}
-        {/*>*/}
-          {/*{recordingStatus === 'recording' ? 'Запись' :*/}
-          {/*  recordingStatus === 'paused' ? 'На паузе' :*/}
-          {/*    // recordingStatus === 'stopped' ? 'Остановлено' : 'Готово'}*/}
-          {recordingStatus === 'recording' ?
-            <IconPauseCircle className={s.icon} onClick={()=>pauseRecording()} />
-            : <IconPlayCircle className={s.icon} onClick={()=>resumeRecording()} />}
-        {/*</button>*/}
-      <span>TYT BUDET WAVEFORM</span>
-          <span> {formatTime(recordingTime)}</span>
+      {recordingStatus === 'recording' ? (
+        <IconPauseCircle
+          className={s.icon}
+          onClick={pauseRecording} // ✅ ПАУЗА ЗАПИСИ
+        />
+      ) : recordingStatus === 'paused' ? (
+        <IconPlayCircle
+          className={s.icon}
+          onClick={resumeRecording} // ✅ ПРОДОЛЖИТЬ ЗАПИСЬ
+        />
+      ) : (
+        <IconPlayCircle
+          className={s.icon}
+          onClick={() => waveSurferRef.current?.playPause()} // ▶️ ПРОИГРЫВАНИЕ
+        />
+      )}
+
+      <div ref={waveformRef} className={s.waveform}/>
+
+      <span> {formatTime(recordingTime)}</span>
 
         <Button
           className={s.buttonSubmit}
@@ -180,24 +284,7 @@ export  function VoiceRecorder({
         >
           Send voice
         </Button>
-
-
-      {/* Предпрослушивание аудио */}
-      {/*{audioUrl && recordingStatus === "stopped" && !isButtonDisabled && (*/}
-      {/*  <div className="audio-preview">*/}
-      {/*    <p>Предпросмотр записи:</p>*/}
-      {/*    <audio controls src={audioUrl} />*/}
-      {/*    <small>Временный файл, будет удален после отправки</small>*/}
-      {/*  </div>*/}
-      {/*)}*/}
-
-      {/* Отладочная информация (можно убрать в production) */}
-      {/*<div className="debug-info" style={{ fontSize: '12px', color: '#666', marginTop: '10px' }}>*/}
-      {/*  Room ID: {roomId} | Status: {recordingStatus} |*/}
-      {/*  Uploading: {isUploading ? 'Yes' : 'No'} |*/}
-      {/*  Loading: {isLoading ? 'Yes' : 'No'}*/}
-      {/*</div>*/}
     </div>
   );
 }
-//export default VoiceRecorder;
+export default VoiceRecorder;

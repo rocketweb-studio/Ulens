@@ -43,7 +43,6 @@ export const Message = ({ type, message, media, date, avatar, friendName }: Prop
           <div key={audio.id} className={s.audioContainer}>
             <AudioMessage
               audioUrl={getMediaUrl(audio.url)}
-              duration={audio.duration}
               type={type}
             />
           </div>

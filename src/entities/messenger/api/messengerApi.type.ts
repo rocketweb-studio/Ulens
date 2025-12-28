@@ -74,8 +74,8 @@ export type UploadVoiceRequest = {
   audio: File;
 }
 export type UploadVoiceResponce = {
-  "id": string,
-  "messageId": number,
-  "url": string,
-  "type": string
+  id: string;
+  messageId?: string|number;
+  url: string;
+  type: 'AUDIO';
 }

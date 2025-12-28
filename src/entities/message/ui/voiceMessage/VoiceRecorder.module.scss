@@ -299,15 +299,28 @@
 //    color: colors.color('light',100);
 //padding: 12px;
 //}
-.voiceRecorder{
+.voiceRecorder {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: space-between;
     gap: 12px;
-
+    width: 100%;
 }
-.icon{
 
+
+.icon {
+    //display: flex;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+    flex-shrink: 0; // 🔥 КЛЮЧЕВОЕ
 }
+
+.waveform {
+    flex: 1;          // занимает всё доступное
+    min-width: 0;     // 🔥 иначе ломает flex
+    width: 100%;
+    height: 48px;
+}
+
 
