@@ -1,0 +1,156 @@
+.audioMessage {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 18px;
+  max-width: 300px;
+  min-width: 200px;
+
+  &.mine {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    .playButton {
+      color: white;
+      background: rgba(255, 255, 255, 0.2);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+    }
+
+    .progressBar {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .progressFill {
+      background: white;
+    }
+
+    .timeInfo {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .volumeControl {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .volumeSlider {
+      &::-webkit-slider-thumb {
+        background: white;
+      }
+    }
+  }
+
+  &.friend {
+    background: #f3f4f6;
+
+    .playButton {
+      color: #4f46e5;
+      background: rgba(79, 70, 229, 0.1);
+
+      &:hover {
+        background: rgba(79, 70, 229, 0.2);
+      }
+    }
+
+    .progressBar {
+      background: rgba(79, 70, 229, 0.1);
+    }
+
+    .progressFill {
+      background: #4f46e5;
+    }
+
+    .timeInfo {
+      color: #6b7280;
+    }
+
+    .volumeControl {
+      color: #9ca3af;
+    }
+
+    .volumeSlider {
+      &::-webkit-slider-thumb {
+        background: #4f46e5;
+      }
+    }
+  }
+}
+
+.playButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.waveformContainer {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.progressBar {
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.1s;
+}
+
+.timeInfo {
+  display: flex;
+  font-size: 11px;
+  font-weight: 500;
+  gap: 2px;
+
+  .currentTime {
+    font-weight: 600;
+  }
+
+  .duration {
+    opacity: 0.7;
+  }
+}
+
+.volumeControl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.volumeSlider {
+  width: 50px;
+  height: 3px;
+  -webkit-appearance: none;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+}
+
+
+   .audioMessage audio {
+     display: none;
+   }

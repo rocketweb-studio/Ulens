@@ -1,5 +1,5 @@
-import { Area } from 'react-easy-crop'
-import { FilteredImage } from '@/src/features/post/postCreate/model/types'
+//import { Area } from 'react-easy-crop'
+//import { FilteredImage } from '@/src/features/post/postCreate/model/types'
 
 export type UserRoom = {
   id: string
@@ -32,6 +32,7 @@ export type MediaFields = {
   fileSize: number
   size: string
   type: string
+  duration: number
 }
 
 export type UploadedFileInMessage = {
@@ -67,3 +68,14 @@ export type CreateRoomResponce = {
 }
 
 export type GetMessagesByRoomResponce = MessageType[]
+
+export type UploadVoiceRequest = {
+  roomId: number
+  audio: File;
+}
+export type UploadVoiceResponce = {
+  "id": string,
+  "messageId": number,
+  "url": string,
+  "type": string
+}

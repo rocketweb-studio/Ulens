@@ -1,0 +1,313 @@
+@use 'src/shared/styles/colors' as colors;
+
+//.audioMessage {
+//    display: flex;
+//    align-items: center;
+//    gap: 12px;
+//    padding: 6px 12px 6px 8px;
+//    border-radius: 8px;
+//    max-width: 300px;
+//    min-width: 180px;
+//    user-select: none;
+//    position: relative;
+//    transition: background-color 0.2s;
+//
+//&.mine {
+//    background-color: #2b5278; // Telegram blue для темной темы
+//margin-left: auto;
+//
+//    .playButton {
+//        background: rgba(255, 255, 255, 0.15);
+//
+//        &:hover {
+//            background: rgba(255, 255, 255, 0.25);
+//        }
+//
+//        .playButtonInner {
+//            color: white;
+//        }
+//    }
+//
+//    .waveformBar {
+//        background: rgba(255, 255, 255, 0.6);
+//    }
+//
+//    .progressOverlay {
+//        background: rgba(255, 255, 255, 0.9);
+//        border-radius: 1px;
+//    }
+//
+//    .timeInfo {
+//        color: rgba(255, 255, 255, 0.8);
+//    }
+//
+//    .volumeButton {
+//        color: rgba(255, 255, 255, 0.6);
+//
+//        &:hover {
+//            color: rgba(255, 255, 255, 0.8);
+//        }
+//    }
+//
+//    .muteIndicator {
+//        background: rgba(255, 255, 255, 0.6);
+//    }
+//}
+//
+//&.friend {
+//    background-color: #182533; // Telegram gray для темной темы
+//margin-right: auto;
+//
+//    .playButton {
+//        background: rgba(255, 255, 255, 0.1);
+//
+//        &:hover {
+//            background: rgba(255, 255, 255, 0.2);
+//        }
+//
+//        .playButtonInner {
+//            color: #e1e1e1;
+//        }
+//    }
+//
+//    .waveformBar {
+//        background: rgba(255, 255, 255, 0.4);
+//    }
+//
+//    .progressOverlay {
+//        background: rgba(255, 255, 255, 0.7);
+//        border-radius: 1px;
+//    }
+//
+//    .timeInfo {
+//        color: rgba(255, 255, 255, 0.6);
+//    }
+//
+//    .volumeButton {
+//        color: rgba(255, 255, 255, 0.4);
+//
+//        &:hover {
+//            color: rgba(255, 255, 255, 0.6);
+//        }
+//    }
+//
+//    .muteIndicator {
+//        background: rgba(255, 255, 255, 0.4);
+//    }
+//}
+//
+//// Эффект при наведении
+//&:hover {
+//    &.mine {
+//        background-color: #2c5a85;
+//    }
+//
+//    &.friend {
+//        background-color: #1a2a3a;
+//    }
+//}
+//}
+//
+//               .playButton {
+//                   width: 32px;
+//                   height: 32px;
+//                   border-radius: 50%;
+//                   border: none;
+//                   cursor: pointer;
+//                   flex-shrink: 0;
+//                   display: flex;
+//                   align-items: center;
+//                   justify-content: center;
+//                   transition: background 0.2s, transform 0.1s;
+//
+//                   &:active {
+//                       transform: scale(0.95);
+//                   }
+//               }
+//
+//.playButtonInner {
+//    display: flex;
+//    align-items: center;
+//    justify-content: center;
+//    margin-left: 1px; // Смещение иконки play вправо
+//}
+//
+//   .waveformContainer {
+//       flex: 1;
+//       min-width: 0;
+//   }
+//
+//   .waveform {
+//       height: 32px;
+//       cursor: pointer;
+//       position: relative;
+//       margin-bottom: 2px;
+//   }
+//
+//   .waveformBars {
+//       display: flex;
+//       align-items: flex-end;
+//       gap: 2px;
+//       height: 100%;
+//       padding: 4px 0;
+//   }
+//
+//.waveformBar {
+//    flex: 1;
+//    min-width: 2px;
+//    border-radius: 1px;
+//    transition: opacity 0.2s;
+//}
+//
+//   .progressOverlay {
+//       position: absolute;
+//       top: 0;
+//       left: 0;
+//       height: 100%;
+//       pointer-events: none;
+//       opacity: 0.3;
+//       border-top-right-radius: 1px;
+//       border-bottom-right-radius: 1px;
+//       overflow: hidden;
+//
+//       &::after {
+//           content: '';
+//           position: absolute;
+//           top: 0;
+//           left: 0;
+//           right: 0;
+//           bottom: 0;
+//           background: inherit;
+//       }
+//   }
+//
+//   .timeInfo {
+//       display: flex;
+//       font-size: 12px;
+//       font-weight: 400;
+//       gap: 1px;
+//       letter-spacing: 0.2px;
+//
+//       .currentTime {
+//           font-weight: 500;
+//       }
+//
+//       .duration {
+//           opacity: 0.7;
+//       }
+//   }
+//
+//   .volumeControl {
+//       position: relative;
+//       flex-shrink: 0;
+//   }
+//
+//.volumeButton {
+//    background: none;
+//    border: none;
+//    cursor: pointer;
+//    display: flex;
+//    align-items: center;
+//    justify-content: center;
+//    width: 24px;
+//    height: 24px;
+//    border-radius: 4px;
+//    transition: color 0.2s, background 0.2s;
+//
+//    &:hover {
+//        background: rgba(255, 255, 255, 0.1);
+//    }
+//}
+//
+//   .muteIndicator {
+//       position: absolute;
+//       top: 50%;
+//       left: 50%;
+//       transform: translate(-50%, -50%) rotate(45deg);
+//       width: 18px;
+//       height: 2px;
+//       border-radius: 1px;
+//   }
+//
+//@media (prefers-color-scheme: light) {
+//    .audioMessage {
+//        &.mine {
+//            background-color: #007aff; // iOS blue
+//
+//        .playButton {
+//            background: rgba(255, 255, 255, 0.2);
+//        }
+//
+//            .waveformBar {
+//                background: rgba(255, 255, 255, 0.8);
+//            }
+//
+//            .timeInfo {
+//                color: rgba(255, 255, 255, 0.9);
+//            }
+//        }
+//
+//        &.friend {
+//            background-color: #e9e9eb; // iOS light gray
+//
+//        .playButton {
+//            background: rgba(0, 0, 0, 0.05);
+//
+//            .playButtonInner {
+//                color: #000;
+//            }
+//        }
+//
+//            .waveformBar {
+//                background: rgba(0, 0, 0, 0.3);
+//            }
+//
+//            .timeInfo {
+//                color: rgba(0, 0, 0, 0.6);
+//            }
+//
+//            .volumeButton {
+//                color: rgba(0, 0, 0, 0.4);
+//            }
+//        }
+//    }
+//}
+//
+//@keyframes pulse {
+//    0%, 100% {
+//        opacity: 1;
+//    }
+//    50% {
+//        opacity: 0.7;
+//    }
+//}
+//
+//.audioMessage:global(.playing) {
+//    .waveformBar {
+//        animation: pulse 1s infinite;
+//    }
+//}
+//
+//   .audioMessage audio {
+//       display: none;
+//   }
+//& .buttonSubmit {
+//    padding: 3px;
+//    width: 162px;
+//}
+//& .buttonAudio, & .buttonUploadImage{
+//    color: colors.color('light',100);
+//padding: 12px;
+//}
+.voiceRecorder{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+}
+.icon{
+
+}
+

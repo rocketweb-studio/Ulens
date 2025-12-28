@@ -1,8 +1,9 @@
+// @/src/entities/message/ui/Message/Message.tsx
 import s from './message.module.scss'
 import { UserAvatar } from '@/src/entities/userProfile'
 import { MediaFields } from '@/src/entities/messenger/api/messengerApi.type'
 import Image from 'next/image'
-import React from 'react'
+import { AudioMessage } from '@/src/entities/message/ui/voiceMessage/AudioMessage'
 
 type Props = {
   type: 'mine' | 'friend'
@@ -14,31 +15,64 @@ type Props = {
 }
 
 export const Message = ({ type, message, media, date, avatar, friendName }: Props) => {
-  const filterImage = media?.filter((item) => item.size === 'medium')
+  // Фильтруем изображения
+  const images = media?.filter((item) => item.type === 'IMAGE' && item.size === 'medium')
+  // console.log('🔍 Message component:',media?.filter(item => item.type === 'AUDIO'))
+  // Фильтруем аудио
+  const audioItems = media?.filter((item) => item.type === 'AUDIO')
+
+  // Получаем полный URL для медиа
+  const getMediaUrl = (url: string) => {
+    return `${process.env.NEXT_PUBLIC_MEDIA_URL}${url}`
+  }
 
   return (
     <div className={`${s.message} ${type === 'mine' ? s.mine : ''}`}>
       {type === 'friend' && (
-        <UserAvatar mode={'size'} width={36} height={36} avatarOwner={avatar} userName={friendName} />
+        <UserAvatar
+          mode={'size'}
+          width={36}
+          height={36}
+          avatarOwner={avatar}
+          userName={friendName}
+        />
       )}
       <div className={s.messageContent}>
-        {filterImage?.length > 0 && (
-          <span className={`${s.telegramGrid} ${message && s.hasMessage}`}>
-            {filterImage?.map((img, index) => (
-              <div className={s.gridItem}>
+        {/* Аудио сообщения */}
+        {audioItems?.map((audio) => (
+          <div key={audio.id} className={s.audioContainer}>
+            <AudioMessage
+              audioUrl={getMediaUrl(audio.url)}
+              duration={audio.duration}
+              type={type}
+            />
+          </div>
+        ))}
+
+        {/* Изображения */}
+        {images?.length > 0 && (
+          <div className={`${s.telegramGrid} ${(message || audioItems?.length > 0) && s.hasMessage}`}>
+            {images?.map((img) => (
+              <div className={s.gridItem} key={img.id}>
                 <Image
-                  key={index}
-                  src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${img.url}`}
-                  alt={''}
-                  width={img.width}
-                  height={img.height}
+                  src={getMediaUrl(img.url)}
+                  alt=""
+                  width={img.width || 200}
+                  height={img.height || 200}
+                  style={{ objectFit: 'cover' }}
                 />
               </div>
             ))}
-          </span>
+          </div>
         )}
-        {message && <span className={s.messageContentText}>{message}</span>}
-        <span className={`${s.messageContentDate} ${!message && s.imageDate}`}>{date}</span>
+
+        {/* Текст сообщения */}
+        {message && <div className={s.messageContentText}>{message}</div>}
+
+        {/* Дата */}
+        <div className={`${s.messageContentDate} ${(!message && images?.length === 0 && audioItems?.length === 0) && s.imageDate}`}>
+          {date}
+        </div>
       </div>
     </div>
   )

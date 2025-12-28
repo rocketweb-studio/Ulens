@@ -54,7 +54,20 @@
   }
 }
 
+.buttonsGroup {
+  display: flex;
+  gap: 8px;
+}
 
+// Стили для затемнения фона при записи
+.sendMessageContainer {
+  position: relative;
+
+  &.recordingActive {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
 
 .inputSendMessage {
   flex-grow: 1;
