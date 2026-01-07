@@ -12,7 +12,7 @@ export type UserRoom = {
 export type MessageType = {
   id: number
   content: string
-  media: MediaFields[]
+  media: MediaFields[]| UploadVoiceResponce
   createdAt: string
   author: {
     id: string
@@ -75,7 +75,7 @@ export type UploadVoiceRequest = {
 }
 export type UploadVoiceResponce = {
   id: string;
-  messageId:number|string;
+  messageId:number;
   url: string;
   type: 'AUDIO';
 }

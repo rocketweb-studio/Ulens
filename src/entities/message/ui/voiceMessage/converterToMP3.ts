@@ -30,5 +30,5 @@ export async function convertWebmToMp3(blob: Blob): Promise<Blob> {
 
   const data = await ffmpeg.readFile('output.mp3');
 //@ts-ignore
-  return new Blob([data], { type: 'audio/mpeg' });
+  return new Blob([data], { type: 'audio/mp3' });
 }
