@@ -44,11 +44,12 @@ export const messengerApi = baseApi.injectEndpoints({
     uploadVoiceMessage: build.mutation<UploadVoiceResponce, UploadVoiceRequest>({
       query: ({ roomId, audio }) => {
         const formData = new FormData();
+    if(audio) {
         formData.append('audio', audio);
-        console.log(formData)
+        }
         return {
-          url: `messenger/rooms/${roomId}/audio`,
           method: 'POST',
+          url: `messenger/rooms/${roomId}/audio`,
           body: formData,
            // overrideExisting: true
         };

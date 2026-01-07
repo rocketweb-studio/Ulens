@@ -163,14 +163,20 @@ export  function VoiceRecorder({
             });
 
             // Создаем File для отправки (MP3 вместо WAV)
-            const audioFile = new File([mp3Blob], `voice-${Date.now()}.mp3`, { // ← меняем расширение
-              type: 'audio/mpeg' // ← меняем MIME-тип
-            });
+            // const audioFile = new File([mp3Blob], `voice-${Date.now()}.mp3`, { // ← меняем расширение
+            //   type: 'audio/mpeg' // ← меняем MIME-тип
+            // });
+            const audioFile = new File(
+              [mp3Blob],
+              `audio-${Date.now()}-mp3`,
+              { type: mp3Blob.type }
+            );
 
             console.log('📤 Отправка MP3 файла:', {
               fileName: audioFile.name,
               fileType: audioFile.type,
-              fileSize: audioFile.size
+              fileSize: audioFile.size,
+
             });
 
             // Проверяем размер файла
@@ -191,11 +197,11 @@ export  function VoiceRecorder({
               .then((result) => {
                 const token = localStorage.getItem('accessToken')
                 const socket = io('https://ulens.org/ws', { auth: { token }, })
-                console.log( {
+                console.log('response message: ', {
                   id: result.id,
                   messageId: result.messageId,
                   url: result.url,
-                  type: 'AUDIO',
+                  type: result.type,
                 })
 
                 socket.emit('SEND_MESSAGE', {
@@ -205,7 +211,7 @@ export  function VoiceRecorder({
                     id: result.id,
                     messageId: result.messageId,
                     url: result.url,
-                    type: 'AUDIO',
+                    type: result.type,
                   },
                 })
 

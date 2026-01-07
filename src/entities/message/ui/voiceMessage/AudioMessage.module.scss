@@ -1,3 +1,5 @@
+@use '@/src/shared/styles/colors' as colors;
+
 //.audioMessage {
 //  display: flex;
 //  align-items: center;
@@ -168,13 +170,13 @@
   min-width: 250px;
 
   &.mine {
-    background: #F3F4F6;
+    background: colors.color('accent',900);
     align-self: flex-end;
     margin-left: auto;
   }
 
   &.friend {
-    background: #E0F2FE;
+    background: colors.color('dark',300);
     align-self: flex-start;
     margin-right: auto;
   }
@@ -187,23 +189,23 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: white;
-  border: 1px solid #E5E7EB;
+  background: colors.color('light',500);
   cursor: pointer;
   flex-shrink: 0;
   transition: background-color 0.2s ease;
 
   &:hover {
-    background: #F9FAFB;
+    background: colors.color('light',700);
   }
 
   &:focus-visible {
-    outline: 2px solid #3B82F6;
+    outline: 2px solid red;
     outline-offset: 2px;
   }
 
   svg {
-    color: #374151;
+    color: colors.color('accent',900);
+
   }
 }
 
@@ -220,7 +222,7 @@
   cursor: pointer;
 
   &:focus-visible {
-    outline: 2px solid #3B82F6;
+    outline: 2px solid colors.color('accent',300);;
     outline-offset: 2px;
     border-radius: 4px;
   }
@@ -241,7 +243,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid #3B82F6;
+    outline: 2px solid colors.color('accent',500);;
     outline-offset: 2px;
     border-radius: 4px;
   }
@@ -254,7 +256,7 @@
   width: 100%;
   height: 100%;
   border-radius: 2px;
-  background-color: #E5E7EB;
+  background-color: red;
 }
 
 .progressBarFill {
@@ -275,7 +277,7 @@
   border-radius: 50%;
   opacity: 0;
   transition: opacity 0.2s ease, transform 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px red;
   z-index: 2;
 
   .progressBarContainer:hover & {
@@ -298,9 +300,9 @@
 
 .currentTime {
   font-weight: 600;
-  color: #374151;
+  color: colors.color('light',700);;
 }
 
 .duration {
-  color: #9CA3AF;
+  color: colors.color('light',700);
 }
