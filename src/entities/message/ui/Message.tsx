@@ -1,3 +1,4 @@
+
 import s from './message.module.scss'
 import { UserAvatar } from '@/src/entities/userProfile'
 import { MediaFields, MessageType, UploadVoiceResponce } from '@/src/entities/messenger/api/messengerApi.type'
@@ -7,26 +8,29 @@ import { AudioMessage } from '@/src/entities/message/ui/voiceMessage/AudioMessag
 type Props = {
   type: 'mine' | 'friend'
   message: string
-  media: MediaFields[] | UploadVoiceResponce
+  media: MediaFields[] //| UploadVoiceResponce[]
   date: string
   avatar: string
   friendName: string
 }
 
+// Получаем полный URL для медиа
+export const getMediaUrl = (url: string) => {
+  return `${process.env.NEXT_PUBLIC_MEDIA_URL}${url}`
+}
+
 export const Message = ({ type, message, media, date, avatar, friendName }: Props) => {
 
-  const mediaDataMessage=Array.isArray(media) && media.length
-    ? media.filter((item) => item.type === 'IMAGE' && item.size === 'medium')
-    :media;
+  const filterImage=Array.isArray(media) && media?.filter((item) => item.type === 'IMAGE' && item.size === 'medium')
+  //@ts-ignore
+   const audio=Array.isArray(media) && media[0]?.type === 'AUDIO' ? media[0] : typeof media==='object' && media?.type==='AUDIO'?media:false  //(media && media[0]?.type === 'AUDIO') && media[0]
 
-  if(!Array.isArray(media)){
-    console.log(media)
-  }
+  // console.log('Message mediaDataMessage: ',mediaDataMessage)
+     console.log('Message media: ',media)
+  //@ts-ignore
+ // if(mediaDataMessage?.url){  console.log('Message mediaDataMessage.url: ',mediaDataMessage.url)}
 
-  // Получаем полный URL для медиа
-  const getMediaUrl = (url: string) => {
-    return `${process.env.NEXT_PUBLIC_MEDIA_URL}${url}`
-  }
+
 
   return (
     <div className={`${s.message} ${type === 'mine' ? s.mine : ''}`}>
@@ -42,12 +46,12 @@ export const Message = ({ type, message, media, date, avatar, friendName }: Prop
       <div className={s.messageContent}>
 
         {/*Аудио или Изображения */}
-        {Array.isArray(mediaDataMessage) && mediaDataMessage.length > 0 ? (
+        {filterImage && (
           <div className={`${s.telegramGrid} ${message && s.hasMessage}`}>
-            {mediaDataMessage?.map((img) => (
+            {filterImage?.map((img) => (
               <div className={s.gridItem} key={img.id}>
                 <Image
-                  src={getMediaUrl(img.url)}
+                   src={getMediaUrl(img.url)}
                   alt=""
                   width={img.width || 200}
                   height={img.height || 200}
@@ -56,11 +60,13 @@ export const Message = ({ type, message, media, date, avatar, friendName }: Prop
               </div>
             ))}
           </div>
-        ) :  (mediaDataMessage as UploadVoiceResponce)?.url &&(
+        )}
+        { audio &&(
           <div className={s.audioContainer}>
             <AudioMessage
-              audioUrl={getMediaUrl((mediaDataMessage as UploadVoiceResponce).url)}
-              type={type}
+              //@ts-ignore
+              audioUrl={getMediaUrl(audio.url)}
+                type={type}
             />
           </div>
         )}
@@ -69,7 +75,7 @@ export const Message = ({ type, message, media, date, avatar, friendName }: Prop
         {message && <div className={s.messageContentText}>{message}</div>}
 
         {/* Дата */}
-        <div className={`${s.messageContentDate} ${(!message ) && s.imageDate}`}>
+        <div className={`${s.messageContentDate} `}> {/* ${(!message ) && s.imageDate} */}
           {date}
         </div>
       </div>

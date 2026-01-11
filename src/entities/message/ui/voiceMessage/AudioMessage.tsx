@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Play, Pause, Volume2 } from 'lucide-react'
+import { Play, Pause } from 'lucide-react'
 import WaveSurfer from 'wavesurfer.js'
 import s from './AudioMessage.module.scss'
 
@@ -13,51 +13,59 @@ interface AudioMessageProps {
 export const AudioMessage = ({ audioUrl, type }: AudioMessageProps) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
-  const [audioDuration, setAudioDuration] = useState( 0)
-  const [volume, setVolume] = useState(0.7)
+  const [audioDuration, setAudioDuration] = useState(0)
 
   const waveformRef = useRef<HTMLDivElement>(null)
   const waveRef = useRef<WaveSurfer | null>(null)
+  const destroyedRef = useRef(false)
 
+  // console.log('AudioMessage audioURL', audioUrl)
+
+  // 1️⃣ Создание WaveSurfer (один раз)
   useEffect(() => {
-    if (!audioUrl || !waveformRef.current) return
+    if (!waveformRef.current || waveRef.current) return
 
+    destroyedRef.current = false
 
-
-    waveRef.current = WaveSurfer.create({
-      container: waveformRef.current,
+    const wave = WaveSurfer.create({
+      container: waveformRef.current!,
       waveColor: type === 'mine' ? '#9CA3AF' : '#CBD5E1',
       progressColor: type === 'mine' ? '#2563EB' : '#0EA5E9',
-      height: 32,
-      barWidth: 2,
-      cursorColor: 'transparent',
+      interact: true,
+      media: new Audio(audioUrl),
     })
 
-    waveRef.current.load(audioUrl)
+    waveRef.current = wave
 
-    waveRef.current.on('audioprocess', () => {
-      setCurrentTime(waveRef.current!.getCurrentTime())
+    wave.on('audioprocess', () => {
+      if (!destroyedRef.current) {
+        setCurrentTime(wave.getCurrentTime())
+      }
     })
 
-    waveRef.current.on('ready', () => {
-      setAudioDuration(waveRef.current!.getDuration())
-      waveRef.current!.setVolume(volume)
+    wave.on('ready', () => {
+      if (!destroyedRef.current) {
+        setAudioDuration(wave.getDuration())
+      }
     })
 
-    waveRef.current.on('play', () => setIsPlaying(true))
-    waveRef.current.on('pause', () => setIsPlaying(false))
-    waveRef.current.on('finish', () => setIsPlaying(false))
+    wave.on('play', () => setIsPlaying(true))
+    wave.on('pause', () => setIsPlaying(false))
+    wave.on('finish', () => setIsPlaying(false))
 
     return () => {
-      waveRef.current?.destroy()
+      destroyedRef.current = true
+      wave.destroy()
       waveRef.current = null
     }
-  }, [audioUrl, type])
+  }, [type])
 
-  // громкость
-  useEffect(() => {
-    waveRef.current?.setVolume(volume)
-  }, [volume])
+  // 2️⃣ Загрузка аудио при изменении url
+  // useEffect(() => {
+  //   if (!audioUrl || !waveRef.current) return
+  //
+  //   waveRef.current.load(audioUrl)
+  // }, [audioUrl])
 
   const togglePlay = () => {
     waveRef.current?.playPause()
@@ -71,23 +79,17 @@ export const AudioMessage = ({ audioUrl, type }: AudioMessageProps) => {
 
   return (
     <div className={`${s.audioMessage} ${s[type]}`}>
-      <button
-        className={s.playButton}
-        onClick={togglePlay}
-        aria-label={isPlaying ? 'Pause' : 'Play'}
-      >
+      <button className={s.playButton} onClick={togglePlay}>
         {isPlaying ? <Pause size={18} /> : <Play size={18} />}
       </button>
-
       <div className={s.waveformContainer}>
         <div ref={waveformRef} className={s.waveform} />
 
         <div className={s.timeInfo}>
-          <span className={s.currentTime}>{formatTime(currentTime)}</span>
-          <span className={s.duration}>/ {formatTime(audioDuration)}</span>
+          <span>{formatTime(currentTime)}</span>
+          <span> / {formatTime(audioDuration)}</span>
         </div>
       </div>
-
     </div>
   )
 }

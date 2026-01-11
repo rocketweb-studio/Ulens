@@ -41,7 +41,7 @@ export const messengerApi = baseApi.injectEndpoints({
       //   { type: 'GetMessagesByRoomId', id: roomId }
       // ],
     }),
-    uploadVoiceMessage: build.mutation<UploadVoiceResponce, UploadVoiceRequest>({
+    uploadVoiceMessage: build.mutation<UploadVoiceResponce[], UploadVoiceRequest>({
       query: ({ roomId, audio }) => {
         const formData = new FormData();
     if(audio) {

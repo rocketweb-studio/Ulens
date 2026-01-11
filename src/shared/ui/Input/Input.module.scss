@@ -217,7 +217,7 @@
 .errorText {
   position: absolute;
   bottom: 0;
-  color: color(danger, 500);
+  color: colors.color(danger, 500);
   font-size: 14px;
   margin-top: 2px;
   width: 100%;

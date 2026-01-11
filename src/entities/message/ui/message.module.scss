@@ -375,16 +375,16 @@
     }
 
     .waveform {
-      --waveColor: #ffffff;
-      --progressColor: #c7d2fe;
+      --waveColor: #5367d3;
+      --progressColor: #6a1371;
     }
 
     .audioInfo {
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(37, 179, 44, 0.8);
     }
 
     .volumeControl {
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(83, 44, 44, 0.7);
     }
   }
 
@@ -396,16 +396,16 @@
     }
 
     .waveform {
-      --waveColor: #6366f1;
-      --progressColor: #4f46e5;
+      --waveColor: #63f1e5;
+      --progressColor: #e5d846;
     }
 
     .audioInfo {
-      color: #6b7280;
+      color: #4b5d81;
     }
 
     .volumeControl {
-      color: #9ca3af;
+      color: #75ec8e;
     }
   }
 }
@@ -417,13 +417,13 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(110, 55, 55, 0.2);
   border: none;
   cursor: pointer;
   transition: background 0.2s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(239, 177, 177, 0.3);
   }
 }
 
@@ -452,7 +452,7 @@
     width: 60px;
     height: 4px;
     -webkit-appearance: none;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgb(172, 226, 234);
     border-radius: 2px;
     outline: none;
 
@@ -461,7 +461,7 @@
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: white;
+      background: #f444f1;
       cursor: pointer;
     }
   }

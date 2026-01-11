@@ -164,8 +164,7 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
             ?
               <VoiceRecorder
                 roomId={roomId}
-                 setStartVoiceRecorder={() => setStartVoiceRecorder(false)}
-                onUploadError={console.log}
+                setStartVoiceRecorder={() => setStartVoiceRecorder(false)}
                 isRecording={startVoiceRecorder} />
             :
               <Input
@@ -201,6 +200,7 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
                     onClick={() =>{ setStartVoiceRecorder(true)}} // ← ВКЛЮЧАЕМ рекордер
                     disabled={isDisable}
                   >
+                    <input {...getInputProps()} />
                     <IconMicOutline />
                   </Button>
                   <Button

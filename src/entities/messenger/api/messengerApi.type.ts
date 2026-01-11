@@ -12,7 +12,7 @@ export type UserRoom = {
 export type MessageType = {
   id: number
   content: string
-  media: MediaFields[]| UploadVoiceResponce
+  media: MediaFields[] //| UploadVoiceResponce[]
   createdAt: string
   author: {
     id: string
@@ -54,7 +54,7 @@ export type LastMessage = {
   content: string
   createdAt: string
   authorId: string
-  media: MediaFields
+  media: MediaFields //| UploadVoiceResponce
 }
 
 export type GetRoomsResponce = {

@@ -171,12 +171,14 @@
 
   &.mine {
     background: colors.color('accent',900);
+    background: red;
     align-self: flex-end;
     margin-left: auto;
   }
 
   &.friend {
     background: colors.color('dark',300);
+    background: red;
     align-self: flex-start;
     margin-right: auto;
   }
