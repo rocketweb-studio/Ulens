@@ -1,7 +1,7 @@
 
 import s from './message.module.scss'
 import { UserAvatar } from '@/src/entities/userProfile'
-import { MediaFields, MessageType, UploadVoiceResponce } from '@/src/entities/messenger/api/messengerApi.type'
+import { MediaFields, UploadVoiceResponce } from '@/src/entities/messenger/api/messengerApi.type'
 import Image from 'next/image'
 import { AudioMessage } from '@/src/entities/message/ui/voiceMessage/AudioMessage'
 
@@ -24,12 +24,6 @@ export const Message = ({ type, message, media, date, avatar, friendName }: Prop
   const filterImage=Array.isArray(media) && media?.filter((item) => item.type === 'IMAGE' && item.size === 'medium')
   //@ts-ignore
    const audio=Array.isArray(media) && media[0]?.type === 'AUDIO' ? media[0] : typeof media==='object' && media?.type==='AUDIO'?media:false  //(media && media[0]?.type === 'AUDIO') && media[0]
-
-  // console.log('Message mediaDataMessage: ',mediaDataMessage)
-     console.log('Message media: ',media)
-  //@ts-ignore
- // if(mediaDataMessage?.url){  console.log('Message mediaDataMessage.url: ',mediaDataMessage.url)}
-
 
 
   return (

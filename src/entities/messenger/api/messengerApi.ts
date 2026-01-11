@@ -44,9 +44,9 @@ export const messengerApi = baseApi.injectEndpoints({
     uploadVoiceMessage: build.mutation<UploadVoiceResponce[], UploadVoiceRequest>({
       query: ({ roomId, audio }) => {
         const formData = new FormData();
-    if(audio) {
-        formData.append('audio', audio);
-        }
+      if(audio) {
+          formData.append('audio', audio);
+      }
         return {
           method: 'POST',
           url: `messenger/rooms/${roomId}/audio`,

@@ -21,17 +21,15 @@ import { UploadedFileInMessage } from '@/src/entities/messenger/api/messengerApi
 import Image from 'next/image'
 import { useUploadMessageImagesMutation } from '@/src/entities/messenger'
 import { io } from 'socket.io-client'
- // import { VoiceRecorder } from '@/src/entities/message/ui/voiceMessage/VoiceRecorder'
 import dynamic from 'next/dynamic';
-//import { testSOCKET } from '@/src/entities/message/ui/voiceMessage/VoiceRecorder'
 
-// ✅ ВАЖНО: ssr: false
 const VoiceRecorder = dynamic(
   () =>
     import('@/src/entities/message/ui/voiceMessage/VoiceRecorder')
       .then((m) => m.VoiceRecorder),
   { ssr: false }
 );
+
 type Props = {
   roomId: number | null
   isDisable: boolean
@@ -124,23 +122,11 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
     return hasMessage || hasMedia
   }
 
-  // Добавляем обработчик Escape для закрытия рекордера
-  React.useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && startVoiceRecorder) {
-        setStartVoiceRecorder(false)
-      }
-    }
-
-    window.addEventListener('keydown', handleEscape)
-    return () => window.removeEventListener('keydown', handleEscape)
-  }, [startVoiceRecorder])
-
   return (
     <div className={s.sendMessageContainer}>
-
       <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
         {uploadedFiles.length > 0 && (
+
           <div className={s.previewImageWrap}>
             {uploadedFiles.map((file) => (
               <div key={file.id} className={s.previewImage}>
@@ -150,6 +136,7 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
                 </span>
               </div>
             ))}
+
             {uploadedFiles.length < 10 && (
               <div className={s.addMoreImageBtn} {...getRootProps()}>
                 <input {...getInputProps()} />
@@ -173,7 +160,7 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
                 id={'message'}
                 name={'message'}
                 placeholder={'Type Message...'}
-                // disabled={isDisable || startVoiceRecorder} // ← Отключаем при записи
+                 disabled={isDisable || startVoiceRecorder} // ← Отключаем при записи
           />}
 
           {isFormValid() ? (
@@ -189,7 +176,7 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
             </Button>
           ) : (
             <div className={s.buttonsGroup}>
-              {!startVoiceRecorder && ( // ← Показываем кнопки только когда рекордер не активен
+              {!startVoiceRecorder && (
                 <>
                   <Button
                     type="button"
@@ -200,7 +187,7 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
                     onClick={() =>{ setStartVoiceRecorder(true)}} // ← ВКЛЮЧАЕМ рекордер
                     disabled={isDisable}
                   >
-                    <input {...getInputProps()} />
+                    {/*<input {...getInputProps()} />*/}
                     <IconMicOutline />
                   </Button>
                   <Button

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useRef, useEffect } from 'react'
 import { Play, Pause } from 'lucide-react'
 import WaveSurfer from 'wavesurfer.js'
@@ -19,12 +18,10 @@ export const AudioMessage = ({ audioUrl, type }: AudioMessageProps) => {
   const waveRef = useRef<WaveSurfer | null>(null)
   const destroyedRef = useRef(false)
 
-  // console.log('AudioMessage audioURL', audioUrl)
 
-  // 1️⃣ Создание WaveSurfer (один раз)
+  //  Создание WaveSurfer (один раз)
   useEffect(() => {
     if (!waveformRef.current || waveRef.current) return
-
     destroyedRef.current = false
 
     const wave = WaveSurfer.create({
@@ -36,7 +33,6 @@ export const AudioMessage = ({ audioUrl, type }: AudioMessageProps) => {
     })
 
     waveRef.current = wave
-
     wave.on('audioprocess', () => {
       if (!destroyedRef.current) {
         setCurrentTime(wave.getCurrentTime())
@@ -59,13 +55,6 @@ export const AudioMessage = ({ audioUrl, type }: AudioMessageProps) => {
       waveRef.current = null
     }
   }, [type])
-
-  // 2️⃣ Загрузка аудио при изменении url
-  // useEffect(() => {
-  //   if (!audioUrl || !waveRef.current) return
-  //
-  //   waveRef.current.load(audioUrl)
-  // }, [audioUrl])
 
   const togglePlay = () => {
     waveRef.current?.playPause()
