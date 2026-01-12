@@ -21,9 +21,9 @@ export const getMediaUrl = (url: string) => {
 
 export const Message = ({ type, message, media, date, avatar, friendName }: Props) => {
 
-  const filterImage=Array.isArray(media) && media?.filter((item) => item.type === 'IMAGE' && item.size === 'medium')
+  const filterImage=Array.isArray(media) ? media?.filter((item) => item.type === 'IMAGE' && item.size === 'medium') : ''
   //@ts-ignore
-   const audio=Array.isArray(media) && media[0]?.type === 'AUDIO' ? media[0] : typeof media==='object' && media?.type==='AUDIO'?media:false  //(media && media[0]?.type === 'AUDIO') && media[0]
+  const audio=Array.isArray(media) && media[0]?.type === 'AUDIO' ? media[0] : typeof media==='object' && media?.type==='AUDIO'?media : ''  //(media && media[0]?.type === 'AUDIO') && media[0]
 
 
   return (
@@ -45,7 +45,7 @@ export const Message = ({ type, message, media, date, avatar, friendName }: Prop
             {filterImage?.map((img) => (
               <div className={s.gridItem} key={img.id}>
                 <Image
-                   src={getMediaUrl(img.url)}
+                  src={getMediaUrl(img.url)}
                   alt=""
                   width={img.width || 200}
                   height={img.height || 200}
@@ -60,18 +60,22 @@ export const Message = ({ type, message, media, date, avatar, friendName }: Prop
             <AudioMessage
               //@ts-ignore
               audioUrl={getMediaUrl(audio.url)}
-                type={type}
+              type={type}
+              date={date}
             />
           </div>
         )}
 
         {/* Текст сообщения */}
-        {message && <div className={s.messageContentText}>{message}</div>}
+        {message && !audio && <div className={s.messageContentText}>{message}</div>}
 
         {/* Дата */}
-        <div className={`${s.messageContentDate} `}> {/* ${(!message ) && s.imageDate} */}
-          {date}
-        </div>
+        {(message && !audio || filterImage?.length>0) ? (
+          <div className={`${s.messageContentDate} ${!message && s.imageDate}`}>
+            {date}
+          </div>
+        ):null}
+
       </div>
     </div>
   )

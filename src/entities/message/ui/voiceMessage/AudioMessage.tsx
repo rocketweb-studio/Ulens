@@ -7,9 +7,11 @@ import s from './AudioMessage.module.scss'
 interface AudioMessageProps {
   audioUrl: string
   type: 'mine' | 'friend'
+  date: string
 }
+let activeWave: WaveSurfer | null = null
 
-export const AudioMessage = ({ audioUrl, type }: AudioMessageProps) => {
+export const AudioMessage =  ({ audioUrl, type, date }: AudioMessageProps) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [audioDuration, setAudioDuration] = useState(0)
@@ -19,18 +21,42 @@ export const AudioMessage = ({ audioUrl, type }: AudioMessageProps) => {
   const destroyedRef = useRef(false)
 
 
-  //  Создание WaveSurfer (один раз)
-  useEffect(() => {
+  useEffect( () => {
     if (!waveformRef.current || waveRef.current) return
+    waveformRef.current.textContent = ''
     destroyedRef.current = false
+
 
     const wave = WaveSurfer.create({
       container: waveformRef.current!,
+      height: 40,
+      barWidth: 2,
+      barGap: 2,
+      barRadius: 2,
+      cursorWidth: 0,
       waveColor: type === 'mine' ? '#9CA3AF' : '#CBD5E1',
       progressColor: type === 'mine' ? '#2563EB' : '#0EA5E9',
       interact: true,
-      media: new Audio(audioUrl),
+      media:new Audio(audioUrl),
+      peaks: [
+        Array.from({ length: 100 }, (_, i) =>
+          Math.sin(i / 5) * Math.random() * 0.8
+        ),
+      ],
+      // url: audioUrl,
     })
+
+    // wave.load(audioUrl)
+    waveRef.current = wave
+
+    wave.on('play', () => {
+      if (activeWave && activeWave !== wave) {
+        activeWave.pause()
+      }
+      activeWave = wave
+      setIsPlaying(true)
+    })
+
 
     waveRef.current = wave
     wave.on('audioprocess', () => {
@@ -39,21 +65,34 @@ export const AudioMessage = ({ audioUrl, type }: AudioMessageProps) => {
       }
     })
 
+    // wave.on('ready', () => {
+    //   if (!destroyedRef.current) {
+    //     setAudioDuration(wave.getDuration())
+    //   }
+    // })
     wave.on('ready', () => {
-      if (!destroyedRef.current) {
-        setAudioDuration(wave.getDuration())
-      }
+      setAudioDuration(wave.getDuration())
     })
 
-    wave.on('play', () => setIsPlaying(true))
+
+    // wave.on('play', () => setIsPlaying(true))
     wave.on('pause', () => setIsPlaying(false))
     wave.on('finish', () => setIsPlaying(false))
 
+    // return () => {
+    //   destroyedRef.current = true
+    //   wave.destroy()
+    //   waveRef.current = null
+    // }
     return () => {
       destroyedRef.current = true
-      wave.destroy()
+      if (activeWave === wave) {
+        activeWave = null
+      }
+      // wave.destroy()
       waveRef.current = null
     }
+
   }, [type])
 
   const togglePlay = () => {
@@ -79,6 +118,8 @@ export const AudioMessage = ({ audioUrl, type }: AudioMessageProps) => {
           <span> / {formatTime(audioDuration)}</span>
         </div>
       </div>
+
+      <span className={s.audioDate}>{date}</span>
     </div>
   )
 }
