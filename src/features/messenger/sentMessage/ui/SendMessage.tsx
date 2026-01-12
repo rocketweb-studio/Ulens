@@ -15,20 +15,18 @@ import { MessageInput, messageSchema } from '@/src/features/messenger/sentMessag
 import { useDropzone } from 'react-dropzone'
 import { FILES_VALIDATE } from '@/src/features/post/postCreate/model/consts'
 import { base64ToFile, fileToBase64, getImageDimensions } from '@/src/features/post/postCreate/utils'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { UploadedFileInMessage } from '@/src/entities/messenger/api/messengerApi.type'
 
 import Image from 'next/image'
 import { useUploadMessageImagesMutation } from '@/src/entities/messenger'
-import { io } from 'socket.io-client'
-import dynamic from 'next/dynamic';
+import { io, Socket } from 'socket.io-client'
+import dynamic from 'next/dynamic'
 
 const VoiceRecorder = dynamic(
-  () =>
-    import('@/src/entities/message/ui/voiceMessage/VoiceRecorder')
-      .then((m) => m.VoiceRecorder),
-  { ssr: false }
-);
+  () => import('@/src/entities/message/ui/voiceMessage/VoiceRecorder').then((m) => m.VoiceRecorder),
+  { ssr: false },
+)
 
 type Props = {
   roomId: number | null
@@ -36,6 +34,8 @@ type Props = {
 }
 
 export const SendMessage = ({ roomId, isDisable = false }: Props) => {
+  const socketRef = useRef<Socket | null>(null)
+
   const {
     register,
     handleSubmit,
@@ -61,7 +61,12 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
     maxSize: FILES_VALIDATE.maxSize,
   })
 
-  async function onDrop(acceptedFiles: File[], {/* rejectedFiles: any[]*/ }) {
+  async function onDrop(
+    acceptedFiles: File[],
+    {
+      /* rejectedFiles: any[]*/
+    },
+  ) {
     const newFiles = await Promise.all(
       acceptedFiles.slice(0, 10 - uploadedFiles.length).map(async (file) => {
         const base64String = await fileToBase64(file)
@@ -84,12 +89,24 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
     setUploadedFiles(uploadedFiles.filter((file) => file.id !== id))
   }
 
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken')
+    const socket = io('https://ulens.org/ws', { auth: { token } })
+    socketRef.current = socket
+
+    // Очистка при размонтировании
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect()
+        socketRef.current = null
+      }
+    }
+  }, [])
+
   const onSubmit: SubmitHandler<MessageInput> = async (data) => {
     try {
       if (!roomId) return
 
-      const token = localStorage.getItem('accessToken')
-      const socket = io('https://ulens.org/ws', { auth: { token } })
       let res
       if (uploadedFiles.length > 0) {
         const imageFiles = await Promise.all(
@@ -102,14 +119,16 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
           images: imageFiles,
         }).unwrap()
       }
-      socket.emit('SEND_MESSAGE', {
-        roomId,
-        content: data.message,
-        media: res ? res.files : null,
-      })
+      if (socketRef.current) {
+        socketRef.current.emit('SEND_MESSAGE', {
+          roomId,
+          content: data.message,
+          media: res ? res.files : null,
+        })
 
-      reset()
-      setUploadedFiles([])
+        reset()
+        setUploadedFiles([])
+      }
     } catch (error) {
       console.error('Failed to send message:', error)
     }
@@ -126,7 +145,6 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
     <div className={s.sendMessageContainer}>
       <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
         {uploadedFiles.length > 0 && (
-
           <div className={s.previewImageWrap}>
             {uploadedFiles.map((file) => (
               <div key={file.id} className={s.previewImage}>
@@ -147,23 +165,23 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
         )}
 
         <div className={s.formWrapper}>
-          {startVoiceRecorder && roomId
-            ?
-              <VoiceRecorder
-                roomId={roomId}
-                setStartVoiceRecorder={() => setStartVoiceRecorder(false)}
-                isRecording={startVoiceRecorder} />
-            :
-              <Input
-                className={s.inputSendMessage}
-                register={register}
-                id={'message'}
-                name={'message'}
-                placeholder={'Type Message...'}
-                 disabled={isDisable || startVoiceRecorder} // ← Отключаем при записи
-          />}
+          {startVoiceRecorder && roomId ?
+            <VoiceRecorder
+              roomId={roomId}
+              setStartVoiceRecorder={() => setStartVoiceRecorder(false)}
+              isRecording={startVoiceRecorder}
+            />
+          : <Input
+              className={s.inputSendMessage}
+              register={register}
+              id={'message'}
+              name={'message'}
+              placeholder={'Type Message...'}
+              disabled={isDisable || startVoiceRecorder} // ← Отключаем при записи
+            />
+          }
 
-          {isFormValid() ? (
+          {isFormValid() ?
             <Button
               className={s.buttonSubmit}
               type={'submit'}
@@ -174,17 +192,18 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
             >
               Send message
             </Button>
-          ) : (
-            <div className={s.buttonsGroup}>
+          : <div className={s.buttonsGroup}>
               {!startVoiceRecorder && (
                 <>
                   <Button
-                    type="button"
+                    type='button'
                     className={s.buttonAudio}
-                    variant="text"
-                    size="large"
+                    variant='text'
+                    size='large'
                     withoutPadding
-                    onClick={() =>{ setStartVoiceRecorder(true)}} // ← ВКЛЮЧАЕМ рекордер
+                    onClick={() => {
+                      setStartVoiceRecorder(true)
+                    }} // ← ВКЛЮЧАЕМ рекордер
                     disabled={isDisable}
                   >
                     {/*<input {...getInputProps()} />*/}
@@ -205,7 +224,7 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
                 </>
               )}
             </div>
-          )}
+          }
         </div>
       </form>
     </div>
