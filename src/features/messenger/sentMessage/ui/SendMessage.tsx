@@ -94,7 +94,6 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
     const socket = io('https://ulens.org/ws', { auth: { token } })
     socketRef.current = socket
 
-    // Очистка при размонтировании
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect()

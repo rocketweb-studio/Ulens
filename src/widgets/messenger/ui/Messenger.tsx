@@ -16,7 +16,7 @@ import { LastMessage, UserRoom } from '@/src/entities/messenger/api/messengerApi
 import { UserAvatar } from '@/src/entities/userProfile'
 import { SendMessage } from '@/src/features/messenger/sentMessage'
 import { Message } from '@/src/entities/message'
-import { io } from 'socket.io-client'
+import { io, Socket } from 'socket.io-client'
 import { useAppDispatch } from '@/src/shared/hooks/useAppDispatch'
 import { dateFormatterForChat } from '@/src/shared/utils'
 import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
@@ -29,6 +29,7 @@ const Scrollbars = dynamic(() => import('react-custom-scrollbars'), {
 })
 
 export const Messenger = () => {
+  const socketRef = useRef<Socket | null>(null)
   const {
     data: RoomsList,
     isSuccess: isGetRoomsSuccess,
@@ -111,34 +112,38 @@ export const Messenger = () => {
   }, [])
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken')
-
     if (!activeChat) return
+    const token = localStorage.getItem('accessToken')
     const socket = io('https://ulens.org/ws', { auth: { token } })
+    socketRef.current = socket
+    if (socketRef.current) {
+      socketRef.current.on('connect', () => {
+        socketRef.current?.emit('SUBSCRIBE_CHAT', { roomId: activeChat?.id })
+        socketRef.current?.emit('SUBSCRIBE_ALL_ROOM_MESSAGES', { userId: meData?.id })
+      })
 
-    socket.on('connect', () => {
-      socket.emit('SUBSCRIBE_CHAT', { roomId: activeChat?.id })
-      socket.emit('SUBSCRIBE_ALL_ROOM_MESSAGES', { userId: meData?.id })
-    })
+      socketRef.current.on('NEW_MESSAGE', (msg) => {
+        dispatch(
+          messengerApi.util.updateQueryData(
+            'getMessagesByRoomId',
+            { roomId: activeChat.id !== null ? activeChat.id : 0 },
+            (draft) => {
+              draft.unshift(msg)
+            },
+          ),
+        )
+      })
 
-    socket.on('NEW_MESSAGE', (msg) => {
-      dispatch(
-        messengerApi.util.updateQueryData(
-          'getMessagesByRoomId',
-          { roomId: activeChat.id !== null ? activeChat.id : 0 },
-          (draft) => {
-            draft.unshift(msg)
-          },
-        ),
-      )
-    })
-
-    socket.on('NEW_GLOBAL_MESSAGE', () => {
-      refetchRoomList()
-    })
+      socket.on('NEW_GLOBAL_MESSAGE', () => {
+        refetchRoomList()
+      })
+    }
 
     return () => {
-      socket.disconnect()
+      if (socketRef.current) {
+        socketRef.current.disconnect()
+        socketRef.current = null
+      }
     }
   }, [activeChat])
 
