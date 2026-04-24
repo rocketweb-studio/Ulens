@@ -3,7 +3,7 @@ import {
   CreateRoomResponce,
   GetMessagesByRoomResponce,
   GetRoomsResponce,
-  UploadImageResponse,
+  UploadImageResponse, UploadVoiceRequest, UploadVoiceResponce
 } from '@/src/entities/messenger/api/messengerApi.type'
 
 export const messengerApi = baseApi.injectEndpoints({
@@ -36,12 +36,26 @@ export const messengerApi = baseApi.injectEndpoints({
           body: formData,
         }
       },
+
       // invalidatesTags: (result, error, { roomId }) => [
       //   { type: 'GetMessagesByRoomId', id: roomId }
       // ],
     }),
+    uploadVoiceMessage: build.mutation<UploadVoiceResponce[], UploadVoiceRequest>({
+      query: ({ roomId, audio }) => {
+        const formData = new FormData();
+      if(audio) {
+          formData.append('audio', audio);
+      }
+        return {
+          method: 'POST',
+          url: `messenger/rooms/${roomId}/audio`,
+          body: formData,
+           // overrideExisting: true
+        };
+      },})
   }),
 })
 
-export const { useGetRoomsQuery, useCreateRoomMutation, useGetMessagesByRoomIdQuery, useUploadMessageImagesMutation } =
+export const { useGetRoomsQuery, useCreateRoomMutation, useGetMessagesByRoomIdQuery, useUploadMessageImagesMutation,useUploadVoiceMessageMutation } =
   messengerApi

@@ -1,44 +1,81 @@
+
 import s from './message.module.scss'
 import { UserAvatar } from '@/src/entities/userProfile'
-import { MediaFields } from '@/src/entities/messenger/api/messengerApi.type'
+import { MediaFields, UploadVoiceResponce } from '@/src/entities/messenger/api/messengerApi.type'
 import Image from 'next/image'
-import React from 'react'
+import { AudioMessage } from '@/src/entities/message/ui/voiceMessage/AudioMessage'
 
 type Props = {
   type: 'mine' | 'friend'
   message: string
-  media: MediaFields[]
+  media: MediaFields[] //| UploadVoiceResponce[]
   date: string
   avatar: string
   friendName: string
 }
 
+// Получаем полный URL для медиа
+export const getMediaUrl = (url: string) => {
+  return `${process.env.NEXT_PUBLIC_MEDIA_URL}${url}`
+}
+
 export const Message = ({ type, message, media, date, avatar, friendName }: Props) => {
-  const filterImage = media?.filter((item) => item.size === 'medium')
+
+  const filterImage=Array.isArray(media) ? media?.filter((item) => item.type === 'IMAGE' && item.size === 'medium') : ''
+  //@ts-ignore
+  const audio=Array.isArray(media) && media[0]?.type === 'AUDIO' ? media[0] : typeof media==='object' && media?.type==='AUDIO'?media : ''  //(media && media[0]?.type === 'AUDIO') && media[0]
+
 
   return (
     <div className={`${s.message} ${type === 'mine' ? s.mine : ''}`}>
       {type === 'friend' && (
-        <UserAvatar mode={'size'} width={36} height={36} avatarOwner={avatar} userName={friendName} />
+        <UserAvatar
+          mode={'size'}
+          width={36}
+          height={36}
+          avatarOwner={avatar}
+          userName={friendName}
+        />
       )}
       <div className={s.messageContent}>
-        {filterImage?.length > 0 && (
-          <span className={`${s.telegramGrid} ${message && s.hasMessage}`}>
-            {filterImage?.map((img, index) => (
-              <div className={s.gridItem}>
+
+        {/*Аудио или Изображения */}
+        {filterImage && (
+          <div className={`${s.telegramGrid} ${message && s.hasMessage}`}>
+            {filterImage?.map((img) => (
+              <div className={s.gridItem} key={img.id}>
                 <Image
-                  key={index}
-                  src={`${process.env.NEXT_PUBLIC_MEDIA_URL}${img.url}`}
-                  alt={''}
-                  width={img.width}
-                  height={img.height}
+                  src={getMediaUrl(img.url)}
+                  alt=""
+                  width={img.width || 200}
+                  height={img.height || 200}
+                  style={{ objectFit: 'cover' }}
                 />
               </div>
             ))}
-          </span>
+          </div>
         )}
-        {message && <span className={s.messageContentText}>{message}</span>}
-        <span className={`${s.messageContentDate} ${!message && s.imageDate}`}>{date}</span>
+        { audio &&(
+          <div className={s.audioContainer}>
+            <AudioMessage
+              //@ts-ignore
+              audioUrl={getMediaUrl(audio.url)}
+              type={type}
+              date={date}
+            />
+          </div>
+        )}
+
+        {/* Текст сообщения */}
+        {message && !audio && <div className={s.messageContentText}>{message}</div>}
+
+        {/* Дата */}
+        {(message && !audio || filterImage?.length>0) ? (
+          <div className={`${s.messageContentDate} ${!message && s.imageDate}`}>
+            {date}
+          </div>
+        ):null}
+
       </div>
     </div>
   )

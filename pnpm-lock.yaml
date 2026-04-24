@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@ffmpeg/ffmpeg':
+        specifier: ^0.12.15
+        version: 0.12.15
+      '@ffmpeg/util':
+        specifier: ^0.12.2
+        version: 0.12.2
       '@hookform/resolvers':
         specifier: ^5.2.1
         version: 5.2.2(react-hook-form@7.68.0(react@19.1.0))
@@ -26,6 +32,9 @@ importers:
       framer-motion:
         specifier: ^12.23.23
         version: 12.23.26(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      lucide-react:
+        specifier: ^0.562.0
+        version: 0.562.0(react@19.1.0)
       next:
         specifier: 15.4.5
         version: 15.4.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.97.0)
@@ -56,12 +65,18 @@ importers:
       react-toastify:
         specifier: ^11.0.5
         version: 11.0.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react-use-audio-recorder:
+        specifier: ^0.4.2
+        version: 0.4.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       socket.io-client:
         specifier: ^4.8.1
         version: 4.8.1
       swiper:
         specifier: ^12.0.2
         version: 12.0.3
+      wavesurfer.js:
+        specifier: ^7.12.1
+        version: 7.12.1
       zod:
         specifier: ^4.1.5
         version: 4.2.1
@@ -317,6 +332,18 @@ packages:
   '@eslint/plugin-kit@0.4.1':
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@ffmpeg/ffmpeg@0.12.15':
+    resolution: {integrity: sha512-1C8Obr4GsN3xw+/1Ww6PFM84wSQAGsdoTuTWPOj2OizsRDLT4CXTaVjPhkw6ARyDus1B9X/L2LiXHqYYsGnRFw==}
+    engines: {node: '>=18.x'}
+
+  '@ffmpeg/types@0.12.4':
+    resolution: {integrity: sha512-k9vJQNBGTxE5AhYDtOYR5rO5fKsspbg51gbcwtbkw2lCdoIILzklulcjJfIDwrtn7XhDeF2M+THwJ2FGrLeV6A==}
+    engines: {node: '>=16.x'}
+
+  '@ffmpeg/util@0.12.2':
+    resolution: {integrity: sha512-ouyoW+4JB7WxjeZ2y6KpRvB+dLp7Cp4ro8z0HIVpZVCM7AwFlHa0c4R8Y/a4M3wMqATpYKhC7lSFHQ0T11MEDw==}
+    engines: {node: '>=18.x'}
 
   '@hookform/resolvers@5.2.2':
     resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
@@ -1860,6 +1887,11 @@ packages:
   loupe@3.2.1:
     resolution: {integrity: sha512-CdzqowRJCeLU72bHvWqwRBBlLcMEtIvGrlvef74kMnV2AolS9Y8xUv1I0U/MNAWMhBlKIoyuEgoJ0t/bbwHbLQ==}
 
+  lucide-react@0.562.0:
+    resolution: {integrity: sha512-82hOAu7y0dbVuFfmO4bYF1XEwYk/mEbM5E+b1jgci/udUBEE/R7LF5Ip0CCEmXe8AybRM8L+04eP+LGZeDvkiw==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
@@ -2149,6 +2181,12 @@ packages:
       react: ^18 || ^19
       react-dom: ^18 || ^19
 
+  react-use-audio-recorder@0.4.2:
+    resolution: {integrity: sha512-faPMdqW+r9/XXuAZXFRB6TTo3geo2Jkx1YcSkTw/AWJOmUHL/8gO1Mjusg8ZGmr8TM9C7DCOBlfgqRX36qXkAg==}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+
   react@19.1.0:
     resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
     engines: {node: '>=0.10.0'}
@@ -2160,6 +2198,9 @@ packages:
   readdirp@4.1.2:
     resolution: {integrity: sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg==}
     engines: {node: '>= 14.18.0'}
+
+  recordrtc@5.6.2:
+    resolution: {integrity: sha512-1QNKKNtl7+KcwD1lyOgP3ZlbiJ1d0HtXnypUy7yq49xEERxk31PHvE9RCciDrulPCY7WJ+oz0R9hpNxgsIurGQ==}
 
   redux-thunk@3.1.0:
     resolution: {integrity: sha512-NW2r5T6ksUKXCabzhL9z+h206HQw/NJkcLm1GPImRQ8IzfXwRGqjVhKJGauHirT0DAuyy6hjdnMZaRoAcy0Klw==}
@@ -2569,6 +2610,9 @@ packages:
       jsdom:
         optional: true
 
+  wavesurfer.js@7.12.1:
+    resolution: {integrity: sha512-NswPjVHxk0Q1F/VMRemCPUzSojjuHHisQrBqQiRXg7MVbe3f5vQ6r0rTTXA/a/neC/4hnOEC4YpXca4LpH0SUg==}
+
   which-boxed-primitive@1.1.1:
     resolution: {integrity: sha512-TbX3mj8n0odCBFVlY8AxkqcHASw3L60jIuF8jFP78az3C2YhmGvqbHBpAjTRH2/xqYunrJ9g1jSyjCjpoWzIAA==}
     engines: {node: '>= 0.4'}
@@ -2791,6 +2835,14 @@ snapshots:
     dependencies:
       '@eslint/core': 0.17.0
       levn: 0.4.1
+
+  '@ffmpeg/ffmpeg@0.12.15':
+    dependencies:
+      '@ffmpeg/types': 0.12.4
+
+  '@ffmpeg/types@0.12.4': {}
+
+  '@ffmpeg/util@0.12.2': {}
 
   '@hookform/resolvers@5.2.2(react-hook-form@7.68.0(react@19.1.0))':
     dependencies:
@@ -3839,8 +3891,8 @@ snapshots:
       '@typescript-eslint/parser': 8.50.0(eslint@9.39.2)(typescript@5.9.3)
       eslint: 9.39.2
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2))(eslint@9.39.2)
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2))(eslint@9.39.2))(eslint@9.39.2)
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.2)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.39.2)
       eslint-plugin-react: 7.37.5(eslint@9.39.2)
       eslint-plugin-react-hooks: 5.2.0(eslint@9.39.2)
@@ -3859,7 +3911,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2))(eslint@9.39.2):
+  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.2):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.3
@@ -3870,22 +3922,22 @@ snapshots:
       tinyglobby: 0.2.15
       unrs-resolver: 1.11.1
     optionalDependencies:
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2))(eslint@9.39.2))(eslint@9.39.2)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2)
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2))(eslint@9.39.2))(eslint@9.39.2):
+  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 8.50.0(eslint@9.39.2)(typescript@5.9.3)
       eslint: 9.39.2
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2))(eslint@9.39.2)
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.2)
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2))(eslint@9.39.2))(eslint@9.39.2):
+  eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.9
@@ -3896,7 +3948,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.39.2
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2))(eslint@9.39.2))(eslint@9.39.2)
+      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.50.0(eslint@9.39.2)(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2)
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
@@ -4426,6 +4478,10 @@ snapshots:
 
   loupe@3.2.1: {}
 
+  lucide-react@0.562.0(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -4703,11 +4759,19 @@ snapshots:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
+  react-use-audio-recorder@0.4.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+      recordrtc: 5.6.2
+
   react@19.1.0: {}
 
   react@19.2.3: {}
 
   readdirp@4.1.2: {}
+
+  recordrtc@5.6.2: {}
 
   redux-thunk@3.1.0(redux@5.0.1):
     dependencies:
@@ -5251,6 +5315,8 @@ snapshots:
       - terser
       - tsx
       - yaml
+
+  wavesurfer.js@7.12.1: {}
 
   which-boxed-primitive@1.1.1:
     dependencies:

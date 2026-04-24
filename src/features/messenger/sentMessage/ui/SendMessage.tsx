@@ -21,6 +21,14 @@ import { UploadedFileInMessage } from '@/src/entities/messenger/api/messengerApi
 import Image from 'next/image'
 import { useUploadMessageImagesMutation } from '@/src/entities/messenger'
 import { io } from 'socket.io-client'
+import dynamic from 'next/dynamic';
+
+const VoiceRecorder = dynamic(
+  () =>
+    import('@/src/entities/message/ui/voiceMessage/VoiceRecorder')
+      .then((m) => m.VoiceRecorder),
+  { ssr: false }
+);
 
 type Props = {
   roomId: number | null
@@ -44,6 +52,7 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
 
   const [uploadImages] = useUploadMessageImagesMutation()
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFileInMessage[]>([])
+  const [startVoiceRecorder, setStartVoiceRecorder] = useState<boolean>(false) // ← ИЗМЕНЕНО
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
@@ -52,7 +61,7 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
     maxSize: FILES_VALIDATE.maxSize,
   })
 
-  async function onDrop(acceptedFiles: File[], rejectedFiles: any[]) {
+  async function onDrop(acceptedFiles: File[], {/* rejectedFiles: any[]*/ }) {
     const newFiles = await Promise.all(
       acceptedFiles.slice(0, 10 - uploadedFiles.length).map(async (file) => {
         const base64String = await fileToBase64(file)
@@ -93,7 +102,6 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
           images: imageFiles,
         }).unwrap()
       }
-
       socket.emit('SEND_MESSAGE', {
         roomId,
         content: data.message,
@@ -118,6 +126,7 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
     <div className={s.sendMessageContainer}>
       <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
         {uploadedFiles.length > 0 && (
+
           <div className={s.previewImageWrap}>
             {uploadedFiles.map((file) => (
               <div key={file.id} className={s.previewImage}>
@@ -127,6 +136,7 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
                 </span>
               </div>
             ))}
+
             {uploadedFiles.length < 10 && (
               <div className={s.addMoreImageBtn} {...getRootProps()}>
                 <input {...getInputProps()} />
@@ -137,15 +147,23 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
         )}
 
         <div className={s.formWrapper}>
-          <Input
-            className={s.inputSendMessage}
-            register={register}
-            id={'message'}
-            name={'message'}
-            placeholder={'Type Message...'}
-            disabled={isDisable}
-          />
-          {isFormValid() ?
+          {startVoiceRecorder && roomId
+            ?
+              <VoiceRecorder
+                roomId={roomId}
+                setStartVoiceRecorder={() => setStartVoiceRecorder(false)}
+                isRecording={startVoiceRecorder} />
+            :
+              <Input
+                className={s.inputSendMessage}
+                register={register}
+                id={'message'}
+                name={'message'}
+                placeholder={'Type Message...'}
+                 disabled={isDisable || startVoiceRecorder} // ← Отключаем при записи
+          />}
+
+          {isFormValid() ? (
             <Button
               className={s.buttonSubmit}
               type={'submit'}
@@ -156,23 +174,38 @@ export const SendMessage = ({ roomId, isDisable = false }: Props) => {
             >
               Send message
             </Button>
-          : <div>
-              <Button type={'button'} className={s.buttonAudio} variant={'text'} size={'large'} withoutPadding>
-                <IconMicOutline />
-              </Button>
-              <Button
-                {...getRootProps()}
-                type={'button'}
-                className={s.buttonUploadImage}
-                variant={'text'}
-                size={'large'}
-                withoutPadding
-              >
-                <input {...getInputProps()} />
-                <IconImageOutline />
-              </Button>
+          ) : (
+            <div className={s.buttonsGroup}>
+              {!startVoiceRecorder && (
+                <>
+                  <Button
+                    type="button"
+                    className={s.buttonAudio}
+                    variant="text"
+                    size="large"
+                    withoutPadding
+                    onClick={() =>{ setStartVoiceRecorder(true)}} // ← ВКЛЮЧАЕМ рекордер
+                    disabled={isDisable}
+                  >
+                    {/*<input {...getInputProps()} />*/}
+                    <IconMicOutline />
+                  </Button>
+                  <Button
+                    {...getRootProps()}
+                    type={'button'}
+                    className={s.buttonUploadImage}
+                    variant={'text'}
+                    size={'large'}
+                    withoutPadding
+                    disabled={isDisable}
+                  >
+                    <input {...getInputProps()} />
+                    <IconImageOutline />
+                  </Button>
+                </>
+              )}
             </div>
-          }
+          )}
         </div>
       </form>
     </div>
