@@ -3,23 +3,41 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "node server.js",
+    "dev-http": "next dev --turbopack",
     "build": "next build",
     "build:production": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "update-ui-kit": "pnpm i @rocketweb-studio/ulens-ui-kit@latest"
   },
   "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
     "@hookform/resolvers": "^5.2.1",
     "@reduxjs/toolkit": "^2.8.2",
+    "@rocketweb-studio/ulens-ui-kit": "^0.9.21",
+    "@types/react-custom-scrollbars": "^4.0.13",
+    "async-mutex": "^0.5.0",
+    "framer-motion": "^12.23.23",
+    "lucide-react": "^0.562.0",
     "next": "15.4.5",
     "react": "19.1.0",
+    "react-custom-scrollbars": "^4.2.1",
+    "react-day-picker": "^9.11.0",
     "react-dom": "19.1.0",
-    "react-hook-form": "^7.62.0",
+    "react-dropzone": "^14.3.8",
+    "react-easy-crop": "^5.5.0",
+    "react-hook-form": "^7.65.0",
     "react-redux": "^9.2.0",
-    "zod": "^4.0.14"
+    "react-toastify": "^11.0.5",
+    "react-use-audio-recorder": "^0.4.2",
+    "socket.io-client": "^4.8.1",
+    "swiper": "^12.0.2",
+    "wavesurfer.js": "^7.12.1",
+    "zod": "^4.1.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -31,7 +49,9 @@
     "eslint": "^9",
     "eslint-config-next": "15.4.5",
     "prettier": "3.6.2",
+    "sass": "^1.90.0",
     "typescript": "^5",
     "vitest": "^3.2.4"
-  }
+  },
+  "packageManager": "pnpm@10.14.0+sha512.ad27a79641b49c3e481a16a805baa71817a04bbe06a38d17e60e2eaee83f6a146c6a688125f5792e48dd5ba30e7da52a5cda4c3992b9ccf333f9ce223af84748"
 }

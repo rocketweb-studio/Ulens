@@ -1,0 +1,93 @@
+@use "colors";
+
+$font-family: 'Inter', sans-serif;
+
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semi-bold: 600;
+$font-weight-bold: 700;
+
+@mixin large {
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 138%;
+}
+
+@mixin h1 {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 180%;
+}
+
+@mixin h2 {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 133%;
+}
+
+@mixin h3 {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 150%;
+}
+
+@mixin regular_text_16 {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+}
+
+@mixin bold_text_16 {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 150%;
+}
+
+@mixin regular_text_14 {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 171%;
+}
+
+@mixin medium_text_14 {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 171%;
+}
+
+@mixin bold_text_14 {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 171%;
+}
+
+@mixin small_text {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 133%;
+}
+
+@mixin semi_bold_small_text {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 133%;
+}
+
+@mixin regular_link {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 171%;
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  color: colors.color(accent, 500);
+}
+
+@mixin small_link {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 133%;
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  color: colors.color(accent, 500);
+}

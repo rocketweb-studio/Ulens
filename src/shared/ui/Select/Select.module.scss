@@ -1,0 +1,63 @@
+@use '@/src/shared/styles/typography' as typography;
+@use '@/src/shared/styles/colors' as colors;
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  width: 100%;
+}
+
+.title{
+  @include typography.regular_text_14 ;
+  color: colors.color(light, 900);
+}
+.trigger {
+  //@include typography.regular_text_16 ;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border: 1px solid colors.color(light, 900);
+  background: inherit;
+  &.disabled {
+    svg{
+      display: none;
+    }
+  }
+}
+.input{
+  @include typography.regular_text_16 ;
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+  border: none;
+  padding: 6px 12px;
+  &:focus{
+    outline: none;
+  }
+  &:disabled{
+    background-color: colors.color(dark,100);
+    cursor: not-allowed;
+  }
+}
+.options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: colors.color(dark,500);
+  border: 1px solid colors.color(light, 900);
+  z-index: 101;
+  max-height: 150px;
+  overflow-y: scroll;
+}
+
+.option {
+  @include typography.regular_text_14 ;
+  padding: 4px 8px;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: colors.color(dark,100);
+  }
+}

@@ -1,0 +1,211 @@
+@use 'src/shared/styles/colors' as colors;
+
+.voiceRecorder {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+
+    // Главный контейнер для всех элементов в строку
+    .mainContainer {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        width: 100%;
+        gap: 12px;
+    }
+
+    // Левый блок: иконка закрытия + время
+    .leftBlock {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+
+        .time {
+            font-size: 14px;
+            color: colors.color('dark', 100);
+            font-weight: 500;
+            min-width: 45px;
+        }
+    }
+
+    // Центральный блок: иконка play/pause + waveform
+    .centerBlock {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        min-width: 0; // Важно для flex-shrink
+    }
+
+    // Правый блок: кнопка отправки
+    .rightBlock {
+        flex-shrink: 0;
+    }
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+    flex-shrink: 0;
+    cursor: pointer;
+    color: colors.color('dark', 100);
+    transition: color 0.2s;
+
+    &:hover {
+        color: colors.color('accent', 500);
+    }
+
+    &:active {
+        color: colors.color('accent', 700);
+    }
+}
+
+.waveform {
+    position: relative;
+    flex: 1;
+    min-width: 0; // Ключевое для корректного сжатия
+    height: 40px;
+    background: rgba(colors.color('dark', 100), 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.audioPlaceholder{
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.buttonSubmit {
+    padding: 6px 16px ;
+    font-size: 16px ;
+    flex-shrink: 0;
+    font-weight: 500;
+    color: rgba(colors.color('accent', 500), 0.1);
+    white-space: nowrap;
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+// Для режима записи
+.recording {
+    .icon {
+        color: colors.color('light', 500);
+        animation: pulse 1.5s infinite;
+    }
+
+    .waveform {
+        background: transparent;
+    }
+
+}
+
+// Для режима прослушивания
+.playing {
+    .icon {
+        color: colors.color('accent', 500);
+    }
+
+    .waveform {
+        background: rgba(colors.color('accent', 500), 0.1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+    .voiceRecorder {
+        padding: 6px 10px;
+
+        .mainContainer {
+            gap: 8px;
+        }
+
+        .centerBlock {
+            gap: 8px;
+        }
+    }
+
+    .waveform {
+        height: 36px;
+    }
+
+    .buttonSubmit {
+        padding: 4px 12px !important;
+        min-width: 80px !important;
+        font-size: 13px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .voiceRecorder {
+        padding: 4px 8px;
+
+        .leftBlock {
+            gap: 6px;
+
+            .time {
+                font-size: 13px;
+                min-width: 40px;
+            }
+        }
+    }
+
+    .waveform {
+        height: 32px;
+    }
+
+    .buttonSubmit {
+        padding: 4px 8px !important;
+        min-width: 70px !important;
+        font-size: 12px !important;
+    }
+
+    .icon {
+        width: 20px;
+        height: 20px;
+        min-width: 20px;
+        min-height: 20px;
+    }
+}
+
+// Тёмная тема
+:global(.theme-dark) {
+    .voiceRecorder {
+        background: colors.color('dark', 300);
+        border-color: colors.color('dark', 500);
+
+        .leftBlock .time {
+            color: colors.color('light', 700);
+        }
+    }
+
+    .icon {
+        color: colors.color('light', 900);
+
+        &:hover {
+            color: colors.color('accent', 300);
+        }
+    }
+
+    .waveform {
+        background: rgba(colors.color('light', 900), 0.15);
+    }
+}

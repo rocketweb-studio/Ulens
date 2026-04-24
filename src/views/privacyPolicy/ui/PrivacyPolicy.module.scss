@@ -1,0 +1,20 @@
+@use '@/src/shared/styles/colors' as colors;
+@use '@/src/shared/styles/typography' as typography;
+
+.buttonBack {
+  color: colors.color(light, 900);
+}
+
+.title {
+  margin: 23px 0 20px;
+  text-align: center;
+}
+
+.content {
+  padding: 0 100px 30px;
+}
+
+.text {
+  @include typography.regular_text_14;
+  text-align: center;
+}

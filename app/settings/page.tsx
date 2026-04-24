@@ -1,0 +1,48 @@
+'use client'
+
+import { Tabs } from 'src/widgets/Tabs'
+import { redirect, useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
+import { Path } from '@/src/shared/router/Path'
+
+import { useGetMeQuery } from '@/src/entities/auth/api/authApi'
+import { GeneralInformation } from '@/src/views/generalInformation'
+import { AccountManagementPage } from '@/src/views/accountManagementPage'
+import { MyPaymentsPage } from '@/src/views/myPaymentsPage'
+import { Devices } from '@/src/entities/session'
+
+const allowedParts = ['info', 'devices', 'subscriptions', 'payments']
+
+function SettingsContent() {
+  const { isError } = useGetMeQuery()
+
+  if (isError) {
+    redirect(Path.SignIn)
+  }
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SettingsPageContent />
+    </Suspense>
+  )
+}
+
+function SettingsPageContent() {
+  const params = useSearchParams()
+  const part = params?.get('part')
+  const payment = params?.get('payment')
+  if (!part || !allowedParts.includes(part)) {
+    redirect(Path.Settings('info'))
+  }
+  return (
+    <div>
+      <Tabs />
+      {part === 'info' && <GeneralInformation />}
+      {part === 'devices' && <Devices />}
+      {part === 'subscriptions' && <AccountManagementPage />}
+      {part === 'payments' && <MyPaymentsPage />}
+    </div>
+  )
+}
+
+export default SettingsContent

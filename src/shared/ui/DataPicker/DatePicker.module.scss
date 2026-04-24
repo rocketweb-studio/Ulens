@@ -1,0 +1,45 @@
+@use '@/src/shared/styles/colors' as colors;
+
+.dateContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.input{
+  padding-bottom: 0;
+  margin-bottom: 24px;
+}
+.calendar {
+  position: absolute;
+  right: 12px;
+  z-index: 4;
+}
+.datePickerPopup{
+  position: absolute;
+  z-index: 555;
+  background-color: colors.color(dark, 500);
+  border-radius: 2px;
+  padding: 16px 24px;
+svg{
+  fill: white;
+  background-color:  colors.color(dark, 100);
+  border-radius: 50%;
+  padding: 4px;
+}
+  & select {
+    background-color: colors.color(dark, 500);
+    display: inline-block;
+    font-size: 10px;
+    width: 100%;
+  }
+//& :global(.rdp-day_button) {
+//  border: none !important;
+//}
+& :global(.rdp-months_dropdown) {
+  margin-right: 4px;
+}
+& :global(.rdp-caption_label){
+display: flex;
+  gap: 5px;
+}
+}

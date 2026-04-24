@@ -1,0 +1,143 @@
+@use '/src/shared/styles/colors' as colors;
+@use '/src/shared/styles/typography' as typography;
+
+.modal {
+  width: 492px;
+}
+
+.cropModal {
+  padding: 0;
+}
+
+.addStep {
+  display: flex;
+  flex-direction:  column;
+  align-items: center;
+  justify-content: center;
+}
+
+.draftButtonWrapper {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.form {
+  width: 100%;
+}
+
+.container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.dropError {
+  margin-top: 20px;
+}
+
+.dropErrorText {
+  @include typography.bold_text_16;
+  color: colors.color(danger, 500);
+}
+
+.publication {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  min-width: 80vw;
+  max-width: 80vw;
+  overflow: hidden;
+}
+
+.img{
+  width: 100%;
+  height: auto;
+}
+
+.publicationImgWrapper {
+  grid-column: 1;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.publicationImg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.publicationContent {
+  grid-column: 2;
+  padding: 24px 15px;
+  overflow-y: auto;
+}
+
+.publicationProfile {
+  display: flex;
+  align-items: center;
+  gap: 0 12px;
+  margin-bottom: 24px;
+}
+
+.accessCloseModalText {
+  @include typography.regular_text_16
+
+}
+
+.accessCloseModalButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  padding: 0 24px;
+}
+
+.slideContent {
+  position: relative;
+  width: 100%;
+  height: 661px;
+  overflow: hidden;
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    object-fit: contain;
+  }
+}
+
+.slidePlaceholder {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

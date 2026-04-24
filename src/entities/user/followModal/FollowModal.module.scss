@@ -1,0 +1,24 @@
+@use '@/src/shared/styles/colors' as colors;
+
+.container {
+  padding: 20px;
+  width: 450px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.search {
+  width: 100%;
+  padding: 10px;
+  background: colors.color(dark, 100);
+  border: 1px solid colors.color(dark, 300);
+  border-radius: 6px;
+  color: colors.color(light, 100);
+  margin-bottom: 15px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}

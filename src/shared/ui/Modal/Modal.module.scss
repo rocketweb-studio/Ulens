@@ -1,0 +1,86 @@
+@use '@/src/shared/styles/typography' as typography;
+@use '@/src/shared/styles/colors' as colors;
+
+.overlay {
+  z-index: 1000;
+  background: rgba(colors.color(dark, 900), 0.8);
+  position: fixed;
+  inset: 0;
+  //overflow-y: scroll;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.content {
+  z-index: 1001;
+  border: 1px solid colors.color(dark, 100);
+  border-radius: 4px;
+  background-color: colors.color(dark, 300);
+  position: relative;
+  //max-width: 90vw;
+  //width: auto;
+  margin: auto;
+}
+
+.header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: colors.color(dark, 100);
+    position: absolute;
+    bottom: 0;
+    transform: translatex(-25px);
+  }
+}
+
+.title {
+  @include typography.h1;
+  color: colors.color(light, 100);
+}
+
+.closeButton {
+  cursor: pointer;
+  border: none;
+  background-color: inherit;
+  height: 25px;
+  width: 25px;
+  position: absolute;
+  top: 16px;
+  right: 18px;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+  &:active {
+    transform: translatey(2px);
+  }
+}
+
+.flexContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 30px 24px 36px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.flexContainer.withoutPadding {
+  padding: 0;
+}
+
+.button {
+  margin-bottom: 25px;
+  width: 90px;
+  align-self: flex-end;
+}

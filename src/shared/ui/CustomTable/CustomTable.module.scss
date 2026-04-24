@@ -1,0 +1,35 @@
+@use '@/src/shared/styles/typography' as typography;
+@use '@/src/shared/styles/colors' as colors;
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid colors.color(dark, 500);
+}
+
+.header {
+  @include typography.bold_text_14;
+  font-weight: 600;
+  background-color: colors.color(dark, 500);
+  color: colors.color(light, 100);
+}
+
+.cell {
+  padding: 12px 24px;
+  text-align: left;
+}
+
+.row {
+  @include typography.small_text;
+  color: colors.color(light, 100);
+  background-color: rgba(0, 0, 0, 0);
+  border-bottom: 1px solid colors.color(dark, 500);
+}
+
+.container {
+  overflow-x: auto;
+}
+
+.paginationWrapper {
+  margin: 36px 0 0 0;
+}

@@ -1,0 +1,76 @@
+@use '@/src/shared/styles/typography' as typography;
+@use '@/src/shared/styles/colors' as colors;
+
+.publicPageWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.postsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.postWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.swiperWrapper {
+  flex: 0 0 50%;
+  max-width: 240px;
+  display: flex;
+  align-items: center;
+  background: #000;
+}
+
+.slideImageWrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img {
+    width: 235px;
+    height: 240px;
+    object-fit: cover;
+  }
+}
+
+.customSwiper{
+
+}
+
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: colors.color(light, 900);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.author {
+  @include typography.h3;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.dateText {
+  @include typography.small_text;
+  color: colors.color(light, 900);
+}
+
+.description {
+  @include typography.regular_text_14;
+  width: 235px;
+  height: 72px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
