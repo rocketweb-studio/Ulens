@@ -15,7 +15,7 @@ export default async function UserPage({ params, searchParams }: Props) {
   }).then((res) => res.json())
 
   const postsData = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}posts/user/${userId}`, {
-    next: { revalidate: 30 },
+    next: { revalidate: 31 },
   }).then((res) => res.json())
 
   return (
